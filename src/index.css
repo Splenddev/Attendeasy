@@ -1,0 +1,26 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+:root {
+  --main-color: #4f46e5;
+  /* #3576ec; */
+  --font-outfit: 'Outfit';
+  --font-sen: 'Sen';
+}
+body {
+  font-family: var(--font-sen), sans-serif;
+}
+button,
+input,
+select {
+  font-family: var(--font-outfit), sans-serif;
+}
+.cap {
+  text-transform: capitalize;
+}

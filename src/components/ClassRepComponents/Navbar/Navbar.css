@@ -1,0 +1,90 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 60px;
+  display: flex;
+  justify-content: space-between;
+  height: 50px;
+  box-shadow: 0 1px 5px #9c9c9c;
+  background: #fff;
+  z-index: 1;
+}
+.navbar-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  font-weight: 600;
+}
+.navbar-side {
+  display: flex;
+  justify-content: space-between;
+}
+.navbar-side .alert {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-left: 1px solid #9b9b9b;
+  border-right: 1px solid #9b9b9b;
+  padding: 0px 15px;
+  cursor: pointer;
+}
+.alert.messages {
+  border-left: none;
+}
+.alert .badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 9px;
+  right: 10px;
+  background: #d61515;
+  color: #fff;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  font-size: 12px;
+  border: 2px solid #fff;
+}
+.alert svg {
+  font-size: 20px;
+}
+.navbar-side .user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px;
+}
+.details .name {
+  /* font-size: 1px; */
+  text-transform: capitalize;
+}
+.details .role {
+  font-style: italic;
+  font-size: 13px;
+  color: #888888;
+}
+.user img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.user svg {
+  display: none;
+  margin-right: 10px;
+}
+@media (max-width: 600px) {
+  .navbar-side .alert {
+    display: none;
+  }
+  .user .details {
+    display: none;
+  }
+  .user svg {
+    display: block;
+  }
+}

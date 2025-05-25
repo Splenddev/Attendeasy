@@ -1,0 +1,54 @@
+.date-filter {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 10px;
+  align-items: end;
+}
+.date-filter-nav,
+.date-filter-modes {
+  display: flex;
+  gap: 5px;
+  padding: 5px;
+  background: #fff;
+  border-radius: 20px;
+}
+.custom-date-input {
+  display: flex;
+  height: 100%;
+  padding: 5px;
+
+  & input {
+    border: none;
+    height: 100%;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    text-align: center;
+  }
+}
+.date-nav {
+  border: none;
+  background: #007bff;
+  color: white;
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  padding: 0 10px;
+  border-radius: 15px;
+  transition: 0.3s ease;
+}
+.date-nav.disabled {
+  background: #cccccc;
+}
+.date-type-filter {
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  text-transform: capitalize;
+  font-size: 12px;
+  transition: 0.3s ease;
+}
+.date-type-filter.active {
+  background: #007bff;
+  color: white;
+}

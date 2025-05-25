@@ -1,0 +1,13 @@
+.c-layout {
+  height: 100vh;
+  overflow-y: auto;
+  background: #f0f0f0;
+}
+.c-layout .main {
+  margin-top: 50px;
+  margin-left: 60px;
+  transition: margin-left 0.5s ease;
+}
+.c-layout .main.move {
+  margin-left: 220px;
+}

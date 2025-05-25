@@ -1,0 +1,9 @@
+button {
+  text-transform: capitalize;
+  cursor: pointer;
+}
+button.mixed {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
