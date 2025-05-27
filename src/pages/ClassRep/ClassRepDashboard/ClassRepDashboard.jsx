@@ -112,11 +112,10 @@ const ClassRepDashboard = () => {
                         <div className="class-status">
                           {timeFormatter(time.start) > now ? (
                             <>
-                              <MdBlock />
+                              <FaClock />
                               <p>Not Yet Time</p>
                             </>
-                          ) : timeFormatter(time.start) < now &&
-                            timeFormatter(time.end) > now ? (
+                          ) : timeFormatter(time.end) < now ? (
                             <>
                               <MdBlock />
                               <p>Class Ended</p>
