@@ -28,7 +28,7 @@
 }
 .date-nav {
   border: none;
-  background: #007bff;
+  background: var(--main-color);
   color: white;
   display: flex;
   align-items: center;

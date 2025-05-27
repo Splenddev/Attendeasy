@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import './ClassRepDashboard.css';
 import { useAuth } from '../../../context/AuthContext';
@@ -13,12 +14,13 @@ import {
 import { FiCircle } from 'react-icons/fi';
 import { MdBlock } from 'react-icons/md';
 import { AnimatePresence, motion } from 'framer-motion';
+import { timeFormatter } from '../../../utils/helpers';
 
 const ClassRepDashboard = () => {
   const { setNavTitle } = useAuth();
   useEffect(() => {
     setNavTitle('Dashboard');
-  }, []);
+  }, [setNavTitle]);
   const [navMenu, setNavMenu] = useState('today');
   return (
     <div className="c-dashboard">
@@ -79,10 +81,7 @@ const ClassRepDashboard = () => {
                     new Date(b.time.start).getTime()
                 )
                 .map(({ course, time, progress }, index) => {
-                  const now = new Date().toLocaleTimeString('en-GB', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  });
+                  const now = timeFormatter(null, 'en-US');
 
                   return (
                     <motion.div
@@ -91,26 +90,12 @@ const ClassRepDashboard = () => {
                       transition={{ delay: index / 10 + 0.1, duration: 1 }}
                       className="schedule"
                       key={course.code}>
-                      <div className="submitted-container ">
-                        <div
-                          className={`submitted ${
-                            progress.submitted && 'yes'
-                          }`}>
-                          <FaCircle className="icon" />
-                        </div>
-                        <p>Submitted</p>
-                      </div>
                       <div className="schedule-left">
                         <div className="schedule-time">
                           <span>
                             <FiCircle className="start icon" /> Start
                           </span>
-                          <p>
-                            {new Date(time.start).toLocaleTimeString('en-GB', {
-                              hour: '2-digit',
-                              minute: '2-digit',
-                            })}
-                          </p>
+                          <p>{timeFormatter(time.start)}</p>
                         </div>
                         <div className="schedule-time">
                           <span>
@@ -118,22 +103,20 @@ const ClassRepDashboard = () => {
                             <FiCircle className="end icon" />
                             End
                           </span>
-                          <p>
-                            {new Date(time.end).toLocaleTimeString('en-GB', {
-                              hour: '2-digit',
-                              minute: '2-digit',
-                            })}
-                          </p>
+                          <p>{timeFormatter(time.end, 'en-US')}</p>
                         </div>
                       </div>
                       <div className="schedule-right">
                         <p className="title">{course.title}</p>
                         <p className="">Lecturer: {course.lecturer}</p>
                         <div className="class-status">
-                          {new Date(time.end).toLocaleTimeString('en-GB', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                          }) > now ? (
+                          {timeFormatter(time.start) > now ? (
+                            <>
+                              <MdBlock />
+                              <p>Not Yet Time</p>
+                            </>
+                          ) : timeFormatter(time.start) < now &&
+                            timeFormatter(time.end) > now ? (
                             <>
                               <MdBlock />
                               <p>Class Ended</p>

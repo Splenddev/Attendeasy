@@ -1,0 +1,16 @@
+.class-schedule {
+}
+.class-schedule-container {
+  padding: 20px;
+}
+.class-schedule .cap {
+  padding: 20px;
+  display: flex;
+  background: #fff;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  & h2 {
+    font-size: 20px;
+  }
+}

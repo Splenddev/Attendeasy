@@ -2,13 +2,14 @@ import './CreateAttendance.css';
 import { MdPublish, MdSave } from 'react-icons/md';
 import { FormProvider } from 'react-hook-form';
 import button from '../../../components/Button/Button';
-import Contents from '../../../features/Contents/Contents';
+import DynamicForm from '../../../features/DynamicForm/DynamicForm';
 import { formDataAssets, formDataAssets2 } from '../../../utils/contants';
 import { useAuth } from '../../../context/AuthContext';
 import useAttendanceForm from './useAttendanceForm';
 import { useEffect } from 'react';
 import { InfoModal } from '../../../components/Modals';
 import { useInfoModal } from '../../../context/infoModalContext';
+import { infoModalContent } from '../../../components/Modals/Info/CreateAttendance/infoModalContent';
 
 const CreateAttendance = () => {
   const { setNavTitle, user } = useAuth();
@@ -23,7 +24,7 @@ const CreateAttendance = () => {
 
   useEffect(() => {
     setNavTitle('Create Attendance');
-  }, []);
+  }, [setNavTitle]);
 
   const { visible, modalId, closeModal } = useInfoModal();
 
@@ -50,7 +51,7 @@ const CreateAttendance = () => {
           <div className="create-attendance-sections">
             <div className="create-attendance-section left">
               {formDataAssets.map((data) => (
-                <Contents
+                <DynamicForm
                   key={data.id}
                   id={data.id}
                   title={data.title}
@@ -61,14 +62,14 @@ const CreateAttendance = () => {
 
             <div className="create-attendance-section right">
               {formDataAssets2.map((data) => (
-                <Contents
+                <DynamicForm
                   key={data.id}
                   id={data.id}
                   title={data.title}
                   selectOptions={data.selectOptions}
                 />
               ))}
-              <Contents
+              <DynamicForm
                 view="grid"
                 title="students"
                 id="students"
@@ -85,6 +86,7 @@ const CreateAttendance = () => {
         visible={visible}
         modalId={modalId}
         onClose={closeModal}
+        infoModalContent={infoModalContent}
       />
     </>
   );

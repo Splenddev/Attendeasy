@@ -1,21 +1,18 @@
-import React from 'react';
 import {
   MdCheckBox,
   MdCheckBoxOutlineBlank,
   MdInfoOutline,
-  MdPerson2,
   MdSelectAll,
-  MdSupervisedUserCircle,
 } from 'react-icons/md';
 import { FaCrown, FaUserGraduate, FaUserPlus } from 'react-icons/fa';
 
-import Select from '../../components/Select/Select';
-import './Contents.css';
+import FieldSet from '../../components/FieldSet/FieldSet';
+import './DynamicForm.css';
 import { list } from '../../utils/contants';
 import button from '../../components/Button/Button';
 import { useInfoModal } from '../../context/infoModalContext';
 
-const Contents = ({
+const DynamicForm = ({
   title = '',
   selectOptions = [],
   selectedStudents = [],
@@ -31,14 +28,13 @@ const Contents = ({
   const { openModal } = useInfoModal();
 
   return (
-    <section>
+    <section className="dynamic-form">
       <div className="title cap">
         {title}
         {button.icon({
           icon: MdInfoOutline,
           func: () => {
             openModal(id);
-            console.log('hello');
           },
         })}
       </div>
@@ -105,7 +101,7 @@ const Contents = ({
       ) : (
         <div className="contents">
           {selectOptions.map((item) => (
-            <Select
+            <FieldSet
               key={item.title}
               title={item.title}
               options={item.options}
@@ -122,4 +118,4 @@ const Contents = ({
   );
 };
 
-export default Contents;
+export default DynamicForm;

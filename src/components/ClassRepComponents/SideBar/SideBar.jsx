@@ -3,9 +3,10 @@ import './SideBar.css';
 import { NavLink } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { assets } from '../../../assets/assets';
+import { MdLogout, MdSettings } from 'react-icons/md';
 const SideBar = ({ components, menuActive, setMenuActive }) => {
   return (
-    <div className="c-sidebar-container">
+    <aside className={`c-sidebar-container ${!menuActive ? 'closed' : ''}`}>
       <div className={`c-sidebar ${!menuActive ? 'closed' : ''}`}>
         <div
           className="close"
@@ -16,26 +17,49 @@ const SideBar = ({ components, menuActive, setMenuActive }) => {
             <div className="line"></div>
           </div>
         </div>
-        <div className="c-sidebar-left">
-          <div className="c-sidebar-header">
-            <img
-              src={assets.logo}
-              alt="logo"
-            />
-          </div>
-          <div className="c-sidebar-left-icon">
-            {components.map(({ icon, link }) => {
-              const Icon = icon;
-              return (
-                <NavLink
-                  to={link}
-                  key={link}>
-                  <div className="icon">{<Icon />}</div>
-                </NavLink>
-              );
-            })}
-          </div>
-        </div>
+        <AnimatePresence>
+          <motion.div
+            initial={{ x: -40, opacity: 0 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, ease: 'easeInOut' }}
+            className="c-sidebar-left">
+            <div className="c-sidebar-header">
+              <img
+                src={assets.logo}
+                alt="logo"
+              />
+            </div>
+            <div className="c-sidebar-left-icon">
+              <AnimatePresence>
+                {components.map(({ icon, link }) => {
+                  const Icon = icon;
+                  return (
+                    <NavLink
+                      to={link}
+                      key={link}>
+                      <motion.div
+                        initial={{ opacity: 0, x: 30 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 30 }}
+                        transition={{ duration: 0.2 }}
+                        className="icon">
+                        <Icon />
+                      </motion.div>
+                    </NavLink>
+                  );
+                })}
+              </AnimatePresence>
+            </div>
+            <div className="other-navs">
+              <span>
+                <MdLogout />
+              </span>
+              <span>
+                <MdSettings />
+              </span>
+            </div>
+          </motion.div>
+        </AnimatePresence>
         <div className="c-sidebar-right">
           <div className="c-sidebar-header">
             <p>Class Tracker</p>
@@ -45,7 +69,9 @@ const SideBar = ({ components, menuActive, setMenuActive }) => {
               {menuActive &&
                 components.map(({ label, link }) => {
                   return (
-                    <NavLink to={link}>
+                    <NavLink
+                      to={link}
+                      key={link}>
                       <motion.div
                         initial={{ opacity: 0, x: 30 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -60,9 +86,13 @@ const SideBar = ({ components, menuActive, setMenuActive }) => {
                 })}
             </AnimatePresence>
           </div>
+          <div className="other-navs">
+            <p>Log Out</p>
+            <p>Settings</p>
+          </div>
         </div>
       </div>
-    </div>
+    </aside>
   );
 };
 

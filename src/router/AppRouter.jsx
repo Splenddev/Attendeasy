@@ -1,12 +1,11 @@
 import { Suspense } from 'react';
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import Loader from '../components/Loader/Loader';
 import {
   App,
   Attendance,
   ClassRepDashboard,
   ClassSchedule,
-  CreateSchedule,
   Home,
   NotFound,
   StudentAttendance,
@@ -16,9 +15,9 @@ import {
 } from '../utils/lazyPages';
 import ProtectedRoutes from '../components/ProtectedRoutes';
 import { ROLES } from '../utils/roles';
-import ClassRepLayout from '../layouts/ClassRepLayout/ClassRepLayout';
-import StudentLayout from '../layouts/StudentLayout/StudentLayout';
 import CreateAttendance from '../pages/ClassRep/CreateAttendance/CreateAttendance';
+import { AuthLayout, ClassRepLayout, StudentLayout } from '../layouts';
+import { CreateSchedule, Login, Register } from '../pages';
 
 export const router = createBrowserRouter([
   {
@@ -38,7 +37,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: 'class-rep',
+        path: 'class-rep/',
         element: (
           <ProtectedRoutes allowedRoles={[ROLES.CLASS_REP]}>
             <Suspense fallback={<Loader />}>
@@ -49,6 +48,14 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
+            element: (
+              <Navigate
+                to="dashboard"
+                replace
+              />
+            ),
+          },
+          {
             path: 'dashboard',
             element: (
               <Suspense fallback={<Loader />}>
@@ -57,7 +64,7 @@ export const router = createBrowserRouter([
             ),
           },
           {
-            path: 'schedule/create',
+            path: 'schedules/create',
             element: (
               <Suspense fallback={<Loader />}>
                 <CreateSchedule />
@@ -124,6 +131,23 @@ export const router = createBrowserRouter([
               </Suspense>
             ),
           },
+        ],
+      },
+      {
+        path: 'auth/',
+        element: <AuthLayout />,
+        children: [
+          {
+            index: true,
+            element: (
+              <Navigate
+                to="login"
+                replace
+              />
+            ),
+          },
+          { path: 'login', element: <Login /> },
+          { path: 'register', element: <Register /> },
         ],
       },
       {

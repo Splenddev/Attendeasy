@@ -10,6 +10,9 @@ a {
 :root {
   --main-color: #4f46e5;
   /* #3576ec; */
+  --outline: #e0e9ff;
+  --red: #dc2626;
+  --green: #49b583;
   --font-outfit: 'Outfit';
   --font-sen: 'Sen';
 }

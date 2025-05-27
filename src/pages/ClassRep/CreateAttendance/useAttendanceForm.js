@@ -1,10 +1,10 @@
 import { useForm } from 'react-hook-form';
-import { useAuth } from '../../../context/AuthContext';
+// import { useAuth } from '../../../context/AuthContext';
 import { selectOneStudent, selectAllStudents } from './attendanceHelpers';
 
 const useAttendanceForm = () => {
   const methods = useForm({ defaultValues: { students: [] } });
-  const { setAttendanceList } = useAuth();
+  // const { setAttendanceList } = useAuth();
   const { handleSubmit, setValue, watch, getValues } = methods;
 
   const selectedStudents = watch('students');
@@ -17,7 +17,7 @@ const useAttendanceForm = () => {
     };
     alert('submitted');
     console.log(formData);
-    // setAttendanceList(prev => ([...prev, formData]));
+    // setAttendanceList((prev) => [...prev, formData]);
   };
 
   const toggleStudent = (name) => selectOneStudent(setValue, name, getValues);

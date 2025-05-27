@@ -1,0 +1,74 @@
+.schedule-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.day-section {
+  margin-bottom: 20px;
+  padding: 20px;
+  border-radius: 20px;
+  background: #fff;
+}
+
+.day-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  & h2 {
+    font-size: 20px;
+    color: #2a2a2a;
+  }
+}
+.action {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 15px;
+  & svg {
+    color: var(--green);
+    cursor: pointer;
+    &:first-child {
+      color: var(--red);
+    }
+  }
+}
+
+.course-block {
+  position: relative;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  border: 2px solid var(--outline);
+}
+
+.course-block h3 {
+  margin: 0 0 5px;
+}
+
+.course-block p {
+  &.first {
+    margin-top: 10px;
+  }
+  &:last-child {
+    font-style: italic;
+    color: var(--main-color);
+    margin: 10px 0;
+  }
+}
+
+.course-block .code {
+  font-size: 0.9em;
+  color: var(--main-color);
+}
+
+.no-class {
+  color: #999;
+  font-style: italic;
+  -webkit-user-select: none;
+  user-select: none;
+}

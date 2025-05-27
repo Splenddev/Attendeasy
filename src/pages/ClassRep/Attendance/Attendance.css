@@ -293,14 +293,12 @@
   font-weight: 600;
   font-size: 16px;
 }
-.list .student-name .name {
-}
 .c-attendance-student .student-img {
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #000;
+  background: var(--main-color);
   color: #fff;
 }
 .c-attendance-student.grid .student-img {
@@ -355,4 +353,22 @@
 }
 .cap {
   text-transform: capitalize;
+}
+@media (max-width: 600px) {
+  .c-attendance-student.list {
+    grid-template-columns: 1fr 0.5fr 0.5fr 0.5fr 0.5fr;
+  }
+  .c-attendance-lists-properties {
+    grid-template-columns: 1fr 0.5fr 0.5fr 0.5fr;
+    & p:nth-child(2) {
+      display: none;
+    }
+  }
+  .c-attendance-student.list .student-name {
+    display: flex;
+    flex-direction: column;
+  }
+  .list .role {
+    display: none;
+  }
 }

@@ -68,9 +68,17 @@ export const infoModalContent = [
         text: `Attendance Entry Window:
 Define the timeframe students can mark attendance.
 
-Entry Start: Options like 10 min, 30 min, or 1 hr after class start, or manual.
+Entry Start: Choose when students can start marking attendance:
 
-Entry End: Options relative to entry start or manual.`,
+10 min, 30 min, or 1 hr after class start: Automatically opens attendance after the specified time.
+
+Manual: You’ll manually start the attendance window when ready.
+
+Entry End: Choose when attendance closes:
+
+Options are relative to entry start (e.g., 10 min after it begins).
+
+Manual: You’ll manually stop the attendance at your chosen time.`,
       },
       {
         icon: MdEvent,

@@ -6,8 +6,15 @@
 .c-layout .main {
   margin-top: 50px;
   margin-left: 60px;
-  transition: margin-left 0.5s ease;
 }
-.c-layout .main.move {
-  margin-left: 220px;
+.c-layout.mobile .main {
+  margin-left: 0px;
+}
+.c-layout.is-mobile {
+  & .c-sidebar-container {
+    width: 0;
+    .c-sidebar-left {
+      width: 0;
+    }
+  }
 }

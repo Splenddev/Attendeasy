@@ -13,34 +13,7 @@
   flex-direction: column;
   gap: 20px;
 }
-.create-attendance-section > section {
-  background: #fff;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 0 3px #aaa;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  & > .title {
-    display: flex;
-    font-weight: 600;
-    justify-content: space-between;
-    align-items: center;
-    color: #000;
-    & svg {
-      cursor: pointer;
-      transition: 0.4s ease;
-      font-size: 20px;
-      &:hover {
-        color: var(--main-color);
-      }
-    }
-  }
-}
 .create-attendance-header {
-  position: sticky;
-  top: 60px;
   background: #fff;
   border-radius: 8px;
   right: 0;
@@ -60,12 +33,13 @@
   }
 }
 .create-attendance-header-action {
+  position: sticky;
+  top: 60px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 10px;
 
   & button {
-    white-space: nowrap;
     display: flex;
     align-items: center;
     gap: 10px;

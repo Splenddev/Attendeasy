@@ -1,15 +1,42 @@
-section .contents {
+.dynamic-form {
+  background: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 0 3px #aaa;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  overflow: hidden;
+  gap: 10px;
+
+  & > .title {
+    display: flex;
+    font-weight: 600;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 10px;
+    color: #000;
+    & svg {
+      cursor: pointer;
+      transition: 0.4s ease;
+      font-size: 20px;
+      &:hover {
+        color: var(--main-color);
+      }
+    }
+  }
 }
-section .title.cap button {
+.dynamic-form .contents {
+  display: flex;
+  flex-direction: column;
+}
+.dynamic-form .title.cap button {
   background: none;
   border: none;
 }
 .container .student-list {
   display: grid;
   column-gap: 10px;
+  font-size: 14px;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 .student {
@@ -41,7 +68,7 @@ section .title.cap button {
     justify-content: center;
     border-radius: 20px;
     border: none;
-    background: #000;
+    background: var(--main-color);
     color: #fff;
     font-size: 14px;
     & svg {

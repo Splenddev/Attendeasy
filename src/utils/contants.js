@@ -12,7 +12,7 @@ export const formDataAssets2 = [
     selectOptions: [
       {
         title: 'Reminders',
-        choices: ['Email', 'Push Notifications'],
+        choices: ['Email', 'Notifications'],
         type: 'choice',
         choiceMode: 'single',
       },
@@ -173,7 +173,17 @@ export const formDataAssets = [
         required: true,
         title: 'Other Types',
         type: 'choice',
-        choices: ['E - Excused', 'M - Medical'],
+        choices: [
+          'C - Conference / Official Duty',
+          'E - Excused',
+          'F - Family Emergency',
+          'M - Medical',
+          'O - Others (Speciify)',
+          'P - Personal Reasons',
+          'R - Religious Observance',
+          'S - Suspension',
+          'T - Travel',
+        ],
         choiceMode: 'multiple',
       },
     ],
@@ -217,3 +227,20 @@ export const list = [
     role: 'student',
   },
 ];
+
+export const variants = {
+  shake: {
+    shake: {
+      x: [0, -10, 10, -10, 10, 0],
+      transition: { duration: 0.5 },
+    },
+    still: { x: 0 },
+  },
+  blink: {
+    blink: {
+      opacity: [0, 0.1, 1, -0.1, 1, 0],
+      transition: { duration: 1, delay: 0.5 },
+    },
+    still: { opacity: 0 },
+  },
+};

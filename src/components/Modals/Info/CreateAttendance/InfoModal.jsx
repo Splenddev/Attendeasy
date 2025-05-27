@@ -1,9 +1,10 @@
-import { infoModalContent } from './infoModalContent';
 import './InfoModal.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect } from 'react';
+import button from '../../../Button/Button';
+import { MdThumbUp } from 'react-icons/md';
 
-const InfoModal = ({ visible, modalId, onClose }) => {
+const InfoModal = ({ visible, modalId, onClose, infoModalContent }) => {
   const modalData = infoModalContent.find((item) => item.id === modalId);
 
   useEffect(() => {
@@ -51,16 +52,23 @@ const InfoModal = ({ visible, modalId, onClose }) => {
                       {point.text.split('\n').map((line, i) => (
                         <p key={i}>{line}</p>
                       ))}
+                      <hr />
                     </span>
                   </li>
                 );
               })}
             </ul>
-            <button
+
+            <div
               className="modal-close-btn"
               onClick={onClose}>
-              OK
-            </button>
+              {button.multiple({
+                icon: MdThumbUp,
+                func: onClose,
+                label: 'close-info-modal',
+                element: 'OK',
+              })}
+            </div>
           </motion.div>
         </motion.div>
       )}

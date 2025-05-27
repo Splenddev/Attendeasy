@@ -5,7 +5,14 @@ export const checkboxChange = (key, setState, state) => {
   setState((prev) => ({ ...prev, [key]: !prev[key] }));
   console.log(state);
 };
-export const onChoiceChange = (choice, checkedChoices, choiceMode, title, setValue) => {
+export const onChoiceChange = (
+  choice,
+  checkedChoices,
+  choiceMode,
+  title,
+  setValue,
+  getValues
+) => {
   const current = { ...checkedChoices };
 
   if (choiceMode === 'multiple') {
@@ -15,16 +22,22 @@ export const onChoiceChange = (choice, checkedChoices, choiceMode, title, setVal
     current[choice] = true;
   }
 
-  setValue(`${title}_choices`, current);
+  const timeValue = getValues('classStartTime') || '';
+
+  const selectedArray = Object.keys(current)
+    .filter((key) => current[key])
+    .map((day) => ({ day, time: timeValue }));
+
+  setValue(`${title}_choices`, current); // for UI
+  setValue(`${title}`, selectedArray);
 };
 
 export const select = (type, setValue, selected, list, getValues) => {
   if (type === 'selectOne') {
     const prev = getValues('students') || [];
-    const updated =
-      prev.includes(selected)
-        ? prev.filter((name) => name !== selected)
-        : [...prev, selected];
+    const updated = prev.includes(selected)
+      ? prev.filter((name) => name !== selected)
+      : [...prev, selected];
 
     setValue('students', updated);
   }
@@ -36,4 +49,29 @@ export const select = (type, setValue, selected, list, getValues) => {
 
     setValue('students', updated);
   }
+};
+export const dateFormatter = (date) => {
+  const formattedDate = new Date(date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit',
+  });
+  return formattedDate;
+};
+export const timeFormatter = (time, lang = 'en-US') => {
+  const formattedTime = new Date(time).toLocaleTimeString([lang], {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+  return formattedTime;
+};
+export const toCamelCase = (str) => {
+  const formattedName = str
+    .toLowerCase()
+    .replace(/[^a-zA-Z0-9 ]/g, '')
+    .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) =>
+      index === 0 ? word.toLowerCase() : word.toUpperCase()
+    )
+    .replace(/\s+/g, '');
+  return formattedName;
 };

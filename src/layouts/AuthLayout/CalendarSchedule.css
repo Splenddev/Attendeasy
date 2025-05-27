@@ -1,0 +1,89 @@
+.calendar-strip {
+  display: flex;
+  margin: 12px 0;
+}
+
+.calendar-day {
+  flex: 1;
+  cursor: pointer;
+  text-align: center;
+  padding: 8px 6px;
+  border: 1px solid transparent;
+  user-select: none;
+  border-radius: 4px;
+  margin: 0 2px;
+}
+
+.calendar-day .day-label {
+  font-size: 0.75rem;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.calendar-day .day-number {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.calendar-day.active {
+  border: 2px solid #007bff;
+  background-color: #e0f0ff;
+  font-weight: bold;
+}
+
+.calendar-day.not-current-month {
+  color: #aaa;
+  cursor: default;
+  background-color: #f9f9f9;
+}
+
+.calendar-header,
+.day-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 8px 0;
+}
+
+.calendar-header button,
+.day-navigation button {
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.month-label,
+.selected-day-label {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.event-list {
+  margin-top: 12px;
+}
+
+.event-item {
+  border-left: 4px solid;
+  padding: 6px 10px;
+  margin-bottom: 6px;
+  background-color: #f0f8ff;
+  border-radius: 4px;
+}
+
+.event-time {
+  font-weight: 600;
+}
+
+.event-grade,
+.event-title {
+  font-size: 0.9rem;
+  margin-left: 6px;
+  display: inline-block;
+}
+
+.no-events {
+  color: #666;
+  font-style: italic;
+  padding: 10px 0;
+  text-align: center;
+}
