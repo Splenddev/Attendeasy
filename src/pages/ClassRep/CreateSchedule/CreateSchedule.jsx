@@ -5,7 +5,9 @@ import DynamicForm from '../../../features/DynamicForm/DynamicForm';
 import { FormProvider } from 'react-hook-form';
 import useScheduleForm from './useScheduleForm';
 import './CreateSchedule.css';
-import InfoModal from '../../../components/Modals/Info/CreateAttendance/InfoModal';
+import InfoModal from '../../../components/Modals/Info/InfoModal';
+import button from '../../../components/Button/Button';
+import { MdAddCard, MdAddchart, MdSave } from 'react-icons/md';
 
 const CreateSchedule = () => {
   const { setNavTitle } = useAuth();
@@ -16,7 +18,7 @@ const CreateSchedule = () => {
   return (
     <>
       <FormProvider {...methods}>
-        <h1>Create Schedules</h1>
+        <h1 className="header">Add a New Schedule</h1>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="create-schedule">
@@ -31,7 +33,12 @@ const CreateSchedule = () => {
               );
             })}
           </div>
-          <button>Submit</button>
+          {button.multiple({
+            icon: MdAddchart,
+            func: () => console.log('submitted'),
+            element: 'Add Schedule',
+            type: 'submit',
+          })}
         </form>
       </FormProvider>
       {/* <InfoModal /> */}

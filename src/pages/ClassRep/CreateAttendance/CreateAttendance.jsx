@@ -9,7 +9,7 @@ import useAttendanceForm from './useAttendanceForm';
 import { useEffect } from 'react';
 import { InfoModal } from '../../../components/Modals';
 import { useInfoModal } from '../../../context/infoModalContext';
-import { infoModalContent } from '../../../components/Modals/Info/CreateAttendance/infoModalContent';
+import { infoModalContent } from '../../../components/Modals/Info/infoModalContent';
 
 const CreateAttendance = () => {
   const { setNavTitle, user } = useAuth();

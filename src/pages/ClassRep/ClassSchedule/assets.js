@@ -90,6 +90,13 @@ export const schedule = [
           endTime: '15:52',
         },
       },
+      {
+        day: 'Wednesday',
+        timing: {
+          startTime: '10:52',
+          endTime: '15:52',
+        },
+      },
     ],
     media: [
       {
@@ -112,6 +119,13 @@ export const schedule = [
     classDaysTimes: [
       {
         day: 'Friday',
+        timing: {
+          startTime: '10:52',
+          endTime: '15:52',
+        },
+      },
+      {
+        day: 'Wednesday',
         timing: {
           startTime: '10:52',
           endTime: '15:52',

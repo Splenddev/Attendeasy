@@ -75,3 +75,26 @@ export const toCamelCase = (str) => {
     .replace(/\s+/g, '');
   return formattedName;
 };
+export const parseTimeToday = (timeString) => {
+  const [hours, minutes, seconds] = timeString.split('T')[1].split(':');
+  const date = new Date();
+  date.setHours(Number(hours), Number(minutes), Number(seconds ?? 0), 0);
+  return date;
+};
+export const groupByDay = (schedule) => {
+  return schedule.reduce((acc, course) => {
+    course.classDaysTimes.forEach(({ day, timing }) => {
+      if (!acc[day]) acc[day] = [];
+
+      acc[day].push({
+        courseTitle: course.courseTitle,
+        courseCode: course.courseCode,
+        lecturerName: course.lecturerName,
+        classroomVenue: course.classroomVenue,
+        timing,
+        media: course.media,
+      });
+    });
+    return acc;
+  }, {});
+};

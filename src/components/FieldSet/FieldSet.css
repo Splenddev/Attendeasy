@@ -3,7 +3,7 @@
   grid-template-columns: 90px 2px 1fr;
   background: #fff;
   gap: 5px;
-  border-bottom: 1px solid var(--outline);
+  border-bottom: 1px solid var(--light-blue-300);
   border-radius: 3px;
   padding: 0 10px;
   position: relative;
@@ -30,7 +30,7 @@
   border: none;
   height: 100%;
   width: 1px;
-  background: var(--outline);
+  background: var(--light-blue-300);
 }
 
 .option-select input {
@@ -139,7 +139,7 @@
 }
 
 .SliderTrack {
-  background-color: var(--outline);
+  background-color: var(--light-blue-300);
   position: relative;
   flex-grow: 1;
   height: 4px;

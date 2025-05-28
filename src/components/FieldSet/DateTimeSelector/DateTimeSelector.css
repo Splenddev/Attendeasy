@@ -11,7 +11,7 @@
   flex-direction: column;
   gap: 8px;
   padding: 10px;
-  border: 1px solid var(--outline);
+  border: 1px solid var(--light-blue-300);
   border-radius: 6px;
   margin-right: -10px;
 }
@@ -39,7 +39,7 @@
 
 .time-inputs input[type='time'] {
   padding: 5px;
-  border: 1px solid var(--outline);
+  border: 1px solid var(--light-blue-300);
   border-radius: 6px;
   font-size: 14px;
   /* width: 100px; */

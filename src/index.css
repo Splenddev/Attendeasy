@@ -8,13 +8,16 @@ a {
   color: inherit;
 }
 :root {
-  --main-color: #4f46e5;
-  /* #3576ec; */
+  --main-color:
+   /* #4f46e5; */ #3576ec;
   --outline: #e0e9ff;
+  --light-blue-200: #e9f2ff;
+  --light-blue-300: #e0e9ff;
   --red: #dc2626;
   --green: #49b583;
   --font-outfit: 'Outfit';
   --font-sen: 'Sen';
+  --tag-color-blue: #4984e4;
 }
 body {
   font-family: var(--font-sen), sans-serif;

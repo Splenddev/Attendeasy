@@ -8,6 +8,16 @@ const SideBar = ({ components, menuActive, setMenuActive }) => {
   return (
     <aside className={`c-sidebar-container ${!menuActive ? 'closed' : ''}`}>
       <div className={`c-sidebar ${!menuActive ? 'closed' : ''}`}>
+        <AnimatePresence>
+          {menuActive && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="overlay"
+              onClick={() => setMenuActive(false)}></motion.div>
+          )}
+        </AnimatePresence>
         <div
           className="close"
           onClick={() => setMenuActive(!menuActive)}>
@@ -62,7 +72,7 @@ const SideBar = ({ components, menuActive, setMenuActive }) => {
         </AnimatePresence>
         <div className="c-sidebar-right">
           <div className="c-sidebar-header">
-            <p>Class Tracker</p>
+            <p>Vigilo</p>
           </div>
           <div className="c-sidebar-right-texts">
             <AnimatePresence>

@@ -2,6 +2,7 @@ import { MdNotificationsActive } from 'react-icons/md';
 import './Schedule.css';
 import { FaTrash } from 'react-icons/fa';
 import { FiAlertOctagon, FiEdit3 } from 'react-icons/fi';
+import { groupByDay } from '../../../../utils/helpers';
 
 const daysOfWeek = [
   'Monday',
@@ -12,25 +13,6 @@ const daysOfWeek = [
   'Saturday',
   'Sunday',
 ];
-
-// Group courses by day using reduce
-const groupByDay = (schedule) => {
-  return schedule.reduce((acc, course) => {
-    course.classDaysTimes.forEach(({ day, timing }) => {
-      if (!acc[day]) acc[day] = [];
-
-      acc[day].push({
-        courseTitle: course.courseTitle,
-        courseCode: course.courseCode,
-        lecturerName: course.lecturerName,
-        classroomVenue: course.classroomVenue,
-        timing,
-        media: course.media,
-      });
-    });
-    return acc;
-  }, {});
-};
 
 const Schedule = ({ data }) => {
   const schedulesByDay = groupByDay(data);

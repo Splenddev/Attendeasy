@@ -47,7 +47,7 @@ export const todaySchedule = [
     progress: { submitted: false },
   },
   {
-    time: { start: '2025-05-01T18:00:00', end: '2025-05-01T20:00:00' },
+    time: { start: '2025-05-01T22:00:00', end: '2025-05-01T23:00:00' },
     course: {
       code: 'BCH312',
       title: 'Intro to Physiology',
@@ -56,7 +56,7 @@ export const todaySchedule = [
     progress: { submitted: true },
   },
   {
-    time: { start: '2025-05-01T10:00:00', end: '2025-05-01T11:00:00' },
+    time: { start: '2025-05-01T23:00:00', end: '2025-05-01T00:00:00' },
     course: {
       code: 'CHM312',
       title: 'Intro to Chemistry',

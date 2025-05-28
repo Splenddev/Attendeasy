@@ -9,11 +9,13 @@ import button from '../../../components/Button/Button';
 import {
   FaChalkboardTeacher,
   FaClock,
+  FaCrown,
   FaEnvelopeOpen,
   FaList,
   FaPlus,
   FaRegCalendarCheck,
   FaSearch,
+  FaUserGraduate,
 } from 'react-icons/fa';
 import {
   dateFormatter,
@@ -35,21 +37,17 @@ const Attendance = () => {
     setNavTitle('Attendance');
   }, [setNavTitle]);
 
-  // Filter attendance based on selected course
   const filteredByCourse = filteredAttendance.filter((session) => {
     if (course !== '')
       return session.Code.toLowerCase() === course.toLowerCase();
     return true;
   });
 
-  // Sort attendance by date (Date field in data)
   const sortedAttendance = filteredByCourse.sort(
     (a, b) => new Date(a.Date) - new Date(b.Date)
   );
 
-  // Group students based on view and filter by attendance status + search
   const groupStudents = (students) => {
-    // Filter students by status and search
     const filteredStudents = students.filter((student) => {
       const matchesStatus = marked === '' || student.status === marked;
       const matchesSearch =
@@ -165,7 +163,6 @@ const Attendance = () => {
         </div>
       ) : (
         sortedAttendance.map((session, idx) => {
-          // use session.id or fallback key
           const key = session.id || `${session.Code}-${session.Date}-${idx}`;
 
           return (
@@ -248,6 +245,13 @@ const Attendance = () => {
                                   .split(' ')
                                   .map((n) => n.charAt(0).toUpperCase())
                                   .join('')}
+                                <span className="role-icon">
+                                  {student.role === 'student' ? (
+                                    <FaUserGraduate />
+                                  ) : (
+                                    <FaCrown />
+                                  )}{' '}
+                                </span>
                               </div>
                               <p className="name">{student.name}</p>
                             </div>

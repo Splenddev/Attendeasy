@@ -301,12 +301,29 @@
   background: var(--main-color);
   color: #fff;
 }
+.student-img .role-icon {
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  height: 16px;
+  width: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  border-radius: 50%;
+  background: var(--red);
+}
 .c-attendance-student.grid .student-img {
   height: 60px;
   width: 60px;
   font-size: 20px;
+  & .role-icon {
+    display: none;
+  }
 }
 .c-attendance-student.list .student-img {
+  position: relative;
   height: 30px;
   width: 30px;
   font-size: 10px;
@@ -342,10 +359,10 @@
     color: #fff;
   }
   &.list.present {
-    color: #22a876;
+    color: var(--green);
   }
   &.list.absent {
-    color: #e3340f;
+    color: var(--red);
   }
   &.list.late {
     color: #fbc948;

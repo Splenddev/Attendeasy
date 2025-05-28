@@ -6,3 +6,24 @@
   flex-direction: column;
   gap: 20px;
 }
+.header {
+  margin-top: 20px;
+  padding: 10px;
+  font-size: 25px;
+}
+.create-schedule > button {
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: none;
+  margin-top: 20px;
+  place-self: center;
+  width: 100%;
+  justify-content: center;
+  color: #fff;
+  max-width: 250px;
+  cursor: pointer;
+  background: var(--main-color);
+  & svg {
+    font-size: 20px;
+  }
+}

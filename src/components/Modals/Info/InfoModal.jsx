@@ -1,7 +1,7 @@
 import './InfoModal.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect } from 'react';
-import button from '../../../Button/Button';
+import button from '../../Button/Button';
 import { MdThumbUp } from 'react-icons/md';
 
 const InfoModal = ({ visible, modalId, onClose, infoModalContent }) => {
