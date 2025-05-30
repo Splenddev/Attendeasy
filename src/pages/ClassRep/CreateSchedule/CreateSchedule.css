@@ -1,6 +1,11 @@
 .create-schedule {
   padding: 15px;
 }
+.create-schedule-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 20px;
+}
 .create-schedule-section {
   display: flex;
   flex-direction: column;

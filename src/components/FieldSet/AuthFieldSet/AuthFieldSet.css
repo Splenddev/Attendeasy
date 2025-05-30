@@ -1,0 +1,33 @@
+.auth-field {
+  display: flex;
+  gap: 20px;
+  padding: 15px;
+  border: 1px solid var(--main-color);
+  border-radius: 12px;
+}
+.auth-field input {
+  margin-top: 5px;
+  padding: 15px 20px;
+  width: 100%;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  background: var(--light-blue-200);
+}
+input[type='checkbox'] {
+  /* display: none; */
+  border: none;
+}
+.auth-field legend {
+  margin-left: 20px;
+}
+.auth-field label,
+.term-cond {
+  color: var(--main-color);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 10px;
+  padding: 5px;
+  font-size: 15px;
+}

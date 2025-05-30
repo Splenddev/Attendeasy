@@ -28,12 +28,8 @@
   justify-content: center;
   position: relative;
   border-left: 1px solid #9b9b9b;
-  border-right: 1px solid #9b9b9b;
   padding: 0px 15px;
   cursor: pointer;
-}
-.alert.messages {
-  border-left: none;
 }
 .alert .badge {
   display: flex;
@@ -54,11 +50,12 @@
   font-size: 20px;
 }
 .navbar-side .user {
+  border-left: 1px solid #9b9b9b;
   display: flex;
   align-items: center;
   gap: 10px;
   position: relative;
-  padding: 5px;
+  padding: 10px;
   cursor: pointer;
 }
 .details .name {
@@ -103,9 +100,9 @@
   }
 }
 @media (max-width: 600px) {
-  .navbar-side .alert {
+  /* .navbar-side .alert {
     display: none;
-  }
+  } */
   .user .details {
     display: none;
   }

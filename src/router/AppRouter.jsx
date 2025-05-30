@@ -17,7 +17,7 @@ import ProtectedRoutes from '../components/ProtectedRoutes';
 import { ROLES } from '../utils/roles';
 import CreateAttendance from '../pages/ClassRep/CreateAttendance/CreateAttendance';
 import { AuthLayout, ClassRepLayout, StudentLayout } from '../layouts';
-import { CreateSchedule, Login, Register } from '../pages';
+import { CreateSchedule, Login, Notifications, Register } from '../pages';
 
 export const router = createBrowserRouter([
   {
@@ -95,6 +95,10 @@ export const router = createBrowserRouter([
               </Suspense>
             ),
           },
+          {
+            path: 'notifications/:id',
+            element: <Notifications />,
+          },
         ],
       },
       {
@@ -107,6 +111,15 @@ export const router = createBrowserRouter([
           </ProtectedRoutes>
         ),
         children: [
+          {
+            index: true,
+            element: (
+              <Navigate
+                to={'dashboard'}
+                replace
+              />
+            ),
+          },
           {
             path: 'dashboard',
             element: (

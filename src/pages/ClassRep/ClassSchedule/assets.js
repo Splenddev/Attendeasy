@@ -29,6 +29,13 @@ export const schedule = [
           endTime: '15:52',
         },
       },
+      {
+        day: 'Thursday',
+        timing: {
+          startTime: '10:52',
+          endTime: '15:52',
+        },
+      },
     ],
     media: [
       {

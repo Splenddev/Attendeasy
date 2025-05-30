@@ -5,12 +5,16 @@ import { AuthProvider } from './context/AuthContext.jsx';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './router/AppRouter.jsx';
 import { InfoModalProvider } from './context/infoModalContext.jsx';
+import { MainProvider } from './context/MainContext.jsx';
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <AuthProvider>
-      <InfoModalProvider>
-        <RouterProvider router={router} />
-      </InfoModalProvider>
-    </AuthProvider>
+    <MainProvider>
+      <AuthProvider>
+        <InfoModalProvider>
+          <RouterProvider router={router} />
+        </InfoModalProvider>
+      </AuthProvider>
+    </MainProvider>
   </StrictMode>
 );

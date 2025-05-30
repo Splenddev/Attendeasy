@@ -5,7 +5,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState({
-    role: 'class-rep',
+    role: 'student',
     name: 'splendid felix',
   });
   const [navTitle, setNavTitle] = useState('Welcome');
@@ -17,7 +17,9 @@ export const AuthProvider = ({ children }) => {
     user,
     setUser,
     navTitle,
-    setNavTitle, attendanceList, setAttendanceList
+    setNavTitle,
+    attendanceList,
+    setAttendanceList,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

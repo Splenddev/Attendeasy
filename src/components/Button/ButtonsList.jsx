@@ -8,7 +8,7 @@ export const IconButton = ({ icon, func, label, name, type = 'button' }) => {
       onClick={func}
       aria-label={label || 'icon button'}
       tabIndex={0}
-      type={type}>
+      type={type || 'button'}>
       <Icon />
     </button>
   );
@@ -31,7 +31,7 @@ export const IconTextButton = ({ icon, func, label, name, element, type }) => {
 export const NormalButton = ({ element, func, name, type = 'button' }) => {
   return (
     <button
-      type={type}
+      type={type || 'button'}
       onClick={func}
       className={`${name}`}>
       {element}

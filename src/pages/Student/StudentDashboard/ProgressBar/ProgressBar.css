@@ -1,0 +1,42 @@
+.progress-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, sans-serif;
+}
+
+.progress-container .status {
+  font-size: 12px;
+  gap: 6px;
+  font-weight: 600;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  & p {
+    color: #000;
+    font-size: 18px;
+    font-family: var(--font-sen);
+    font-weight: 600;
+  }
+  & span {
+    color: #aaa;
+    margin-top: -5px;
+    margin-bottom: 3px;
+  }
+}
+.test {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: calc(130px - 26px);
+  width: calc(130px - 26px);
+  border-radius: 50%;
+  border: 6px solid #f0f0f09a;
+}

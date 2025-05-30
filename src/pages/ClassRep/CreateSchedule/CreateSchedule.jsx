@@ -5,9 +5,9 @@ import DynamicForm from '../../../features/DynamicForm/DynamicForm';
 import { FormProvider } from 'react-hook-form';
 import useScheduleForm from './useScheduleForm';
 import './CreateSchedule.css';
-import InfoModal from '../../../components/Modals/Info/InfoModal';
+// import InfoModal from '../../../components/Modals/Info/InfoModal';
 import button from '../../../components/Button/Button';
-import { MdAddCard, MdAddchart, MdSave } from 'react-icons/md';
+import { MdAddchart } from 'react-icons/md';
 
 const CreateSchedule = () => {
   const { setNavTitle } = useAuth();
@@ -22,16 +22,29 @@ const CreateSchedule = () => {
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="create-schedule">
-          <div className="create-schedule-section">
-            {createScheduleFormDataAssets.map((schedule) => {
-              return (
-                <DynamicForm
-                  key={schedule.id}
-                  title={schedule.title}
-                  selectOptions={schedule.selectOptions}
-                />
-              );
-            })}
+          <div className="create-schedule-sections">
+            <div className="create-schedule-section">
+              {createScheduleFormDataAssets.slice(0, 3).map((schedule) => {
+                return (
+                  <DynamicForm
+                    key={schedule.id}
+                    title={schedule.title}
+                    selectOptions={schedule.selectOptions}
+                  />
+                );
+              })}
+            </div>
+            <div className="create-schedule-section">
+              {createScheduleFormDataAssets.slice(3).map((schedule) => {
+                return (
+                  <DynamicForm
+                    key={schedule.id}
+                    title={schedule.title}
+                    selectOptions={schedule.selectOptions}
+                  />
+                );
+              })}
+            </div>
           </div>
           {button.multiple({
             icon: MdAddchart,

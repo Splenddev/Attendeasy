@@ -1,10 +1,15 @@
 /* eslint-disable no-unused-vars */
 import './SideBar.css';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { assets } from '../../../assets/assets';
 import { MdLogout, MdSettings } from 'react-icons/md';
-const SideBar = ({ components, menuActive, setMenuActive }) => {
+import { useEffect } from 'react';
+const SideBar = ({ components, menuActive, setMenuActive, isMobile }) => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    setMenuActive(false);
+  }, [pathname, setMenuActive]);
   return (
     <aside className={`c-sidebar-container ${!menuActive ? 'closed' : ''}`}>
       <div className={`c-sidebar ${!menuActive ? 'closed' : ''}`}>

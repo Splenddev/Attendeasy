@@ -1,3 +1,4 @@
+import { Outlet } from 'react-router-dom';
 import CalendarSchedule from './CalendarSchedule';
 const scheduleData = {
   '2024-11-01': [
@@ -31,7 +32,8 @@ const AuthLayout = () => {
   return (
     <div>
       <p>Login | Signup</p>
-      <CalendarSchedule scheduleData={scheduleData} />
+      <Outlet />
+      {/* <CalendarSchedule scheduleData={scheduleData} /> */}
     </div>
   );
 };
