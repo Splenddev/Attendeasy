@@ -1,0 +1,44 @@
+.s-attendance {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.s-attendance-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.s-attendance-info {
+  display: flex;
+  gap: 20px;
+}
+.s-attendance-info-left {
+  flex: 1;
+  & hr {
+    margin: 10px 0;
+  }
+  /* display: flex; */
+}
+.s-attendance-info-left .marking-overview {
+  list-style: none;
+  display: flex;
+  border-radius: 12px;
+  border: 1px solid #999;
+  width: max-content;
+  & li {
+    padding: 10px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    &:nth-child(2) {
+      border-right: 1px solid #999;
+      border-left: 1px solid #999;
+    }
+  }
+}
+@media (max-width: 550px) {
+  .s-attendance-info {
+    flex-direction: column;
+  }
+}

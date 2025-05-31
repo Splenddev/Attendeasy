@@ -51,7 +51,8 @@ export const select = (type, setValue, selected, list, getValues) => {
   }
 };
 export const dateFormatter = (date) => {
-  const formattedDate = new Date(date).toLocaleDateString('en-US', {
+  const validateDate = date ? new Date(date) : new Date();
+  const formattedDate = validateDate.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
     day: '2-digit',

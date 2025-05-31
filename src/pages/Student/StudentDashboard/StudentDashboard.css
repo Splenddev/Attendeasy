@@ -10,6 +10,14 @@
   display: grid;
   grid-template-columns: 1fr 250px;
   gap: 20px;
+  & section > p {
+    font-weight: 600;
+    font-size: 1.2rem;
+    & ~ span {
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+  }
 }
 .s-dashboard-header .curr-date {
   font-size: 14px;
@@ -31,8 +39,10 @@
 }
 .s-dashboard-body {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
   gap: 20px;
+  align-items: center;
+  /* justify-content: center; */
 }
 .info-field {
   background: #fff;
@@ -42,7 +52,9 @@
   border-radius: 20px;
   padding: 15px;
   height: 100%;
-  min-width: 150px;
+  /* width: 100%; */
+  /* flex: 1; */
+  /* min-width: 250px; */
   & svg {
     font-size: 20px;
     color: var(--main-color);
@@ -52,14 +64,20 @@
 .s-dashboard-body-second {
   gap: 20px;
   display: flex;
+  height: 100%;
 }
 .s-dashboard-body-second {
   flex-direction: row-reverse;
+  justify-content: start;
 }
 .s-dashboard-body .left {
   border-radius: 20px;
   padding: 15px;
   background: #fff;
+  max-width: 100%;
+}
+.today-schedule {
+  flex: 1;
 }
 .today-schedule .top {
   display: flex;
@@ -78,11 +96,13 @@
 }
 .today-schedule .mid {
   display: flex;
+  width: 100%;
   gap: 20px;
 }
 .mid .mid-left {
   display: flex;
   flex-direction: column;
+  gap: 5px;
   justify-content: space-between;
   & svg {
     font-size: 2rem;
@@ -94,8 +114,9 @@
 }
 .mid-left .stat {
   display: grid;
-  grid-template-columns: 20px 1fr;
+  grid-template-columns: 20px 1fr 40px;
   align-items: center;
+  gap: 10px;
   & svg {
     font-size: 8px;
   }
@@ -114,6 +135,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  /* width: 100%; */
   flex: 1;
 }
 p.time-left {
@@ -125,14 +147,23 @@ p.time-left {
     font-weight: 600;
   }
 }
-@media (max-width: 890px) {
-  .s-dashboard-body .right {
+@media (max-width: 500px) {
+  .s-dashboard-body {
+    grid-template-columns: 1fr;
     /* flex-direction: row; */
   }
 }
 @media (max-width: 600px) {
   .s-dashboard-body-first,
   .s-dashboard-body-second {
+    flex-direction: column;
+  }
+  .s-dashboard-header {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .today-schedule .mid {
     flex-direction: column;
   }
 }

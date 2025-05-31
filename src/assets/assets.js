@@ -35,7 +35,7 @@ export const s_Sidebar = [
     link: `${roleUrl2}/dashboard`,
   },
   {
-    label: 'Attendance',
+    label: 'My Attendance',
     icon: FaClipboardList,
     link: `${roleUrl2}/attendance`,
   },

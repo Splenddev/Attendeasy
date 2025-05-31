@@ -15,6 +15,21 @@ import MultiSegmentProgressBar from './ProgressBar/MultiSegmentProgressBar ';
 
 const StudentDashboard = () => {
   const { user } = useAuth();
+  const overview = [
+    {
+      color: 'green',
+      figure: '101',
+      text: 'present ( on time )',
+    },
+    { color: 'green', figure: '121', text: 'late' },
+    { color: 'red', figure: '21', text: 'absent' },
+    { color: 'red', figure: '21', text: 'other reasons' },
+  ];
+  let total = 0;
+  overview.forEach((o) => {
+    total += parseFloat(o.figure);
+  });
+
   const color = 'orange';
   const now = new Date();
   return (
@@ -22,7 +37,9 @@ const StudentDashboard = () => {
       <header className="s-dashboard-header">
         <section>
           <p className="cap">Good Morning, {user.name}</p>
-          <span>You have 2 upcoming schedules and 1 attendance</span>
+          <span>
+            You have <b>2</b> upcoming schedules and <b>1</b> attendance
+          </span>
         </section>
         <section className="curr-date">
           <div>
@@ -52,7 +69,11 @@ const StudentDashboard = () => {
                   Time left : <span>56m 44s</span>
                 </p>
               </div>
-              <ProgressBar percent={18} />
+              <ProgressBar
+                text
+                percent={18}
+                styled
+              />
             </div>
             {button.normal({ element: 'mark presence', name: 'cap' })}
           </section>
@@ -72,40 +93,30 @@ const StudentDashboard = () => {
         <div className="s-dashboard-body-second">
           <section className="today-schedule left">
             <div className="top">
-              <h3>My Attendance Overview</h3>
+              <h3>My Attendance</h3>
               {button.normal({ element: 'View Stats', name: 'stats' })}
             </div>
             <hr />
             <div className="mid">
               <div className="mid-left">
-                {[
-                  {
-                    color: 'green',
-                    figure: '1012',
-                    text: 'present ( on time )',
-                  },
-                  { color: 'green', figure: '121', text: 'late' },
-                  { color: 'red', figure: '21', text: 'absent' },
-                  { color: 'red', figure: '21', text: 'other reasons' },
-                ].map(({ text, figure, color }) => (
-                  <div
-                    className="stat"
-                    key={text}>
-                    <FaCircle color={`var(--${color})`} />{' '}
-                    <p>
-                      <b>{figure}</b> {text}
-                    </p>
-                  </div>
-                ))}
+                {overview.map(({ text, figure, color }) => {
+                  return (
+                    <div
+                      className="stat"
+                      key={text}>
+                      <FaCircle color={`var(--${color})`} />{' '}
+                      <p>
+                        <b>{figure}</b> {text}
+                      </p>
+                      <ProgressBar
+                        strokeWidth={13}
+                        size={25}
+                        percent={(figure / total) * 100}
+                      />
+                    </div>
+                  );
+                })}
               </div>
-              <MultiSegmentProgressBar
-                present={40}
-                absent={30}
-                late={15}
-                others={10}
-                medical={10}
-                excused={5}
-              />
             </div>
             <div className="encourage">
               <LuBookCheck />

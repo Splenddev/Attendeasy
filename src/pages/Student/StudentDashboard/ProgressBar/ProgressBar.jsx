@@ -3,7 +3,13 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import './ProgressBar.css';
 
-const ProgressBar = ({ percent }) => {
+const ProgressBar = ({
+  percent,
+  text = false,
+  size = 130,
+  styled = false,
+  strokeWidth = 9,
+}) => {
   const [animatedPercent, setAnimatedPercent] = useState(0);
 
   // Animate from 0 to percent
@@ -32,19 +38,24 @@ const ProgressBar = ({ percent }) => {
 
   return (
     <div className="progress-container">
-      <div
-        className="status"
-        style={{ color: statusColor, marginTop: 5 }}>
-        <p>{`${percent}%`}</p>
-        <span>marked</span>
-        {statusText}
-      </div>
-      <div className="test"></div>
-      <div style={{ width: 130, height: 130 }}>
+      {text && (
+        <div
+          className="status"
+          style={{ color: statusColor, marginTop: 5 }}>
+          <p>{`${percent}%`}</p>
+          <span>marked</span>
+          {statusText}
+        </div>
+      )}
+      {styled && (
+        <div
+          className="styled"
+          style={{ width: `${size - 26}px`, height: `${size - 26}px` }}></div>
+      )}
+      <div style={{ width: size, height: size }}>
         <CircularProgressbar
           value={animatedPercent}
-          strokeWidth={9}
-          // text={}
+          strokeWidth={strokeWidth}
           styles={buildStyles({
             pathColor: statusColor,
             textColor: '#333',

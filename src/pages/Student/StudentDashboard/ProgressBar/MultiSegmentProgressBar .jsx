@@ -1,6 +1,4 @@
 import React from 'react';
-import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
 
 const MultiSegmentProgressBar = ({
   present,
@@ -9,77 +7,104 @@ const MultiSegmentProgressBar = ({
   medical,
   excused,
 }) => {
+  const circumference = 314; // Circumference of the circle with r = 50
+  const total = present + absent + late + medical + excused; // Ensure this equals 100%
+
+  // Calculate the offset for each segment based on its percentage
+  const getStrokeDasharray = (percent) => (percent / 100) * circumference;
+
+  const presentOffset = getStrokeDasharray(present);
+  const absentOffset = getStrokeDasharray(absent);
+  const lateOffset = getStrokeDasharray(late);
+  const medicalOffset = getStrokeDasharray(medical);
+  const excusedOffset = getStrokeDasharray(excused);
+
   return (
     <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}>
-      {/* Present Segment */}
-      <div style={{ width: 120, height: 120 }}>
-        <CircularProgressbar
-          value={present}
-          text={`${present}%`}
-          styles={buildStyles({
-            pathColor: '#32CD32', // Green color for present
-            textColor: '#333',
-            trailColor: '#e0e5e9',
-          })}
+      className="progress-container"
+      style={{ width: 120, height: 120 }}>
+      <svg
+        className="progress-ring"
+        width="120"
+        height="120">
+        <circle
+          className="progress-bg"
+          cx="60"
+          cy="60"
+          r="50"
         />
-      </div>
-
-      {/* Absent Segment */}
-      <div style={{ width: 120, height: 120 }}>
-        <CircularProgressbar
-          value={absent}
-          text={`${absent}%`}
-          styles={buildStyles({
-            pathColor: '#FF6347', // Red color for absent
-            textColor: '#333',
-            trailColor: '#e0e5e9',
-          })}
+        {/* Present Segment */}
+        <circle
+          className="progress-bar"
+          cx="60"
+          cy="60"
+          r="50"
+          style={{
+            strokeDasharray: presentOffset, // Length of present segment
+            strokeDashoffset: 0, // Starting position
+            stroke: 'green', // Color for present
+            strokeWidth: 10,
+            fill: 'none',
+          }}
         />
-      </div>
-
-      {/* Late Segment */}
-      <div style={{ width: 120, height: 120 }}>
-        <CircularProgressbar
-          value={late}
-          text={`${late}%`}
-          styles={buildStyles({
-            pathColor: '#FFD700', // Yellow for late
-            textColor: '#333',
-            trailColor: '#e0e5e9',
-          })}
+        {/* Absent Segment */}
+        <circle
+          className="progress-bar"
+          cx="60"
+          cy="60"
+          r="50"
+          style={{
+            strokeDasharray: absentOffset, // Length of absent segment
+            strokeDashoffset: presentOffset, // Starting offset after present
+            stroke: 'red', // Color for absent
+            strokeWidth: 10,
+            fill: 'none',
+          }}
         />
-      </div>
-
-      {/* Medical Segment */}
-      <div style={{ width: 120, height: 120 }}>
-        <CircularProgressbar
-          value={medical}
-          text={`${medical}%`}
-          styles={buildStyles({
-            pathColor: '#1E90FF', // Blue for medical
-            textColor: '#333',
-            trailColor: '#e0e5e9',
-          })}
+        {/* Late Segment */}
+        <circle
+          className="progress-bar"
+          cx="60"
+          cy="60"
+          r="50"
+          style={{
+            strokeDasharray: lateOffset, // Length of late segment
+            strokeDashoffset: presentOffset + absentOffset, // Starting offset after present and absent
+            stroke: 'yellow', // Color for late
+            strokeWidth: 10,
+            fill: 'none',
+          }}
         />
-      </div>
-
-      {/* Excused Segment */}
-      <div style={{ width: 120, height: 120 }}>
-        <CircularProgressbar
-          value={excused}
-          text={`${excused}%`}
-          styles={buildStyles({
-            pathColor: '#800080', // Purple for excused
-            textColor: '#333',
-            trailColor: '#e0e5e9',
-          })}
+        {/* Medical Segment */}
+        <circle
+          className="progress-bar"
+          cx="60"
+          cy="60"
+          r="50"
+          style={{
+            strokeDasharray: medicalOffset, // Length of medical segment
+            strokeDashoffset: presentOffset + absentOffset + lateOffset, // Starting offset
+            stroke: 'blue', // Color for medical
+            strokeWidth: 10,
+            fill: 'none',
+          }}
         />
-      </div>
+        {/* Excused Segment */}
+        <circle
+          className="progress-bar"
+          cx="60"
+          cy="60"
+          r="50"
+          style={{
+            strokeDasharray: excusedOffset, // Length of excused segment
+            strokeDashoffset:
+              presentOffset + absentOffset + lateOffset + medicalOffset, // Starting offset
+            stroke: 'purple', // Color for excused
+            strokeWidth: 10,
+            fill: 'none',
+          }}
+        />
+      </svg>
     </div>
   );
 };
