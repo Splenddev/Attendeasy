@@ -12,9 +12,11 @@ import { FaCircle, FaHistory, FaRegClock } from 'react-icons/fa';
 import ProgressBar from './ProgressBar/ProgressBar';
 import { LuBookCheck } from 'react-icons/lu';
 import MultiSegmentProgressBar from './ProgressBar/MultiSegmentProgressBar ';
+import { useEffect, useState } from 'react';
 
 const StudentDashboard = () => {
   const { user } = useAuth();
+  const [now, setNow] = useState(new Date());
   const overview = [
     {
       color: 'green',
@@ -29,9 +31,15 @@ const StudentDashboard = () => {
   overview.forEach((o) => {
     total += parseFloat(o.figure);
   });
-
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setNow(new Date());
+    }, 1000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
   const color = 'orange';
-  const now = new Date();
   return (
     <div className="s-dashboard">
       <header className="s-dashboard-header">
@@ -45,7 +53,7 @@ const StudentDashboard = () => {
           <div>
             <p>Current date</p>
             <span>
-              {dateFormatter(now)} {timeFormatter(now)}
+              {dateFormatter(now)} {timeFormatter(now, 'en-GB', true)}
             </span>
           </div>
           <MdTimelapse />

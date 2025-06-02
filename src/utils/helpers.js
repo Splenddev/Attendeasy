@@ -59,11 +59,17 @@ export const dateFormatter = (date) => {
   });
   return formattedDate;
 };
-export const timeFormatter = (time, lang = 'en-US') => {
-  const formattedTime = new Date(time).toLocaleTimeString([lang], {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+export const timeFormatter = (time, lang = 'en-US', seconds) => {
+  // const passedTime=;
+  const formattedTime = new Date(time).toLocaleTimeString(
+    [lang],
+    !seconds
+      ? {
+          hour: '2-digit',
+          minute: '2-digit',
+        }
+      : { hour: '2-digit', minute: '2-digit', second: '2-digit' }
+  );
   return formattedTime;
 };
 export const toCamelCase = (str) => {
@@ -82,6 +88,12 @@ export const parseTimeToday = (timeString) => {
   date.setHours(Number(hours), Number(minutes), Number(seconds ?? 0), 0);
   return date;
 };
+export const parseTimeToday2 = (timeString) => {
+  const [hours, minutes] = timeString.split(':');
+  const date = new Date();
+  date.setHours(Number(hours), Number(minutes));
+  return date;
+};
 export const groupByDay = (schedule) => {
   return schedule.reduce((acc, course) => {
     course.classDaysTimes.forEach(({ day, timing }) => {
@@ -98,4 +110,25 @@ export const groupByDay = (schedule) => {
     });
     return acc;
   }, {});
+};
+
+export const updateTime = () => {
+  return new Date().toLocaleTimeString();
+};
+export const parseTime2 = (refTime = '', value = '') => {
+  let [hour, minutes] = refTime.split(':').map(Number);
+  if (isNaN(hour) || isNaN(minutes)) return 'Invalid refTime';
+
+  const match = value.match(/(?:(\d+)H)?(?:(\d+)M)?/);
+  if (!match) return 'Invalid value';
+
+  const hoursToAdd = Number(match[1]) || 0;
+  const minToAdd = Number(match[2]) || 0;
+
+  minutes += minToAdd;
+  hour += hoursToAdd + Math.floor(minutes / 60);
+  minutes = minutes % 60;
+  hour = hour % 24; // optional wrap-around
+
+  return `${String(hour).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
 };

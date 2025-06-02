@@ -91,11 +91,11 @@ export const todaySchedule = [
 export const attendance = [
   {
     Absence_Plea_choices: { Text: true },
-    Class_Start: '03:29',
-    Class_End: '03:27',
+    Class_Start: '06:00',
+    Class_End: '09:00',
     Code: 'BCH302',
     Course_Title: 'Analytical Biochemistry',
-    DateCreated: '2025-05-06',
+    DateCreated: '2025-06-02',
     Email: 'nnhvbn@gmail.com',
     Entry_Start: '0H30M',
     Entry_End: '0H30M',
@@ -183,7 +183,7 @@ export const attendance = [
     Class_End: '03:27',
     Code: 'BCH303',
     Course_Title: 'Analytical Biochemistry',
-    DateCreated: '2025-05-05',
+    DateCreated: '2025-06-02',
     Email: 'nnhvbn@gmail.com',
     Entry_Start: '0H30M',
     Entry_End: '0H30M',
