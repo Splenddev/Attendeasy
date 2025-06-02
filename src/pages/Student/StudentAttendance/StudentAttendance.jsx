@@ -36,11 +36,10 @@ const StudentAttendance = () => {
   now.setHours(0, 0, 0, 0);
   const filtered = attendance.filter((att) => {
     const attDate = new Date(att.DateCreated);
-
-    console.log(attDate);
-    console.log(att.DateCreated);
-    return attDate >= now;
+    attDate.setHours(0, 0, 0, 0);
+    return attDate.getTime() === now.getTime();
   });
+
   return (
     <div className="s-attendance">
       <section className="s-attendance-heading">
