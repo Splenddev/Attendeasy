@@ -5,7 +5,7 @@ const ClassStatus = ({ status }) => {
   const statusIcons = {
     'not-started': { icon: <FaClock />, text: 'Not Yet Time' },
     'in-progress': { icon: <FaHourglassHalf />, text: 'In Progress' },
-    ended: { icon: <MdBlock />, text: 'Class Ended' },
+    ended: { icon: <MdBlock />, text: 'Ended' },
   };
 
   return (

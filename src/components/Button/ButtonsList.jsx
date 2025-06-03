@@ -1,9 +1,17 @@
 import './Button.css';
 
-export const IconButton = ({ icon, func, label, name, type = 'button' }) => {
+export const IconButton = ({
+  disabled = false,
+  icon,
+  func,
+  label,
+  name,
+  type = 'button',
+}) => {
   const Icon = icon;
   return (
     <button
+      disabled={disabled}
       className={`${name}`}
       onClick={func}
       aria-label={label || 'icon button'}
@@ -13,10 +21,19 @@ export const IconButton = ({ icon, func, label, name, type = 'button' }) => {
     </button>
   );
 };
-export const IconTextButton = ({ icon, func, label, name, element, type }) => {
+export const IconTextButton = ({
+  disabled = false,
+  icon,
+  func,
+  label,
+  name,
+  element,
+  type,
+}) => {
   const Icon = icon;
   return (
     <button
+      disabled={disabled}
       className={`${name} mixed`}
       onClick={func}
       aria-label={label || name || element}
@@ -28,9 +45,16 @@ export const IconTextButton = ({ icon, func, label, name, element, type }) => {
   );
 };
 
-export const NormalButton = ({ element, func, name, type = 'button' }) => {
+export const NormalButton = ({
+  disabled = false,
+  element,
+  func,
+  name,
+  type = 'button',
+}) => {
   return (
     <button
+      disabled={disabled}
       type={type || 'button'}
       onClick={func}
       className={`${name}`}>
@@ -38,9 +62,15 @@ export const NormalButton = ({ element, func, name, type = 'button' }) => {
     </button>
   );
 };
-export const SimpleFunctionButton = ({ name, element, setState }) => {
+export const SimpleFunctionButton = ({
+  disabled = false,
+  name,
+  element,
+  setState,
+}) => {
   return (
     <button
+      disabled={disabled}
       className={`${name}`}
       onClick={() => setState(element)}>
       {element}

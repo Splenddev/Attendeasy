@@ -90,12 +90,13 @@ export const todaySchedule = [
 ];
 export const attendance = [
   {
+    id: 1,
     Absence_Plea_choices: { Text: true },
     Class_Start: '06:00',
     Class_End: '09:00',
     Code: 'BCH302',
     Course_Title: 'Analytical Biochemistry',
-    DateCreated: '2025-06-02',
+    DateCreated: '2025-06-03',
     Email: 'nnhvbn@gmail.com',
     Entry_Start: '0H30M',
     Entry_End: '0H30M',
@@ -178,6 +179,7 @@ export const attendance = [
     ],
   },
   {
+    id: 2,
     Absence_Plea_choices: { Text: true },
     Class_Start: '03:29',
     Class_End: '03:27',
@@ -259,6 +261,7 @@ export const attendance = [
     ],
   },
   {
+    id: 3,
     Absence_Plea_choices: { Text: true },
     Class_Start: '03:29',
     Class_End: '03:27',

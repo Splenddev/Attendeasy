@@ -12,7 +12,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  /* background: #fff; */
+  margin-top: 20px;
 }
 .s-attendance-info-left {
   display: flex;
@@ -168,6 +168,22 @@
   background: #fff;
   padding: 15px;
   border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  & button {
+    min-width: 100px;
+    padding: 8px;
+    margin-top: 15px;
+    background: var(--main-color);
+    border-radius: 20px;
+    place-self: end;
+    color: #fff;
+    &:disabled {
+      background: var(--others-light);
+      color: #444;
+      cursor: not-allowed;
+    }
+  }
 }
 .today-attendance-card .top {
   display: flex;
@@ -185,9 +201,9 @@
   gap: 10px;
   & p {
     display: grid;
+    align-items: center;
     grid-template-columns: auto 1fr;
     gap: 10px;
-    font-size: 15px;
     font-size: 1rem;
   }
 }
@@ -201,6 +217,11 @@
     background: var(--light-blue-200);
     & p {
       color: var(--main-color);
+      display: grid;
+      align-items: center;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      font-size: 1rem;
     }
     & h3 {
       font-size: 1.7rem;
@@ -238,7 +259,12 @@
 .s-attendance-history-card {
   background: #fff;
   padding: 1rem;
-  border-left: 6px solid #000;
+  & hr {
+    border: none;
+    height: 1px;
+    width: 100%;
+    background: #ddd;
+  }
 }
 .s-attendance-history-card .top {
   display: flex;
@@ -268,6 +294,19 @@
 }
 .s-attendance-history-card .entries {
   margin: 10px 0;
+}
+.s-attendance-history-card .bottom {
+  display: flex;
+  & span {
+    font-weight: 600;
+    font-size: 17px;
+  }
+  & p {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
 }
 /* media queries */
 @media (max-width: 550px) {

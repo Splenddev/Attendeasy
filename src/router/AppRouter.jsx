@@ -18,6 +18,7 @@ import { ROLES } from '../utils/roles';
 import CreateAttendance from '../pages/ClassRep/CreateAttendance/CreateAttendance';
 import { AuthLayout, ClassRepLayout, StudentLayout } from '../layouts';
 import { CreateSchedule, Login, Notifications, Register } from '../pages';
+import MarkAttendance from '../pages/Student/MarkAttendance/MarkAttendance';
 
 export const router = createBrowserRouter([
   {
@@ -133,6 +134,14 @@ export const router = createBrowserRouter([
             element: (
               <Suspense fallback={<Loader />}>
                 <StudentAttendance />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'attendance/mark/:id',
+            element: (
+              <Suspense fallback={<Loader />}>
+                <MarkAttendance />
               </Suspense>
             ),
           },
