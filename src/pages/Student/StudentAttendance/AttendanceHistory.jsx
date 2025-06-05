@@ -30,12 +30,13 @@ const AttendanceHistory = () => {
       code: 'BCH315',
       location: 'Auditorium',
     },
-    // Add more mock entries as needed
   ];
 
   return (
     <section className="s-attendance-history">
-      <h1>Attendance History</h1>
+      <header className="heading">
+        Attendance History <hr />
+      </header>
       <div className="s-attendance-history-wrap">
         <div className="s-attendance-history-pagination cap">
           {button.normal({ element: 'prev', name: 'btn' })}

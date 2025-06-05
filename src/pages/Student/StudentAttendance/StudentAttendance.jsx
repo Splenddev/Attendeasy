@@ -7,10 +7,11 @@ import './StudentAttendance.css';
 import AttendanceInfo from './AttendanceInfo';
 import TodayAttendance from './TodayAttendance';
 import AttendanceHistory from './AttendanceHistory';
+import MarkEntry from '../../../components/Modals/MarkEntry/MarkEntry';
 
 const StudentAttendance = () => {
   const { setNavTitle, user } = useAuth();
-const [markEntryModal, setMarkEntryModal] = useState(false)
+
   useEffect(() => {
     setNavTitle('My Attendance');
   }, [setNavTitle]);
@@ -32,6 +33,7 @@ const [markEntryModal, setMarkEntryModal] = useState(false)
       />
       <TodayAttendance data={filtered} />
       <AttendanceHistory />
+      <MarkEntry />
     </div>
   );
 };

@@ -40,7 +40,7 @@
 .s-dashboard-body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-  gap: 20px;
+  gap: 10px;
   align-items: center;
   /* justify-content: center; */
 }
@@ -59,25 +59,57 @@
     font-size: 20px;
     color: var(--main-color);
   }
+  & button {
+    padding: 7px 20px;
+    margin-top: -5px;
+    border-radius: 20px;
+    justify-content: center;
+    place-self: end;
+    color: #fff;
+    background: var(--main-color);
+    & svg {
+      color: #fff;
+      font-size: 14px;
+    }
+  }
+  & input {
+    border: 1px solid var(--light-blue-300);
+    outline: none;
+    padding: 4px 15px;
+    font-size: 14px;
+    border-radius: 7px;
+  }
+}
+.info-field .truncate {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 7px;
 }
 .s-dashboard-body-first,
 .s-dashboard-body-second {
-  gap: 20px;
-  display: flex;
+  gap: 10px;
+  display: grid;
+  grid-template-columns: 1fr 0.6fr;
   height: 100%;
 }
 .s-dashboard-body-second {
-  flex-direction: row-reverse;
+  grid-auto-flow: row;
+  direction: rtl;
   justify-content: start;
+  & > * {
+    direction: ltr;
+  }
 }
 .s-dashboard-body .left {
   border-radius: 20px;
   padding: 15px;
   background: #fff;
-  max-width: 100%;
+  /* max-width: 100%; */
 }
 .today-schedule {
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 .today-schedule .top {
   display: flex;
@@ -97,12 +129,13 @@
 .today-schedule .mid {
   display: flex;
   width: 100%;
-  gap: 20px;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 .mid .mid-left {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 10px;
   justify-content: space-between;
   & svg {
     font-size: 2rem;
@@ -114,11 +147,14 @@
 }
 .mid-left .stat {
   display: grid;
-  grid-template-columns: 20px 1fr 40px;
+  grid-template-columns: auto 1fr 1fr;
   align-items: center;
   gap: 10px;
   & svg {
     font-size: 8px;
+  }
+  & .progress-container {
+    margin-left: auto;
   }
 }
 .today-schedule .cap {
@@ -129,12 +165,24 @@
   font-size: 16px;
   background: var(--main-color);
   cursor: pointer;
-  margin-top: 20px;
+  margin-top: auto;
+}
+.today-schedule .encourage {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  margin-top: auto;
+  gap: 6px;
+}
+.today-schedule .view-stats {
+  padding: 7px 16px;
+  border-radius: 20px;
+  background: var(--main-color);
+  color: #fff;
 }
 .s-dashboard-body .right {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
   /* width: 100%; */
   flex: 1;
 }
@@ -156,6 +204,7 @@ p.time-left {
 @media (max-width: 600px) {
   .s-dashboard-body-first,
   .s-dashboard-body-second {
+    display: flex;
     flex-direction: column;
   }
   .s-dashboard-header {
@@ -163,6 +212,9 @@ p.time-left {
     flex-direction: column;
     gap: 20px;
   }
+}
+
+@media (max-width: 600px) {
   .today-schedule .mid {
     flex-direction: column;
   }

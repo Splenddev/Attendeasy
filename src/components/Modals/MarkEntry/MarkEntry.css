@@ -1,0 +1,116 @@
+.mark-entry-modal {
+  max-width: 520px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 24px 32px;
+  margin: 80px auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #222;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.modal-header h2 {
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.close-button {
+  background: transparent;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #555;
+  transition: color 0.2s ease-in-out;
+}
+
+.close-button:hover {
+  color: #000;
+}
+
+hr {
+  border: none;
+  border-top: 1.5px solid #e0e0e0;
+  margin-bottom: 20px;
+}
+
+.modal-section p {
+  margin: 8px 0;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.modal-section strong {
+  color: #444;
+}
+
+.map-container {
+  margin: 20px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid #ddd;
+}
+
+.info-box {
+  margin: 16px 0;
+  padding: 14px 16px;
+  background-color: #f0f4ff;
+  border-left: 5px solid #4a7cf7;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: #1e2a78;
+  border-radius: 6px;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+}
+
+.check-button {
+  width: 100%;
+  background-color: #4a7cf7;
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 600;
+  padding: 14px 0;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.check-button:disabled {
+  background-color: #a3b9f7;
+  cursor: not-allowed;
+}
+
+.check-button:hover:not(:disabled) {
+  background-color: #3563d6;
+}
+.goto-location-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  background-color: #007bff;
+  border: none;
+  padding: 8px 12px;
+  color: white;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s ease;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.goto-location-button:hover {
+  background-color: #0056b3;
+}

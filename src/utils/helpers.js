@@ -132,3 +132,7 @@ export const parseTime2 = (refTime = '', value = '') => {
 
   return `${String(hour).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
 };
+export const truncateText = (text = '', length = 20) => {
+  if (typeof text !== 'string') return '';
+  return text.length > length ? text.slice(0, length).trim() + '...' : text;
+};

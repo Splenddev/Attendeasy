@@ -5,7 +5,7 @@ import { parseTime2, parseTimeToday2 } from '../../../utils/helpers';
 import ClassStatus from '../../ClassRep/ClassRepDashboard/ClassStatus';
 import button from '../../../components/Button/Button';
 
-const AttendanceCard = ({ att }) => {
+const AttendanceCard = ({ att, isModal, setIsModal }) => {
   const start = parseTimeToday2(att.Class_Start);
   const end = parseTimeToday2(att.Class_End);
   const now = new Date();
@@ -63,7 +63,11 @@ const AttendanceCard = ({ att }) => {
           </div>
         </div>
       </div>
-      {button.normal({ element: 'Mark', disabled: status !== 'in-progress' })}
+      {button.normal({
+        element: 'Mark',
+        func: () => setIsModal(true),
+        //disabled: status !== 'in-progress'
+      })}
     </div>
   );
 };

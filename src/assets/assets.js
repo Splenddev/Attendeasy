@@ -1,5 +1,11 @@
-import { FaClipboardList, FaTachometerAlt } from 'react-icons/fa';
-import { MdGroup, MdSchedule } from 'react-icons/md';
+import { FaClipboardList, FaRegListAlt, FaTachometerAlt } from 'react-icons/fa';
+import {
+  MdAccessTime,
+  MdDashboard,
+  MdEventNote,
+  MdGroup,
+  MdSchedule,
+} from 'react-icons/md';
 import logo from './splendid.png';
 import profile from './profile.jpg';
 const roleUrl = '/class-rep';
@@ -9,7 +15,7 @@ export const assets = { logo, profile };
 export const c_Sidebar = [
   {
     label: 'Dashboard',
-    icon: FaTachometerAlt,
+    icon: MdDashboard,
     link: `${roleUrl}/dashboard`,
   },
   {
@@ -31,17 +37,17 @@ export const c_Sidebar = [
 export const s_Sidebar = [
   {
     label: 'Dashboard',
-    icon: FaTachometerAlt,
+    icon: MdDashboard,
     link: `${roleUrl2}/dashboard`,
   },
   {
     label: 'My Attendance',
-    icon: FaClipboardList,
+    icon: FaRegListAlt,
     link: `${roleUrl2}/attendance`,
   },
   {
     label: 'Class Schedules',
-    icon: MdSchedule,
+    icon: MdEventNote,
     link: `${roleUrl2}/schedules`,
   },
   // {
@@ -96,7 +102,7 @@ export const attendance = [
     Class_End: '09:00',
     Code: 'BCH302',
     Course_Title: 'Analytical Biochemistry',
-    DateCreated: '2025-06-03',
+    DateCreated: '2025-06-04',
     Email: 'nnhvbn@gmail.com',
     Entry_Start: '0H30M',
     Entry_End: '0H30M',
@@ -185,7 +191,7 @@ export const attendance = [
     Class_End: '03:27',
     Code: 'BCH303',
     Course_Title: 'Analytical Biochemistry',
-    DateCreated: '2025-06-02',
+    DateCreated: '2025-06-05',
     Email: 'nnhvbn@gmail.com',
     Entry_Start: '0H30M',
     Entry_End: '0H30M',

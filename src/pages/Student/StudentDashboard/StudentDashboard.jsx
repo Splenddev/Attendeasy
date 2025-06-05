@@ -1,22 +1,26 @@
-import {
-  MdAccessTime,
-  MdAddchart,
-  MdHistory,
-  MdTimelapse,
-} from 'react-icons/md';
+import { MdAddchart, MdChat, MdSend, MdTimelapse } from 'react-icons/md';
 import { useAuth } from '../../../context/AuthContext';
-import { dateFormatter, timeFormatter } from '../../../utils/helpers';
+import {
+  dateFormatter,
+  timeFormatter,
+  truncateText,
+} from '../../../utils/helpers';
 import './StudentDashboard.css';
 import button from '../../../components/Button/Button';
-import { FaCircle, FaHistory, FaRegClock } from 'react-icons/fa';
+import { FaCircle, FaFileAlt, FaHistory } from 'react-icons/fa';
+import { AiFillFilePdf } from 'react-icons/ai';
+import { FiDownload } from 'react-icons/fi';
+import { HiDocumentText } from 'react-icons/hi';
 import ProgressBar from './ProgressBar/ProgressBar';
 import { LuBookCheck } from 'react-icons/lu';
-import MultiSegmentProgressBar from './ProgressBar/MultiSegmentProgressBar ';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const StudentDashboard = () => {
   const { user } = useAuth();
   const [now, setNow] = useState(new Date());
+  const navigate = useNavigate();
+  const [message, setMessage] = useState('');
   const overview = [
     {
       color: 'green',
@@ -39,7 +43,6 @@ const StudentDashboard = () => {
       clearInterval(timer);
     };
   }, []);
-  const color = 'orange';
   return (
     <div className="s-dashboard">
       <header className="s-dashboard-header">
@@ -87,14 +90,32 @@ const StudentDashboard = () => {
           </section>
           <section className="right">
             <div className="info-field">
-              <FaHistory style={{ color: color || 'var(--main-color)' }} />
-              <span>Average Hours</span>
-              <h3>7h 7mins</h3>
+              <MdChat />
+              <span>Send a message to class rep</span>
+              <input
+                type="text"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+              />
+              {button.multiple({
+                icon: MdSend,
+                element: 'Send',
+                disabled: message === '',
+              })}
             </div>
             <div className="info-field">
-              <FaHistory />
-              <span>Arrival</span>
-              <h3>98 %</h3>
+              <FaFileAlt />
+              <span>Course Materials</span>
+              <p className="truncate">
+                <AiFillFilePdf color="red" />
+                <strong>
+                  {truncateText('BCH305 - intro to practical biochemistry', 30)}
+                </strong>
+                <FiDownload />
+              </p>
+              {button.normal({
+                element: 'view all',
+              })}
             </div>
           </section>
         </div>
@@ -102,7 +123,11 @@ const StudentDashboard = () => {
           <section className="today-schedule left">
             <div className="top">
               <h3>My Attendance</h3>
-              {button.normal({ element: 'View Stats', name: 'stats' })}
+              {button.normal({
+                element: 'View Full Stats',
+                name: 'view-stats',
+                func: () => navigate(`/${user.role}/attendance`),
+              })}
             </div>
             <hr />
             <div className="mid">
@@ -117,8 +142,8 @@ const StudentDashboard = () => {
                         <b>{figure}</b> {text}
                       </p>
                       <ProgressBar
-                        strokeWidth={13}
-                        size={25}
+                        strokeWidth={10}
+                        size={30}
                         percent={(figure / total) * 100}
                       />
                     </div>
@@ -136,13 +161,19 @@ const StudentDashboard = () => {
           <section className="right">
             <div className="info-field">
               <FaHistory />
-              <span>Average Hours</span>
-              <h3>7h 7mins</h3>
+              <span>Today's Classes</span>
+              <h3>BCH305</h3>
+              {button.normal({
+                element: 'view all',
+              })}
             </div>
             <div className="info-field">
-              <FaHistory />
-              <span>Arrival</span>
-              <h3>98 %</h3>
+              <HiDocumentText />
+              <span>Assignments</span>
+              <h3>2 Assignments</h3>
+              {button.normal({
+                element: 'view all',
+              })}
             </div>
           </section>
         </div>

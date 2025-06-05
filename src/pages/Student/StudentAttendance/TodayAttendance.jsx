@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import AttendanceCard from './AttendanceCard';
 
 const TodayAttendance = ({ data }) => {
+  const [markEntryModal, setMarkEntryModal] = useState(false);
   return (
     <section className="s-attendance-today">
-      <header>
+      <header className="heading">
         Today's <hr />
       </header>
       <div className="today-attendance-cards">
@@ -12,6 +14,8 @@ const TodayAttendance = ({ data }) => {
         ) : (
           data.map((att, i) => (
             <AttendanceCard
+              isModal={markEntryModal}
+              setIsModal={setMarkEntryModal}
               key={i}
               att={att}
             />
