@@ -12,7 +12,7 @@ import L from 'leaflet';
 import { MdClose } from 'react-icons/md';
 import './MarkEntry.css';
 
-const classLocation = { lat: 6.5244, lng: 3.3792 }; // Example: Lagos
+const classLocation = { lat: 6.5244, lng: 3.3792 };
 
 const classIcon = L.icon({
   iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
@@ -20,6 +20,7 @@ const classIcon = L.icon({
   iconAnchor: [15, 40],
   popupAnchor: [0, -40],
 });
+
 const userIcon = L.icon({
   iconUrl: 'https://cdn-icons-png.flaticon.com/512/149/149060.png',
   iconSize: [30, 40],
@@ -58,12 +59,12 @@ function GoToMyLocationButton({ onLocationFound }) {
       onClick={handleClick}
       title="Go to My Location"
       style={{ position: 'absolute', top: 10, right: 10, zIndex: 1000 }}>
-      📍 Go to My Location
+      📍 My Location
     </button>
   );
 }
 
-const MarkEntry = ({ onClose }) => {
+const MarkEntry = ({ onClose, visible }) => {
   const [userLocation, setUserLocation] = useState(null);
   const [distance, setDistance] = useState(null);
   const maxDistance = 50;
@@ -74,11 +75,19 @@ const MarkEntry = ({ onClose }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const watchId = useRef(null);
 
+  useEffect(() => {
+    document.body.style.overflow = visible ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [visible]);
+
   const reverseGeocode = async ({ lat, lng }) => {
     try {
       const res = await fetch(
         `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`
       );
+      if (!res.ok) throw new Error('Failed to fetch');
       const data = await res.json();
       return data.display_name || 'Unknown location';
     } catch {
@@ -103,7 +112,7 @@ const MarkEntry = ({ onClose }) => {
   useEffect(() => {
     if (status === 'checking') {
       if (!navigator.geolocation) {
-        setErrorMessage('Geolocation is not supported by your browser.');
+        setErrorMessage('Geolocation not supported.');
         setStatus('error');
         return;
       }
@@ -115,41 +124,35 @@ const MarkEntry = ({ onClose }) => {
             lng: pos.coords.longitude,
           };
           setUserLocation(coords);
-
           const dist = calculateDistance(coords, classLocation);
           setDistance(dist);
-
           setStatus(dist <= maxDistance ? 'within' : 'far');
           setErrorMessage('');
         },
         (err) => {
-          console.error('Geolocation error:', err);
-          if (err.code === err.PERMISSION_DENIED) {
-            setErrorMessage('Permission denied. Please allow location access.');
-          } else if (err.code === err.POSITION_UNAVAILABLE) {
-            setErrorMessage('Position unavailable. Try again later.');
-          } else if (err.code === err.TIMEOUT) {
-            setErrorMessage('Location request timed out.');
-          } else {
-            setErrorMessage('Unable to retrieve location.');
-          }
+          const messages = {
+            1: 'Permission denied. Please allow location access.',
+            2: 'Position unavailable. Try again later.',
+            3: 'Request timed out. Try again.',
+          };
+          setErrorMessage(messages[err.code] || 'Geolocation error.');
           setStatus('error');
         },
         {
-          enableHighAccuracy: false,
+          enableHighAccuracy: true,
           maximumAge: 5000,
           timeout: 10000,
         }
       );
     } else {
-      if (watchId.current !== null) {
+      if (watchId.current) {
         navigator.geolocation.clearWatch(watchId.current);
         watchId.current = null;
       }
     }
 
     return () => {
-      if (watchId.current !== null) {
+      if (watchId.current) {
         navigator.geolocation.clearWatch(watchId.current);
       }
     };
@@ -157,14 +160,15 @@ const MarkEntry = ({ onClose }) => {
 
   const calculateDistance = (loc1, loc2) => {
     const R = 6371e3;
-    const toRad = (deg) => (deg * Math.PI) / 180;
-    const dLat = toRad(loc2.lat - loc1.lat);
-    const dLng = toRad(loc2.lng - loc1.lng);
+    const φ1 = (loc1.lat * Math.PI) / 180;
+    const φ2 = (loc2.lat * Math.PI) / 180;
+    const Δφ = ((loc2.lat - loc1.lat) * Math.PI) / 180;
+    const Δλ = ((loc2.lng - loc1.lng) * Math.PI) / 180;
+
     const a =
-      Math.sin(dLat / 2) ** 2 +
-      Math.cos(toRad(loc1.lat)) *
-        Math.cos(toRad(loc2.lat)) *
-        Math.sin(dLng / 2) ** 2;
+      Math.sin(Δφ / 2) ** 2 +
+      Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) ** 2;
+
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return Math.round(R * c);
   };
@@ -172,17 +176,15 @@ const MarkEntry = ({ onClose }) => {
   const getStatusMessage = () => {
     switch (status) {
       case 'idle':
-        return 'Click "Check Location" to start tracking your position.';
+        return '📍 Click "Check Location" to start tracking.';
       case 'checking':
-        return 'Tracking your location... Move around to update.';
+        return '🛰️ Tracking your location...';
       case 'within':
-        return '✅ You are within the allowed distance.';
+        return '✅ You are within range.';
       case 'far':
-        return '❌ You are too far from the class location.';
+        return '❌ You are too far from class location.';
       case 'error':
-        return `⚠️ ${
-          errorMessage || 'Unable to access or track your location.'
-        }`;
+        return `⚠️ ${errorMessage || 'Tracking error.'}`;
       default:
         return '';
     }
@@ -204,21 +206,20 @@ const MarkEntry = ({ onClose }) => {
 
       <div className="modal-section">
         <p>
-          <strong>Class Location:</strong>{' '}
-          {classAddress ?? 'Loading address...'}
+          <strong>Class Location:</strong> {classAddress || 'Loading...'}
         </p>
         {userLocation && (
           <p>
             <strong>Your Location:</strong>{' '}
-            {loadingAddress ? 'Loading address...' : userAddress || 'Unknown'}
+            {loadingAddress ? 'Loading...' : userAddress || 'Unknown'}
           </p>
         )}
         <p>
           <strong>Distance:</strong>{' '}
-          {distance != null ? `${distance} meters` : 'Not measured'}
+          {distance != null ? `${distance} m` : 'Not measured'}
         </p>
         <p>
-          <strong>Max Allowed:</strong> {maxDistance} meters
+          <strong>Allowed Range:</strong> {maxDistance} meters
         </p>
       </div>
 
@@ -229,7 +230,7 @@ const MarkEntry = ({ onClose }) => {
           center={userLocation || classLocation}
           zoom={15}
           scrollWheelZoom={false}
-          style={{ height: '300px', width: '100%' }}>
+          style={{ height: '300px', width: '100%', borderRadius: '8px' }}>
           <TileLayer
             attribution="&copy; OpenStreetMap contributors"
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -259,7 +260,7 @@ const MarkEntry = ({ onClose }) => {
               />
               <Polyline
                 positions={[userLocation, classLocation]}
-                pathOptions={{ color: 'blue', weight: 4, opacity: 0.7 }}
+                pathOptions={{ color: 'blue', weight: 3, opacity: 0.6 }}
               />
             </>
           )}
@@ -267,11 +268,13 @@ const MarkEntry = ({ onClose }) => {
         </MapContainer>
       </div>
 
-      <div className="info-box">{getStatusMessage()}</div>
+      <div className={`info-box ${status}`}>{getStatusMessage()}</div>
 
       <button
         className="check-button"
-        onClick={() => setStatus(status === 'checking' ? 'idle' : 'checking')}>
+        onClick={() =>
+          setStatus((prev) => (prev === 'checking' ? 'idle' : 'checking'))
+        }>
         {status === 'checking' ? 'Stop Tracking' : 'Check Location'}
       </button>
     </div>

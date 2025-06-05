@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import './InfoModal.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect } from 'react';

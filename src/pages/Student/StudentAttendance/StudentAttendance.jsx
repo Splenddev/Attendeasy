@@ -40,7 +40,10 @@ const StudentAttendance = () => {
       <AttendanceHistory />
       {markEntryModal && (
         <div className="modal-wrap">
-          <MarkEntry onClose={setMarkEntryModal} />
+          <MarkEntry
+            onClose={setMarkEntryModal}
+            visible={markEntryModal}
+          />
         </div>
       )}
     </div>
