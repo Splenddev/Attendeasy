@@ -12,7 +12,7 @@ import L from 'leaflet';
 import { MdClose } from 'react-icons/md';
 import './MarkEntry.css';
 
-const classLocation = { lat: 6.5244, lng: 3.3792 };
+const classLocation = { lat: 6.5762, lng: 3.3521 };
 
 const classIcon = L.icon({
   iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
@@ -67,7 +67,7 @@ function GoToMyLocationButton({ onLocationFound }) {
 const MarkEntry = ({ onClose, visible }) => {
   const [userLocation, setUserLocation] = useState(null);
   const [distance, setDistance] = useState(null);
-  const maxDistance = 50;
+  const maxDistance = 100;
   const [status, setStatus] = useState('idle');
   const [userAddress, setUserAddress] = useState(null);
   const [classAddress, setClassAddress] = useState(null);
