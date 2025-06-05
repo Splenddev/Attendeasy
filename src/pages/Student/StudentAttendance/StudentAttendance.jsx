@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { attendance } from '../../../assets/assets';
 import { dateFormatter } from '../../../utils/helpers';
@@ -8,10 +8,11 @@ import AttendanceInfo from './AttendanceInfo';
 import TodayAttendance from './TodayAttendance';
 import AttendanceHistory from './AttendanceHistory';
 import MarkEntry from '../../../components/Modals/MarkEntry/MarkEntry';
+import { useState } from 'react';
 
 const StudentAttendance = () => {
   const { setNavTitle, user } = useAuth();
-
+  const [markEntryModal, setMarkEntryModal] = useState(false);
   useEffect(() => {
     setNavTitle('My Attendance');
   }, [setNavTitle]);
@@ -31,9 +32,17 @@ const StudentAttendance = () => {
         user={user}
         date={dateFormatter(null)}
       />
-      <TodayAttendance data={filtered} />
+      <TodayAttendance
+        data={filtered}
+        markEntryModal={markEntryModal}
+        setMarkEntryModal={setMarkEntryModal}
+      />
       <AttendanceHistory />
-      <MarkEntry />
+      {markEntryModal && (
+        <div className="modal-wrap">
+          <MarkEntry onClose={setMarkEntryModal} />
+        </div>
+      )}
     </div>
   );
 };

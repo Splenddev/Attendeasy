@@ -193,7 +193,7 @@ const MarkEntry = ({ onClose }) => {
       <div className="modal-header">
         <h2>Mark Entry</h2>
         <button
-          onClick={onClose}
+          onClick={() => onClose(false)}
           className="close-button"
           title="Close modal">
           <MdClose />

@@ -1,8 +1,6 @@
-import { useState } from 'react';
 import AttendanceCard from './AttendanceCard';
 
-const TodayAttendance = ({ data }) => {
-  const [markEntryModal, setMarkEntryModal] = useState(false);
+const TodayAttendance = ({ data, markEntryModal, setMarkEntryModal }) => {
   return (
     <section className="s-attendance-today">
       <header className="heading">
