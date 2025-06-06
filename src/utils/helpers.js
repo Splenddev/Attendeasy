@@ -100,6 +100,7 @@ export const groupByDay = (schedule) => {
       if (!acc[day]) acc[day] = [];
 
       acc[day].push({
+        id: course.id,
         courseTitle: course.courseTitle,
         courseCode: course.courseCode,
         lecturerName: course.lecturerName,

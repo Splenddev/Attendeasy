@@ -69,7 +69,6 @@ const Schedule = ({ data, isClassRep = false }) => {
               Media for {activeMediaCourse.courseTitle} (
               {activeMediaCourse.courseCode})
             </h3>
-            <p>{activeMediaCourse.id}</p>
             {activeMediaCourse.media?.length > 0 ? (
               <ul className="media-list">
                 {activeMediaCourse.media.map((file) => (
@@ -114,7 +113,7 @@ const Schedule = ({ data, isClassRep = false }) => {
           {schedulesByDay[day] ? (
             schedulesByDay[day].map((course, index) => (
               <div
-                key={course.id}
+                key={index}
                 className="course-block">
                 {isClassRep && (
                   <div className="action">
