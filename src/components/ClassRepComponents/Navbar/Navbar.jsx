@@ -1,20 +1,19 @@
 /* eslint-disable no-unused-vars */
 import './Navbar.css';
-import { FaBell, FaHome, FaPlus, FaUserEdit } from 'react-icons/fa';
+import { FaBell, FaHome, FaUserEdit } from 'react-icons/fa';
 import { useAuth } from '../../../context/AuthContext';
-import { assets } from '../../../assets/assets';
-import {
-  MdContactSupport,
-  MdHelpCenter,
-  MdMail,
-  MdSettings,
-} from 'react-icons/md';
+import { assets, notifications } from '../../../assets/assets';
+import { MdContactSupport, MdHelpCenter, MdSettings } from 'react-icons/md';
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
+import NotificationPanel from '../../../features/Notifications/NotificationsPanel';
 const Navbar = ({ dropdownAssets = [] }) => {
   const { user, navTitle } = useAuth();
-  const [isDropdown, setIsDropdown] = useState(false);
+  const [isDropdown, setIsDropdown] = useState({
+    quickLinks: false,
+    notifications: false,
+  });
   return (
     <nav className="navbar">
       <div className="navbar-title">
@@ -25,19 +24,47 @@ const Navbar = ({ dropdownAssets = [] }) => {
           <MdHelpCenter />
         </div>
         <div className="alert notification">
-          <FaBell />
+          <AnimatePresence>
+            {isDropdown.notifications && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="dropdown-notifications">
+                <NotificationPanel
+                  notifications={notifications}
+                  onClose={setIsDropdown}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <FaBell
+            onClick={() =>
+              setIsDropdown((prev) => ({
+                ...prev,
+                notifications: true,
+                quickLinks: false,
+              }))
+            }
+          />
           <div className="badge">4</div>
         </div>
         <div
           className="user"
-          onClick={() => setIsDropdown((prev) => !prev)}>
+          onClick={() =>
+            setIsDropdown((prev) => ({
+              ...prev,
+              quickLinks: !prev.quickLinks,
+              notifications: !prev.quickLinks ? false : true,
+            }))
+          }>
           <div className="details">
             <p className="name">{user.name}</p>
             <p className="role">{user.role}</p>
           </div>
           <img src={assets.profile} />
           <AnimatePresence>
-            {isDropdown && (
+            {isDropdown.quickLinks && (
               <motion.div
                 initial={{ opacity: 0, x: 100 }}
                 animate={{ opacity: 1, x: 0 }}

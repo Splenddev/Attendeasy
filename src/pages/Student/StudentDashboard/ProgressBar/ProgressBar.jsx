@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import './ProgressBar.css';
@@ -11,11 +12,18 @@ const ProgressBar = ({
   strokeWidth = 9,
 }) => {
   const [animatedPercent, setAnimatedPercent] = useState(0);
+  const { ref, inView } = useInView({
+    triggerOnce: false, // allow retrigger
+    threshold: 0.9,
+  });
 
-  // Animate from 0 to percent
   useEffect(() => {
+    if (!inView) return;
+
+    setAnimatedPercent(0); // reset on re-enter
+
     let current = 0;
-    const step = Math.max(1, Math.floor(percent / 60)); // smooth steps
+    const step = Math.max(1, Math.floor(percent / 60));
     const interval = setInterval(() => {
       current += step;
       if (current >= percent) {
@@ -23,21 +31,23 @@ const ProgressBar = ({
         clearInterval(interval);
       }
       setAnimatedPercent(current);
-    }, 15); // animation speed
+    }, 50);
+
     return () => clearInterval(interval);
-  }, [percent]);
+  }, [inView, percent]);
 
   const getStatus = (percent) => {
     if (percent < 40) return { text: 'POOR', color: 'red' };
-    if (percent >= 40 && percent < 70)
-      return { text: 'AVERAGE', color: 'orange' };
+    if (percent < 70) return { text: 'AVERAGE', color: 'orange' };
     return { text: 'GOOD', color: 'green' };
   };
 
   const { text: statusText, color: statusColor } = getStatus(percent);
 
   return (
-    <div className="progress-container">
+    <div
+      className="progress-container"
+      ref={ref}>
       {text && (
         <div
           className="status"

@@ -16,7 +16,7 @@ export const schedule = [
     classroomVenue: 'Venue B',
     classDaysTimes: [
       {
-        day: 'Monday',
+        day: 'Friday',
         timing: {
           startTime: '10:52',
           endTime: '15:52',

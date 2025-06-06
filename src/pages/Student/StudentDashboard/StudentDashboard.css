@@ -52,16 +52,12 @@
   border-radius: 20px;
   padding: 15px;
   height: 100%;
-  /* width: 100%; */
-  /* flex: 1; */
-  /* min-width: 250px; */
   & svg {
     font-size: 20px;
     color: var(--main-color);
   }
   & button {
     padding: 7px 20px;
-    margin-top: -5px;
     border-radius: 20px;
     justify-content: center;
     place-self: end;
@@ -73,9 +69,10 @@
     }
   }
   & input {
-    border: 1px solid var(--light-blue-300);
+    background: var(--light-blue-300);
     outline: none;
-    padding: 4px 15px;
+    border: none;
+    padding: 8px 15px;
     font-size: 14px;
     border-radius: 7px;
   }

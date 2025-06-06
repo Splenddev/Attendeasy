@@ -1,0 +1,97 @@
+.app-footer {
+  background-color: #1e1e2f;
+  color: #ffffff;
+  padding: 40px 20px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.footer-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid #444;
+  padding-bottom: 30px;
+}
+
+.footer-logo {
+  flex: 1 1 100%;
+  text-align: center;
+}
+
+.footer-logo img {
+  width: 50px;
+  height: auto;
+}
+
+.footer-logo h2 {
+  margin: 10px 0 5px;
+}
+
+.footer-logo p {
+  max-width: 400px;
+  margin: 0 auto;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.footer-section {
+  flex: 1 1 200px;
+  text-align: center;
+}
+
+.footer-section h4 {
+  margin-bottom: 10px;
+  color: var(--late);
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-section ul li {
+  margin: 6px 0;
+}
+
+.footer-section ul li a {
+  color: #cccccc;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.footer-section ul li a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.social-icons {
+  margin-top: 10px;
+}
+
+.social-icons svg {
+  width: 24px;
+  margin: 0 5px;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 13px;
+  color: #aaa;
+}
+
+/* === Mobile Styles === */
+@media (max-width: 768px) {
+  .footer-section {
+    flex: 1 1 100%;
+    margin-top: 20px;
+  }
+
+  .footer-top {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}

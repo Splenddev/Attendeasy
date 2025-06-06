@@ -7,6 +7,7 @@ import { useMain } from '../../context/MainContext';
 import ScrollToTop from '../../components/ScrollToTop';
 import { useAuth } from '../../context/AuthContext';
 import { MdAddCard, MdAddComment, MdAddTask } from 'react-icons/md';
+import Footer from '../../components/Footer/Footer';
 const StudentLayout = () => {
   const { isSideBarMenu, setIsSidebarMenu, isMobile } = useMain();
   const { user } = useAuth();
@@ -40,7 +41,7 @@ const StudentLayout = () => {
       <main className={`main s ${isSideBarMenu ? 'move' : ''}`}>
         <Outlet />
       </main>
-      <footer>footer</footer>
+      <Footer role={user.role} />
     </div>
   );
 };

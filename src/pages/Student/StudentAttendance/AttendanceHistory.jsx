@@ -35,7 +35,7 @@ const AttendanceHistory = () => {
   return (
     <section className="s-attendance-history">
       <header className="heading">
-        Attendance History <hr />
+        <span>Attendance History</span> <hr />
       </header>
       <div className="s-attendance-history-wrap">
         <div className="s-attendance-history-pagination cap">

@@ -29,7 +29,6 @@
   position: relative;
   border-left: 1px solid #9b9b9b;
   padding: 0px 15px;
-  cursor: pointer;
 }
 .alert .badge {
   display: flex;
@@ -48,6 +47,7 @@
 }
 .alert svg {
   font-size: 20px;
+  cursor: pointer;
 }
 .navbar-side .user {
   border-left: 1px solid #9b9b9b;
@@ -72,15 +72,25 @@
   border-radius: 50%;
   object-fit: cover;
 }
-.dropdown-menus {
+.dropdown-menus,
+.dropdown-notifications {
   position: absolute;
   right: 10px;
-  top: 100%;
+  top: 105%;
   background: #fff;
   min-width: 200px;
-  box-shadow: 0 0 4px #b1b1b1;
-  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
+}
+.dropdown-menus {
+  overflow: hidden;
+  z-index: 1;
+}
+.dropdown-notifications {
+  overflow-y: auto;
+  height: calc(100vh - 50px);
+  width: 60vw;
+  right: 0;
 }
 .dropdown-menus .menu {
   display: grid;

@@ -136,3 +136,58 @@ export const truncateText = (text = '', length = 20) => {
   if (typeof text !== 'string') return '';
   return text.length > length ? text.slice(0, length).trim() + '...' : text;
 };
+export const generateSmartTip = (history) => {
+  const lastThree = history.slice(-3);
+  const allOnTime = lastThree.every((h) => h.status === 'on time');
+  if (allOnTime) return "🔥 You're on time 3 times in a row!";
+
+  const missedDays = history
+    .filter((h) => h.status === 'absent')
+    .map((h) => h.day);
+  const mostMissed =
+    missedDays.length > 0
+      ? missedDays.sort(
+          (a, b) =>
+            missedDays.filter((v) => v === a).length -
+            missedDays.filter((v) => v === b).length
+        )[0]
+      : null;
+
+  if (mostMissed)
+    return `⚠️ You often miss classes on ${mostMissed}s. Be cautious.`;
+  return null;
+};
+
+export const getTodaySchedule = (schedule) => {
+  const daysOfWeek = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
+  const todayDay = daysOfWeek[new Date().getDay()]; // e.g. "Friday"
+
+  return schedule
+    .map((course) => {
+      // Find today's classDayTime if any
+      const todayClassDayTime = course.classDaysTimes.find(
+        (dayTime) => dayTime.day === todayDay
+      );
+      if (!todayClassDayTime) return null;
+
+      // Return only today's info with timing
+      return {
+        id: course.id,
+        courseTitle: course.courseTitle,
+        lecturerName: course.lecturerName,
+        courseCode: course.courseCode,
+        classroomVenue: course.classroomVenue,
+        day: todayDay,
+        timing: todayClassDayTime.timing,
+      };
+    })
+    .filter(Boolean); // remove nulls
+};

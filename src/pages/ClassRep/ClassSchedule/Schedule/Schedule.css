@@ -65,3 +65,72 @@
   font-size: 0.9em;
   color: var(--main-color);
 }
+.media-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.media-modal {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.media-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+.media-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.icon {
+  font-size: 1.2rem;
+}
+
+.media-name {
+  flex: 1;
+}
+
+.media-actions svg {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.add-media-btn {
+  background: #007bff;
+  color: white;
+  padding: 6px 12px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.close-btn {
+  background: #999;
+  color: white;
+  padding: 6px 12px;
+  margin-top: 10px;
+  margin-left: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}

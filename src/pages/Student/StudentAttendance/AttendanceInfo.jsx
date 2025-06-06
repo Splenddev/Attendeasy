@@ -2,7 +2,11 @@ import { MdCalendarToday, MdMessage, MdPhoneInTalk } from 'react-icons/md';
 import { FaCircle } from 'react-icons/fa';
 import button from '../../../components/Button/Button';
 
-const AttendanceInfo = ({ user, date }) => {
+const AttendanceInfo = ({
+  user,
+  date,
+  data = { onTime: '-%', late: '-%', absent: '-%' },
+}) => {
   return (
     <section className="s-attendance-heading">
       <h1>My Attendance</h1>
@@ -17,15 +21,15 @@ const AttendanceInfo = ({ user, date }) => {
           <ul className="marking-overview">
             <li>
               <FaCircle className="on-time" /> <b className="cap">on time</b>{' '}
-              <span>80%</span>
+              <span>{data.onTime}%</span>
             </li>
             <li>
               <FaCircle className="late" /> <b className="cap">late</b>{' '}
-              <span>10%</span>
+              <span>{data.late}%</span>
             </li>
             <li>
               <FaCircle className="absent" /> <b className="cap">absent</b>{' '}
-              <span>10%</span>
+              <span>{data.absent}%</span>
             </li>
           </ul>
         </div>

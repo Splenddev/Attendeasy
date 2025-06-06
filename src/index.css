@@ -29,6 +29,7 @@ a {
   --late-light: #fff3cd;
   --others: #6c757d;
   --others-light: #f1f3f5;
+  --on-time: #4caf50;
 }
 .on-time {
   color: var(--main-color);
