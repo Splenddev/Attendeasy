@@ -1,4 +1,3 @@
-// src/components/InitialRedirect.jsx
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -6,20 +5,17 @@ import { ROLES } from '../../utils/roles';
 import Loader from '../Loader/Loader';
 
 const InitialRedirect = () => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 1. New user -> landing page
+    if (loading) return;
+
     if (user?.isNewUser) {
       navigate('/', { replace: true });
-    }
-    // 2. Not authenticated
-    else if (!user?.isLoggedIn) {
+    } else if (!user?.isLoggedIn) {
       navigate('/auth/login', { replace: true });
-    }
-    // 3. Authenticated with role
-    else {
+    } else {
       if (user.role === ROLES.CLASS_REP) {
         navigate('/class-rep/dashboard', { replace: true });
       } else if (user.role === ROLES.STUDENT) {
@@ -28,7 +24,7 @@ const InitialRedirect = () => {
         navigate('/unauthorized', { replace: true });
       }
     }
-  }, [user, navigate]);
+  }, [user, loading, navigate]);
 
   return <Loader />;
 };
