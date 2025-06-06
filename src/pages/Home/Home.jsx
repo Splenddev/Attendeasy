@@ -1,23 +1,21 @@
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import { useState } from 'react';
 
 const Home = () => {
-  const { setUser } = useAuth();
-  const [state, setstate] = useState('student');
   return (
     <div className="home">
-      <Link to="/class-rep">Class rep</Link>
-      <Link to="/student">Student</Link>
-      <select
-        value={state}
-        onChange={(e) => {
-          setUser((prev) => ({ ...prev, role: e.target.value }));
-          setstate(e.target.value);
-        }}>
-        <option value="student">student</option>
-        <option value="class-rep">class-rep</option>
-      </select>
+      <h1>Welcome to Vigilo</h1>
+      <p>
+        Effortless class attendance, announcements, and academic tracking for
+        students and class reps.
+      </p>
+      <div style={{ marginTop: 20 }}>
+        <Link
+          to="/auth/login"
+          style={{ marginRight: 12 }}>
+          Login
+        </Link>
+        <Link to="/auth/register">Sign Up</Link>
+      </div>
     </div>
   );
 };

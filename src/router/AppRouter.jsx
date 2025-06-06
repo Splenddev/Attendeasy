@@ -19,6 +19,7 @@ import CreateAttendance from '../pages/ClassRep/CreateAttendance/CreateAttendanc
 import { AuthLayout, ClassRepLayout, StudentLayout } from '../layouts';
 import { CreateSchedule, Login, Notifications, Register } from '../pages';
 import MarkAttendance from '../pages/Student/MarkAttendance/MarkAttendance';
+import InitialRedirect from '../components/InitialRedirect/InitialRedirect';
 
 export const router = createBrowserRouter([
   {
@@ -34,6 +35,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loader />}>
             <Home />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'redirect',
+        element: (
+          <Suspense fallback={<Loader />}>
+            <InitialRedirect />
           </Suspense>
         ),
       },
@@ -116,7 +125,7 @@ export const router = createBrowserRouter([
             index: true,
             element: (
               <Navigate
-                to={'dashboard'}
+                to="dashboard"
                 replace
               />
             ),

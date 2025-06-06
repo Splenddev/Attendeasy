@@ -1,5 +1,5 @@
 import './AuthFieldSet.css';
-const AuthFieldSet = ({ name, type, icon, element }) => {
+const AuthFieldSet = ({ name, type, icon, element, value, onChange }) => {
   const Icon = icon;
   return (
     <fieldset className="auth-field">
@@ -17,6 +17,8 @@ const AuthFieldSet = ({ name, type, icon, element }) => {
         type={type || name}
         placeholder={`Enter your ${element || name}`}
         required
+        value={value}
+        onChange={onChange}
       />
     </fieldset>
   );

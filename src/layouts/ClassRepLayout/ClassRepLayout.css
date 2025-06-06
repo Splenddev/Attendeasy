@@ -1,6 +1,4 @@
 .c-layout {
-  height: 100vh;
-  overflow-y: auto;
   background: #f0f0f0;
 }
 .c-layout .main {

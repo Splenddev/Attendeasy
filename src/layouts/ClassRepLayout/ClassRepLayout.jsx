@@ -39,7 +39,6 @@ const ClassRepLayout = () => {
       <main className={`main ${isSideBarMenu ? 'move' : ''}`}>
         <Outlet />
       </main>
-      <footer>footer</footer>
     </div>
   );
 };

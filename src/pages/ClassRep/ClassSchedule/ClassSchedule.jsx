@@ -19,7 +19,10 @@ const ClassSchedule = () => {
         <h2>Welcome, {user.name}</h2>
       </div>
       <div className="class-schedule-container">
-        <Schedule data={schedule} />
+        <Schedule
+          data={schedule}
+          isClassRep={user.role === 'class-rep'}
+        />
       </div>
       <p
         onClick={() => {

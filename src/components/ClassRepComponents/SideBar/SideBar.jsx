@@ -1,12 +1,20 @@
 /* eslint-disable no-unused-vars */
 import './SideBar.css';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { assets } from '../../../assets/assets';
 import { MdLogout, MdSettings } from 'react-icons/md';
 import { useEffect } from 'react';
+import { useAuth } from '../../../context/AuthContext';
 const SideBar = ({ components, menuActive, setMenuActive, isMobile }) => {
   const { pathname } = useLocation();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
   useEffect(() => {
     setMenuActive(false);
   }, [pathname, setMenuActive]);
@@ -66,7 +74,7 @@ const SideBar = ({ components, menuActive, setMenuActive, isMobile }) => {
               </AnimatePresence>
             </div>
             <div className="other-navs">
-              <span>
+              <span onClick={handleLogout}>
                 <MdLogout />
               </span>
               <span>
@@ -102,7 +110,7 @@ const SideBar = ({ components, menuActive, setMenuActive, isMobile }) => {
             </AnimatePresence>
           </div>
           <div className="other-navs">
-            <p>Log Out</p>
+            <p onClick={handleLogout}>Log Out</p>
             <p>Settings</p>
           </div>
         </div>

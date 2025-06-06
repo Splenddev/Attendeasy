@@ -1,18 +1,30 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { attendance } from '../assets/assets';
+import { getUserFromLocalStorageOrAPI } from '../utils/auth';
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState({
-    role: 'student',
-    name: 'splendid felix',
-  });
+  const [user, setUser] = useState(null);
   const [navTitle, setNavTitle] = useState('Welcome');
-
+  const [loading, setLoading] = useState(true);
   const [attendanceList, setAttendanceList] = useState(attendance);
 
-  // const filtered = attendanceList.filter((item) => {item.DateCreated})
+  useEffect(() => {
+    const syncUser = async () => {
+      const storedUser = await getUserFromLocalStorageOrAPI();
+      setUser(storedUser); // null or { isLoggedIn: true, role: ..., ... }
+      setLoading(false);
+    };
+    syncUser();
+  }, []);
+
+  const logout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+  };
+
   const value = {
     user,
     setUser,
@@ -20,7 +32,10 @@ export const AuthProvider = ({ children }) => {
     setNavTitle,
     attendanceList,
     setAttendanceList,
+    loading,
+    logout,
   };
+
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 

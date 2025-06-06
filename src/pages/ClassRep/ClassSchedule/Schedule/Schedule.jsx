@@ -10,6 +10,7 @@ import { FaPlus, FaTrash } from 'react-icons/fa';
 import { FiEdit3 } from 'react-icons/fi';
 import { groupByDay } from '../../../../utils/helpers';
 import './Schedule.css';
+import FileUploadModal from '../../../../components/Modals/FileUploadModal/FileUploadModal';
 
 const daysOfWeek = [
   'Monday',
@@ -29,13 +30,34 @@ const fileTypeIcons = {
   audio: <MdAudiotrack />,
 };
 
-const Schedule = ({ data, isClassRep = false, onAddMedia }) => {
+const Schedule = ({ data, isClassRep = false }) => {
   const schedulesByDay = groupByDay(data);
   const [activeMediaCourse, setActiveMediaCourse] = useState(null);
+  const [uploadCourseId, setUploadCourseId] = useState(null);
+
+  const openUploadModal = (courseId) => {
+    setUploadCourseId(courseId);
+    console.log(courseId);
+    // setActiveMediaCourse(null); // close media modal if open
+  };
+
+  const handleUpload = (courseId, media) => {
+    console.log('Uploaded media:', courseId, media);
+    setUploadCourseId(null);
+    // Optionally refresh media for that course here, if you keep media in state
+  };
 
   return (
     <div className="schedule-container">
-      {/* Modal */}
+      {/* Upload Modal */}
+      <FileUploadModal
+        isOpen={uploadCourseId}
+        courseId={uploadCourseId}
+        onClose={() => setUploadCourseId(null)}
+        onUpload={handleUpload}
+      />
+
+      {/* Media Modal */}
       {activeMediaCourse && (
         <div
           className="media-modal-overlay"
@@ -47,6 +69,7 @@ const Schedule = ({ data, isClassRep = false, onAddMedia }) => {
               Media for {activeMediaCourse.courseTitle} (
               {activeMediaCourse.courseCode})
             </h3>
+            <p>{activeMediaCourse.id}</p>
             {activeMediaCourse.media?.length > 0 ? (
               <ul className="media-list">
                 {activeMediaCourse.media.map((file) => (
@@ -70,7 +93,7 @@ const Schedule = ({ data, isClassRep = false, onAddMedia }) => {
             )}
             <button
               className="add-media-btn"
-              onClick={() => onAddMedia?.(activeMediaCourse.id)}>
+              onClick={() => openUploadModal(activeMediaCourse.id)}>
               <FaPlus /> Add Media
             </button>
             <button
@@ -91,7 +114,7 @@ const Schedule = ({ data, isClassRep = false, onAddMedia }) => {
           {schedulesByDay[day] ? (
             schedulesByDay[day].map((course, index) => (
               <div
-                key={index}
+                key={course.id}
                 className="course-block">
                 {isClassRep && (
                   <div className="action">
@@ -102,7 +125,9 @@ const Schedule = ({ data, isClassRep = false, onAddMedia }) => {
                 )}
                 <h3>
                   {course.courseTitle}{' '}
-                  <span className="code">({course.courseCode})</span>
+                  <span className="code">
+                    ({course.courseCode}){course.id}
+                  </span>
                 </h3>
                 <p className="first">
                   <strong>Lecturer:</strong> {course.lecturerName}

@@ -1,10 +1,11 @@
-import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+
 const ProtectedRoutes = ({ children, allowedRoles }) => {
   const { user } = useAuth();
   const location = useLocation();
-  if (!user) {
+
+  if (!user || !user.isLoggedIn) {
     return (
       <Navigate
         to="/"
@@ -13,6 +14,7 @@ const ProtectedRoutes = ({ children, allowedRoles }) => {
       />
     );
   }
+
   if (!allowedRoles.includes(user.role)) {
     return (
       <Navigate
@@ -22,6 +24,7 @@ const ProtectedRoutes = ({ children, allowedRoles }) => {
       />
     );
   }
+
   return children;
 };
 
