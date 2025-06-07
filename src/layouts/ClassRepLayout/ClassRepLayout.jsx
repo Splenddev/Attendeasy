@@ -8,6 +8,7 @@ import { useAuth } from '../../context/AuthContext';
 import { FaHome, FaPlus, FaUserEdit } from 'react-icons/fa';
 import { MdContactSupport } from 'react-icons/md';
 import { useMain } from '../../context/MainContext';
+import Footer from '../../components/Footer/Footer';
 const ClassRepLayout = () => {
   const { user } = useAuth();
   const { isSideBarMenu, setIsSidebarMenu, isMobile } = useMain();
@@ -39,6 +40,7 @@ const ClassRepLayout = () => {
       <main className={`main ${isSideBarMenu ? 'move' : ''}`}>
         <Outlet />
       </main>
+      <Footer role={user.role} />
     </div>
   );
 };

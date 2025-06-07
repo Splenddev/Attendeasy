@@ -17,6 +17,7 @@ const dummyUsers = [
     password: '1234',
     role: ROLES.CLASS_REP,
     isNewUser: false,
+    name: 'Splendid James',
   },
   {
     id: '2',

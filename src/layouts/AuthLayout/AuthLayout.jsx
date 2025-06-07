@@ -31,7 +31,6 @@ const scheduleData = {
 const AuthLayout = () => {
   return (
     <div>
-      <p>Login | Signup</p>
       <Outlet />
       {/* <CalendarSchedule scheduleData={scheduleData} /> */}
     </div>

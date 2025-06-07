@@ -26,7 +26,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
   border-left: 1px solid #9b9b9b;
   padding: 0px 15px;
 }
@@ -75,7 +74,7 @@
 .dropdown-menus,
 .dropdown-notifications {
   position: absolute;
-  right: 10px;
+  right: 5px;
   top: 105%;
   background: #fff;
   min-width: 200px;
@@ -88,9 +87,9 @@
 }
 .dropdown-notifications {
   overflow-y: auto;
-  height: calc(100vh - 50px);
-  width: 60vw;
-  right: 0;
+  height: calc(100vh - 60px);
+  width: 95%;
+  max-width: 450px;
 }
 .dropdown-menus .menu {
   display: grid;

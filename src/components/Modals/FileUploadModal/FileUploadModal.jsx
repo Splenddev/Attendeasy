@@ -3,7 +3,7 @@ import './FileUploadModal.css';
 
 const allowedExtensions = {
   doc: ['.pdf', '.doc', '.docx', '.ppt', '.pptx', '.xls', '.xlsx'],
-  image: ['.png', '.jpeg', '.webp'],
+  image: ['.png', '.jpeg', '.jpg', '.webp'],
   video: ['.mp4', '.webm', '.avi'],
   audio: ['.mp3', '.aac', '.wav', '.wma'],
 };

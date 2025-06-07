@@ -5,12 +5,14 @@ import {
   MdImage,
   MdPictureAsPdf,
   MdOutlineMovie,
+  MdFileOpen,
 } from 'react-icons/md';
-import { FaPlus, FaTrash } from 'react-icons/fa';
-import { FiEdit3 } from 'react-icons/fi';
+import { FaFolderOpen, FaPlus, FaTrash } from 'react-icons/fa';
+import { FiDownload, FiEdit3 } from 'react-icons/fi';
 import { groupByDay } from '../../../../utils/helpers';
 import './Schedule.css';
 import FileUploadModal from '../../../../components/Modals/FileUploadModal/FileUploadModal';
+import button from '../../../../components/Button/Button';
 
 const daysOfWeek = [
   'Monday',
@@ -77,9 +79,9 @@ const Schedule = ({ data, isClassRep = false }) => {
                     className="media-item">
                     <span className="icon">{fileTypeIcons[file.fileType]}</span>
                     <span className="media-name">{file.name}</span>
-                    <span className="file-type">({file.fileType})</span>
                     {isClassRep && (
                       <span className="media-actions">
+                        <FiDownload title="Download file" />
                         <FiEdit3 title="Edit file" />
                         <FaTrash title="Delete file" />
                       </span>
@@ -90,16 +92,20 @@ const Schedule = ({ data, isClassRep = false }) => {
             ) : (
               <p>No media files uploaded yet.</p>
             )}
-            <button
-              className="add-media-btn"
-              onClick={() => openUploadModal(activeMediaCourse.id)}>
-              <FaPlus /> Add Media
-            </button>
-            <button
-              className="close-btn"
-              onClick={() => setActiveMediaCourse(null)}>
-              Close
-            </button>
+
+            <div className="action-btns">
+              {button.multiple({
+                name: 'add-media-btn',
+                icon: FaPlus,
+                func: () => openUploadModal(activeMediaCourse.id),
+                element: 'add media',
+              })}
+              {button.normal({
+                name: 'close-btn',
+                func: () => setActiveMediaCourse(null),
+                element: 'close',
+              })}
+            </div>
           </div>
         </div>
       )}
@@ -124,9 +130,7 @@ const Schedule = ({ data, isClassRep = false }) => {
                 )}
                 <h3>
                   {course.courseTitle}{' '}
-                  <span className="code">
-                    ({course.courseCode}){course.id}
-                  </span>
+                  <span className="code">({course.courseCode})</span>
                 </h3>
                 <p className="first">
                   <strong>Lecturer:</strong> {course.lecturerName}
@@ -138,11 +142,12 @@ const Schedule = ({ data, isClassRep = false }) => {
                   <strong>Time:</strong> {course.timing.startTime} -{' '}
                   {course.timing.endTime}
                 </p>
-                <button
-                  className="add-media-btn"
-                  onClick={() => setActiveMediaCourse(course)}>
-                  📁 View/Add Media
-                </button>
+                {button.multiple({
+                  name: 'add-media-btn',
+                  func: () => setActiveMediaCourse(course),
+                  icon: FaFolderOpen,
+                  element: 'view/add media',
+                })}
               </div>
             ))
           ) : (

@@ -41,6 +41,7 @@ const StudentLayout = () => {
       <main className={`main s ${isSideBarMenu ? 'move' : ''}`}>
         <Outlet />
       </main>
+      <Footer role={user?.role || ''} />
     </div>
   );
 };

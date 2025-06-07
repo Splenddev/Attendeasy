@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { FaFacebook, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import './Footer.css';
 
-const Footer = ({ role }) => {
+const Footer = ({ role = '' }) => {
   const quickLinks = [
     { label: 'Dashboard', path: 'dashboard' },
     { label: 'My Attendance', path: 'attendance' },

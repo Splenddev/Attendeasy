@@ -23,21 +23,7 @@ const Navbar = ({ dropdownAssets = [] }) => {
         <div className="alert ">
           <MdHelpCenter />
         </div>
-        <div className="alert notification">
-          <AnimatePresence>
-            {isDropdown.notifications && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="dropdown-notifications">
-                <NotificationPanel
-                  notifications={notifications}
-                  onClose={setIsDropdown}
-                />
-              </motion.div>
-            )}
-          </AnimatePresence>
+        <div className="alert">
           <FaBell
             onClick={() =>
               setIsDropdown((prev) => ({
@@ -49,6 +35,20 @@ const Navbar = ({ dropdownAssets = [] }) => {
           />
           <div className="badge">4</div>
         </div>
+        <AnimatePresence>
+          {isDropdown.notifications && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="dropdown-notifications">
+              <NotificationPanel
+                notifications={notifications}
+                onClose={setIsDropdown}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
         <div
           className="user"
           onClick={() =>

@@ -6,7 +6,7 @@ import {
   MdGroup,
   MdSchedule,
 } from 'react-icons/md';
-import logo from './splendid.png';
+import logo from '/vigilo_logo.jpeg';
 import profile from './profile.jpg';
 const roleUrl = '/class-rep';
 const roleUrl2 = '/student';

@@ -4,12 +4,12 @@
   left: 0;
   z-index: 5;
   transition: width 0.5s ease;
-  width: 220px;
+  width: 230px;
 }
 .c-sidebar {
   background: #fff;
   display: grid;
-  grid-template-columns: 60px 1fr;
+  grid-template-columns: 70px 1fr;
   overflow: hidden;
   overflow-y: auto;
   height: 100vh;
@@ -59,8 +59,10 @@
   font-size: 20px;
 }
 .c-sidebar-header img {
-  width: 30px;
-  height: 30px;
+  width: 45px;
+  background: #fff;
+  padding: 6px;
+  height: 45px;
   border-radius: 50%;
 }
 .c-sidebar-left,
