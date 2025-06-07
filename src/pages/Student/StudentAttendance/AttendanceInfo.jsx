@@ -38,7 +38,7 @@ const AttendanceInfo = ({
             <div className="profile">S</div>
             <div className="cred">
               <h3 className="cap">{user.name}</h3>
-              <p>{user.role}</p>
+              <p>{user.role || 'role'}</p>
               <p>classrep@gmail.com</p>
               <div className="btn">
                 {button.icon({ icon: MdPhoneInTalk, label: 'reps contact' })}

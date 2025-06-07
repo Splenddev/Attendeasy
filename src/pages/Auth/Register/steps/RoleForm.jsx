@@ -32,6 +32,7 @@ const RoleForm = ({ onNext }) => {
             src="https://i.postimg.cc/pLhzz8L7/copilot-image-1749254654511.png"
             alt="class-rep avatar"
           />
+          
           <div className="input-wrap">
             <input
               type="radio"

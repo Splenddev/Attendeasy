@@ -40,7 +40,7 @@ const ClassRepLayout = () => {
       <main className={`main ${isSideBarMenu ? 'move' : ''}`}>
         <Outlet />
       </main>
-      <Footer role={user.role} />
+      <Footer role={user.role || 'class-rep'} />
     </div>
   );
 };

@@ -3,7 +3,7 @@ import './ClassManagement.css';
 import { useAuth } from '../../context/AuthContext';
 const ClassManagement = () => {
   const { user } = useAuth();
-  const userRole = user.role; // or 'student' from auth
+  const userRole = ; // or 'student' from auth
   const hasGroup = user.hasGroup; // simulate new user without group
   return <div></div>;
 };

@@ -59,8 +59,8 @@ const Navbar = ({ dropdownAssets = [] }) => {
             }))
           }>
           <div className="details">
-            <p className="name">{user.name}</p>
-            <p className="role">{user.role}</p>
+            <p className="name">{user.name||'name'}</p>
+            <p className="role">{user.role||'role'}</p>
           </div>
           <img src={assets.profile} />
           <AnimatePresence>
