@@ -1,0 +1,323 @@
+.register-wrapper {
+  max-width: 500px;
+  width: 90vw;
+  margin: 40px auto;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  /* height:100%; */
+  height: calc(100% - 80px);
+  overflow-x: hidden;
+  position: relative;
+}
+.register-form {
+  height: calc(100vh - 80px - 150px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px;
+  padding-top: 20px;
+  padding-bottom: 50px;
+  margin-bottom: 20px;
+}
+
+/* progress header  */
+.progress-header {
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  left: 0;
+  padding-bottom: 10px;
+  max-height: 90px;
+  /* h100 */
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+  position: relative;
+}
+
+.step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 1.1rem;
+  right: -50%;
+  width: 100%;
+  height: 2px;
+  background-color: #ccc;
+  z-index: 0;
+}
+
+.step.done:not(:last-child)::after {
+  background-color: #007bff;
+}
+
+.circle {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  color: #333;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  z-index: 1;
+  position: relative;
+}
+
+.step.active .circle {
+  background-color: #007bff;
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2);
+}
+
+.step.done .circle {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.label {
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.form-step input {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid var(--outline);
+  border-radius: 8px;
+  outline: 1px solid var(--main-color);
+}
+
+/*role form step*/
+
+.role-cards {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 20px;
+  margin: 15px 0;
+  justify-content: center;
+}
+.role-card {
+  border-radius: 10px;
+  position: relative;
+  cursor: pointer;
+  border: 2px solid #ccc;
+  & img {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    width: 100%;
+  }
+  & p {
+    padding: 0.5rem;
+    text-align: center;
+  }
+}
+.role-card .input-wrap {
+  position: absolute;
+  right: 9px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  top: 8px;
+  background: #fff;
+}
+
+.role-card {
+  padding: 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.role-card.selected {
+  border-color: var(--main-color);
+  background-color: var(--light-blue-300);
+}
+
+.role-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+.input-wrap {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+.check-icon {
+  color: var(--main-color);
+  font-size: 1.5rem;
+}
+
+.next-btn {
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  background-color: var(--main-color);
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.next-btn:disabled {
+  background-color: #a5d6a7;
+  cursor: not-allowed;
+}
+
+/*personal form*/
+
+.form-title {
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 0.6rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+  font-size: 14px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1.5px solid #ccc;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.form-input:focus {
+  border-color: #007bff;
+}
+
+.input-valid {
+  border-color: #2ecc71;
+  background-color: #f6fff8;
+}
+
+.input-error {
+  border-color: #e74c3c !important;
+  background-color: #fff6f6;
+}
+
+.error-text {
+  color: #e74c3c;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  padding-left: 0.2rem;
+}
+
+.register-wrapper button {
+  &:disabled {
+    background: #ccc;
+  }
+}
+
+/* review step */
+.review-step {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 480px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.review-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+}
+
+.review-card {
+  background-color: #f9f9f9;
+  padding: 1.2rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.review-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.review-row:last-child {
+  border-bottom: none;
+}
+
+.label {
+  font-weight: 500;
+  color: #666;
+}
+
+.value {
+  color: #222;
+  font-weight: 600;
+}
+
+.button-group {
+  display: flex;
+  margin-top: 1rem;
+  justify-content: space-between;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+  background: #fff;
+  padding: 20px;
+}
+
+.btn {
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn.primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn.primary:hover {
+  background-color: #005dc1;
+}
+
+.btn.secondary {
+  background-color: #e4e6ea;
+  color: #333;
+}
+
+.btn.secondary:hover {
+  background-color: #d4d6db;
+}
+/* VerificationStep */

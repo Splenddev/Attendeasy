@@ -20,6 +20,8 @@ const FieldSet = ({
   choices = [],
   choiceMode = 'multiple',
   required = false,
+  disabled = false,
+  fontSize = '14px',
 }) => {
   const {
     register,
@@ -61,7 +63,7 @@ const FieldSet = ({
           <MdError />
         </motion.p>
       )}
-      <p className="title">{title}</p>
+      <p className="title cap">{title}</p>
       <hr />
 
       {/* Input Field */}
@@ -97,7 +99,10 @@ const FieldSet = ({
 
       {/* Dropdown */}
       {type === 'select' && (
-        <select {...register(name, validationRules)}>
+        <select
+          {...register(name, validationRules)}
+          disabled={disabled}
+          style={{ fontSize: fontSize }}>
           <option value="">-- Select an option --</option>
           {options.map((option, index) => {
             const value = option.value || option.text || option;
