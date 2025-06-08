@@ -1,24 +1,35 @@
+:root {
+  --wrapper-max-width: 500px;
+  --padding: 20px;
+  --header-height: 80px;
+  --footer-height: 150px;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
 .register-wrapper {
-  max-width: 500px;
+  max-width: var(--wrapper-max-width);
   width: 90vw;
   margin: 40px auto;
-  padding: 20px;
+  padding: var(--padding);
   border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   background: #fff;
-  /* height:100%; */
-  height: calc(100% - 80px);
-  overflow-x: hidden;
+  box-shadow: 0 0 10px var(--shadow-color);
+  height: calc(100vh - var(--header-height));
+  overflow: hidden;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
+
 .register-form {
-  height: calc(100vh - 80px - 150px);
+  flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 10px;
-  padding-top: 20px;
-  padding-bottom: 50px;
+  padding: 20px 10px 50px;
   margin-bottom: 20px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  /* Optional: for iOS */
 }
 
 /* progress header  */

@@ -1,16 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { motion } from 'framer-motion';
 import { MdCheckCircle } from 'react-icons/md';
 
-const RoleForm = ({ onNext }) => {
+const RoleForm = ({ onNext, setIsValid }) => {
   const {
     register,
     watch,
     trigger,
     formState: { errors },
   } = useFormContext();
+
   const selected = watch('role');
+
+  useEffect(() => {
+    // Watch for role changes to enable/disable button
+    if (setIsValid) setIsValid(!!selected);
+  }, [selected]);
 
   const handleNext = async () => {
     const isValid = await trigger('role');
@@ -19,7 +25,7 @@ const RoleForm = ({ onNext }) => {
 
   return (
     <motion.div
-      className="role-form-step"
+      className="role-form-step form-step"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
@@ -35,7 +41,7 @@ const RoleForm = ({ onNext }) => {
         variants={{
           visible: { transition: { staggerChildren: 0.15 } },
         }}>
-        {['student', 'classRep'].map((role) => (
+        {['classRep', 'student'].map((role) => (
           <motion.label
             key={role}
             className={`role-card ${selected === role ? 'selected' : ''}`}
@@ -71,17 +77,21 @@ const RoleForm = ({ onNext }) => {
       </motion.div>
 
       {errors.role && <p className="error">Please select a role.</p>}
-      <div className="button-group">
-        <motion.button
+
+      {/* Only show step button here instead of BtnGroup to avoid conflict */}
+      <motion.div
+        initial={{ opacity: 0, x: -30 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, transition: { delay: 0 } }}
+        transition={{ delay: 1 }}
+        className="button-group">
+        <button
           type="button"
           onClick={handleNext}
-          className="next-btn"
-          disabled={!selected}
-          whileHover={{ scale: selected ? 1.05 : 1 }}
-          whileTap={{ scale: selected ? 0.95 : 1 }}>
-          Next
-        </motion.button>
-      </div>
+          className="btn primary">
+          Continue
+        </button>
+      </motion.div>
     </motion.div>
   );
 };

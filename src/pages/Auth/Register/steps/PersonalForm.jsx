@@ -3,7 +3,7 @@ import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { variants } from '../../../../utils/contants';
 
-const PersonalForm = ({ onNext, onBack }) => {
+const PersonalForm = () => {
   const {
     register,
     formState: { errors, dirtyFields },
@@ -86,21 +86,6 @@ const PersonalForm = ({ onNext, onBack }) => {
               {errors.password.message}
             </motion.p>
           )}
-        </div>
-
-        <div className="button-group">
-          <button
-            type="button"
-            className="btn secondary"
-            onClick={onBack}>
-            Back
-          </button>
-          <button
-            type="button"
-            className="btn primary"
-            onClick={onNext}>
-            Next
-          </button>
         </div>
       </motion.div>
     </AnimatePresence>

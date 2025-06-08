@@ -91,6 +91,9 @@ select {
 button {
   border: none;
   outline: none;
+  &.reverse {
+    flex-direction: row-reverse;
+  }
 }
 
 .no-class {

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import '../styles/ProfileSetup.css';
 import FieldSet from '../../../../components/FieldSet/FieldSet';
+import { motion } from 'framer-motion';
+import BtnGroup from '../BtnGroup';
 
 const faculties = ['Sciences', 'Arts', 'Engineering', 'Social Sciences'];
 const departments = {
@@ -14,9 +16,8 @@ const departments = {
 const levels = ['100L', '200L', '300L', '400L', '500L'];
 
 const ProfileSetup = ({ onNext, onBack }) => {
-  const { watch, setValue, trigger } = useFormContext();
+  const { watch, setValue, trigger, getValues } = useFormContext();
   const selectedFaculty = watch('faculty');
-  const profilePic = watch('profilePicture');
   const [preview, setPreview] = useState(null);
 
   const handleImageChange = (e) => {
@@ -29,12 +30,10 @@ const ProfileSetup = ({ onNext, onBack }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const valid = await trigger([
-      'faculty',
-      'department',
-      'level',
-      'profilePicture',
-    ]);
+    const val = getValues();
+    const valid = await trigger(['faculty', 'department', 'level']);
+    console.log(val);
+    console.log(valid.toString());
     if (!valid) return;
     if (onNext) onNext();
   };
@@ -86,6 +85,7 @@ const ProfileSetup = ({ onNext, onBack }) => {
         title={'faculty'}
         type={'select'}
         fontSize="1rem"
+        required={true}
       />
       <FieldSet
         options={departments[selectedFaculty]}
@@ -93,28 +93,22 @@ const ProfileSetup = ({ onNext, onBack }) => {
         type={'select'}
         disabled={!selectedFaculty}
         fontSize="1rem"
+        // required={true}
       />
       <FieldSet
         options={levels}
         title={'level'}
         type={'select'}
         fontSize="1rem"
+        // required={true}
       />
-
-      <div className="button-group">
-        <button
-          type="button"
-          onClick={onBack}
-          className="btn secondary">
-          Back
-        </button>
-        <button
-          type="submit"
-          className="btn primary"
-          onClick={handleSubmit}>
-          Continue
-        </button>
-      </div>
+      <BtnGroup
+        onNext={handleSubmit}
+        onBack={onBack}
+        step={3}
+        nextText="Submit"
+        type="submit"
+      />
     </div>
   );
 };

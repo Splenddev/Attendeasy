@@ -5,17 +5,18 @@ import { useFormContext } from 'react-hook-form';
 import button from '../../../../components/Button/Button';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import '../styles/VerificationStep.css';
+import { useEffect } from 'react';
 
 const VerificationStep = ({
   title = 'Verify Your Email',
-  onBack,
   sendOtp,
   loader1,
   loader2,
   isOtpSent,
   timeLeft,
   formatTimeLeft,
-  onNext, // callback when verification passes
+  onNext,
+  otpVerified, // ✅ New prop
 }) => {
   const {
     register,
@@ -24,6 +25,16 @@ const VerificationStep = ({
     trigger,
     formState: { errors },
   } = useFormContext();
+
+  useEffect(() => {
+    if (otpVerified) {
+      const digits = '123456'.split('');
+      digits.forEach((digit, i) => {
+        setValue(`otp${i}`, digit);
+        if (inputsRef.current[i]) inputsRef.current[i].value = digit;
+      });
+    }
+  }, [otpVerified, setValue]);
 
   const inputsRef = useRef([]);
 
@@ -111,6 +122,7 @@ const VerificationStep = ({
                 onKeyDown={(e) => keydownHandler(e, i)}
                 className={errors[`otp${i}`] ? 'input-error' : ''}
                 autoComplete="one-time-code"
+                readOnly={otpVerified}
               />
             ))}
         </div>
@@ -129,22 +141,13 @@ const VerificationStep = ({
             )}
           </div>
           {button.multiple({
-            name: 'verify-button',
+            name: 'verify-button reverse',
             icon: loader2 ? FiLoader : FaArrowRight,
-            element: loader2 ? '' : 'verify email',
-            type: 'button', // changed from submit to button
-            disabled: loader2,
-            func: onSubmitHandler, // attach manual submit handler
+            element: loader2 ? '' : otpVerified ? 'Verified' : 'Verify Email',
+            type: 'button',
+            disabled: loader2 || otpVerified, // ✅ disable if verified
+            func: otpVerified ? undefined : onSubmitHandler,
           })}
-
-          <div className="button-group">
-            {button.multiple({
-              name: 'btn secondary',
-              func: onBack,
-              icon: FaArrowLeft,
-              element: 'back',
-            })}
-          </div>
         </div>
       </div>
     </motion.div>

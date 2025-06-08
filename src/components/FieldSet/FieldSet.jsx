@@ -14,7 +14,7 @@ import { variants } from '../../utils/contants';
 
 const FieldSet = ({
   options = [],
-  title,
+  title = '',
   type,
   input = { type: '', placeholder: '' },
   choices = [],
@@ -34,7 +34,14 @@ const FieldSet = ({
   const validationRules = required ? { required: `${title} is required` } : {};
   const name = toCamelCase(title);
 
-  const inputValue = watch(name) || (input.type === 'range' ? [100] : '');
+  const inputValue = watch(name) ?? (input.type === 'range' ? [100] : '');
+
+  useEffect(() => {
+    if (input.type === 'range' && !watch(name)) {
+      setValue(name, [100]);
+    }
+  }, []);
+
   const checkedChoices = watch(`${name}_choices`) || {};
 
   const hasError = !!errors[name];
@@ -102,7 +109,10 @@ const FieldSet = ({
         <select
           {...register(name, validationRules)}
           disabled={disabled}
-          style={{ fontSize: fontSize }}>
+          style={{ fontSize: fontSize }}
+          onClick={() => {
+            console.log(name);
+          }}>
           <option value="">-- Select an option --</option>
           {options.map((option, index) => {
             const value = option.value || option.text || option;

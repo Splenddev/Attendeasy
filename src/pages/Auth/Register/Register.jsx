@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { AnimatePresence, motion } from 'framer-motion';
 import './styles/Register.css';
@@ -9,6 +9,7 @@ import RoleForm from './steps/RoleForm';
 import ReviewStep from './steps/ReviewStep';
 import VerificationStep from './steps/VerificationStep';
 import ProfileSetup from './steps/ProfileSetup';
+import BtnGroup from './BtnGroup';
 
 const steps = [
   'Select Role',
@@ -33,6 +34,7 @@ const stepVariants = {
 const Register = () => {
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(0);
+  const [otpVerified, setOtpVerified] = useState(false);
 
   // OTP related states
   const [isOtpSent, setIsOtpSent] = useState(false);
@@ -93,7 +95,6 @@ const Register = () => {
   };
 
   const handleNext = async () => {
-    // Before step 2 (Verification), trigger validation for current fields
     if (step === 1) {
       const valid = await methods.trigger([
         'role',
@@ -130,27 +131,23 @@ const Register = () => {
       case 0:
         return <RoleForm onNext={handleNext} />;
       case 1:
-        return (
-          <PersonalForm
-            onNext={handleNext}
-            onBack={handleBack}
-          />
-        );
+        return <PersonalForm />;
       case 2:
         return (
           <VerificationStep
-            onBack={handleBack}
             sendOtp={sendOtp}
             loader1={sendingOtp}
             loader2={verifyingOtp}
             isOtpSent={isOtpSent}
             timeLeft={timeLeft}
+            otpVerified={otpVerified}
             formatTimeLeft={formatTimeLeft}
             onNext={async (otpCode) => {
               setVerifyingOtp(true);
               await new Promise((res) => setTimeout(res, 1500));
               setVerifyingOtp(false);
               if (otpCode === '123456') {
+                setOtpVerified(true); // ✅ OTP verified
                 handleNext();
               } else {
                 alert('Invalid OTP. Please try again.');
@@ -192,11 +189,20 @@ const Register = () => {
               initial="initial"
               animate="animate"
               exit="exit"
-              transition={{ duration: 0.4 }}>
+              transition={{ duration: 0.4, delay: 0.2 }}>
               {renderStep()}
             </motion.div>
           </AnimatePresence>
         </form>
+        {step !== 0 && step !== 3 && (
+          <BtnGroup
+            onBack={handleBack}
+            onNext={
+              (step === 2 && !otpVerified) || step === 4 ? null : handleNext
+            }
+            step={step}
+          />
+        )}
       </FormProvider>
     </div>
   );
