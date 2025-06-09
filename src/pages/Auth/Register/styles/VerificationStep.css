@@ -65,12 +65,6 @@
   height: 36px;
 }
 
-.send-otp-options span:hover,
-.otp-actions .resend-otp:hover {
-  background-color: var(--main-color);
-  color: #fff;
-}
-
 .otp-expire-time {
   font-weight: 500;
   color: #777;
@@ -86,18 +80,13 @@
   font-weight: 700;
   border-radius: 30px;
   transition: box-shadow 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
-  background: linear-gradient(to top, var(--main-color), #4e91f0, #6aa8ff);
-  box-shadow: inset 0 6px 6px rgba(255, 255, 255, 0.2),
-    inset 0 -6px 6px rgba(0, 0, 0, 0.15), 0 6px 12px rgba(0, 0, 0, 0.1);
+  background: var(--btn-bg);
+  box-shadow: var(--btn-shadow);
   color: #fff;
-  border: none;
   cursor: pointer;
   &:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--btn-shadow-hover);
   }
 }
 

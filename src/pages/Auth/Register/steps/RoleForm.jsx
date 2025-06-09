@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import { motion } from 'framer-motion';
 import { MdCheckCircle } from 'react-icons/md';
 
-const RoleForm = ({ onNext, setIsValid }) => {
+const RoleForm = ({ onNext }) => {
   const {
     register,
     watch,
@@ -12,11 +12,6 @@ const RoleForm = ({ onNext, setIsValid }) => {
   } = useFormContext();
 
   const selected = watch('role');
-
-  useEffect(() => {
-    // Watch for role changes to enable/disable button
-    if (setIsValid) setIsValid(!!selected);
-  }, [selected]);
 
   const handleNext = async () => {
     const isValid = await trigger('role');
@@ -41,7 +36,7 @@ const RoleForm = ({ onNext, setIsValid }) => {
         variants={{
           visible: { transition: { staggerChildren: 0.15 } },
         }}>
-        {['classRep', 'student'].map((role) => (
+        {['class-rep', 'student'].map((role) => (
           <motion.label
             key={role}
             className={`role-card ${selected === role ? 'selected' : ''}`}
@@ -57,8 +52,8 @@ const RoleForm = ({ onNext, setIsValid }) => {
             <img
               src={
                 role === 'student'
-                  ? 'https://i.postimg.cc/XYb4k6jb/copilot-image-1749254049413.png'
-                  : 'https://i.postimg.cc/pLhzz8L7/copilot-image-1749254654511.png'
+                  ? '/student-avatar.jpg'
+                  : '/class_rep-avatar.jpg'
               }
               alt={`${role} avatar`}
             />

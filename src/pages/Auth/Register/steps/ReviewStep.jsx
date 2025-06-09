@@ -1,8 +1,13 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
+import BtnGroup from '../BtnGroup';
+import button from '../../../../components/Button/Button';
+import { useAuth } from '../../../../context/AuthContext';
 
 const ReviewStep = ({ onBack }) => {
   const { getValues } = useFormContext();
+  const { authBtnsLoading } = useAuth();
+
   const values = getValues();
   const preview = values.profilePicture
     ? URL.createObjectURL(values.profilePicture)
@@ -11,13 +16,23 @@ const ReviewStep = ({ onBack }) => {
   return (
     <div className="form-step review-step">
       <h2 className="review-title">Review Your Information</h2>
-      {preview && <img src={preview} />}
+      {preview && (
+        <div className="image-wrap">
+          <img src={preview} />
+          <span className="cap">
+            {/* {values.role === 'student' ? 'student' : 'class rep'} */}
+            {values.role === 'student' ? 'student' : 'class rep'}
+          </span>
+        </div>
+      )}
 
       <div className="review-card">
-        <div className="review-row">
-          <span className="label">Role:</span>
-          <span className="value">{values.role}</span>
-        </div>
+        {!preview && (
+          <div className="review-row">
+            <span className="label">Role:</span>
+            <span className="value">{values.role}</span>
+          </div>
+        )}
         <div className="review-row">
           <span className="label">Name:</span>
           <span className="value">{values.name}</span>
@@ -25,6 +40,10 @@ const ReviewStep = ({ onBack }) => {
         <div className="review-row">
           <span className="label">Email:</span>
           <span className="value">{values.email}</span>
+        </div>
+        <div className="review-row">
+          <span className="label">Username:</span>
+          <span className="value">{values.username}</span>
         </div>
         <div className="review-row">
           <span className="label">Faculty:</span>
@@ -35,20 +54,13 @@ const ReviewStep = ({ onBack }) => {
           <span className="value">{values.department}</span>
         </div>
       </div>
+      {button.normal({
+        type: 'submit',
+        element: authBtnsLoading.submit ? 'Submitting...' : 'Finish',
+        name: 'review-step-btn',
+      })}
 
-      <div className="button-group">
-        <button
-          type="button"
-          className="btn secondary"
-          onClick={onBack}>
-          Back
-        </button>
-        <button
-          type="submit"
-          className="btn primary">
-          Submit
-        </button>
-      </div>
+      <BtnGroup onBack={onBack} />
     </div>
   );
 };

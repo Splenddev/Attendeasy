@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useRef } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -10,6 +11,8 @@ import ReviewStep from './steps/ReviewStep';
 import VerificationStep from './steps/VerificationStep';
 import ProfileSetup from './steps/ProfileSetup';
 import BtnGroup from './BtnGroup';
+import { useAuth } from '../../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const steps = [
   'Select Role',
@@ -43,6 +46,12 @@ const Register = () => {
   const [timeLeft, setTimeLeft] = useState(0);
   const timerRef = useRef(null);
 
+  const { setAuthBtnsLoading, register } = useAuth();
+
+  const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
+
   // RHF form setup
   const methods = useForm({
     defaultValues: {
@@ -60,6 +69,7 @@ const Register = () => {
       faculty: '',
       department: '',
       level: '',
+      username: '',
     },
 
     mode: 'onChange',
@@ -121,7 +131,34 @@ const Register = () => {
     setStep((prev) => prev - 1);
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    const { otp0, otp1, otp2, otp3, otp4, otp5, terms, ...userData } = data;
+    setAuthBtnsLoading((prev) => ({ ...prev, submit: true }));
+
+    try {
+      const formData = new FormData();
+
+      // Append all key-value pairs
+      for (const key in userData) {
+        if (key === 'profilePicture') {
+          formData.append('profilePicture', userData.profilePicture);
+        } else {
+          formData.append(key, userData[key]);
+        }
+      }
+
+      const result = await register(formData);
+      if (result.success) {
+        navigate('/auth'); // ✅ or success screen
+      } else {
+        setError(result.message || 'Registration failed');
+      }
+    } catch (err) {
+      setError(err.message || 'Something went wrong');
+    } finally {
+      setAuthBtnsLoading((prev) => ({ ...prev, submit: false }));
+    }
+
     console.log('Submitted:', data);
     // Add API submission logic here
   };
@@ -201,9 +238,11 @@ const Register = () => {
               (step === 2 && !otpVerified) || step === 4 ? null : handleNext
             }
             step={step}
+            submit={step === 4}
           />
         )}
       </FormProvider>
+      {error && <p>{error}</p>}
     </div>
   );
 };

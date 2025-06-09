@@ -25,7 +25,7 @@ const Footer = ({ role = '' }) => {
       <div className="footer-top">
         <div className="footer-logo">
           <img
-            src="/logo.png"
+            src="/vigilo_logo.jpeg"
             alt="Attendify Logo"
           />
           <h2>Vigilo</h2>
@@ -56,8 +56,8 @@ const Footer = ({ role = '' }) => {
 
         <div className="footer-section">
           <h4>Contact</h4>
-          <p>Email: support@attendify.app</p>
-          <p>Phone: +123 456 7890</p>
+          <p>Email: support@vigilo.com</p>
+          <p>Phone: +234 7083 484 603</p>
           <div className="social-icons">
             <a
               href="#"
@@ -81,6 +81,7 @@ const Footer = ({ role = '' }) => {
       <div className="footer-bottom">
         <p>© {new Date().getFullYear()} Attendify. All rights reserved.</p>
         <p>Built with ❤️ for students.</p>
+        <p>By SplendDev</p>
       </div>
     </footer>
   );

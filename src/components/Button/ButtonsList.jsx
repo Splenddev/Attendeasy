@@ -29,6 +29,7 @@ export const IconTextButton = ({
   name,
   element,
   type,
+  loader = false,
 }) => {
   const Icon = icon;
   return (
@@ -39,7 +40,7 @@ export const IconTextButton = ({
       aria-label={label || name || element}
       tabIndex={0}
       type={`${type || 'button'}`}>
-      <Icon />
+      <Icon className={`${loader ? 'spin' : ''}`} />
       {element}
     </button>
   );

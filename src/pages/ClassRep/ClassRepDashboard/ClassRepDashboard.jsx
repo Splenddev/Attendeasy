@@ -4,6 +4,8 @@ import { useAuth } from '../../../context/AuthContext';
 import { schedule } from '../ClassSchedule/assets';
 import AttendanceSection from './AttendanceSection';
 import ScheduleSection from './ScheduleSection';
+import TopSummaryCards from './TopSummaryCards';
+import { useNavigate } from 'react-router-dom';
 
 const getTodayName = () =>
   new Date().toLocaleString('en-US', { weekday: 'long' });
@@ -29,14 +31,24 @@ const getTodaySchedule = () => {
 };
 
 const ClassRepDashboard = () => {
-  const { setNavTitle } = useAuth();
+  const { setNavTitle, user } = useAuth();
   useEffect(() => setNavTitle('Dashboard'), [setNavTitle]);
+
+  const navigate = useNavigate();
 
   const todaySchedules = useMemo(() => getTodaySchedule(), []);
   const [navMenu, setNavMenu] = useState('today');
 
   return (
     <div className="c-dashboard">
+      <TopSummaryCards
+        data={{
+          totalStudents: 38,
+          classesToday: todaySchedules.length,
+          pendingPleas: 4,
+          pendingMedia: 2,
+        }}
+      />
       <AttendanceSection
         navMenu={navMenu}
         setNavMenu={setNavMenu}

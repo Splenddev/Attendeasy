@@ -30,7 +30,7 @@ const PersonalForm = () => {
             <motion.p
               variants={variants.shake}
               animate={errors.name ? 'shake' : 'still'}
-              className="error-text">
+              className="text">
               {errors.name.message}
             </motion.p>
           )}
@@ -60,6 +60,35 @@ const PersonalForm = () => {
               animate={errors.email ? 'shake' : 'still'}
               className="error-text">
               {errors.email.message}
+            </motion.p>
+          )}
+        </div>
+
+        <div className="form-group">
+          <label>Username</label>
+          <input
+            className={`form-input ${
+              errors.username
+                ? 'input-error'
+                : dirtyFields.username
+                ? 'input-valid'
+                : ''
+            }`}
+            {...register('username', {
+              required: 'Username is required',
+              pattern: {
+                value: /^[a-zA-Z0-9_.-]{3,20}$/,
+                message:
+                  'Username must be 3–20 characters (letters, numbers, ., _, -)',
+              },
+            })}
+          />
+          {errors.username && (
+            <motion.p
+              variants={variants.shake}
+              animate={errors.username ? 'shake' : 'still'}
+              className="error-text">
+              {errors.username.message}
             </motion.p>
           )}
         </div>

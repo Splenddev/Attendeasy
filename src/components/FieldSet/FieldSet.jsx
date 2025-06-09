@@ -185,16 +185,6 @@ const FieldSet = ({
           setValue={setValue}
         />
       )}
-
-      {/* Optionally show error text: */}
-      {/* Uncomment below if you want error messages shown under the field */}
-      {/*
-      {hasError && (
-        <div className="error">
-          <p>{errors[name].message}</p>
-        </div>
-      )}
-      */}
     </motion.div>
   );
 };

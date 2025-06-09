@@ -1,5 +1,5 @@
 :root {
-  --wrapper-max-width: 500px;
+  --wrapper-max-width: 600px;
   --padding: 20px;
   --header-height: 80px;
   --footer-height: 150px;
@@ -26,7 +26,8 @@
   overflow-y: auto;
   overflow-x: hidden;
   padding: 20px 10px 50px;
-  margin-bottom: 20px;
+  padding-bottom: 0;
+  margin-bottom: 50px;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   /* Optional: for iOS */
@@ -66,7 +67,7 @@
 }
 
 .step.done:not(:last-child)::after {
-  background-color: #007bff;
+  background-color: var(--main-color);
 }
 
 .circle {
@@ -85,13 +86,13 @@
 }
 
 .step.active .circle {
-  background-color: #007bff;
+  background-color: var(--main-color);
   color: #fff;
   box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2);
 }
 
 .step.done .circle {
-  background-color: #007bff;
+  background-color: var(--main-color);
   color: #fff;
 }
 
@@ -221,7 +222,7 @@
 }
 
 .form-input:focus {
-  border-color: #007bff;
+  border-color: var(--main-color);
 }
 
 .input-valid {
@@ -230,15 +231,13 @@
 }
 
 .input-error {
-  border-color: #e74c3c !important;
+  border-color: var(--red) !important;
   background-color: #fff6f6;
 }
 
 .error-text {
-  color: #e74c3c;
+  color: var(--red);
   font-size: 0.875rem;
-  margin-top: 0.25rem;
-  padding-left: 0.2rem;
 }
 
 .register-wrapper button {
@@ -272,8 +271,9 @@
 }
 
 .review-row {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 15px;
   padding: 0.6rem 0;
   border-bottom: 1px solid #eee;
 }
@@ -282,14 +282,16 @@
   border-bottom: none;
 }
 
-.label {
+span.label {
   font-weight: 500;
   color: #666;
 }
 
 .value {
   color: #222;
+  overflow-x: auto;
   font-weight: 600;
+  text-align: right;
 }
 
 .button-group {
@@ -315,7 +317,7 @@
 }
 
 .btn.primary {
-  background-color: #007bff;
+  background-color: var(--main-color);
   color: white;
 }
 
@@ -331,4 +333,42 @@
 .btn.secondary:hover {
   background-color: #d4d6db;
 }
-/* VerificationStep */
+
+.review-step {
+  padding: 10px;
+}
+.review-step .image-wrap {
+  position: relative;
+  place-self: center;
+  width: max-content;
+  text-align: center;
+  & img {
+    max-height: 300px;
+    width: 100%;
+    max-width: 400px;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 30px;
+    aspect-ratio: 1/1;
+  }
+  & span {
+    position: absolute;
+    right: 0px;
+    top: 20px;
+    padding: 0.6rem 1.5rem;
+    background: #fff;
+  }
+}
+.review-step-btn {
+  padding: 1rem;
+  transition: box-shadow 0.3s ease;
+  border-radius: 30px;
+  font-size: 1rem;
+  background: var(--btn-bg);
+  box-shadow: var(--btn-shadow);
+  color: #fff;
+  cursor: pointer;
+  &:hover {
+    box-shadow: var(--btn-shadow-hover);
+  }
+}

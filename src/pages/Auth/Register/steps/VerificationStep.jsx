@@ -132,7 +132,13 @@ const VerificationStep = ({
             <span
               onClick={sendOtp}
               className="resend-otp">
-              {loader1 ? <FiLoader /> : isOtpSent ? 'Resend OTP' : 'Send OTP'}
+              {loader1 ? (
+                <FiLoader className="spin" />
+              ) : isOtpSent ? (
+                'Resend OTP'
+              ) : (
+                'Send OTP'
+              )}
             </span>
             {timeLeft > 0 && (
               <p className="otp-expire-time">
@@ -147,6 +153,7 @@ const VerificationStep = ({
             type: 'button',
             disabled: loader2 || otpVerified, // ✅ disable if verified
             func: otpVerified ? undefined : onSubmitHandler,
+            loader: loader2,
           })}
         </div>
       </div>

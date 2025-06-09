@@ -13,7 +13,7 @@ a {
   color: inherit;
 }
 :root {
-  --main-color: #3576ec;
+  --main-color: #25aff3;
   --main-color-light: #e9f2ff;
   --outline: #e0e9ff;
   --light-blue-200: #e9f2ff;
@@ -24,12 +24,16 @@ a {
   --green: #49b583;
   --font-outfit: 'Outfit';
   --font-sen: 'Sen';
-  --tag-color-blue: #4984e4;
+  --tag-color-blue: #25aff3;
   --late: #ffc10d;
   --late-light: #fff3cd;
   --others: #6c757d;
   --others-light: #f1f3f5;
   --on-time: #4caf50;
+  --btn-bg: linear-gradient(to top, var(--main-color), #219edd, #0b9be4);
+  --btn-shadow: inset 0 6px 6px rgba(255, 255, 255, 0.2),
+    inset 0 -6px 6px rgba(0, 0, 0, 0.15), 0 6px 12px rgba(0, 0, 0, 0.1);
+  --btn-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 .on-time {
   color: var(--main-color);
@@ -101,4 +105,14 @@ button {
   font-style: italic;
   -webkit-user-select: none;
   user-select: none;
+}
+
+.spin {
+  animation: spin 1.5s infinite linear;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
 }
