@@ -6,6 +6,7 @@ import AttendanceSection from './AttendanceSection';
 import ScheduleSection from './ScheduleSection';
 import TopSummaryCards from './TopSummaryCards';
 import { useNavigate } from 'react-router-dom';
+import ClassOverview from './ClassOverview';
 
 const getTodayName = () =>
   new Date().toLocaleString('en-US', { weekday: 'long' });
@@ -52,6 +53,19 @@ const ClassRepDashboard = () => {
       <AttendanceSection
         navMenu={navMenu}
         setNavMenu={setNavMenu}
+      />
+
+      <ClassOverview
+        overview={{
+          groupName: 'CSC 300 - Software Engineering',
+          department: 'Computer Science',
+          faculty: 'Science',
+          level: '300',
+          pendingRequests: 3,
+          activeAssignments: 2,
+          upcomingDeadlines: 1,
+          unreadNotifications: 5,
+        }}
       />
 
       <ScheduleSection todaySchedules={todaySchedules} />
