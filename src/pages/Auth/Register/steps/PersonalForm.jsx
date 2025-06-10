@@ -45,7 +45,7 @@ const PersonalForm = () => {
                 : dirtyFields.email
                 ? 'input-valid'
                 : ''
-            }`}
+            }`} placeholder='Email address'
             {...register('email', {
               required: 'Email is required',
               pattern: {
@@ -97,7 +97,7 @@ const PersonalForm = () => {
           <label>Matric Number</label>
           <input
             className={`form-input ${errors.matricNumber && 'input-error'}`}
-            {...register('username', {
+            {...register('matricNumber', {
               required: 'Matric Number is required',
             })}
           />
