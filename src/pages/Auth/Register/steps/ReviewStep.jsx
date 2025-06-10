@@ -46,6 +46,10 @@ const ReviewStep = ({ onBack }) => {
           <span className="value">{values.username}</span>
         </div>
         <div className="review-row">
+          <span className="label">Matric Number:</span>
+          <span className="value">{values.matricNumber}</span>
+        </div>
+        <div className="review-row">
           <span className="label">Faculty:</span>
           <span className="value">{values.faculty}</span>
         </div>

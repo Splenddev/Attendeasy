@@ -74,6 +74,7 @@ const PersonalForm = () => {
                 ? 'input-valid'
                 : ''
             }`}
+            placeholder="username"
             {...register('username', {
               required: 'Username is required',
               pattern: {
@@ -89,6 +90,23 @@ const PersonalForm = () => {
               animate={errors.username ? 'shake' : 'still'}
               className="error-text">
               {errors.username.message}
+            </motion.p>
+          )}
+        </div>
+        <div className="form-group">
+          <label>Matric Number</label>
+          <input
+            className={`form-input ${errors.matricNumber && 'input-error'}`}
+            {...register('username', {
+              required: 'Matric Number is required',
+            })}
+          />
+          {errors.matricNumber && (
+            <motion.p
+              variants={variants.shake}
+              animate={errors.matricNumber ? 'shake' : 'still'}
+              className="error-text">
+              {errors.matricNumber.message}
             </motion.p>
           )}
         </div>

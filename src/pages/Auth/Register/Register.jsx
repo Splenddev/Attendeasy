@@ -70,6 +70,7 @@ const Register = () => {
       department: '',
       level: '',
       username: '',
+      matricNumber: '',
     },
 
     mode: 'onChange',
