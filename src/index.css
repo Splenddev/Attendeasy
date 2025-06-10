@@ -68,7 +68,7 @@ a {
     background: #fff3cd;
     color: #856404;
     border: 1px solid var(--late);
-    & svg {
+    & > svg {
       color: #856404;
     }
   }

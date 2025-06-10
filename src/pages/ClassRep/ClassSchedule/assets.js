@@ -98,6 +98,13 @@ export const schedule = [
         },
       },
       {
+        day: 'Tuesday',
+        timing: {
+          startTime: '10:52',
+          endTime: '15:52',
+        },
+      },
+      {
         day: 'Wednesday',
         timing: {
           startTime: '10:52',

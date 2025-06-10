@@ -20,12 +20,12 @@ export const c_Sidebar = [
   },
   {
     label: 'Attendance',
-    icon: FaClipboardList,
+    icon: FaRegListAlt,
     link: `${roleUrl}/attendance`,
   },
   {
     label: 'Class Schedules',
-    icon: MdSchedule,
+    icon: MdEventNote,
     link: `${roleUrl}/schedules`,
   },
   // {
@@ -102,7 +102,7 @@ export const attendance = [
     Class_End: '09:00',
     Code: 'BCH302',
     Course_Title: 'Analytical Biochemistry',
-    DateCreated: '2025-06-06',
+    DateCreated: '2025-06-10',
     Email: 'nnhvbn@gmail.com',
     Entry_Start: '0H30M',
     Entry_End: '0H30M',

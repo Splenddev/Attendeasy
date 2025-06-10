@@ -37,7 +37,13 @@ const ScheduleCard = ({ course, time, index }) => {
         <p>Lecturer: {course.lecturer}</p>
         <div className="bottom">
           <ClassStatus status={status} />
-          <FaBell title="send notifications to students" />
+          <div className="on-time">
+            <FaBell
+              title="send notifications to students"
+              className="bell-icon"
+            />
+            send reminder
+          </div>
         </div>
       </div>
     </motion.div>

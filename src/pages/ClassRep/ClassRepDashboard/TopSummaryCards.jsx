@@ -16,7 +16,7 @@ const TopSummaryCards = ({ data }) => {
       value: data.classesToday,
       subLabel: "Based on today's schedule",
       icon: '📅',
-      color: '#2196F3',
+      color: 'var(--main-color)',
       tooltip: 'Number of classes scheduled for today.',
     },
     {
@@ -24,7 +24,7 @@ const TopSummaryCards = ({ data }) => {
       value: data.pendingPleas,
       subLabel: 'Require your review',
       icon: '📩',
-      color: '#FF9800',
+      color: 'var(--late)',
       tooltip: 'Absence requests submitted by students awaiting approval.',
     },
     {
@@ -32,7 +32,7 @@ const TopSummaryCards = ({ data }) => {
       value: data.pendingMedia,
       subLabel: 'Uploaded by students',
       icon: '🎞️',
-      color: '#E91E63',
+      color: 'var(--absent)',
       tooltip:
         'Student-submitted media (e.g., images, notes) waiting for your action.',
     },
