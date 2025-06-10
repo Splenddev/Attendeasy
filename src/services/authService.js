@@ -3,7 +3,7 @@ import axios from 'axios';
 export const registerUser = async (formData) => {
   try {
     const response = await axios.post(
-      'http://localhost:5000/app/auth/register',
+      'https://vigilo-server.onrender.com/app/auth/register',
       formData,
       {
         headers: {
