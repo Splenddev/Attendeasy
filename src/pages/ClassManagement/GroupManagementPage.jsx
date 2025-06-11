@@ -6,13 +6,13 @@ import { useState } from 'react';
 // import MaterialsTab from './tabs/MaterialsTab';
 import { useAuth } from '../../context/AuthContext';
 import { Tabs } from './components/Tabs';
-import MembersTab from './components/tab/Overview/MembersTab/MembersTab';
 import OverviewTab from './components/tab/Overview/OverviewTab';
+import MembersTab from './components/tab/Overview/MembersTab/MembersTab';
 import './GroupManagementPage.css';
 
 const GroupManagementPage = () => {
   const { user } = useAuth();
-  const isClassRep = user?.role === 'classrep';
+  const isClassRep = user?.role === 'class-rep';
   const isStudent = user?.role === 'student';
   const group = {
     id: 'grp-12345',
@@ -20,27 +20,60 @@ const GroupManagementPage = () => {
     department: 'Computer Science',
     faculty: 'Faculty of Science',
     level: '300',
+    classRepId: 'stu101',
     classRepName: 'Jane Doe',
-    joinStatus: 'Accepted', // For student view: 'Pending' | 'Accepted'
+    joinStatus: 'Accepted',
 
     members: [
-      { id: 'stu-1', name: 'Alice Johnson', role: 'student' },
-      { id: 'stu-2', name: 'Bob Smith', role: 'student' },
-      { id: 'stu-3', name: 'Clara James', role: 'assistant' },
-      { id: 'stu-4', name: 'Daniel Lee', role: 'student' },
+      {
+        id: 'stu101',
+        name: 'Jane Doe',
+        absenceRate: 12,
+        email: 'jane.doe@university.edu',
+        department: 'Computer Science',
+        avatar: 'https://i.pravatar.cc/150?img=5',
+        joinedAt: '2025-04-01T09:00:00Z',
+      },
+      {
+        id: 'stu102',
+        name: 'Victor A.',
+        absenceRate: 4,
+        email: 'victor.a@university.edu',
+        department: 'Computer Science',
+        avatar: 'https://i.pravatar.cc/150?img=11',
+        joinedAt: '2025-04-05T13:15:00Z',
+      },
+      {
+        id: 'stu103',
+        name: 'Ahmed S.',
+        absenceRate: 0,
+        email: 'ahmed.s@university.edu',
+        department: 'Computer Science',
+        avatar: 'https://i.pravatar.cc/150?img=22',
+        joinedAt: '2025-04-10T10:45:00Z',
+      },
     ],
 
+    // ID of currently assigned student assistant (optional)
+    studentAssistant: 'stu102',
+
+    // Simulates the assign assistant logic
+    setAssistant: (id) => alert(`Assigned ${id} as assistant`),
+
+    // Students requesting to join the group
     pendingRequests: [
       { id: 'req-1', name: 'Eva Green', submittedAt: '2025-06-08T10:00:00Z' },
       { id: 'req-2', name: 'Felix Noah', submittedAt: '2025-06-09T14:30:00Z' },
     ],
 
+    // Announcement to show
     latestAnnouncement: {
       title: '📝 Midterm Exam Notice',
       body: 'The midterm exam has been moved to Friday at 9 AM. Please revise chapters 1–5 and be on time.',
       postedAt: '2025-06-07T16:00:00Z',
     },
 
+    // Next class info
     nextClass: {
       day: 'Wednesday',
       time: '10:00 AM – 12:00 PM',
@@ -77,7 +110,10 @@ const GroupManagementPage = () => {
         )}
 
         {selectedTab === 'members' && isClassRep && (
-          <MembersTab groupId={group.id} />
+          <MembersTab
+            user={user}
+            group={group}
+          />
         )}
 
         {/* {selectedTab === 'announcements' && (

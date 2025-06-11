@@ -21,12 +21,12 @@
   justify-content: space-between;
 }
 
-.tabs {
+.notification-container .tabs {
   display: flex;
   gap: 10px;
 }
 
-.tab {
+.notification-container .tab {
   background: none;
   border: none;
   padding: 6px 10px;
@@ -36,7 +36,7 @@
   border-radius: 4px;
 }
 
-.tab.active {
+.notification-container .tab.active {
   background: #efefef;
 }
 

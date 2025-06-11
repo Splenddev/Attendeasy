@@ -1,5 +1,5 @@
 export const Tabs = ({ tabs, selected, onChange }) => (
-  <div className="tabs">
+  <div className="header-tabs">
     {tabs.map((tab) => (
       <button
         key={tab.key}

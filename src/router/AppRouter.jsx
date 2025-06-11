@@ -112,7 +112,11 @@ export const router = createBrowserRouter([
           },
           {
             path: 'group-management',
-            element: <GroupManagementPage />,
+            element: (
+              <Suspense fallback={<Loader />}>
+                <GroupManagementPage />,
+              </Suspense>
+            ),
           },
         ],
       },
@@ -169,7 +173,11 @@ export const router = createBrowserRouter([
           },
           {
             path: 'group-management',
-            element: <GroupManagementPage />,
+            element: (
+              <Suspense fallback={<Loader />}>
+                <GroupManagementPage />,
+              </Suspense>
+            ),
           },
         ],
       },

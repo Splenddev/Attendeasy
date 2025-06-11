@@ -1,5 +1,5 @@
 .c-layout {
-  background: #f0f0f0;
+  background: var(--bg-body);
 }
 .c-layout .main {
   margin-top: 50px;

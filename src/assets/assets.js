@@ -1,11 +1,10 @@
-import { FaClipboardList, FaRegListAlt, FaTachometerAlt } from 'react-icons/fa';
 import {
-  MdAccessTime,
-  MdDashboard,
-  MdEventNote,
-  MdGroup,
-  MdSchedule,
-} from 'react-icons/md';
+  FaClipboardList,
+  FaRegListAlt,
+  FaTachometerAlt,
+  FaUsers,
+} from 'react-icons/fa';
+import { MdDashboard, MdEventNote, MdGroup } from 'react-icons/md';
 import logo from '/vigilo_logo.jpeg';
 import profile from './profile.jpg';
 const roleUrl = '/class-rep';
@@ -16,44 +15,44 @@ export const c_Sidebar = [
   {
     label: 'Dashboard',
     icon: MdDashboard,
-    link: `${roleUrl}/dashboard`,
+    link: `dashboard`,
   },
   {
     label: 'Attendance',
     icon: FaRegListAlt,
-    link: `${roleUrl}/attendance`,
+    link: `attendance`,
   },
   {
     label: 'Class Schedules',
     icon: MdEventNote,
-    link: `${roleUrl}/schedules`,
+    link: `schedules`,
   },
   {
     label: 'Class Group',
-    icon: MdGroup,
-    link: `${roleUrl}/group-management`,
+    link: `group-management`,
+    icon: FaUsers,
   },
 ];
 export const s_Sidebar = [
   {
     label: 'Dashboard',
     icon: MdDashboard,
-    link: `${roleUrl2}/dashboard`,
+    link: `dashboard`,
   },
   {
     label: 'My Attendance',
     icon: FaRegListAlt,
-    link: `${roleUrl2}/attendance`,
+    link: `attendance`,
   },
   {
     label: 'Class Schedules',
     icon: MdEventNote,
-    link: `${roleUrl2}/schedules`,
+    link: `schedules`,
   },
   {
     label: 'Class Group',
-    icon: MdGroup,
-    link: `/group-management`,
+    icon: FaUsers,
+    link: `group-management`,
   },
   // {
   //   label: 'Class Group',

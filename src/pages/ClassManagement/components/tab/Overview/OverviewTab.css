@@ -1,46 +1,80 @@
+:root {
+  --primary: #25aff3;
+  --primary-dark: #1c93c8;
+  --bg: #f4f8fb;
+  --card-bg: #ffffff;
+  --text-main: #222;
+  --text-muted: #666;
+  --border: #e0e6ed;
+  --radius: 12px;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.035);
+}
+
 .overview-tab {
+  background: var(--bg);
+  padding: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 .card {
-  background: #f9f9f9;
-  padding: 1.25rem 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem 2rem;
 }
 
 .card-title {
-  margin-bottom: 0.75rem;
-  font-size: 1.125rem;
+  font-size: 1.2rem;
   font-weight: 600;
-  color: #333;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.2rem;
 }
 
-.grid.two-col {
+.info-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem 2rem;
+  font-size: 0.95rem;
 }
 
-.button-group {
+.button-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
-.button-group button {
-  padding: 0.5rem 1rem;
-  border: none;
-  background-color: #007bff;
+button {
+  background: var(--primary);
   color: white;
-  border-radius: 6px;
+  padding: 0.55rem 1rem;
+  font-size: 0.94rem;
   font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   cursor: pointer;
   transition: background 0.2s ease;
 }
 
-.button-group button:hover {
-  background-color: #005bb5;
+button:hover {
+  background: var(--primary-dark);
+}
+
+.announcement-title {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.announcement-body {
+  font-size: 0.95rem;
+  color: var(--text-muted);
 }
