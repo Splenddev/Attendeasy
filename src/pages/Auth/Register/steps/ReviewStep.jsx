@@ -62,6 +62,7 @@ const ReviewStep = ({ onBack }) => {
         type: 'submit',
         element: authBtnsLoading.submit ? 'Submitting...' : 'Finish',
         name: 'review-step-btn',
+        disabled: authBtnsLoading.submit,
       })}
 
       <BtnGroup onBack={onBack} />

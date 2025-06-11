@@ -20,7 +20,9 @@ const Navbar = ({ dropdownAssets = [] }) => {
         <p>{navTitle}</p>
       </div>
       <div className="navbar-side">
-        <div className="alert ">
+        <div
+          className="alert"
+          onClick={() => console.log(user)}>
           <MdHelpCenter />
         </div>
         <div className="alert">
@@ -55,14 +57,24 @@ const Navbar = ({ dropdownAssets = [] }) => {
             setIsDropdown((prev) => ({
               ...prev,
               quickLinks: !prev.quickLinks,
-              notifications: !prev.quickLinks ? false : true,
+              notifications: !prev.notifications && false,
             }))
           }>
           <div className="details">
-            <p className="name">{user.name||'name'}</p>
-            <p className="role">{user.role||'role'}</p>
+            <p className="name">{user.name || 'name'}</p>
+            <p className="role">{user.role || 'role'}</p>
           </div>
-          <img src={assets.profile} />
+          {user.profilePicture ? (
+            <img
+              src={user.profilePicture}
+              className="round"
+            />
+          ) : (
+            <img
+              alt="user-avatar"
+              src={`/main_${user.role}_avatar.png`}
+            />
+          )}
           <AnimatePresence>
             {isDropdown.quickLinks && (
               <motion.div

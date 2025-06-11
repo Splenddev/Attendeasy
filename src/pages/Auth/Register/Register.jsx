@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { AnimatePresence, motion } from 'framer-motion';
 import './styles/Register.css';
-
+import { toast } from 'react-toastify';
 import ProgressHeader from './ProgressHeader';
 import PersonalForm from './steps/PersonalForm';
 import RoleForm from './steps/RoleForm';
@@ -13,6 +13,7 @@ import ProfileSetup from './steps/ProfileSetup';
 import BtnGroup from './BtnGroup';
 import { useAuth } from '../../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { sendUserOtp, verifyUserOtp } from '../../../services/authService';
 
 const steps = [
   'Select Role',
@@ -75,27 +76,40 @@ const Register = () => {
 
     mode: 'onChange',
   });
+  const email = methods.getValues('email'); // Assuming you're using RHF
 
-  // Send OTP function simulation
   const sendOtp = async () => {
     setSendingOtp(true);
-    // Simulate API call
-    await new Promise((res) => setTimeout(res, 1500));
-    setSendingOtp(false);
-    setIsOtpSent(true);
-    setTimeLeft(120); // e.g., 2 minutes expiry
 
-    // Reset timer if any
-    if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => {
-      setTimeLeft((time) => {
-        if (time <= 1) {
-          clearInterval(timerRef.current);
-          return 0;
-        }
-        return time - 1;
-      });
-    }, 1000);
+    try {
+      const { success, message } = await sendUserOtp(email);
+
+      if (!success) {
+        throw new Error(message || 'Failed to send OTP');
+      }
+
+      toast.success('OTP sent successfully');
+      setIsOtpSent(true);
+      setTimeLeft(120); // 2 minutes countdown
+
+      // Reset timer if any
+      if (timerRef.current) clearInterval(timerRef.current);
+      timerRef.current = setInterval(() => {
+        setTimeLeft((time) => {
+          if (time <= 1) {
+            clearInterval(timerRef.current);
+            return 0;
+          }
+          return time - 1;
+        });
+      }, 1000);
+    } catch (err) {
+      console.error('sendOtp error:', err.message);
+      toast.error(err?.response?.data || 'Failed to send OTP');
+    } finally {
+      setSendingOtp(false);
+      setAuthBtnsLoading((prev) => ({ ...prev, login: false }));
+    }
   };
 
   // Format seconds as mm:ss
@@ -122,7 +136,7 @@ const Register = () => {
       // Normally OTP verification handled inside VerificationStep
       // So here, just proceed if you want
     }
-
+    if (step === 1 && !isOtpSent) return;
     setDirection(1);
     setStep((prev) => prev + 1);
   };
@@ -149,6 +163,7 @@ const Register = () => {
       }
 
       const result = await register(formData);
+      console.log(result);
       if (result.success) {
         navigate('/auth'); // ✅ or success screen
       } else {
@@ -173,24 +188,20 @@ const Register = () => {
       case 2:
         return (
           <VerificationStep
+            email={email}
             sendOtp={sendOtp}
+            verifyOtp={verifyUserOtp}
             loader1={sendingOtp}
             loader2={verifyingOtp}
+            setLoader2={setVerifyingOtp}
             isOtpSent={isOtpSent}
             timeLeft={timeLeft}
-            otpVerified={otpVerified}
             formatTimeLeft={formatTimeLeft}
-            onNext={async (otpCode) => {
-              setVerifyingOtp(true);
-              await new Promise((res) => setTimeout(res, 1500));
-              setVerifyingOtp(false);
-              if (otpCode === '123456') {
-                setOtpVerified(true); // ✅ OTP verified
-                handleNext();
-              } else {
-                alert('Invalid OTP. Please try again.');
-              }
+            onNext={(otp) => {
+              console.log('Verified OTP:', otp);
+              setOtpVerified(true);
             }}
+            otpVerified={otpVerified}
           />
         );
       case 3:
@@ -231,6 +242,7 @@ const Register = () => {
               {renderStep()}
             </motion.div>
           </AnimatePresence>
+          {error && <p>{error}</p>}
         </form>
         {step !== 0 && step !== 3 && (
           <BtnGroup
@@ -243,7 +255,6 @@ const Register = () => {
           />
         )}
       </FormProvider>
-      {error && <p>{error}</p>}
     </div>
   );
 };

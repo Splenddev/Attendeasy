@@ -4,11 +4,12 @@
   padding: 1.5rem;
   margin: 2rem 0;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 .class-overview h3 {
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  margin-bottom: 1.2rem;
   color: #333;
 }
 
@@ -25,6 +26,12 @@
   font-size: 0.95rem;
   display: flex;
   flex-direction: column;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.overview-item:hover {
+  background-color: #f0f4fa;
+  transform: translateY(-2px);
 }
 
 .overview-item strong {
@@ -32,7 +39,23 @@
   margin-bottom: 0.3rem;
 }
 
+.overview-item span {
+  font-weight: 500;
+  color: #222;
+}
+
 .overview-item.highlight {
-  background: #e9f6ff;
-  border-left: 4px solid #2196f3;
+  background: #e3f3ff;
+  border-left: 4px solid #1976d2;
+  position: relative;
+}
+
+@media (max-width: 480px) {
+  .class-overview {
+    padding: 1rem;
+  }
+
+  .overview-item {
+    padding: 0.6rem 0.8rem;
+  }
 }

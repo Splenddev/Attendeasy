@@ -4,6 +4,8 @@ import DevRoleSwitcher from './components/DevRoleSwitcher';
 import { useEffect } from 'react';
 import { useAuth } from './context/AuthContext';
 import { ROLES } from './utils/roles';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 const App = () => {
   const { user } = useAuth();
@@ -16,6 +18,7 @@ const App = () => {
   }, [user, navigate]);
   return (
     <>
+      <ToastContainer position="top-center" />
       <Outlet />
       <DevRoleSwitcher />
     </>

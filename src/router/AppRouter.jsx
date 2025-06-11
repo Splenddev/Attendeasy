@@ -20,6 +20,7 @@ import { AuthLayout, ClassRepLayout, StudentLayout } from '../layouts';
 import { CreateSchedule, Login, Notifications, Register } from '../pages';
 import MarkAttendance from '../pages/Student/MarkAttendance/MarkAttendance';
 import InitialRedirect from '../components/InitialRedirect/InitialRedirect';
+import GroupManagementPage from '../pages/ClassManagement/GroupManagementPage';
 
 export const router = createBrowserRouter([
   {
@@ -109,6 +110,10 @@ export const router = createBrowserRouter([
             path: 'notifications/:id',
             element: <Notifications />,
           },
+          {
+            path: 'group-management',
+            element: <GroupManagementPage />,
+          },
         ],
       },
       {
@@ -161,6 +166,10 @@ export const router = createBrowserRouter([
                 <StudentSchedules />
               </Suspense>
             ),
+          },
+          {
+            path: 'group-management',
+            element: <GroupManagementPage />,
           },
         ],
       },

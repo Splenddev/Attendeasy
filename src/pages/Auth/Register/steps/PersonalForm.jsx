@@ -30,7 +30,7 @@ const PersonalForm = () => {
             <motion.p
               variants={variants.shake}
               animate={errors.name ? 'shake' : 'still'}
-              className="text">
+              className="error-text">
               {errors.name.message}
             </motion.p>
           )}
@@ -45,7 +45,12 @@ const PersonalForm = () => {
                 : dirtyFields.email
                 ? 'input-valid'
                 : ''
+<<<<<<< HEAD
             }`} placeholder='Email address'
+=======
+            }`}
+            placeholder="Email address"
+>>>>>>> 02e6744 (latest wednessdayd)
             {...register('email', {
               required: 'Email is required',
               pattern: {
@@ -100,6 +105,7 @@ const PersonalForm = () => {
             {...register('matricNumber', {
               required: 'Matric Number is required',
             })}
+            placeholder="Enter matric number"
           />
           {errors.matricNumber && (
             <motion.p

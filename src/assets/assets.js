@@ -28,11 +28,11 @@ export const c_Sidebar = [
     icon: MdEventNote,
     link: `${roleUrl}/schedules`,
   },
-  // {
-  //   label: 'Class Group',
-  //   icon: MdGroup,
-  //   link: `${roleUrl}/schedule`,
-  // },
+  {
+    label: 'Class Group',
+    icon: MdGroup,
+    link: `${roleUrl}/group-management`,
+  },
 ];
 export const s_Sidebar = [
   {
@@ -49,6 +49,11 @@ export const s_Sidebar = [
     label: 'Class Schedules',
     icon: MdEventNote,
     link: `${roleUrl2}/schedules`,
+  },
+  {
+    label: 'Class Group',
+    icon: MdGroup,
+    link: `/group-management`,
   },
   // {
   //   label: 'Class Group',

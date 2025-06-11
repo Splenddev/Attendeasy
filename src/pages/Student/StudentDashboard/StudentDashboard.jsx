@@ -23,13 +23,12 @@ const StudentDashboard = () => {
   const [message, setMessage] = useState('');
   const overview = [
     {
-      color: 'green',
       figure: '101',
       text: 'present ( on time )',
     },
-    { color: 'green', figure: '121', text: 'late' },
-    { color: 'red', figure: '21', text: 'absent' },
-    { color: 'red', figure: '21', text: 'other reasons' },
+    { figure: '121', text: 'late' },
+    { figure: '21', text: 'absent' },
+    { figure: '21', text: 'other reasons' },
   ];
   let total = 0;
   overview.forEach((o) => {
@@ -132,12 +131,20 @@ const StudentDashboard = () => {
             <hr />
             <div className="mid">
               <div className="mid-left">
-                {overview.map(({ text, figure, color }) => {
+                {overview.map(({ text, figure }) => {
                   return (
                     <div
                       className="stat"
                       key={text}>
-                      <FaCircle color={`var(--${color})`} />{' '}
+                      <FaCircle
+                        color={`var(--${
+                          text.includes('on time')
+                            ? 'on-time'
+                            : text.includes('other')
+                            ? 'others'
+                            : text
+                        })`}
+                      />{' '}
                       <p>
                         <b>{figure}</b> {text}
                       </p>
@@ -161,7 +168,7 @@ const StudentDashboard = () => {
           <section className="right">
             <div className="info-field">
               <FaHistory />
-              <span>Today's Classes</span>
+              <span>Upcoming Classes</span>
               <h3>BCH305</h3>
               {button.normal({
                 element: 'view all',

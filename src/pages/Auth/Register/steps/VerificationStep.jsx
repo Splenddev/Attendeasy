@@ -1,22 +1,25 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiLoader } from 'react-icons/fi';
 import { useFormContext } from 'react-hook-form';
+import { FaArrowRight } from 'react-icons/fa';
 import button from '../../../../components/Button/Button';
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import '../styles/VerificationStep.css';
-import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 const VerificationStep = ({
   title = 'Verify Your Email',
+  email = '',
   sendOtp,
+  verifyOtp, // ✅ NEW
   loader1,
   loader2,
+  setLoader2, // ✅ NEW
   isOtpSent,
   timeLeft,
   formatTimeLeft,
   onNext,
-  otpVerified, // ✅ New prop
+  otpVerified,
 }) => {
   const {
     register,
@@ -25,6 +28,11 @@ const VerificationStep = ({
     trigger,
     formState: { errors },
   } = useFormContext();
+
+  const inputsRef = useRef([]);
+
+  const otpValues =
+    watch(['otp0', 'otp1', 'otp2', 'otp3', 'otp4', 'otp5']) || [];
 
   useEffect(() => {
     if (otpVerified) {
@@ -35,11 +43,6 @@ const VerificationStep = ({
       });
     }
   }, [otpVerified, setValue]);
-
-  const inputsRef = useRef([]);
-
-  const otpValues =
-    watch(['otp0', 'otp1', 'otp2', 'otp3', 'otp4', 'otp5']) || [];
 
   const inputHandler = (e, i) => {
     const val = e.target.value;
@@ -69,9 +72,7 @@ const VerificationStep = ({
     if (inputsRef.current[nextFocus]) inputsRef.current[nextFocus].focus();
   };
 
-  // NEW: manual submit handler triggered by button click
   const onSubmitHandler = async () => {
-    console.log('Submitting OTP...');
     const valid = await trigger([
       'otp0',
       'otp1',
@@ -81,12 +82,27 @@ const VerificationStep = ({
       'otp5',
     ]);
     if (!valid) {
-      console.log('OTP validation failed');
+      toast.error('Please enter all 6 digits.');
       return;
     }
+
     const otpCode = otpValues.join('');
-    console.log('OTP valid:', otpCode);
-    if (onNext) onNext(otpCode);
+    try {
+      setLoader2(true);
+      const { success, message } = await verifyOtp(email, otpCode);
+      setLoader2(false);
+
+      if (success) {
+        toast.success('OTP verified successfully!');
+        if (onNext) onNext(otpCode);
+      } else {
+        toast.error(message || 'Invalid OTP. Please try again.');
+      }
+    } catch (error) {
+      setLoader2(false);
+      toast.error('An error occurred during OTP verification.');
+      console.error(error);
+    }
   };
 
   return (
@@ -99,7 +115,6 @@ const VerificationStep = ({
       <h2>{title}</h2>
       <p className="subtitle">Enter the 6-digit code sent to your email.</p>
 
-      {/* Removed form tag */}
       <div
         className="otp-form"
         onPaste={pasteHandler}>
@@ -146,12 +161,13 @@ const VerificationStep = ({
               </p>
             )}
           </div>
+
           {button.multiple({
             name: 'verify-button reverse',
             icon: loader2 ? FiLoader : FaArrowRight,
             element: loader2 ? '' : otpVerified ? 'Verified' : 'Verify Email',
             type: 'button',
-            disabled: loader2 || otpVerified, // ✅ disable if verified
+            disabled: loader2 || otpVerified,
             func: otpVerified ? undefined : onSubmitHandler,
             loader: loader2,
           })}

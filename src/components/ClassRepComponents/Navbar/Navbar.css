@@ -28,6 +28,7 @@
   justify-content: center;
   border-left: 1px solid #9b9b9b;
   padding: 0px 15px;
+  position: relative;
 }
 .alert .badge {
   display: flex;
