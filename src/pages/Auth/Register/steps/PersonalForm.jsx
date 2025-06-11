@@ -1,5 +1,5 @@
+// eslint-disable-next-line no-unused-vars
 import { AnimatePresence, motion } from 'framer-motion';
-import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { variants } from '../../../../utils/contants';
 
@@ -45,12 +45,8 @@ const PersonalForm = () => {
                 : dirtyFields.email
                 ? 'input-valid'
                 : ''
-<<<<<<< HEAD
-            }`} placeholder='Email address'
-=======
             }`}
             placeholder="Email address"
->>>>>>> 02e6744 (latest wednessdayd)
             {...register('email', {
               required: 'Email is required',
               pattern: {
