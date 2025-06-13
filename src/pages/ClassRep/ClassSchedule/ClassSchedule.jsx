@@ -20,7 +20,7 @@ const ClassSchedule = () => {
           <FaCrown />
           Welcome, {user.name}
         </h2>
-        <NavLink to={'schedules/create'}>
+        <NavLink to={'create'}>
           {button.multiple({
             icon: FaPlus,
             name: 'create-schedule-btn',
