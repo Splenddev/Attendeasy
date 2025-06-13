@@ -1,0 +1,34 @@
+.header-tabs {
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+  padding: 4px;
+  background: #ddd;
+  border-radius: 12px;
+  font-size: 14px;
+  position: relative;
+  gap: 0.25rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tab {
+  padding: 8px 1.5rem;
+  border-radius: 8px;
+  background: none;
+  cursor: pointer;
+  white-space: nowrap;
+  flex: 1;
+  transition: background 0.2s;
+  color: #414141;
+  text-align: center;
+  &.active {
+    color: #000;
+    background: #fff;
+    font-weight: bold;
+  }
+
+  &:hover {
+    background: #e5e5e5;
+  }
+}

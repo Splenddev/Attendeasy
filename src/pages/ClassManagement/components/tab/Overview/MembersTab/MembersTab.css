@@ -1,166 +1,135 @@
 .members-tab {
-  padding: 2rem;
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.members-header {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
 }
 
-.restricted-msg {
-  padding: 3rem;
-  background: white;
-  text-align: center;
-  font-size: 1rem;
-  color: #666;
-  border: 1px solid #ddd;
-  border-radius: 10px;
+.members-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #222;
 }
 
-.search-bar {
+.members-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.search-box {
   display: flex;
   align-items: center;
-  background: white;
-  padding: 0.6rem 1rem;
+  border: 1px solid #ccc;
+  padding: 0.4rem 0.75rem;
   border-radius: 8px;
-  border: 1px solid #ddd;
-  gap: 0.5rem;
+  flex: 1;
+  max-width: 250px;
+  background: #f9f9f9;
 }
 
-.search-bar input {
-  flex: 1;
+.search-box input {
   border: none;
   outline: none;
-  font-size: 0.95rem;
+  margin-left: 0.5rem;
   background: transparent;
+  font-size: 0.9rem;
+  flex: 1;
 }
 
-.member-grid {
+.export-btn {
+  background: #25aff3;
+  border: none;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.members-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-  gap: 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
 }
 
 .member-card {
-  background: white;
-  padding: 1rem 1.2rem;
-  border: 1px solid #e0e6ed;
+  border: 1px solid #eee;
   border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.025);
+  padding: 1rem;
   display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-
-.member-top {
-  display: flex;
+  gap: 0.75rem;
   align-items: center;
-  gap: 0.8rem;
+  background: #fafafa;
 }
 
-.avatar {
-  width: 45px;
-  height: 45px;
-  object-fit: cover;
+.member-avatar {
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  border: 2px solid #25aff3;
+  object-fit: cover;
+}
+
+.member-info {
+  flex: 1;
 }
 
 .name-role {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  flex: 1;
-  gap: 0.5rem;
-  font-weight: 600;
-  color: #25aff3;
-  font-size: 1rem;
-}
-
-.role-icon {
-  display: flex;
-  align-items: center;
-  font-size: 1rem;
-}
-
-.details {
-  font-size: 0.9rem;
-  color: #444;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.assign-btn {
-  margin-top: auto;
-  background: #25aff3;
-  color: white;
-  padding: 0.45rem 0.8rem;
-  border: none;
-  place-self: start;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.assign-btn:disabled {
-  background: #aaa;
-  cursor: not-allowed;
-}
-
-.assign-btn:hover:not(:disabled) {
-  background: #1c93c8;
-}
-.members-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.navs {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.navs button {
-  background: #ddd;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
   gap: 0.4rem;
-  cursor: pointer;
-  transition: 0.2s;
-}
-.navs button.active {
-  background: #25aff3;
-  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #333;
 }
 
-.badge-cr {
-  background: #25aff3;
-  color: white;
-  padding: 2px 6px;
-  font-size: 0.7rem;
-  border-radius: 4px;
+.member-id {
+  font-size: 0.75rem;
+  color: #888;
 }
 
-.request-actions {
-  display: flex;
-  gap: 0.5rem;
+.absence-rate {
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
 }
 
-.request-card .assign-btn.accept {
-  background-color: #25c166;
+.absence-rate.high {
+  color: #e74c3c;
 }
 
-.request-card .assign-btn.reject {
-  background-color: #e94d4d;
+.absence-rate.mid {
+  color: #f39c12;
 }
 
-.request-card .assign-btn:hover:not(:disabled) {
-  opacity: 0.9;
+.absence-rate.none {
+  color: #2ecc71;
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .members-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  .export-btn {
+    width: 100%;
+    justify-content: center;
+  }
 }

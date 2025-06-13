@@ -1,10 +1,11 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { useEffect } from 'react';
 import { schedule } from './assets';
 import Schedule from './Schedule/Schedule';
-import { FaCrown } from 'react-icons/fa';
+import { FaCrown, FaPlus } from 'react-icons/fa';
 import './ClassSchedule.css';
+import button from '../../../components/Button/Button';
 const ClassSchedule = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -17,6 +18,14 @@ const ClassSchedule = () => {
       <div className="cap">
         <FaCrown />
         <h2>Welcome, {user.name}</h2>
+        <NavLink>
+          {' '}
+          {button.multiple({
+            icon: FaPlus,
+            name: 'create-attendance',
+            element: ' New Schedule',
+          })}
+        </NavLink>
       </div>
       <div className="class-schedule-container">
         <Schedule

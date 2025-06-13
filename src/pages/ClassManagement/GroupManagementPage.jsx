@@ -1,149 +1,150 @@
-import { useState } from 'react';
-// import MembersTab from './tabs/MembersTab';
-// import AnnouncementsTab from './tabs/AnnouncementsTab';
-// import ScheduleTab from './tabs/ScheduleTab';
-// import AttendanceTab from './tabs/AttendanceTab';
-// import MaterialsTab from './tabs/MaterialsTab';
+import React, { useEffect, useState } from 'react';
+import './GroupManagementPage.css';
+import {
+  FaLock,
+  FaUserGraduate,
+  FaBullhorn,
+  FaCalendarAlt,
+} from 'react-icons/fa';
+import MembersTab from './components/tab/Overview/MembersTab/MembersTab';
 import { useAuth } from '../../context/AuthContext';
 import { Tabs } from './components/Tabs';
-import OverviewTab from './components/tab/Overview/OverviewTab';
-import MembersTab from './components/tab/Overview/MembersTab/MembersTab';
-import './GroupManagementPage.css';
+import GroupSidebar from './components/GroupSidebar/GroupSidebar';
+import GroupContents from './components/GroupContents/GroupContents';
+const group = {
+  name: 'CSC 301 - Data Structures',
+  faculty: 'Science',
+  department: 'Computer Science',
+  level: '300',
+  classRepName: 'Jane Doe',
+  description:
+    'This group handles all communications and activities for CSC 301. Ensure you keep up with announcements and attendance.',
+  members: [
+    {
+      id: 1,
+      name: 'Jane Doe',
+      avatar: 'https://i.pravatar.cc/150?img=1',
+      role: 'Class Rep',
+    },
+    {
+      id: 2,
+      name: 'John Smith',
+      avatar: 'https://i.pravatar.cc/150?img=2',
+      role: 'Student',
+    },
+    {
+      id: 3,
+      name: 'Mary Johnson',
+      avatar: 'https://i.pravatar.cc/150?img=3',
+      role: 'Student',
+    },
+    {
+      id: 4,
+      name: 'Mike Brown',
+      avatar: 'https://i.pravatar.cc/150?img=4',
+      role: 'Student',
+    },
+  ],
+
+  // New fields added for OverviewTab compatibility:
+  joinedStudents: [
+    { id: 2, name: 'John Smith' },
+    { id: 3, name: 'Mary Johnson' },
+    { id: 4, name: 'Mike Brown' },
+  ],
+  leftStudents: [{ id: 5, name: 'Chris Walker' }],
+
+  completedClasses: 12,
+  submittedAttendance: 11,
+
+  attendanceRecords: [
+    {
+      date: '2025-06-01',
+      presentStudentIds: [1, 2, 3], // Jane, John, Mary
+    },
+    {
+      date: '2025-06-03',
+      presentStudentIds: [1, 2, 4], // Jane, John, Mike
+    },
+    {
+      date: '2025-06-05',
+      presentStudentIds: [1, 2], // Jane, John
+    },
+    {
+      date: '2025-06-10',
+      presentStudentIds: [1, 3, 4], // Jane, Mary, Mike
+    },
+  ],
+
+  lastAttendanceDate: '2025-06-10T09:00:00Z',
+
+  attendanceTrends: [5, 20, 35, 38, 36, 40], // Total students present over recent classes
+
+  topAbsentees: [
+    { name: 'Mary Johnson', count: 4 },
+    { name: 'Mike Brown', count: 3 },
+  ],
+
+  engagementStats: {
+    announcements: 6,
+    acknowledgements: 75,
+  },
+
+  nextClass: {
+    day: 'Wednesday',
+    time: '10:00 AM – 12:00 PM',
+    topic: 'Stacks and Queues',
+    location: 'Lecture Room 5, CS Building',
+  },
+
+  latestAnnouncement: {
+    title: 'Midterm Review Class',
+    body: 'There will be a special review session this Friday covering all topics from weeks 1–6. Attendance is highly recommended.',
+    postedAt: '2025-06-10T14:30:00Z',
+  },
+  announcements: [
+    {
+      id: 1,
+      title: 'Midterm Review Class',
+      body: 'There will be a special review session this Friday covering all topics from weeks 1–6. Attendance is highly recommended.',
+      postedAt: '2025-06-10T14:30:00Z',
+      type: 'class', // 📘 Class Info
+    },
+    {
+      id: 2,
+      title: 'Assignment 2 Deadline',
+      body: 'Submit your second assignment on Linked Lists by Sunday night. Late submissions will incur penalties.',
+      postedAt: '2025-06-11T10:00:00Z',
+      type: 'assignment', // 📚 Assignment Reminder
+    },
+    {
+      id: 3,
+      title: 'Media Upload Notice',
+      body: 'Lecture recording for Week 5 has been uploaded. Access it from the materials section.',
+      postedAt: '2025-06-09T16:45:00Z',
+      type: 'media', // 🎥 Media Notice
+    },
+    {
+      id: 4,
+      title: 'No Class Next Monday',
+      body: 'Due to a public holiday, there will be no class next Monday. Use the time to revise.',
+      postedAt: '2025-06-08T12:00:00Z',
+      type: 'general', // 🗓 General Announcement
+    },
+  ],
+};
 
 const GroupManagementPage = () => {
-  const { user } = useAuth();
-  const isClassRep = user?.role === 'class-rep';
-  const isStudent = user?.role === 'student';
-  const group = {
-    id: 'grp-12345',
-    name: 'CSC 300 - Data Structures',
-    department: 'Computer Science',
-    faculty: 'Faculty of Science',
-    level: '300',
-    classRepId: 'stu101',
-    classRepName: 'Jane Doe',
-    joinStatus: 'Accepted',
-
-    members: [
-      {
-        id: 'stu101',
-        name: 'Jane Doe',
-        absenceRate: 12,
-        email: 'jane.doe@university.edu',
-        department: 'Computer Science',
-        avatar: 'https://i.pravatar.cc/150?img=5',
-        joinedAt: '2025-04-01T09:00:00Z',
-      },
-      {
-        id: 'stu102',
-        name: 'Victor A.',
-        absenceRate: 4,
-        email: 'victor.a@university.edu',
-        department: 'Computer Science',
-        avatar: 'https://i.pravatar.cc/150?img=11',
-        joinedAt: '2025-04-05T13:15:00Z',
-      },
-      {
-        id: 'stu103',
-        name: 'Ahmed S.',
-        absenceRate: 0,
-        email: 'ahmed.s@university.edu',
-        department: 'Computer Science',
-        avatar: 'https://i.pravatar.cc/150?img=22',
-        joinedAt: '2025-04-10T10:45:00Z',
-      },
-    ],
-
-    // ID of currently assigned student assistant (optional)
-    studentAssistant: 'stu102',
-
-    // Simulates the assign assistant logic
-    setAssistant: (id) => alert(`Assigned ${id} as assistant`),
-
-    // Students requesting to join the group
-    pendingRequests: [
-      { id: 'req-1', name: 'Eva Green', submittedAt: '2025-06-08T10:00:00Z' },
-      { id: 'req-2', name: 'Felix Noah', submittedAt: '2025-06-09T14:30:00Z' },
-    ],
-
-    // Announcement to show
-    latestAnnouncement: {
-      title: '📝 Midterm Exam Notice',
-      body: 'The midterm exam has been moved to Friday at 9 AM. Please revise chapters 1–5 and be on time.',
-      postedAt: '2025-06-07T16:00:00Z',
-    },
-
-    // Next class info
-    nextClass: {
-      day: 'Wednesday',
-      time: '10:00 AM – 12:00 PM',
-      topic: 'Trees & Graphs',
-      location: 'Room 3B',
-    },
-  };
-
-  const [selectedTab, setSelectedTab] = useState('overview');
-
-  const tabs = [
-    { key: 'overview', label: 'Overview' },
-    { key: 'members', label: 'Members', show: isClassRep },
-    { key: 'announcements', label: 'Announcements' },
-    { key: 'schedule', label: 'Schedule' },
-    { key: 'attendance', label: 'Attendance' },
-    { key: 'materials', label: 'Materials' },
-  ].filter((tab) => tab.show === undefined || tab.show);
+  const { user, setNavTitle } = useAuth();
+  useEffect(() => setNavTitle('Group Management'), [setNavTitle]);
 
   return (
-    <div className="group-management-page">
-      <Tabs
-        tabs={tabs}
-        selected={selectedTab}
-        onChange={setSelectedTab}
+    <div className="group-page">
+      <GroupSidebar />
+      <GroupContents
+        user={user}
+        group={group}
       />
-
-      <div className="tab-content">
-        {selectedTab === 'overview' && (
-          <OverviewTab
-            user={user}
-            group={group}
-          />
-        )}
-
-        {selectedTab === 'members' && isClassRep && (
-          <MembersTab
-            user={user}
-            group={group}
-          />
-        )}
-
-        {/* {selectedTab === 'announcements' && (
-          <AnnouncementsTab
-            user={user}
-            groupId={group.id}
-          />
-        )}
-
-        {selectedTab === 'schedule' && (
-          <ScheduleTab
-            user={user}
-            groupId={group.id}
-          />
-        )}
-
-        {selectedTab === 'attendance' && (
-          <AttendanceTab
-            user={user}
-            groupId={group.id}
-          />
-        )}
-
-        {selectedTab === 'materials' && (
-          <MaterialsTab
-            user={user}
-            groupId={group.id}
-          />
-        )} */}
-      </div>
     </div>
   );
 };

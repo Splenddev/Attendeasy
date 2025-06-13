@@ -1,52 +1,6 @@
-.group-management-page {
-  padding: 15px;
-}
-.header-tabs {
-  border-radius: 8px 8px 0 0;
-  display: flex;
-  overflow-x: scroll;
-  /* scrollbar-width: none; Firefox */
-  /* -ms-overflow-style: none; /IE 10+ */
-  border-bottom: 1px solid #e0e0e0;
-  background-color: #f0f0f0;
-  width: 100%;
-}
-
-/* Hide scrollbar for Chrome, Safari and Opera */
-.header-tabs::-webkit-scrollbar {
-  display: none;
-}
-
-.header-tabs .tab {
-  flex-shrink: 0;
-  white-space: nowrap;
-  padding: 0.75rem 1.5rem;
-  cursor: pointer;
-  background: transparent;
-  border: none;
-  border-bottom: 3px solid transparent;
-  color: #333;
-  font-weight: 500;
-  font-size: 0.95rem;
-  transition: color 0.2s ease, border-bottom 0.2s ease,
-    background-color 0.2s ease;
-  border-radius: 6px 6px 0 0;
-}
-
-.header-tabs .tab:hover {
-  background-color: #f0f0f0;
-  color: #007bff;
-}
-
-.header-tabs .tab.active {
-  border-bottom: 3px solid #007bff;
-  color: #007bff;
-  background-color: #ffffff;
-}
-
-.tab-content {
-  padding: 1.5rem;
-  background-color: #ffffff;
-  border-radius: 0 0 8px 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+.group-page {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  /* grid-wrap: wrap; */
 }

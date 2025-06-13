@@ -1,13 +1,12 @@
-// NotificationPanel.jsx
-import './NotificationsPanel.css';
 import { MdClose } from 'react-icons/md';
+import styles from './NotificationsPanel.module.css';
 
 const fileNameFromPath = (path) => path.split('/').pop();
 
 const NotificationsPanel = ({ notifications = [], onClose }) => {
   return (
-    <div className="notification-container">
-      <div className="notification-header">
+    <div className={styles.notification_container}>
+      <div className={styles.notification_header}>
         <h3>
           Notification
           <MdClose
@@ -16,18 +15,18 @@ const NotificationsPanel = ({ notifications = [], onClose }) => {
             }
           />
         </h3>
-        <div className="tabs">
-          <button className="tab active">View All</button>
-          <button className="tab">Approves</button>
-          <button className="tab">Archive</button>
+        <div className={styles.tabs}>
+          <button className={`${styles.tab} ${styles.active}`}>View All</button>
+          <button className={styles.tab}>Approves</button>
+          <button className={styles.tab}>Archive</button>
         </div>
       </div>
-      <div className="notification-list">
+      <div className={styles.notification_list}>
         {notifications.map((note, idx) => (
           <div
             key={idx}
-            className="notification-item">
-            <div className="avatar">
+            className={styles.notification_item}>
+            <div className={styles.avatar}>
               <img
                 src={note.image
                   .replace(
@@ -80,23 +79,25 @@ const NotificationsPanel = ({ notifications = [], onClose }) => {
                   )}
                 alt="icon"
               />
-              {note.isNew && <span className="dot"></span>}
+              {note.isNew && <span className={styles.dot}></span>}
             </div>
-            <div className="notification-content">
+            <div className={styles.notification_content}>
               <p>{note.message}</p>
-              <span className="time">
+              <span className={styles.time}>
                 {note.dateAdded} at {note.timeAdded}
               </span>
               {note.userMedia && (
-                <div className="file-box">
+                <div className={styles.file_box}>
                   <span>{fileNameFromPath(note.userMedia)}</span>
                 </div>
               )}
               {(note.actionApprove || note.actionDeny) && (
-                <div className="buttons">
-                  {note.actionDeny && <button className="deny">Deny</button>}
+                <div className={styles.buttons}>
+                  {note.actionDeny && (
+                    <button className={styles.deny}>Deny</button>
+                  )}
                   {note.actionApprove && (
-                    <button className="approve">Approve</button>
+                    <button className={styles.approve}>Approve</button>
                   )}
                 </div>
               )}

@@ -1,11 +1,11 @@
-.notification-container {
+.notification_container {
   border-radius: 8px;
   margin: 0;
   background: white;
   z-index: 1;
 }
 
-.notification-header {
+.notification_header {
   border-bottom: 1px solid #ddd;
   padding: 16px;
   position: sticky;
@@ -14,37 +14,37 @@
   z-index: 1;
 }
 
-.notification-header h3 {
+.notification_header h3 {
   margin: 0 0 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.notification-container .tabs {
+.notification_container s {
   display: flex;
   gap: 10px;
 }
 
-.notification-container .tab {
+.notification_container .tab {
   background: none;
   border: none;
   padding: 6px 10px;
   cursor: pointer;
   font-weight: 600;
-  color: #555;
+  /* color: #555; */
   border-radius: 4px;
 }
 
-.notification-container .tab.active {
+.notification_container .tab.active {
   background: #efefef;
 }
 
-.notification-list {
+.notification_list {
   padding: 10px 16px;
 }
 
-.notification-item {
+.notification_item {
   display: flex;
   margin-bottom: 16px;
 }
@@ -71,16 +71,16 @@
   border: 2px solid white;
 }
 
-.notification-content {
+.notification_content {
   flex: 1;
 }
 
-.notification-content p {
+.notification_content p {
   margin: 0;
   font-size: 14px;
 }
 
-.notification-content .highlight {
+.notification_content .highlight {
   font-weight: 600;
   color: #333;
 }
@@ -92,7 +92,7 @@
   margin-top: 4px;
 }
 
-.file-box {
+.file_box {
   border: 1px solid #ddd;
   padding: 6px 10px;
   margin-top: 6px;
@@ -101,7 +101,7 @@
   background: #fafafa;
 }
 
-.file-box span {
+.file_box span {
   font-size: 12px;
   color: #666;
 }

@@ -1,0 +1,10 @@
+.group-contents {
+  display: grid;
+  flex-direction: column;
+}
+
+/* tabs */
+.tab-container {
+  overflow: hidden;
+  margin-bottom: 2rem;
+}

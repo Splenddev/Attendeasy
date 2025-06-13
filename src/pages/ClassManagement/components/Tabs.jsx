@@ -1,12 +1,16 @@
-export const Tabs = ({ tabs, selected, onChange }) => (
-  <div className="header-tabs">
-    {tabs.map((tab) => (
-      <button
-        key={tab.key}
-        className={selected === tab.key ? 'tab active' : 'tab'}
-        onClick={() => onChange(tab.key)}>
-        {tab.label}
-      </button>
-    ))}
-  </div>
-);
+import './Tabs.css';
+
+export const Tabs = ({ tabs, selected, onChange }) => {
+  return (
+    <ul className="header-tabs">
+      {tabs.map((tab) => (
+        <li
+          key={tab.key}
+          className={`tab ${selected === tab.key ? 'active' : ''}`}
+          onClick={() => onChange(tab.key)}>
+          {tab.label}
+        </li>
+      ))}
+    </ul>
+  );
+};

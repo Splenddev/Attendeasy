@@ -1,149 +1,210 @@
 import React from 'react';
-import {
-  FaUsers,
-  FaUserClock,
-  FaBullhorn,
-  FaCalendarPlus,
-  FaClipboardList,
-  FaUserTie,
-  FaUniversity,
-  FaBookOpen,
-} from 'react-icons/fa';
 import './OverviewTab.css';
-const OverviewTab = ({ user, group }) => {
-  const isClassRep = user?.role === 'classrep';
-  const isStudent = user?.role === 'student';
+import {
+  FaUserCheck,
+  FaUserTimes,
+  FaCalendarCheck,
+  FaClipboardList,
+  FaChartLine,
+  FaExclamationTriangle,
+  FaBullhorn,
+  FaClock,
+} from 'react-icons/fa';
+import AttendanceTrendChart from './AttendanceTrendChart ';
+import { HiOutlineClipboardList } from 'react-icons/hi';
+import { FiCornerUpRight, FiMail } from 'react-icons/fi';
+import { MdChat, MdEmojiEvents, MdFollowTheSigns } from 'react-icons/md';
+
+const OverviewTab = ({ group }) => {
+  const {
+    description,
+    joinedStudents = [],
+    leftStudents = [],
+    completedClasses = 0,
+    submittedAttendance = 0,
+    lastAttendanceDate, // assume ISO string
+    attendanceTrends = [], // e.g., [38, 35, 40, 36]
+    topAbsentees = [], // e.g., [{ name: 'Jane', count: 5 }]
+    engagementStats = {}, // e.g., { announcements: 5, acknowledgements: 120 }
+  } = group;
+
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString(undefined, {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  };
+
+  const getMostAttendingStudents = (group) => {
+    const attendanceCount = {};
+
+    group.attendanceRecords.forEach(({ presentStudentIds }) => {
+      presentStudentIds.forEach((id) => {
+        attendanceCount[id] = (attendanceCount[id] || 0) + 1;
+      });
+    });
+
+    // Map back to student names
+    const ranked = group.members
+      .map((member) => ({
+        ...member,
+        attendanceCount: attendanceCount[member.id] || 0,
+      }))
+      .filter((m) => m.role === 'Student')
+      .sort((a, b) => b.attendanceCount - a.attendanceCount);
+
+    return ranked.slice(0, 3); // Top 3
+  };
+
+  const mostAttending = getMostAttendingStudents(group);
 
   return (
     <div className="overview-tab">
-      {/* Group Info */}
-      <section className="card">
-        <h2 className="card-title">
-          <FaUniversity size={18} /> Group Info
-        </h2>
-        <div className="info-grid">
-          <div>
-            <strong>Group Name:</strong> {group.name}
+      {/* Description */}
+      <section className="overview-card">
+        <h2>Group Description</h2>
+        <p className="description">
+          {description || 'No description provided.'}
+        </p>
+      </section>
+
+      {/* Stats */}
+      <section className="overview-card">
+        <h2>Summary</h2>
+        <div className="summary-cards">
+          <div className="card">
+            <h3>
+              <FaUserCheck className="icon" />
+              Joined Students
+            </h3>
+            <p>{joinedStudents.length}</p>
           </div>
-          <div>
-            <strong>Level:</strong> {group.level}
+          <div className="card">
+            <h3>
+              <FaUserTimes className="icon" />
+              Left Students
+            </h3>
+            <p>{leftStudents.length}</p>
           </div>
-          <div>
-            <strong>Department:</strong> {group.department}
+          <div className="card">
+            <h3>
+              <FaCalendarCheck className="icon" />
+              Completed Classes
+            </h3>
+            <p>{completedClasses}</p>
           </div>
-          <div>
-            <strong>Faculty:</strong> {group.faculty}
-          </div>
-          <div>
-            <strong>Created By:</strong> {group.classRepName}
-          </div>
-          <div>
-            <strong>Members:</strong> {group.members?.length ?? 0}
+          <div className="card">
+            <h3>
+              <FaClipboardList className="icon" />
+              Submitted Attendance
+            </h3>
+            <p>{submittedAttendance}</p>
           </div>
         </div>
       </section>
+      <section className="overview-card">
+        <h2 className="section-title">
+          <FaClock className="inline-icon" /> Last Attendance Record
+        </h2>
+        <p>
+          {lastAttendanceDate
+            ? `Last marked on ${formatDate(lastAttendanceDate)}`
+            : 'No attendance has been marked yet.'}
+        </p>
+      </section>
+      <div className="overview-attendance-section">
+        {/* Attendance Trends */}
+        {group.attendanceTrends?.length > 0 && (
+          <section className="overview-card chart-container">
+            <h4>Attendance Trend (Recent Classes)</h4>
+            <AttendanceTrendChart data={group.attendanceTrends} />
+          </section>
+        )}
 
-      {/* Class Rep View */}
-      {isClassRep && (
-        <>
-          <section className="card">
-            <h3 className="card-title">
-              <FaClipboardList size={16} /> Quick Actions
-            </h3>
-            <div className="button-row">
-              <button
-                onClick={() => (window.location.href = '/create-attendance')}>
-                <FaCalendarPlus size={14} /> Create Attendance
-              </button>
-              <button
-                onClick={() => (window.location.href = '/create-schedule')}>
-                <FaBookOpen size={14} /> Create Schedule
-              </button>
-              <button
-                onClick={() => (window.location.href = '/make-announcement')}>
-                <FaBullhorn size={14} /> New Announcement
-              </button>
+        <div className="sections">
+          <section className="absent overview-card">
+            <h2>
+              <FaExclamationTriangle /> Top Absentees
+            </h2>
+            {topAbsentees.length > 0 ? (
+              <section className="absentees">
+                <div className="absentees-headers">
+                  <span>Name</span>
+                  <span>Abs</span>
+                  <span>Actions</span>
+                </div>
+                <hr />
+                <ul className="absentee-list">
+                  {topAbsentees.map((student, i) => (
+                    <li key={i}>
+                      <span className="absentee-details">
+                        <img
+                          src={`https://i.pravatar.cc/150?img=${i + 6}`}
+                          alt={student.name}
+                        />
+                        {student.name}
+                      </span>
+                      <b>{student.count}</b>
+                      <span className="actions">
+                        <MdChat />
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ) : (
+              <p>No frequent absentees.</p>
+            )}
+          </section>
+          <section className="overview-card attendees">
+            <h2>
+              <MdEmojiEvents />
+              Top Attendees
+            </h2>
+            <div className="attenders">
+              <div className="attendees-headers">
+                <span>Name</span>
+                <span>Classes</span>
+              </div>
+              <hr />
+              <ul className="attendees-list">
+                {mostAttending.map((student, i) => (
+                  <li key={student.id}>
+                    <span className="attendees-details">
+                      <img
+                        src={`https://i.pravatar.cc/150?img=${i + 6}`}
+                        alt={student.name}
+                      />
+                      {student.name}
+                    </span>
+                    <b>{student.attendanceCount} </b>
+                  </li>
+                ))}
+              </ul>
             </div>
           </section>
+        </div>
+      </div>
 
-          <section className="card">
-            <h3 className="card-title">
-              <FaUsers size={16} /> Group Summary
-            </h3>
-            <div className="info-grid">
-              <div>
-                <strong>Total Members:</strong> {group.members?.length ?? 0}
-              </div>
-              <div>
-                <strong>Pending Join Requests:</strong>{' '}
-                {group.pendingRequests?.length ?? 0}
-              </div>
-              <div>
-                <strong>Recent Absence Rate:</strong>{' '}
-                {group.absenceRate ?? 'N/A'}%
-              </div>
-              <div>
-                <strong>Student Assistant:</strong>{' '}
-                {group.studentAssistant ?? 'Not Assigned'}
-              </div>
-            </div>
-          </section>
-        </>
-      )}
+      {/* Engagement Summary */}
+      <section className="overview-card">
+        <h2 className="section-title">
+          <FaBullhorn className="inline-icon" /> Engagement Summary
+        </h2>
+        <p>
+          Announcements sent:{' '}
+          <strong>{engagementStats.announcements || 0}</strong>
+        </p>
+        <p>
+          Acknowledgements:{' '}
+          <strong>{engagementStats.acknowledgements || 0}</strong>
+        </p>
+      </section>
 
-      {/* Shared: Next Class */}
-      {group.nextClass && (
-        <section className="card">
-          <h3 className="card-title">
-            <FaUserClock size={16} /> Upcoming Class
-          </h3>
-          <div className="info-grid">
-            <div>
-              <strong>Day:</strong> {group.nextClass.day}
-            </div>
-            <div>
-              <strong>Time:</strong> {group.nextClass.time}
-            </div>
-            <div>
-              <strong>Location:</strong> {group.nextClass.location}
-            </div>
-            <div>
-              <strong>Topic:</strong> {group.nextClass.topic}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Shared: Announcement */}
-      {group.latestAnnouncement && (
-        <section className="card">
-          <h3 className="card-title">
-            <FaBullhorn size={16} /> Latest Announcement
-          </h3>
-          <p className="announcement-title">{group.latestAnnouncement.title}</p>
-          <p className="announcement-body">{group.latestAnnouncement.body}</p>
-        </section>
-      )}
-
-      {/* Student View */}
-      {isStudent && (
-        <section className="card">
-          <h3 className="card-title">
-            <FaUserTie size={16} /> My Group Status
-          </h3>
-          <div className="info-grid">
-            <div>
-              <strong>Status:</strong> {group.joinStatus}
-            </div>
-            <div>
-              <strong>Group Rep:</strong> {group.classRepName}
-            </div>
-            <div>
-              <strong>Join Date:</strong> {group.joinDate ?? 'Not joined'}
-            </div>
-          </div>
-        </section>
-      )}
+      {/* Time Since Last Attendance */}
     </div>
   );
 };

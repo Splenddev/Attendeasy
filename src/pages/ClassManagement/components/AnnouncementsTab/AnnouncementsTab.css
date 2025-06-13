@@ -1,0 +1,153 @@
+:root {
+  --danger: #c62828;
+  --light-bg: #f9fafd;
+  --card-bg: #ffffff;
+  --text-main: #222;
+  --text-muted: #666;
+  --btn-bg: #f4f6f8;
+  --btn-hover: #e2e5e8;
+  --border-radius: 8px;
+  --transition: 0.2s ease;
+}
+
+.announcements-tab {
+  background: #fff;
+  color: var(--text-main);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.announcements-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.announcements-header h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--main-color);
+}
+
+.add-btn {
+  background: var(--main-color);
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.add-btn:hover {
+  background: darken(var(--main-color), 10%);
+}
+
+.announcement-category {
+  margin-bottom: 2rem;
+}
+
+.category-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 1rem;
+  border-left: 4px solid var(--main-color);
+  padding-left: 0.5rem;
+}
+
+.announcement-category:not(:last-child) {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1.5rem;
+}
+
+.announcement-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 1rem 1.2rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.announcement-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+
+.card-header h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-main);
+}
+
+.timestamp {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.announcement-card p {
+  margin: 0.5rem 0 1rem;
+  line-height: 1.5;
+  color: var(--text-main);
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.card-actions button {
+  background: var(--btn-bg);
+  border: none;
+  padding: 0.5rem 0.8rem;
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition);
+}
+
+.card-actions button:hover {
+  background-color: #e0e0e0;
+}
+
+.card-actions button:nth-child(2) {
+  background-color: #ffe4e4;
+  color: #c62828;
+}
+
+.card-actions button:nth-child(2):hover {
+  background-color: #ffcccc;
+}
+.card-actions button:nth-child(3) {
+  background-color: var(--light-blue-200);
+  color: var(--main-color);
+}
+
+.card-actions button:nth-child(3):hover {
+  background-color: var(--light-blue-300);
+}

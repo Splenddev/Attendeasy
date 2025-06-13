@@ -103,11 +103,13 @@ const AttendanceSection = ({ navMenu, setNavMenu }) => {
                 <Icon color={color} />
               </div>
               <div className="card-content">
-                <h4 className="value">{value}</h4>
+                <h4 className="value">
+                  {value}
+                  <span className="trend-icon">{trend}</span>
+                </h4>
                 {pct && (
                   <div className="pct-trend">
                     <span className="percentage">{pct}%</span>
-                    <span className="trend-icon">{trend}</span>
                   </div>
                 )}
                 <p className="label">{label}</p>

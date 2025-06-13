@@ -88,7 +88,7 @@
 }
 .dropdown-notifications {
   overflow-y: auto;
-  height: calc(100vh - 60px);
+  height: calc(100vh - 160px);
   width: 95%;
   max-width: 450px;
 }
