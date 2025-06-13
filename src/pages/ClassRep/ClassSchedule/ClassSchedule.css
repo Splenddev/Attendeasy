@@ -6,11 +6,29 @@
 .class-schedule .cap {
   padding: 20px;
   display: flex;
+  justify-content: space-between;
   background: #fff;
   align-items: center;
   gap: 10px;
   font-size: 20px;
   & h2 {
     font-size: 20px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
   }
+}
+.create-schedule-btn {
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 20px;
+  border: none;
+  background: var(--main-color);
+  color: #fff;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 10px 1fr;
+  width: 200px;
+  align-items: center;
+  margin-left: auto;
 }

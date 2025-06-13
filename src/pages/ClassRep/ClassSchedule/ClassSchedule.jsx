@@ -16,13 +16,14 @@ const ClassSchedule = () => {
   return (
     <div className="class-schedule">
       <div className="cap">
-        <FaCrown />
-        <h2>Welcome, {user.name}</h2>
-        <NavLink>
-          {' '}
+        <h2>
+          <FaCrown />
+          Welcome, {user.name}
+        </h2>
+        <NavLink to={'schedules/create'}>
           {button.multiple({
             icon: FaPlus,
-            name: 'create-attendance',
+            name: 'create-schedule-btn',
             element: ' New Schedule',
           })}
         </NavLink>
