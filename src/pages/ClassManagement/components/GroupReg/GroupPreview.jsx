@@ -1,4 +1,5 @@
 import { routesNavigate } from '../../../../utils/helpers';
+import { MdGroups } from 'react-icons/md';
 
 const GroupPreview = ({ data, bannerUrl, role, disabled }) => {
   const {
@@ -14,16 +15,18 @@ const GroupPreview = ({ data, bannerUrl, role, disabled }) => {
   return (
     <div className="group-preview">
       <div className="group-preview-banner">
-        <img
-          src={bannerUrl || '/vigilo_logo.jpeg'}
-          alt="Group Banner"
-          className="group-banner-img"
-          style={{
-            filter: bannerUrl
-              ? 'none'
-              : 'grayscale(100%) contrast(50%) brightness(1.1)',
-          }}
-        />
+        {bannerUrl ? (
+          <img
+            src={bannerUrl || '/vigilo_logo.jpeg'}
+            alt="Group Banner"
+            className="group-banner-img"
+          />
+        ) : (
+          <MdGroups
+            size={140}
+            color="grey"
+          />
+        )}
       </div>
 
       <div className="group-preview-body">

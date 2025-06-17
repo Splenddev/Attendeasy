@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import './GroupFind.css';
+import { MdGroups } from 'react-icons/md';
 
 const dummyGroups = [
   {
@@ -215,10 +216,20 @@ const GroupFind = ({ user = {}, onJoin }) => {
               <div
                 key={group._id}
                 className="find-group-card">
-                <img
-                  src={group.bannerUrl || '/vigilo_logo.jpeg'}
-                  alt="Banner"
-                />
+                <div class="found-group-banner center">
+                  {group.bannerUrl ? (
+                    <img
+                      src={group.bannerUrl}
+                      alt="Group Banner"
+                      className="group-banner-img"
+                    />
+                  ) : (
+                    <MdGroups
+                      size={140}
+                      color="grey"
+                    />
+                  )}
+                </div>
                 <div className="info">
                   <div className="found-group-header">
                     <h3>{group.groupName}</h3>

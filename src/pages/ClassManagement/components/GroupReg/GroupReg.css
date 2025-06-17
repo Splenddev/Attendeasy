@@ -339,9 +339,11 @@ fieldset.group-reg-label input[type='number'] {
 
 .group-preview-banner {
   width: 100%;
-  height: 160px;
   overflow: hidden;
   background: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .group-banner-img {

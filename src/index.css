@@ -109,6 +109,12 @@ button {
   user-select: none;
 }
 
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .spin {
   animation: spin 1.5s infinite linear;
 }
