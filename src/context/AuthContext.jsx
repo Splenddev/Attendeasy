@@ -42,6 +42,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
   const login = async (formData = {}) => {
+    setAuthBtnsLoading((prev) => ({ ...prev, login: true }));
     try {
       const data = await loginUser(formData);
       return { success: data.success, user: data.user };

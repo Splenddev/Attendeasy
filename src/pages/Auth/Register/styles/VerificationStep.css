@@ -81,12 +81,22 @@
   border-radius: 30px;
   transition: box-shadow 0.3s ease;
 
-  background: var(--btn-bg);
+  background: var(--main-color);
   box-shadow: var(--btn-shadow);
   color: #fff;
   cursor: pointer;
   &:hover {
     box-shadow: var(--btn-shadow-hover);
+  }
+  & ~ button {
+    padding: 10px 15px;
+    border-radius: 20px;
+    transition: box-shadow 0.3s ease;
+    color: #fff;
+    background: var(--main-color);
+    &:hover {
+      box-shadow: var(--btn-shadow-hover);
+    }
   }
 }
 

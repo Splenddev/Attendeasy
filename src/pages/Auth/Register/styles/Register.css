@@ -360,11 +360,11 @@ span.label {
   }
 }
 .review-step-btn {
-  padding: 1rem;
+  padding: 0.8rem;
   transition: box-shadow 0.3s ease;
   border-radius: 30px;
   font-size: 1rem;
-  background: var(--btn-bg);
+  background: var(--main-color);
   box-shadow: var(--btn-shadow);
   color: #fff;
   cursor: pointer;

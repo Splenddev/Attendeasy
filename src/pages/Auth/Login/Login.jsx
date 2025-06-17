@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { ROLES } from '../../../utils/roles';
 import { useEffect } from 'react';
 import { useAuth } from '../../../context/AuthContext';
+import { FiLoader } from 'react-icons/fi';
 
 const dummyUsers = [
   {
@@ -39,7 +40,7 @@ const Login = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const { user, setUser, login } = useAuth();
+  const { user, setUser, login, authBtnsLoading } = useAuth();
 
   useEffect(() => {
     if (user?.isLoggedIn) {
@@ -139,23 +140,29 @@ const Login = () => {
           {error && <p style={{ color: 'red' }}>{error}</p>}
 
           {button.normal({
-            element: 'Sign In',
-            func: null, // handled by form onSubmit
+            element: authBtnsLoading.login ? (
+              <FiLoader className="spin" />
+            ) : (
+              'Sign In'
+            ),
+            func: null,
             type: 'submit',
             name: 'login-btn',
+            disabled: authBtnsLoading.login,
           })}
 
           {button.normal({
             element: 'Create new account',
             func: () => navigate('/auth/register'),
+            name: 'register-btn',
           })}
         </form>
       </section>
 
       {/* Optional preview image */}
       {/* <section className="right">
-        <div className="preview">
-          <img src={img} alt="preview" />
+        <div className="app-screenshots">
+          <img src={img} alt="shots" />
         </div>
       </section> */}
     </div>

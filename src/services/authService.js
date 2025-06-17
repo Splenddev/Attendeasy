@@ -27,6 +27,7 @@ export const loginUser = async (formData) => {
 };
 export const sendUserOtp = async (email) => {
   const response = await axios.post(`${API_BASE}send-otp`, { email });
+  console.log(email);
   try {
     console.log(response);
     return response.data;
@@ -35,7 +36,7 @@ export const sendUserOtp = async (email) => {
     throw error.response?.data || { message: 'Server error' };
   }
 };
-export const verifyUserOtp = async ({ email, otp }) => {
+export const verifyUserOtp = async (email, otp) => {
   try {
     const response = await axios.post(`${API_BASE}verify-otp`, { email, otp });
     return response.data;

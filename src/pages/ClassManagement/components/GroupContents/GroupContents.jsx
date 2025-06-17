@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Tabs } from '../Tabs';
 import './GroupContents.css';
 import OverviewTab from '../tab/Overview/OverviewTab';
 import MembersTab from '../tab/Overview/MembersTab/MembersTab';
 import AnnouncementsTab from '../AnnouncementsTab/AnnouncementsTab';
+import { Tabs } from '../../features/Tabs/Tabs';
 
 // Dummy component imports (replace with real ones)
 // import Announcements from './tabs/Announcements';

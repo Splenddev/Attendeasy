@@ -28,7 +28,7 @@ const StudentLayout = () => {
           {
             name: 'Mark Attendance',
             icon: MdAddTask,
-            path: `/${user.role}/message/`,
+            path: `/${user.role}/attendance/`,
           },
         ]}
       />

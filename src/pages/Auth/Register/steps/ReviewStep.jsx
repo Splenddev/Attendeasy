@@ -64,8 +64,6 @@ const ReviewStep = ({ onBack }) => {
         name: 'review-step-btn',
         disabled: authBtnsLoading.submit,
       })}
-
-      <BtnGroup onBack={onBack} />
     </div>
   );
 };

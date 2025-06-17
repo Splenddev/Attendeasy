@@ -82,6 +82,7 @@
     border: none;
   }
 }
+
 .absentees-headers,
 .absentee-list li,
 .attendees-headers,
@@ -90,6 +91,10 @@
   grid-template-columns: 1fr 70px auto;
   align-items: center;
 }
+.absentees-headers,
+.attendees-headers {
+  padding: 0 10px;
+}
 .attendees-list li,
 .absentee-list li {
   padding: 10px;
@@ -97,12 +102,11 @@
   svg {
     cursor: pointer;
     color: var(--absent);
-    font-size: 1.3rem;
+    font-size: 1.2rem;
   }
   .actions {
     display: flex;
-    background: #6d6d6d;
-    width: 50px;
+    width: 65px;
     justify-content: center;
   }
   &:hover {

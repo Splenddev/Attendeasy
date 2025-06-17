@@ -8,9 +8,9 @@ import {
 } from 'react-icons/fa';
 import MembersTab from './components/tab/Overview/MembersTab/MembersTab';
 import { useAuth } from '../../context/AuthContext';
-import { Tabs } from './components/Tabs';
 import GroupSidebar from './components/GroupSidebar/GroupSidebar';
 import GroupContents from './components/GroupContents/GroupContents';
+import GroupRegFind from './features/GroupRegFind/GroupRegFind';
 const group = {
   name: 'CSC 301 - Data Structures',
   faculty: 'Science',
@@ -137,6 +137,7 @@ const group = {
 const GroupManagementPage = () => {
   const { user, setNavTitle } = useAuth();
   useEffect(() => setNavTitle('Group Management'), [setNavTitle]);
+  if (!user.group) return <GroupRegFind user={user} />;
 
   return (
     <div className="group-page">

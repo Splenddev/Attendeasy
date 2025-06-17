@@ -23,19 +23,7 @@
     align-items: center;
   }
 }
-.create-attendance {
-  padding: 10px 15px;
-  cursor: pointer;
-  border-radius: 20px;
-  border: none;
-  background: var(--main-color);
-  color: #fff;
-  display: grid;
-  gap: 10px;
-  grid-template-columns: 10px 1fr;
-  width: 200px;
-  align-items: center;
-}
+
 
 .c-attendance-filter {
   gap: 10px;

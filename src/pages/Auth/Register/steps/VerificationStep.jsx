@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiLoader } from 'react-icons/fi';
 import { useFormContext } from 'react-hook-form';
@@ -6,19 +7,19 @@ import { FaArrowRight } from 'react-icons/fa';
 import button from '../../../../components/Button/Button';
 import '../styles/VerificationStep.css';
 import { toast } from 'react-toastify';
+import { verifyUserOtp } from '../../../../services/authService';
 
 const VerificationStep = ({
   title = 'Verify Your Email',
-  email = '',
+  email = 'michaelnwode023@gmail.com',
   sendOtp,
-  verifyOtp, // ✅ NEW
   loader1,
   loader2,
   setLoader2, // ✅ NEW
   isOtpSent,
   timeLeft,
   formatTimeLeft,
-  onNext,
+  setOtpVerified,
   otpVerified,
 }) => {
   const {
@@ -31,18 +32,21 @@ const VerificationStep = ({
 
   const inputsRef = useRef([]);
 
+  const navigate = useNavigate();
+
   const otpValues =
     watch(['otp0', 'otp1', 'otp2', 'otp3', 'otp4', 'otp5']) || [];
+  const otpCode = otpValues.join('');
 
   useEffect(() => {
     if (otpVerified) {
-      const digits = '123456'.split('');
+      const digits = otpCode.split('');
       digits.forEach((digit, i) => {
         setValue(`otp${i}`, digit);
         if (inputsRef.current[i]) inputsRef.current[i].value = digit;
       });
     }
-  }, [otpVerified, setValue]);
+  }, [otpVerified, setValue, otpCode]);
 
   const inputHandler = (e, i) => {
     const val = e.target.value;
@@ -86,15 +90,18 @@ const VerificationStep = ({
       return;
     }
 
-    const otpCode = otpValues.join('');
     try {
       setLoader2(true);
-      const { success, message } = await verifyOtp(email, otpCode);
+      const { success, message } = await verifyUserOtp(
+        'michaelnwode023@gmail.com',
+        otpCode
+      );
       setLoader2(false);
 
       if (success) {
         toast.success('OTP verified successfully!');
-        if (onNext) onNext(otpCode);
+
+        setOtpVerified(true);
       } else {
         toast.error(message || 'Invalid OTP. Please try again.');
       }
@@ -113,7 +120,11 @@ const VerificationStep = ({
       exit={{ opacity: 0, x: -100 }}
       transition={{ duration: 0.4 }}>
       <h2>{title}</h2>
-      <p className="subtitle">Enter the 6-digit code sent to your email.</p>
+      <p className="subtitle">
+        {isOtpSent
+          ? 'Enter the 6-digit code sent to your email.'
+          : 'Click on send otp to to request for an otp.'}
+      </p>
 
       <div
         className="otp-form"
@@ -162,15 +173,26 @@ const VerificationStep = ({
             )}
           </div>
 
-          {button.multiple({
+          {button.normal({
             name: 'verify-button reverse',
-            icon: loader2 ? FiLoader : FaArrowRight,
-            element: loader2 ? '' : otpVerified ? 'Verified' : 'Verify Email',
+            element: loader2 ? (
+              <FiLoader />
+            ) : otpVerified ? (
+              'Verified'
+            ) : (
+              'Verify Email'
+            ),
             type: 'button',
             disabled: loader2 || otpVerified,
             func: otpVerified ? undefined : onSubmitHandler,
             loader: loader2,
           })}
+          {otpVerified &&
+            button.multiple({
+              element: 'Proceed to Login',
+              icon: FaArrowRight,
+              func: () => navigate('/auth'),
+            })}
         </div>
       </div>
     </motion.div>

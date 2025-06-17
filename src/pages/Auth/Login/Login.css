@@ -28,16 +28,27 @@
   padding: 15px;
   width: 100%;
   border-radius: 30px;
-  margin-top: 10px;
+  margin-top: 20px;
   border: 1px solid #000;
+  font-size: 1rem;
+  transition: all ease 0.3s;
 }
 button.login-btn {
-  background: var(--btn-bg);
+  background: var(--main-color);
   box-shadow: inset 0 6px 6px rgba(255, 255, 255, 0.2),
     inset 0 -6px 6px rgba(0, 0, 0, 0.15), 0 6px 12px rgba(0, 0, 0, 0.1);
   color: #fff;
   border: none;
   cursor: pointer;
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+.login-form .register-btn {
+  margin-top: 10px;
+  border: 2px solid var(--main-color);
+  background: #fff;
+  padding: 12px;
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }

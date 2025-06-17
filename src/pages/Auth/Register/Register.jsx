@@ -18,9 +18,9 @@ import { sendUserOtp, verifyUserOtp } from '../../../services/authService';
 const steps = [
   'Select Role',
   'Personal Details',
-  'Verify',
   'Profile Setup',
   'Review',
+  'Verify',
 ];
 
 const stepVariants = {
@@ -42,6 +42,7 @@ const Register = () => {
 
   // OTP related states
   const [isOtpSent, setIsOtpSent] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [sendingOtp, setSendingOtp] = useState(false);
   const [verifyingOtp, setVerifyingOtp] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
@@ -82,7 +83,9 @@ const Register = () => {
     setSendingOtp(true);
 
     try {
-      const { success, message } = await sendUserOtp(email);
+      const { success, message } = await sendUserOtp(
+        'michaelnwode023@gmail.com'
+      );
 
       if (!success) {
         throw new Error(message || 'Failed to send OTP');
@@ -129,14 +132,12 @@ const Register = () => {
       ]);
       if (!valid) return;
       // Send OTP automatically when moving to verify step
-      await sendOtp();
     }
 
-    if (step === 2) {
-      // Normally OTP verification handled inside VerificationStep
-      // So here, just proceed if you want
+    if (step === 3) {
+      await sendOtp();
     }
-    if (step === 1 && !isOtpSent) return;
+    if (step === 3 && !isOtpSent) return;
     setDirection(1);
     setStep((prev) => prev + 1);
   };
@@ -165,12 +166,15 @@ const Register = () => {
       const result = await register(formData);
       console.log(result);
       if (result.success) {
-        navigate('/auth'); // ✅ or success screen
+        toast.success(result.message || 'Account created');
+        setDirection(1);
+        setIsSubmitted(true);
+        setStep((prev) => prev + 1);
       } else {
-        setError(result.message || 'Registration failed');
+        toast.error(result.message || 'Registration failed');
       }
     } catch (err) {
-      setError(err.message || 'Something went wrong');
+      toast.error(err.message || 'Something went wrong');
     } finally {
       setAuthBtnsLoading((prev) => ({ ...prev, submit: false }));
     }
@@ -187,6 +191,20 @@ const Register = () => {
         return <PersonalForm />;
       case 2:
         return (
+          <ProfileSetup
+            onNext={handleNext}
+            onBack={handleBack}
+          />
+        );
+      case 3:
+        return (
+          <ReviewStep
+            onBack={handleBack}
+            isSubmitted={isSubmitted}
+          />
+        );
+      case 4:
+        return (
           <VerificationStep
             email={email}
             sendOtp={sendOtp}
@@ -197,22 +215,11 @@ const Register = () => {
             isOtpSent={isOtpSent}
             timeLeft={timeLeft}
             formatTimeLeft={formatTimeLeft}
-            onNext={(otp) => {
-              console.log('Verified OTP:', otp);
-              setOtpVerified(true);
-            }}
+            setOtpVerified={setOtpVerified}
             otpVerified={otpVerified}
           />
         );
-      case 3:
-        return (
-          <ProfileSetup
-            onNext={handleNext}
-            onBack={handleBack}
-          />
-        );
-      case 4:
-        return <ReviewStep onBack={handleBack} />;
+
       default:
         return null;
     }
@@ -242,13 +249,14 @@ const Register = () => {
               {renderStep()}
             </motion.div>
           </AnimatePresence>
-          {error && <p>{error}</p>}
         </form>
-        {step !== 0 && step !== 3 && (
+        {step !== 0 && step !== 2 && step !== 4 && (
           <BtnGroup
-            onBack={handleBack}
+            onBack={step === 2 ? null : handleBack}
             onNext={
-              (step === 2 && !otpVerified) || step === 4 ? null : handleNext
+              step === 4 || (step === 3 && !otpVerified && !isSubmitted)
+                ? null
+                : handleNext
             }
             step={step}
             submit={step === 4}

@@ -15,7 +15,7 @@ a {
 :root {
   --main-color: #25aff3;
   --main-color-light: #e9f2ff;
-  --outline: #e0e9ff;
+  --outline: #eaf6fc;
   --light-blue-200: #e9f2ff;
   --light-blue-300: #e0e9ff;
   --red: #dc2626;
@@ -87,7 +87,8 @@ body {
 }
 button,
 input,
-select {
+select,
+textarea {
   font-family: var(--font-outfit), sans-serif;
 }
 .cap {
