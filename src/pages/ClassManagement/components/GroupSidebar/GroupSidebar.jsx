@@ -1,19 +1,16 @@
 import React from 'react';
 import { FaLock } from 'react-icons/fa';
 import { MdSettings } from 'react-icons/md';
+import BannerImage from '../BannerImage/BannerImage';
 // {
 //   excos = [{ name: 'Alex', profile: '/logo.png', role: 'Assistant Rep' }],
 // }
-const GroupSidebar = () => {
+const GroupSidebar = ({ group }) => {
   return (
     <div className="group-sidebar">
       <div className="group-details">
         <div className="group-banner">
-          <img
-            src="https://placehold.co/300x150?text=Group+Banner"
-            alt="Group cover img"
-            className="cover"
-          />
+          <BannerImage bannerUrl={group.bannerUrl} />
           <p>Profile</p>
         </div>
         <div className="group-sidebar-actions">

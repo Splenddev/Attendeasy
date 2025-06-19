@@ -14,6 +14,7 @@ import getCroppedImg from '../../../../utils/cropImages';
 import { createGroup } from '../../../../services/group.services';
 import Spinner from '../../../../components/Loader/Spinner/Spinner';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 axios.defaults.withCredentials = true;
 
 const GroupReg = () => {
@@ -177,7 +178,7 @@ const GroupReg = () => {
       assistantReps: cleanedAssistantReps,
       department: user.department,
       faculty: user.faculty,
-      level: user.level,
+      level: user.level + 'L',
       schedule: classSchedule,
     };
 
@@ -210,11 +211,15 @@ const GroupReg = () => {
 
       if (isMobile) {
         setStep(2);
+      }
+      if (result.success) {
+        toast.success(result.message);
       } else {
-        // Redirect or success logic
+        toast.error(result.message);
       }
     } catch (err) {
       console.error('Error creating group:', err.response?.data || err.message);
+      toast.error('Error creating group:', err.response?.data || err.message);
       // Optionally show feedback to user
     } finally {
       setIsSubmitting(false);

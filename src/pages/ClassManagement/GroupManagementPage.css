@@ -1,5 +1,6 @@
 .group-page {
   display: grid;
+  padding: 1rem;
   gap: 1rem;
 }
 .full-page-loader-wrap {

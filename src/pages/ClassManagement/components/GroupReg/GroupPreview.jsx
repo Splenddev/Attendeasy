@@ -65,7 +65,7 @@ const GroupPreview = ({ data, bannerUrl, role, disabled, isMobile }) => {
         )}
 
         <button
-          onClick={() => routesNavigate(`/${role}/group-management`)}
+          onClick={() => window.location.reload()}
           className={`group-reg-finish-btn ${disabled && 'disabled-btn'}`}
           disabled={disabled}>
           Proceed to Group

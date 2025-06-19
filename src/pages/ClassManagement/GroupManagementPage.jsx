@@ -59,7 +59,7 @@ const GroupManagementPage = () => {
     return (
       <div className="group-not-found">
         <img
-          src="https://undraw.co/api/illustrations/6d7a4c53-5401-431a-b57b-1cfd0ecb9fd6"
+          src="https://undraw.co/api/illustrations/b45c5ed4-0f79-421a-8c2f-cb6ed06e5d72"
           alt="Group Not Found"
           className="group-not-found-image"
         />
@@ -80,7 +80,7 @@ const GroupManagementPage = () => {
 
   return (
     <div className="group-page">
-      <GroupSidebar />
+      <GroupSidebar group={group} />
       <GroupContents
         user={user}
         group={group}
