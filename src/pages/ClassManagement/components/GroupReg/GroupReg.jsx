@@ -12,6 +12,7 @@ import Cropper from 'react-easy-crop';
 import './GroupReg.css';
 import getCroppedImg from '../../../../utils/cropImages';
 import { createGroup } from '../../../../services/group.services';
+import Spinner from '../../../../components/Loader/Spinner/Spinner';
 
 const GroupReg = () => {
   const { user } = useAuth();
@@ -45,6 +46,8 @@ const GroupReg = () => {
   });
 
   const [classSchedule, setClassSchedule] = useState([]);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const TAG_OPTIONS = [
     'official',
@@ -156,6 +159,7 @@ const GroupReg = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     const fullPayload = {
       ...formData,
@@ -186,6 +190,8 @@ const GroupReg = () => {
     } catch (err) {
       console.error('Error submitting group:', err.message || err);
       // Show error to user if needed
+    } finally {
+      setIsSubmitting(false); // ✅ stop loading
     }
   };
 
@@ -436,8 +442,16 @@ const GroupReg = () => {
 
               <button
                 type="submit"
-                className="group-reg-button">
-                <MdGroupAdd size={16} /> {isMobile ? 'Next' : 'Create Group'}
+                className="group-reg-button"
+                disabled={isSubmitting}>
+                {isSubmitting ? (
+                  <Spinner /> // Add this CSS below
+                ) : (
+                  <>
+                    <MdGroupAdd size={16} />{' '}
+                    {isMobile ? 'Next' : 'Create Group'}
+                  </>
+                )}
               </button>
             </motion.form>
           )}
