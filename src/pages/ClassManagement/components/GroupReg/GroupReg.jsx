@@ -13,6 +13,8 @@ import './GroupReg.css';
 import getCroppedImg from '../../../../utils/cropImages';
 import { createGroup } from '../../../../services/group.services';
 import Spinner from '../../../../components/Loader/Spinner/Spinner';
+import axios from 'axios';
+axios.defaults.withCredentials = true;
 
 const GroupReg = () => {
   const { user } = useAuth();
@@ -34,7 +36,7 @@ const GroupReg = () => {
     course: '',
     description: `A group created for ${user.level} level students in the Department of ${user.department}, Faculty of ${user.faculty}. Here, members can manage attendance, receive announcements, and share academic materials.`,
     classRules: '',
-    assistantReps: '',
+    assistantReps: [],
     attendancePolicy: {
       minPercentage: 75,
       allowPlea: true,
@@ -161,37 +163,61 @@ const GroupReg = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
+    // ✅ Convert assistant reps string (if needed)
+    const cleanedAssistantReps =
+      typeof formData.assistantReps === 'string'
+        ? formData.assistantReps
+            .split(',')
+            .map((v) => v.trim())
+            .filter(Boolean)
+        : formData.assistantReps;
+
     const fullPayload = {
       ...formData,
+      assistantReps: cleanedAssistantReps,
       department: user.department,
       faculty: user.faculty,
       level: user.level,
       schedule: classSchedule,
     };
 
-    // Convert payload to FormData for multipart/form-data
+    // Debug
+    console.log('Submitting payload:', fullPayload);
+
+    // ✅ Prepare FormData
     const formDataToSend = new FormData();
+
     for (const key in fullPayload) {
-      if (key === 'schedule') {
-        formDataToSend.append(key, JSON.stringify(fullPayload[key])); // convert objects/arrays to string
+      const value = fullPayload[key];
+
+      if (
+        ['schedule', 'attendancePolicy', 'tags', 'assistantReps'].includes(key)
+      ) {
+        formDataToSend.append(key, JSON.stringify(value)); // Send as JSON string
       } else {
-        formDataToSend.append(key, fullPayload[key]);
+        formDataToSend.append(key, value ?? '');
       }
+    }
+
+    // ✅ Send cropped image if available
+    if (banner) {
+      formDataToSend.append('banner', banner); // already a File
     }
 
     try {
       const result = await createGroup(formDataToSend);
-      console.log('Group created:', result);
+      console.log('Group created successfully:', result);
+
       if (isMobile) {
         setStep(2);
       } else {
-        // Maybe redirect or show a success message
+        // Redirect or success logic
       }
     } catch (err) {
-      console.error('Error submitting group:', err.message || err);
-      // Show error to user if needed
+      console.error('Error creating group:', err.response?.data || err.message);
+      // Optionally show feedback to user
     } finally {
-      setIsSubmitting(false); // ✅ stop loading
+      setIsSubmitting(false);
     }
   };
 

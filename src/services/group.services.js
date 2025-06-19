@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-const API_BASE = 'https://vigilo-server.onrender.com/app/groups/create';
+const API_BASE = 'https://vigilo-server.onrender.com/app/groups/'; //
+// const API_BASE = 'http://localhost:5000/app/groups/';
 export const createGroup = async (data) => {
   try {
-    const response = await axios.post(API_BASE, data, {
+    const response = await axios.post(`${API_BASE}create`, data, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -16,9 +17,9 @@ export const createGroup = async (data) => {
     throw error.response?.data || { message: 'Network error' };
   }
 };
-export const fetchGroupService = async ({ groupId }) => {
+export const fetchGroupService = async (groupId) => {
   try {
-    const res = await axios.get(`/app/groups/${groupId}`);
+    const res = await axios.get(`${API_BASE}find/${groupId}`);
     return { data: res.data, message: res.message };
   } catch (err) {
     console.error('Failed to fetch group:', err.message);

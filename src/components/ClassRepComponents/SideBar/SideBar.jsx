@@ -6,14 +6,27 @@ import { assets } from '../../../assets/assets';
 import { MdLogout, MdSettings } from 'react-icons/md';
 import { useEffect } from 'react';
 import { useAuth } from '../../../context/AuthContext';
+import { logoutUser } from '../../../services/authService';
+import { toast } from 'react-toastify';
 const SideBar = ({ components, menuActive, setMenuActive, isMobile }) => {
   const { pathname } = useLocation();
-  const { logout } = useAuth();
+  const { setUser } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      const data = await logoutUser();
+      console.log(data);
+      if (data.message === 'Logged out successfully') {
+        toast.success(data.message);
+        navigate('/');
+
+        localStorage.removeItem('user');
+        setUser(null);
+      }
+    } catch (err) {
+      console.warn('Logout failed (fallback to client-only):', err.message);
+    }
   };
   useEffect(() => {
     setMenuActive(false);

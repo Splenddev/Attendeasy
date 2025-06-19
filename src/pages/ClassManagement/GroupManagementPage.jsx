@@ -23,6 +23,7 @@ const GroupManagementPage = () => {
 
   useEffect(() => {
     const fetchGroup = async () => {
+      console.log(user.group);
       if (!user?.group) {
         setLoading(false);
         return;

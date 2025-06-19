@@ -3,7 +3,8 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { attendance } from '../assets/assets';
 import { getUserFromLocalStorageOrAPI } from '../utils/auth';
 import axios from 'axios';
-import { loginUser, registerUser } from '../services/authService';
+import { loginUser, logoutUser, registerUser } from '../services/authService';
+import { toast } from 'react-toastify';
 
 axios.defaults.withCredentials = true;
 
@@ -56,12 +57,17 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post('/app/auth/logout'); // if your server clears cookie here
+      const data = await logoutUser();
+      if (data.messaage === 'Logged out successfully') {
+        toast.success(data.message);
+        window.location.href('/');
+
+        localStorage.removeItem('user');
+        setUser(null);
+      }
     } catch (err) {
       console.warn('Logout failed (fallback to client-only):', err.message);
     }
-    localStorage.removeItem('user');
-    setUser(null);
   };
 
   const value = {
