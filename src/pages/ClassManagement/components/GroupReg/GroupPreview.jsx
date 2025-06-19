@@ -1,7 +1,7 @@
 import { routesNavigate } from '../../../../utils/helpers';
 import { MdGroups } from 'react-icons/md';
 
-const GroupPreview = ({ data, bannerUrl, role, disabled }) => {
+const GroupPreview = ({ data, bannerUrl, role, disabled, isMobile }) => {
   const {
     groupName = 'Unnamed Group',
     course = 'Course not specified',
@@ -13,7 +13,7 @@ const GroupPreview = ({ data, bannerUrl, role, disabled }) => {
   } = data;
 
   return (
-    <div className="group-preview">
+    <div className={`group-preview ${isMobile ? 'mobile' : ''}`}>
       <div className="group-preview-banner">
         {bannerUrl ? (
           <img

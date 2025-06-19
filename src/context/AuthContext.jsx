@@ -54,7 +54,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await axios.post('/app/auth/logout'); // if your server clears cookie here
+    } catch (err) {
+      console.warn('Logout failed (fallback to client-only):', err.message);
+    }
     localStorage.removeItem('user');
     setUser(null);
   };

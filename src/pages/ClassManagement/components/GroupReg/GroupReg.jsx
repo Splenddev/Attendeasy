@@ -11,6 +11,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Cropper from 'react-easy-crop';
 import './GroupReg.css';
 import getCroppedImg from '../../../../utils/cropImages';
+import { createGroup } from '../../../../services/group.services';
 
 const GroupReg = () => {
   const { user } = useAuth();
@@ -40,9 +41,21 @@ const GroupReg = () => {
     visibility: 'public',
     academicYear: '',
     groupLink: '',
+    tags: [], // 👈 add this line
   });
 
   const [classSchedule, setClassSchedule] = useState([]);
+
+  const TAG_OPTIONS = [
+    'official',
+    'final year',
+    'freshers',
+    'staylite',
+    'tutorial class',
+    'post graduate',
+    'under graduate',
+    'unofficial',
+  ];
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -92,6 +105,18 @@ const GroupReg = () => {
     );
   };
 
+  const toggleTag = (tag) => {
+    setFormData((prev) => {
+      const tags = prev.tags.includes(tag)
+        ? prev.tags.filter((t) => t !== tag)
+        : prev.tags.length < 3
+        ? [...prev.tags, tag]
+        : prev.tags;
+
+      return { ...prev, tags };
+    });
+  };
+
   const addSchedule = () => {
     setClassSchedule((prev) => [
       ...prev,
@@ -129,8 +154,9 @@ const GroupReg = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     const fullPayload = {
       ...formData,
       department: user.department,
@@ -138,8 +164,29 @@ const GroupReg = () => {
       level: user.level,
       schedule: classSchedule,
     };
-    if (isMobile) setStep(2);
-    else console.log('Submitting full data:', fullPayload);
+
+    // Convert payload to FormData for multipart/form-data
+    const formDataToSend = new FormData();
+    for (const key in fullPayload) {
+      if (key === 'schedule') {
+        formDataToSend.append(key, JSON.stringify(fullPayload[key])); // convert objects/arrays to string
+      } else {
+        formDataToSend.append(key, fullPayload[key]);
+      }
+    }
+
+    try {
+      const result = await createGroup(formDataToSend);
+      console.log('Group created:', result);
+      if (isMobile) {
+        setStep(2);
+      } else {
+        // Maybe redirect or show a success message
+      }
+    } catch (err) {
+      console.error('Error submitting group:', err.message || err);
+      // Show error to user if needed
+    }
   };
 
   const fullData = {
@@ -260,6 +307,7 @@ const GroupReg = () => {
                     max={100}
                   />
                 </label>
+
                 <label>
                   {formData.attendancePolicy.allowPlea ? (
                     <MdCheckCircle color="var(--main-color)" />
@@ -352,6 +400,28 @@ const GroupReg = () => {
                 </select>
               </label>
 
+              <div className="group-reg-label">
+                <label>Group Tags (select up to 3)</label>
+                <div className="tag-selector-wrapper">
+                  <div className="tag-options">
+                    {TAG_OPTIONS.map((tag) => (
+                      <button
+                        type="button"
+                        key={tag}
+                        className={`tag-button ${
+                          formData.tags.includes(tag) ? 'selected' : ''
+                        }`}
+                        onClick={() => toggleTag(tag)}>
+                        {tag}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="tag-counter">
+                    Selected {formData.tags.length}/3
+                  </p>
+                </div>
+              </div>
+
               <label className="group-reg-label">
                 WhatsApp / Telegram Link (optional)
                 <input
@@ -394,6 +464,7 @@ const GroupReg = () => {
                 bannerUrl={bannerUrl}
                 role={user.role}
                 disabled={showPreview}
+                isMobile={isMobile}
               />
             </motion.div>
           )}
