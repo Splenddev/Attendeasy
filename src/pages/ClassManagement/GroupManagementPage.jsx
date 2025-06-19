@@ -59,10 +59,11 @@ const GroupManagementPage = () => {
     return (
       <div className="group-not-found">
         <img
-          src="https://illustrations.popsy.co/gray/error-404.svg"
+          src="https://undraw.co/api/illustrations/6d7a4c53-5401-431a-b57b-1cfd0ecb9fd6"
           alt="Group Not Found"
           className="group-not-found-image"
         />
+
         <h2>Oops! Group not found</h2>
         <p>
           We couldn’t load the group data. It may not exist or something went
