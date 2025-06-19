@@ -6,6 +6,7 @@ import {
   FaBullhorn,
   FaCalendarAlt,
 } from 'react-icons/fa';
+import { FiRefreshCw } from 'react-icons/fi';
 import MembersTab from './components/tab/Overview/MembersTab/MembersTab';
 import { useAuth } from '../../context/AuthContext';
 import GroupSidebar from './components/GroupSidebar/GroupSidebar';
@@ -19,27 +20,29 @@ const GroupManagementPage = () => {
   const [group, setGroup] = useState(null);
   const [loading, setLoading] = useState(true);
   const { user, setNavTitle } = useAuth();
+
   useEffect(() => setNavTitle('Group Management'), [setNavTitle]);
 
+  const fetchGroup = async () => {
+    if (!user?.group) {
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetchGroupService(user.group);
+      setGroup(res.data);
+      toast.success(res.message);
+    } catch (err) {
+      console.error('Failed to fetch group:', err.message);
+      toast.error('Failed to fetch group');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchGroup = async () => {
-      console.log(user.group);
-      if (!user?.group) {
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const res = await fetchGroupService(user.group);
-        setGroup(res.data);
-        toast.success(res.message);
-      } catch (err) {
-        console.error('Failed to fetch group:', err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchGroup();
   }, [user?.group]);
 
@@ -49,8 +52,30 @@ const GroupManagementPage = () => {
         <Spinner scale="3" />
       </div>
     );
+
   if (!user.group) return <GroupRegFind user={user} />;
-  if (!group) return <div>Group not found or fetch failed.</div>;
+
+  if (!group)
+    return (
+      <div className="group-not-found">
+        <img
+          src="https://illustrations.popsy.co/gray/error-404.svg"
+          alt="Group Not Found"
+          className="group-not-found-image"
+        />
+        <h2>Oops! Group not found</h2>
+        <p>
+          We couldn’t load the group data. It may not exist or something went
+          wrong while fetching it.
+        </p>
+        <button
+          onClick={fetchGroup}
+          className="refresh-btn">
+          <FiRefreshCw style={{ marginRight: '8px' }} />
+          Retry
+        </button>
+      </div>
+    );
 
   return (
     <div className="group-page">
