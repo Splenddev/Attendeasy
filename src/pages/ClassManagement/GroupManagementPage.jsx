@@ -43,7 +43,12 @@ const GroupManagementPage = () => {
     fetchGroup();
   }, [user?.group]);
 
-  if (loading) return <Spinner />;
+  if (loading)
+    return (
+      <div className="full-page-loader-wrap">
+        <Spinner scale="3" />
+      </div>
+    );
   if (!user.group) return <GroupRegFind user={user} />;
   if (!group) return <div>Group not found or fetch failed.</div>;
 
