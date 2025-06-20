@@ -2,6 +2,18 @@
   margin: auto;
 }
 
+.group-results-loader {
+  display: flex;
+  align-items: center;
+  position: relative;
+  justify-content: center;
+  width: calc(100vw - 105px);
+  height: 300px;
+  p {
+    position: absolute;
+  }
+}
+
 .filters {
   display: flex;
   flex-direction: column;
@@ -14,16 +26,22 @@
   border-radius: 8px;
 }
 
-.dropdowns {
+.filters .dropdowns {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
 }
 
-.dropdowns select {
-  padding: 0.6rem 1rem;
+.filters .dropdowns select {
+  border: none;
+  outline: none;
+  padding: 0.6rem 10px;
+}
+.filters .dropdowns .dropdown {
   border: 1px solid #ccc;
   border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
 }
 
 .group-results {
@@ -160,7 +178,7 @@
   display: flex;
 }
 .find-group-card button {
-  padding: 6px 15px;
+  padding: 8px 15px;
   border: none;
   background: var(--main-color);
   color: #fff;

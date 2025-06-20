@@ -30,7 +30,7 @@ const GroupContents = ({ user, group }) => {
       case 'overview':
         return <OverviewTab group={group} />;
       case 'members':
-        return <MembersTab members={group.members} />;
+        return <MembersTab group={group} />;
       case 'announcements':
         return (
           <AnnouncementsTab

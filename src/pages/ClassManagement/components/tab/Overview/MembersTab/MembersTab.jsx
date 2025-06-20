@@ -13,7 +13,7 @@ const roleIcons = {
   assistant: (
     <FaUserShield
       color="#25aff3"
-      title="Assistant"
+      title="Assistant Rep"
     />
   ),
   member: (
@@ -24,14 +24,39 @@ const roleIcons = {
   ),
 };
 
-const MembersTab = ({ members, classRepId = 1, assistantId = 2 }) => {
+const MembersTab = ({ group = {} }) => {
   const [search, setSearch] = useState('');
 
+  const { members, creator, assistantReps } = group;
+
+  console.log(members);
+  console.log(group.members);
+  if (!members || !creator) {
+    return <p>Loading group members...</p>;
+  }
+  // Identify role for each member based on IDs
+  const getRole = (memberId) => {
+    if (creator?._id === memberId) return 'classRep';
+    if (assistantReps.some((a) => a._id === memberId)) return 'assistant';
+    return 'member';
+  };
+
+  // Process members for display
+  const displayMembers = members.map((m) => ({
+    id: m._id,
+    name: m.name,
+    avatar: m.avatar,
+    role: getRole(m._id),
+    absenceRate: Math.floor(Math.random() * 20), // Placeholder, replace later
+  }));
+
+  const filteredMembers = displayMembers.filter((m) =>
+    m.name.toLowerCase().includes(search.toLowerCase())
+  );
+
   const handleExport = () => {
-    const csv = members
-      .map(
-        (m) => `"${m.name}","${m.id}","${getRole(m.id)}","${m.absenceRate}%"`
-      )
+    const csv = displayMembers
+      .map((m) => `"${m.name}","${m.id}","${m.role}","${m.absenceRate}%"`)
       .join('\n');
     const blob = new Blob([`Name,ID,Role,Absence Rate\n${csv}`], {
       type: 'text/csv',
@@ -41,16 +66,6 @@ const MembersTab = ({ members, classRepId = 1, assistantId = 2 }) => {
     link.download = 'group-members.csv';
     link.click();
   };
-
-  const getRole = (id) => {
-    if (id === classRepId) return 'classRep';
-    if (id === assistantId) return 'assistant';
-    return 'member';
-  };
-
-  const filteredMembers = members.filter((m) =>
-    m.name.toLowerCase().includes(search.toLowerCase())
-  );
 
   return (
     <div className="members-tab">
@@ -80,16 +95,19 @@ const MembersTab = ({ members, classRepId = 1, assistantId = 2 }) => {
             key={member.id}
             className="member-card">
             <img
-              src={member.avatar}
+              src={
+                member.avatar
+                  ? member.avatar
+                  : `/main_${member.role}_avatar.png`
+              }
               alt={member.name}
               className="member-avatar"
             />
             <div className="member-info">
               <div className="name-role">
                 <span className="member-name">{member.name}</span>
-                {roleIcons[getRole(member.id)]}
+                {roleIcons[member.role]}
               </div>
-              <span className="member-id">{member.id}</span>
               <div
                 className={`absence-rate ${
                   member.absenceRate >= 10

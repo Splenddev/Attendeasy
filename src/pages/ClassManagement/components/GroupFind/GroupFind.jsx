@@ -7,19 +7,25 @@ import {
   joinGroupService,
   searchGroupsService,
 } from '../../../../services/group.services';
+import Spinner from '../../../../components/Loader/Spinner/Spinner';
 
 const GroupFind = ({ user = {}, onJoin }) => {
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState({
     faculty: user.faculty || '',
     department: user.department || '',
-    level: user.level + 'L' || '',
+    level: user.level || '',
   });
   const [sortOrder, setSortOrder] = useState('asc');
   const [currentPage, setCurrentPage] = useState(1);
   const [groups, setGroups] = useState([]);
   const [joinStatus, setJoinStatus] = useState({});
   const [loading, setLoading] = useState(false);
+  const [loaders, setLoaders] = useState({
+    join: false,
+    leave: false,
+    search: false,
+  });
   const [showModal, setShowModal] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState(null);
 
@@ -133,50 +139,58 @@ const GroupFind = ({ user = {}, onJoin }) => {
           }}
         />
         <div className="dropdowns">
-          <select
-            value={filters.faculty}
-            onChange={(e) => {
-              setFilters((f) => ({ ...f, faculty: e.target.value }));
-              setCurrentPage(1);
-            }}>
-            <option value="">All Faculties</option>
-            <option value="Science">Science</option>
-            <option value="Engineering">Engineering</option>
-            <option value="Management Sciences">Management Sciences</option>
-          </select>
-          <select
-            value={filters.department}
-            onChange={(e) => {
-              setFilters((f) => ({ ...f, department: e.target.value }));
-              setCurrentPage(1);
-            }}>
-            <option value="">All Departments</option>
-            <option value="Biochemistry">Biochemistry</option>
-            <option value="Computer Science">Computer Science</option>
-            <option value="Mechanical Engineering">
-              Mechanical Engineering
-            </option>
-            <option value="Accounting">Accounting</option>
-          </select>
-          <select
-            value={filters.level}
-            onChange={(e) => {
-              setFilters((f) => ({ ...f, level: e.target.value }));
-              setCurrentPage(1);
-            }}>
-            <option value="">All Levels</option>
-            <option value="100">100</option>
-            <option value="200">200</option>
-            <option value="300">300</option>
-            <option value="400">400</option>
-            <option value="500">500</option>
-          </select>
-          <select
-            value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value)}>
-            <option value="asc">Sort A-Z</option>
-            <option value="desc">Sort Z-A</option>
-          </select>
+          <div className="dropdown">
+            <select
+              value={filters.faculty}
+              onChange={(e) => {
+                setFilters((f) => ({ ...f, faculty: e.target.value }));
+                setCurrentPage(1);
+              }}>
+              <option value="">All Faculties</option>
+              <option value="Science">Science</option>
+              <option value="Engineering">Engineering</option>
+              <option value="Management Sciences">Management Sciences</option>
+            </select>
+          </div>
+          <div className="dropdown">
+            <select
+              value={filters.department}
+              onChange={(e) => {
+                setFilters((f) => ({ ...f, department: e.target.value }));
+                setCurrentPage(1);
+              }}>
+              <option value="">All Departments</option>
+              <option value="Biochemistry">Biochemistry</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Mechanical Engineering">
+                Mechanical Engineering
+              </option>
+              <option value="Accounting">Accounting</option>
+            </select>
+          </div>
+          <div className="dropdown">
+            <select
+              value={filters.level}
+              onChange={(e) => {
+                setFilters((f) => ({ ...f, level: e.target.value }));
+                setCurrentPage(1);
+              }}>
+              <option value="">All Levels</option>
+              <option value="100">100</option>
+              <option value="200">200</option>
+              <option value="300">300</option>
+              <option value="400">400</option>
+              <option value="500">500</option>
+            </select>
+          </div>
+          <div className="dropdown">
+            <select
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value)}>
+              <option value="asc">Sort A-Z</option>
+              <option value="desc">Sort Z-A</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -184,7 +198,10 @@ const GroupFind = ({ user = {}, onJoin }) => {
 
       <div className="group-results">
         {loading ? (
-          <p>Loading groups...</p>
+          <div className="group-results-loader">
+            <Spinner scale="5" />
+            <p>Loading...</p>
+          </div>
         ) : groups.length === 0 ? (
           <p>No groups found.</p>
         ) : (
@@ -220,7 +237,7 @@ const GroupFind = ({ user = {}, onJoin }) => {
                     {group.department} — {group.level} Level
                   </p>
                   <p>
-                    <strong>Class Rep:</strong> {group.classRepName}
+                    <strong>Class Rep:</strong> {group.creator.name}
                   </p>
                   <div className="actions">
                     {renderStatusBadge(status)}
