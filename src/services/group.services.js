@@ -25,3 +25,18 @@ export const fetchGroupService = async (groupId) => {
     console.error('Failed to fetch group:', err.message);
   }
 };
+
+export const searchGroupsService = async (params) => {
+  const res = await axios.get(`${API_BASE}search`, { params });
+  return res.data;
+};
+
+export const joinGroupService = async (groupId) => {
+  const res = await axios.post(`${API_BASE}${groupId}/join`);
+  return res.data;
+};
+
+export const cancelJoinRequestService = async (groupId) => {
+  const res = await axios.delete(`${API_BASE}${groupId}/join`);
+  return res.data;
+};

@@ -1,114 +1,98 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import './GroupFind.css';
 import { MdGroups } from 'react-icons/md';
-
-const dummyGroups = [
-  {
-    _id: 'grp1',
-    groupName: 'Class of Biochemistry – 400 Level',
-    department: 'Biochemistry',
-    faculty: 'Science',
-    level: '400',
-    bannerUrl: '',
-    classRepName: 'Ada Okeke',
-    privacy: 'Public',
-  },
-  {
-    _id: 'grp2',
-    groupName: 'Mechanical Engineering Final Year',
-    department: 'Mechanical Engineering',
-    faculty: 'Engineering',
-    level: '500',
-    bannerUrl: '',
-    classRepName: 'John Obi',
-    privacy: 'Private',
-  },
-  {
-    _id: 'grp3',
-    groupName: 'Computer Science – 300 Level',
-    department: 'Computer Science',
-    faculty: 'Science',
-    level: '300',
-    bannerUrl: '',
-    classRepName: 'Grace Tunde',
-    privacy: 'Public',
-  },
-  {
-    _id: 'grp4',
-    groupName: 'Accounting Year 2',
-    department: 'Accounting',
-    faculty: 'Management Sciences',
-    level: '200',
-    bannerUrl: '',
-    classRepName: 'Yusuf Kareem',
-    privacy: 'Private',
-  },
-];
-
-const initialJoinStatus = {
-  grp1: 'approved',
-  grp2: 'pending',
-  grp3: 'none',
-  grp4: 'none',
-};
+import { toast } from 'react-toastify';
+import {
+  cancelJoinRequestService,
+  joinGroupService,
+  searchGroupsService,
+} from '../../../../services/group.services';
 
 const GroupFind = ({ user = {}, onJoin }) => {
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState({
     faculty: user.faculty || '',
     department: user.department || '',
-    level: user.level || '',
+    level: user.level + 'L' || '',
   });
   const [sortOrder, setSortOrder] = useState('asc');
   const [currentPage, setCurrentPage] = useState(1);
-  const [joinStatus, setJoinStatus] = useState(initialJoinStatus);
+  const [groups, setGroups] = useState([]);
+  const [joinStatus, setJoinStatus] = useState({});
+  const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState(null);
 
   const pageSize = 4;
 
-  const filteredGroups = useMemo(() => {
-    const result = dummyGroups.filter((group) => {
-      const matchQuery =
-        group.groupName.toLowerCase().includes(query.toLowerCase()) ||
-        group.classRepName?.toLowerCase().includes(query.toLowerCase());
+  const fetchGroups = async () => {
+    setLoading(true);
+    try {
+      const res = await searchGroupsService({
+        query,
+        faculty: filters.faculty,
+        department: filters.department,
+        level: filters.level,
+        sortOrder,
+      });
 
-      const matchFaculty =
-        !filters.faculty || group.faculty === filters.faculty;
-      const matchDepartment =
-        !filters.department || group.department === filters.department;
-      const matchLevel = !filters.level || group.level === filters.level;
+      setGroups(res.groups || []);
+      setJoinStatus(res.joinStatus || {}); // Optional if returned
+    } catch (err) {
+      toast.error('Failed to fetch groups');
+      console.error('Fetch error:', err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      return matchQuery && matchFaculty && matchDepartment && matchLevel;
-    });
-
-    return result.sort((a, b) => {
-      if (sortOrder === 'asc') {
-        return a.groupName.localeCompare(b.groupName);
-      } else {
-        return b.groupName.localeCompare(a.groupName);
-      }
-    });
+  useEffect(() => {
+    fetchGroups();
   }, [query, filters, sortOrder]);
 
   const paginatedGroups = useMemo(() => {
     const start = (currentPage - 1) * pageSize;
-    return filteredGroups.slice(start, start + pageSize);
-  }, [filteredGroups, currentPage]);
+    return groups.slice(start, start + pageSize);
+  }, [groups, currentPage]);
 
-  const totalPages = Math.ceil(filteredGroups.length / pageSize);
+  const totalPages = Math.ceil(groups.length / pageSize);
 
   const handleJoinRequest = (group) => {
     setSelectedGroup(group);
     setShowModal(true);
   };
 
-  const confirmJoin = () => {
-    if (selectedGroup) {
-      setJoinStatus((prev) => ({ ...prev, [selectedGroup._id]: 'pending' }));
+  const confirmJoin = async () => {
+    if (!selectedGroup) return;
+    try {
+      await joinGroupService(selectedGroup._id);
+      setJoinStatus((prev) => ({
+        ...prev,
+        [selectedGroup._id]: 'pending',
+      }));
+      toast.success('Join request sent');
       if (onJoin) onJoin(selectedGroup._id);
+    } catch (err) {
+      console.log(err);
+      toast.error('Failed to send join request');
     }
     setShowModal(false);
+  };
+
+  const cancelRequest = async (groupId) => {
+    try {
+      await cancelJoinRequestService(groupId);
+      setJoinStatus((prev) => ({ ...prev, [groupId]: 'none' }));
+      toast.info('Join request cancelled');
+    } catch (err) {
+      console.log(err);
+      toast.error('Failed to cancel request');
+    }
+  };
+
+  const leaveGroup = (groupId) => {
+    setJoinStatus((prev) => ({ ...prev, [groupId]: 'none' }));
+    // Optional: add leaveGroupService
   };
 
   const renderSearchSummary = () => {
@@ -120,17 +104,9 @@ const GroupFind = ({ user = {}, onJoin }) => {
     if (terms.length === 0) return null;
     return (
       <p className="summary">
-        Found {filteredGroups.length} result(s) for {terms.join(', ')}
+        Found {groups.length} result(s) for {terms.join(', ')}
       </p>
     );
-  };
-
-  const cancelRequest = (groupId) => {
-    setJoinStatus((prev) => ({ ...prev, [groupId]: 'none' }));
-  };
-
-  const leaveGroup = (groupId) => {
-    setJoinStatus((prev) => ({ ...prev, [groupId]: 'none' }));
   };
 
   const renderStatusBadge = (status) => {
@@ -207,7 +183,9 @@ const GroupFind = ({ user = {}, onJoin }) => {
       {renderSearchSummary()}
 
       <div className="group-results">
-        {paginatedGroups.length === 0 ? (
+        {loading ? (
+          <p>Loading groups...</p>
+        ) : groups.length === 0 ? (
           <p>No groups found.</p>
         ) : (
           paginatedGroups.map((group) => {
@@ -216,7 +194,7 @@ const GroupFind = ({ user = {}, onJoin }) => {
               <div
                 key={group._id}
                 className="find-group-card">
-                <div class="found-group-banner center">
+                <div className="found-group-banner center">
                   {group.bannerUrl ? (
                     <img
                       src={group.bannerUrl}
@@ -234,8 +212,8 @@ const GroupFind = ({ user = {}, onJoin }) => {
                   <div className="found-group-header">
                     <h3>{group.groupName}</h3>
                     <span
-                      className={`found-grp-tag ${group.privacy.toLocaleLowerCase()}`}>
-                      {group.privacy}
+                      className={`found-grp-tag ${group.visibility?.toLowerCase()}`}>
+                      {group.visibility}
                     </span>
                   </div>
                   <p>
@@ -247,7 +225,7 @@ const GroupFind = ({ user = {}, onJoin }) => {
                   <div className="actions">
                     {renderStatusBadge(status)}
                     {status === 'none' &&
-                      (group.privacy === 'Public' ? (
+                      (group.visibility === 'public' ? (
                         <button onClick={() => handleJoinRequest(group)}>
                           Request to Join
                         </button>
@@ -258,7 +236,7 @@ const GroupFind = ({ user = {}, onJoin }) => {
                           Private Group
                         </button>
                       ))}
-                    {status === 'pending' && group.privacy === 'Public' && (
+                    {status === 'pending' && group.visibility === 'public' && (
                       <button
                         className="cancel-btn"
                         onClick={() => cancelRequest(group._id)}>
