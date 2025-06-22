@@ -15,10 +15,11 @@ import { createGroup } from '../../../../services/group.services';
 import Spinner from '../../../../components/Loader/Spinner/Spinner';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { getUser } from '../../../../services/authService';
 axios.defaults.withCredentials = true;
 
 const GroupReg = () => {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
 
   const [step, setStep] = useState(1); // Step 1 = form, Step 2 = preview
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -178,7 +179,7 @@ const GroupReg = () => {
       assistantReps: cleanedAssistantReps,
       department: user.department,
       faculty: user.faculty,
-      level: user.level + 'L',
+      level: user.level.includes('L') ? user.level : user.level + 'L',
       schedule: classSchedule,
     };
 
@@ -213,13 +214,22 @@ const GroupReg = () => {
         setStep(2);
       }
       if (result.success) {
+        try {
+          const result = await getUser();
+          if (result.success) {
+            updateUser(result.user);
+          }
+        } catch (fetchErr) {
+          console.error(
+            'Failed to refresh user after group creation:',
+            fetchErr
+          );
+        }
         toast.success(result.message);
-      } else {
-        toast.error(result.message);
       }
     } catch (err) {
       console.error('Error creating group:', err.response?.data || err.message);
-      toast.error('Error creating group:', err.response?.data || err.message);
+      toast.error(`Error creating group: ${err.response?.data || err.message}`);
       // Optionally show feedback to user
     } finally {
       setIsSubmitting(false);

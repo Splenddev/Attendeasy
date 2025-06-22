@@ -1,16 +1,16 @@
 // utils/auth.js
-import axios from 'axios';
+import { getUser } from '../services/authService';
 
 export const getUserFromLocalStorageOrAPI = async () => {
   const stored = localStorage.getItem('user');
   if (stored) return JSON.parse(stored);
   try {
-    const { data } = await axios.get('http://localhost:5000/app/auth/me', {
-      withCredentials: true,
-    });
+    const data = await getUser();
     localStorage.setItem('user', JSON.stringify(data.user));
-    return data.user;
+    const syncedUser = { ...data.user, isLoggedIn: true };
+    return syncedUser;
   } catch (err) {
+    console.log(err);
     return null;
   }
 };

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_BASE = 'https://vigilo-server.onrender.com/app/groups/'; //
-// const API_BASE = 'http://localhost:5000/app/groups/';
+// const API_BASE = 'https://vigilo-server.onrender.com/app/groups/'; //
+const API_BASE = 'http://localhost:5000/app/groups/';
 export const createGroup = async (data) => {
   try {
     const response = await axios.post(`${API_BASE}create`, data, {

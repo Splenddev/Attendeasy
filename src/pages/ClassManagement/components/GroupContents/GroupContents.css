@@ -1,6 +1,7 @@
 .group-contents {
   display: grid;
   flex-direction: column;
+  flex: 1;
 }
 
 /* tabs */

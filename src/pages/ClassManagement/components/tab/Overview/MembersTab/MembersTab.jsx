@@ -4,7 +4,7 @@ import { FiDownload, FiSearch } from 'react-icons/fi';
 import './MembersTab.css';
 
 const roleIcons = {
-  classRep: (
+  'class-rep': (
     <FaCrown
       color="#25aff3"
       title="Class Rep"
@@ -36,7 +36,7 @@ const MembersTab = ({ group = {} }) => {
   }
   // Identify role for each member based on IDs
   const getRole = (memberId) => {
-    if (creator?._id === memberId) return 'classRep';
+    if (creator?._id === memberId) return 'class-rep';
     if (assistantReps.some((a) => a._id === memberId)) return 'assistant';
     return 'member';
   };

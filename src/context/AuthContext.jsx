@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }) => {
   const [navTitle, setNavTitle] = useState('Welcome');
   const [loading, setLoading] = useState(true);
   const [attendanceList, setAttendanceList] = useState(attendance);
+  const [isSyncing, setIsSyncing] = useState(false);
   const [authBtnsLoading, setAuthBtnsLoading] = useState({
     login: false,
     verifyEmail: false,
@@ -70,6 +71,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateUser = (syncedUser) => {
+    const updated = { ...syncedUser, isLoggedIn: true };
+    setUser(updated);
+    localStorage.setItem('user', JSON.stringify(updated));
+  };
+
   const value = {
     user,
     setUser,
@@ -81,9 +88,10 @@ export const AuthProvider = ({ children }) => {
     logout,
     authBtnsLoading,
     setAuthBtnsLoading,
-
+    updateUser,
     register,
     login,
+    setIsSyncing,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

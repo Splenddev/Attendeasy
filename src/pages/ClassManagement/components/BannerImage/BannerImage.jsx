@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { MdGroups } from 'react-icons/md';
 
 const BannerImage = ({ bannerUrl }) => {
   const [loaded, setLoaded] = useState(false);
@@ -6,21 +7,18 @@ const BannerImage = ({ bannerUrl }) => {
   return (
     <div className="banner-container">
       {!loaded && <div className="banner-skeleton" />}
-      <img
-        src={
-          bannerUrl ||
-          'https://placehold.co/300x150/25aff3/ffffff?text=Group+Banner'
-        }
-        alt="Group Banner"
-        className={`cover ${loaded ? 'show' : 'hide'}`}
-        onLoad={() => setLoaded(true)}
-        onError={(e) => {
-          e.target.onerror = null;
-          e.target.src =
-            'https://placehold.co/300x150/25aff3/ffffff?text=Group+Banner';
-          setLoaded(true);
-        }}
-      />
+      {bannerUrl ? (
+        <img
+          src={bannerUrl}
+          alt="Group Banner"
+          className="group-banner-img"
+        />
+      ) : (
+        <MdGroups
+          size={140}
+          color="grey"
+        />
+      )}
     </div>
   );
 };
