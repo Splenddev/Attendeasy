@@ -1,6 +1,6 @@
 import axios from 'axios';
-// const API_BASE = 'http://localhost:5000/app/auth/';
-const API_BASE = 'https://vigilo-server.onrender.com/app/auth/';
+const API_BASE = 'http://localhost:5000/app/auth/';
+// const API_BASE = 'https://vigilo-server.onrender.com/app/auth/';
 axios.defaults.withCredentials = true;
 
 export const registerUser = async (formData) => {

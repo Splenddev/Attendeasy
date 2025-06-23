@@ -29,12 +29,7 @@ const scheduleData = {
   ],
 };
 const AuthLayout = () => {
-  return (
-    <div>
-      <Outlet />
-      {/* <CalendarSchedule scheduleData={scheduleData} /> */}
-    </div>
-  );
+  return <Outlet />;
 };
 
 export default AuthLayout;

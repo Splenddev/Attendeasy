@@ -80,10 +80,14 @@ const GroupManagementPage = () => {
 
   return (
     <div className="group-page">
-      <GroupSidebar group={group} />
+      <GroupSidebar
+        group={group}
+        refresh={fetchGroup}
+      />
       <GroupContents
         user={user}
         group={group}
+        refreshGroup={fetchGroup}
       />
     </div>
   );

@@ -15,13 +15,14 @@ export const AuthProvider = ({ children }) => {
   const [navTitle, setNavTitle] = useState('Welcome');
   const [loading, setLoading] = useState(true);
   const [attendanceList, setAttendanceList] = useState(attendance);
-  const [isSyncing, setIsSyncing] = useState(false);
   const [authBtnsLoading, setAuthBtnsLoading] = useState({
     login: false,
     verifyEmail: false,
     resendOtp: false,
     submit: false,
+    logout: false,
   });
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   useEffect(() => {
     const syncUser = async () => {
@@ -59,15 +60,16 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       const data = await logoutUser();
-      if (data.messaage === 'Logged out successfully') {
-        toast.success(data.message);
-        window.location.href('/');
-
+      if (data.message === 'Logged out successfully') {
         localStorage.removeItem('user');
         setUser(null);
+        toast.success(data.message);
+        window.location.href('/');
       }
     } catch (err) {
       console.warn('Logout failed (fallback to client-only):', err.message);
+    } finally {
+      setShowLogoutModal(false);
     }
   };
 
@@ -91,7 +93,8 @@ export const AuthProvider = ({ children }) => {
     updateUser,
     register,
     login,
-    setIsSyncing,
+    showLogoutModal,
+    setShowLogoutModal,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

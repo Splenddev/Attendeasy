@@ -14,6 +14,8 @@ import BtnGroup from './BtnGroup';
 import { useAuth } from '../../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { sendUserOtp, verifyUserOtp } from '../../../services/authService';
+import button from '../../../components/Button/Button';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const steps = [
   'Select Role',
@@ -227,6 +229,13 @@ const Register = () => {
 
   return (
     <div className="register-wrapper">
+      <div className="register-page-to-login">
+        {button.multiple({
+          icon: FaArrowLeft,
+          element: 'To Login',
+          func: () => navigate('/auth'),
+        })}
+      </div>
       <ProgressHeader
         currentStep={step}
         steps={steps}

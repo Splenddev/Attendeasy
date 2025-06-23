@@ -1,14 +1,13 @@
 .find-group-container {
   margin: auto;
 }
-
 .group-results-loader {
   display: flex;
   align-items: center;
   position: relative;
   justify-content: center;
-  width: calc(100vw - 105px);
   height: 300px;
+
   p {
     position: absolute;
   }

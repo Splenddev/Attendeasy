@@ -6,28 +6,10 @@ import { assets } from '../../../assets/assets';
 import { MdLogout, MdSettings } from 'react-icons/md';
 import { useEffect } from 'react';
 import { useAuth } from '../../../context/AuthContext';
-import { logoutUser } from '../../../services/authService';
-import { toast } from 'react-toastify';
-const SideBar = ({ components, menuActive, setMenuActive, isMobile }) => {
+const SideBar = ({ components, menuActive, setMenuActive }) => {
   const { pathname } = useLocation();
-  const { setUser } = useAuth();
-  const navigate = useNavigate();
+  const { setUser, setShowLogoutModal } = useAuth();
 
-  const handleLogout = async () => {
-    try {
-      const data = await logoutUser();
-      console.log(data);
-      if (data.message === 'Logged out successfully') {
-        toast.success(data.message);
-        navigate('/');
-
-        localStorage.removeItem('user');
-        setUser(null);
-      }
-    } catch (err) {
-      console.warn('Logout failed (fallback to client-only):', err.message);
-    }
-  };
   useEffect(() => {
     setMenuActive(false);
   }, [pathname, setMenuActive]);
@@ -87,7 +69,7 @@ const SideBar = ({ components, menuActive, setMenuActive, isMobile }) => {
               </AnimatePresence>
             </div>
             <div className="other-navs">
-              <span onClick={handleLogout}>
+              <span onClick={() => setShowLogoutModal(true)}>
                 <MdLogout />
               </span>
               <span>
@@ -123,7 +105,7 @@ const SideBar = ({ components, menuActive, setMenuActive, isMobile }) => {
             </AnimatePresence>
           </div>
           <div className="other-navs">
-            <p onClick={handleLogout}>Log Out</p>
+            <p onClick={() => setShowLogoutModal(true)}>Log Out</p>
             <p>Settings</p>
           </div>
         </div>

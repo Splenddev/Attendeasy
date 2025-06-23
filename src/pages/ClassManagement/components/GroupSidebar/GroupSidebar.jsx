@@ -3,19 +3,24 @@ import { FaLock } from 'react-icons/fa';
 import { MdSettings } from 'react-icons/md';
 import BannerImage from '../BannerImage/BannerImage';
 import styles from './GroupSidebar.module.css';
+import { FiRefreshCcw } from 'react-icons/fi';
 
-const GroupSidebar = ({ group }) => {
+const GroupSidebar = ({ group, refresh }) => {
   return (
     <aside className={`center ${styles.sidebar}`}>
-      <p className={styles.bannerLabel}>Group Profile</p>
       <div className={styles.sidebarGrid}>
         <div className={`center ${styles.bannerSection}`}>
-          <BannerImage bannerUrl={group.bannerUrl} />
+          <BannerImage
+            bannerUrl={group.bannerUrl}
+            height="100%"
+            borderRadius="50%"
+          />
         </div>
 
         <div className={styles.sidebarContents}>
           <div className={styles.actions}>
             <MdSettings className={styles.settingsIcon} />
+            <FiRefreshCcw onClick={refresh} />
           </div>
 
           <div className={styles.info}>
@@ -38,6 +43,8 @@ const GroupSidebar = ({ group }) => {
           </div>
         </div>
       </div>
+      <hr />
+      <p className={styles.bannerLabel}>Group Profile</p>
     </aside>
   );
 };

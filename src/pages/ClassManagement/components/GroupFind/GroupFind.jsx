@@ -196,17 +196,17 @@ const GroupFind = ({ user = {}, onJoin }) => {
 
       {renderSearchSummary()}
 
-      <div className="group-results">
-        {loading ? (
-          <div className="group-results-loader">
-            <Spinner scale="5" />
-            <p>Loading...</p>
-          </div>
-        ) : groups.length === 0 ? (
-          <p>No groups found.</p>
-        ) : (
-          paginatedGroups.map((group) => {
-            const status = joinStatus[group._id] || 'none';
+      {loading ? (
+        <div className="group-results-loader">
+          <Spinner scale="5" />
+          <p>Loading...</p>
+        </div>
+      ) : groups.length === 0 ? (
+        <p>No groups found.</p>
+      ) : (
+        <div className="group-results">
+          {paginatedGroups.map((group) => {
+            const status = joinStatus[user._id] || 'none';
             return (
               <div
                 key={group._id}
@@ -271,9 +271,9 @@ const GroupFind = ({ user = {}, onJoin }) => {
                 </div>
               </div>
             );
-          })
-        )}
-      </div>
+          })}{' '}
+        </div>
+      )}
 
       {totalPages > 1 && (
         <div className="pagination">
