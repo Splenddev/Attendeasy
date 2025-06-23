@@ -13,30 +13,28 @@
   width: 100%;
   margin: 1rem 0;
   border: none;
-  background: #999;
+  background: #bbb;
   height: 1px;
 }
 
 .sidebarGrid {
   width: 100%;
-  display: grid;
-  grid-template-columns: auto 1fr;
+  display: flex;
   align-items: center;
   gap: 1rem;
 }
 
 .bannerSection {
   overflow: hidden;
-  border-radius: 50%;
+  border-radius: 20px;
   background: #fff;
-  border: 1px solid #000;
+  border: 1px solid #aaa;
   padding: 3px;
-  max-width: 200px;
-  height: 200px;
+  width: 100%;
+  /* max-width: 200px; */
+  height: 250px;
 }
 
-/* .bannerSection img { */
-/* width: 100%; */
 /* border-radius: 50%; */
 /* aspect-ratio: 3/1; */
 /* object-fit: cover; */
@@ -114,4 +112,9 @@
   font-size: 0.9rem;
   color: #333;
   text-align: center;
+}
+@media (max-width: 768px) {
+  .sidebarGrid {
+    flex-direction: column;
+  }
 }

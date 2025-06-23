@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MdGroups } from 'react-icons/md';
-
+import './BannerImage.css';
 const BannerImage = ({ bannerUrl, height = '200px', borderRadius = '0px' }) => {
   const [loaded, setLoaded] = useState(false);
 

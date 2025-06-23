@@ -13,7 +13,7 @@ const GroupSidebar = ({ group, refresh }) => {
           <BannerImage
             bannerUrl={group.bannerUrl}
             height="100%"
-            borderRadius="50%"
+            borderRadius="20px"
           />
         </div>
 
