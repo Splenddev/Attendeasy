@@ -206,7 +206,10 @@ const GroupFind = ({ user = {}, onJoin }) => {
       ) : (
         <div className="group-results">
           {paginatedGroups.map((group) => {
-            const status = joinStatus[user._id] || 'none';
+            const isJoinRequested = group.joinRequests.find(
+              (req) => req.user === user._id
+            );
+            let status = isJoinRequested ? isJoinRequested.status : 'none';
             return (
               <div
                 key={group._id}

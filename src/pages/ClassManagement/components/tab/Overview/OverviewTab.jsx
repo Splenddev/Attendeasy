@@ -6,7 +6,12 @@ import {
   FaCalendarCheck,
   FaClipboardList,
   FaClock,
+  FaHandshake,
+  FaUserClock,
 } from 'react-icons/fa';
+import { MdMarkEmailUnread } from 'react-icons/md';
+import { HiCloudUpload, HiUserAdd, HiUserCircle } from 'react-icons/hi';
+import { BiSolidUserBadge, BiUserCircle } from 'react-icons/bi';
 
 const OverviewTab = ({ group }) => {
   const {
@@ -16,6 +21,7 @@ const OverviewTab = ({ group }) => {
     assistantReps = [],
     isArchived,
     updatedAt,
+    joinRequests,
   } = group;
 
   const formatDate = (dateStr) => {
@@ -52,7 +58,23 @@ const OverviewTab = ({ group }) => {
 
           <div className="card">
             <h3>
-              <FaUserTimes className="icon" />
+              <FaUserClock className="icon" />
+              Join Requests
+            </h3>
+            <p>{joinRequests.length}</p>
+          </div>
+
+          <div className="card">
+            <h3>
+              <HiCloudUpload className="icon" />
+              Media Uploads
+            </h3>
+            <p>{joinRequests.length}</p>
+          </div>
+
+          <div className="card">
+            <h3>
+              <BiSolidUserBadge className="icon" />
               Assistant Reps
             </h3>
             <p>{assistantReps.length}</p>

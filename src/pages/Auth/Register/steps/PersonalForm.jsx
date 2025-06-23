@@ -66,6 +66,24 @@ const PersonalForm = () => {
         </div>
 
         <div className="form-group">
+          <label>Matric Number</label>
+          <input
+            className={`form-input ${errors.matricNumber && 'input-error'}`}
+            {...register('matricNumber', {
+              required: 'Matric Number is required',
+            })}
+            placeholder="Enter matric number"
+          />
+          {errors.matricNumber && (
+            <motion.p
+              variants={variants.shake}
+              animate={errors.matricNumber ? 'shake' : 'still'}
+              className="error-text">
+              {errors.matricNumber.message}
+            </motion.p>
+          )}
+        </div>
+        <div className="form-group">
           <label>Username</label>
           <input
             className={`form-input ${
@@ -91,24 +109,6 @@ const PersonalForm = () => {
               animate={errors.username ? 'shake' : 'still'}
               className="error-text">
               {errors.username.message}
-            </motion.p>
-          )}
-        </div>
-        <div className="form-group">
-          <label>Matric Number</label>
-          <input
-            className={`form-input ${errors.matricNumber && 'input-error'}`}
-            {...register('matricNumber', {
-              required: 'Matric Number is required',
-            })}
-            placeholder="Enter matric number"
-          />
-          {errors.matricNumber && (
-            <motion.p
-              variants={variants.shake}
-              animate={errors.matricNumber ? 'shake' : 'still'}
-              className="error-text">
-              {errors.matricNumber.message}
             </motion.p>
           )}
         </div>

@@ -13,7 +13,7 @@
   padding: var(--padding);
   border-radius: 12px;
   background: #fff;
-  box-shadow: 0 0 10px var(--shadow-color);
+  box-shadow: 0 0 7px var(--shadow-color);
   height: calc(100vh - var(--header-height));
   overflow: hidden;
   position: relative;
@@ -22,13 +22,13 @@
 }
 
 .register-page-to-login {
-  position: absolute;
-  top: 00px;
+  position: fixed;
+  top: 5px;
   z-index: 1;
   left: 6px;
   button {
     border-radius: 20px;
-    padding: 0.5rem 1rem;
+    padding: 0.3rem 0.8rem;
   }
 }
 
@@ -41,7 +41,6 @@
   margin-bottom: 50px;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-  /* Optional: for iOS */
 }
 
 /* progress header  */
@@ -117,9 +116,6 @@
   width: 100%;
   margin: 10px 0;
   padding: 10px;
-  border: 1px solid var(--outline);
-  border-radius: 8px;
-  outline: 1px solid var(--main-color);
 }
 
 /*role form step*/
@@ -228,13 +224,14 @@
   width: 100%;
   padding: 0.75rem 1rem;
   border-radius: 8px;
-  border: 1.5px solid #ccc;
+  border: 1.5px solid var(--main-color);
   outline: none;
   transition: border-color 0.2s ease;
 }
 
 .form-input:focus {
   border-color: var(--main-color);
+  outline: none;
 }
 
 .input-valid {

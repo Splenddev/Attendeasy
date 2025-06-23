@@ -532,7 +532,7 @@ const GroupReg = () => {
                 image={tempImage.url}
                 crop={crop}
                 zoom={zoom}
-                aspect={5 / 3}
+                aspect={3 / 1.5}
                 onCropChange={setCrop}
                 onZoomChange={setZoom}
                 onCropComplete={handleCropComplete}

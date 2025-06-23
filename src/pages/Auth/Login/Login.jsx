@@ -9,31 +9,7 @@ import { ROLES } from '../../../utils/roles';
 import { useEffect } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { FiLoader } from 'react-icons/fi';
-
-const dummyUsers = [
-  {
-    id: '1',
-    identifier: 'rep123@gmail.com',
-    password: '1234',
-    role: ROLES.CLASS_REP,
-    isNewUser: false,
-    name: 'Splendid James',
-  },
-  {
-    id: '2',
-    identifier: 'student456',
-    password: 'abcd',
-    role: ROLES.STUDENT,
-    isNewUser: false,
-  },
-  {
-    id: '3',
-    identifier: 'newguy',
-    password: 'pass',
-    role: ROLES.STUDENT,
-    isNewUser: true,
-  },
-];
+import LoginRight from './components/LoginRight/LoginRight';
 
 const Login = () => {
   const [formData, setFormData] = useState({ identifier: '', password: '' });
@@ -92,8 +68,8 @@ const Login = () => {
   };
 
   return (
-    <div className="login">
-      <section className="left">
+    <div className="login-container">
+      <div className="login-left">
         <header>
           <img
             src="/vigilo_logo.jpeg"
@@ -101,12 +77,10 @@ const Login = () => {
             className="site-logo"
           />
         </header>
-        <h2>Keep Track, Stay Connected</h2>
-        <p>
-          Vigilo helps you easily track and manage attendance in real-time,
-          ensuring every presence is recorded accurately — making attendance
-          simple, reliable, and stress-free.
-        </p>
+
+        <h2>Welcome Back</h2>
+        <p>Please sign in to continue to Vigilo.</p>
+
         <form
           className="login-form"
           onSubmit={handleLogin}>
@@ -137,7 +111,7 @@ const Login = () => {
             ))}
           </section>
 
-          {error && <p style={{ color: 'red' }}>{error}</p>}
+          {error && <p className="error-msg">{error}</p>}
 
           {button.normal({
             element: authBtnsLoading.login ? (
@@ -157,14 +131,9 @@ const Login = () => {
             name: 'register-btn',
           })}
         </form>
-      </section>
+      </div>
 
-      {/* Optional preview image */}
-      {/* <section className="right">
-        <div className="app-screenshots">
-          <img src={img} alt="shots" />
-        </div>
-      </section> */}
+      <LoginRight />
     </div>
   );
 };

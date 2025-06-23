@@ -34,7 +34,7 @@ const GroupContents = ({ user, group, refreshGroup }) => {
 
   const handleJoinRequestAction = async (userId, action) => {
     const res =
-      action === 'approved'
+      action === 'approve'
         ? await approveJoinRequestService(group._id, userId)
         : await rejectJoinRequestService(group._id, userId);
     if (res.success) {

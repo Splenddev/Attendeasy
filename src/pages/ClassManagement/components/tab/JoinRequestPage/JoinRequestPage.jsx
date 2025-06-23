@@ -21,7 +21,7 @@ const JoinRequestPage = ({ group, onAction }) => {
       setProcessingId(userId);
       await onAction(userId, action);
       toast.success(
-        `${action === 'approved' ? 'Approved' : 'Rejected'} ${name}'s request.`
+        `${action === 'approve' ? 'Approved' : 'Rejected'} ${name}'s request.`
       );
     } catch (err) {
       toast.error(err?.message || 'Something went wrong');
@@ -91,16 +91,14 @@ const JoinRequestPage = ({ group, onAction }) => {
                         className={styles.accept}
                         disabled={isLoading}
                         onClick={() =>
-                          handleActionClick(user, 'approved', name)
+                          handleActionClick(user, 'approve', name)
                         }>
                         {isLoading ? 'Approving...' : 'Accept'}
                       </button>
                       <button
                         className={styles.reject}
                         disabled={isLoading}
-                        onClick={() =>
-                          handleActionClick(user, 'rejected', name)
-                        }>
+                        onClick={() => handleActionClick(user, 'reject', name)}>
                         {isLoading ? 'Rejecting...' : 'Reject'}
                       </button>
                     </>
@@ -121,9 +119,7 @@ const JoinRequestPage = ({ group, onAction }) => {
         message={`Are you sure you want to ${modal.action} ${modal.name}'s join request?`}
         onConfirm={handleConfirm}
         onClose={() => setModal({ isOpen: false })}
-        actionText={`Yes, ${
-          modal.action === 'Approved' ? 'Approve' : 'Reject'
-        }`}
+        actionText={`Yes, ${modal.action === 'approve' ? 'Approve' : 'Reject'}`}
       />
     </div>
   );
