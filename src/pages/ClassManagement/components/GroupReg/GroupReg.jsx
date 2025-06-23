@@ -215,9 +215,9 @@ const GroupReg = () => {
       }
       if (result.success) {
         try {
-          const result = await getUser();
-          if (result.success) {
-            updateUser(result.user);
+          const res = await getUser();
+          if (res.success) {
+            updateUser(res.user);
           }
         } catch (fetchErr) {
           console.error(
