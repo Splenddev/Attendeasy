@@ -1,85 +1,133 @@
+/* Root Styling */
 .schedule-page {
-  padding: 2rem;
-  background: #f9fafe;
+  padding: 3rem 2rem;
+  background-color: #f0f4f8;
+  color: #1e293b;
 }
 
 .schedule-page h1 {
   font-size: 2rem;
-  margin-bottom: 1.5rem;
-  color: #1f2937;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  color: #0f172a;
 }
 
+/* Card Layout */
 .schedule-grid {
   display: grid;
-  gap: 1.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
 }
 
 .schedule-card {
-  background: #fff;
-  border-left: 5px solid #25aff3;
-  padding: 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 1.5rem 1.8rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
 }
 
+.schedule-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Header */
 .schedule-card .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 1rem;
+}
+
+.schedule-card .header h2 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0;
 }
 
 .schedule-card .repeat {
-  background: #25aff3;
-  color: white;
-  padding: 0.25rem 0.5rem;
   font-size: 0.75rem;
-  border-radius: 5px;
+  font-weight: 500;
+  padding: 0.2rem 0.5rem;
+  background-color: #25aff3;
+  color: white;
+  border-radius: 6px;
 }
 
-.schedule-card .info p,
-.schedule-card .timings .time-slot {
-  margin: 0.4rem 0;
-  color: #333;
+/* Course Info */
+.schedule-card .info {
+  margin-bottom: 1rem;
+}
+
+.schedule-card .info p {
+  font-size: 0.9rem;
+  margin: 0.3rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #334155;
+}
+
+/* Class Timings */
+.timings {
+  margin-bottom: 1rem;
+}
+
+.timings .time-slot {
+  font-size: 0.88rem;
+  margin: 0.25rem 0;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.schedule-card .clock-icon {
+.clock-icon {
   color: #25aff3;
 }
 
+/* Media Section */
 .media-section h4 {
-  margin-top: 1rem;
-  font-weight: 600;
-  color: #111827;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  color: #0f172a;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 0.3rem;
 }
 
 .media-list {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .media-item {
+  font-size: 0.85rem;
+  padding: 0.35rem 0;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.3rem 0;
-  font-size: 0.9rem;
-  color: #444;
+  justify-content: space-between;
+  border-bottom: 1px dashed #e2e8f0;
+  gap: 0.4rem;
+  color: #475569;
 }
 
 .media-item.approved {
-  color: #16a34a;
+  color: #059669;
 }
 
 .media-item.pending {
   color: #d97706;
 }
 
+/* Footer Section */
 .footer {
-  margin-top: 1rem;
-  font-size: 0.85rem;
-  color: #555;
+  margin-top: 1.2rem;
+  font-size: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  color: #64748b;
+}
+
+.footer strong {
+  color: #1e40af;
 }
