@@ -7,7 +7,8 @@ import { useAuth } from './context/AuthContext';
 import { ConfirmModal } from './components/Modals';
 
 const App = () => {
-  const { setShowLogoutModal, showLogoutModal, logout } = useAuth();
+  const { setShowLogoutModal, showLogoutModal, logout, authBtnsLoading } =
+    useAuth();
   return (
     <>
       <ToastContainer position="top-center" />
@@ -15,6 +16,7 @@ const App = () => {
         isOpen={showLogoutModal}
         onClose={() => setShowLogoutModal(false)}
         onConfirm={logout}
+        loader={authBtnsLoading.logout}
         actionText="Logout"
         message="You’re about to log out of your account."
       />

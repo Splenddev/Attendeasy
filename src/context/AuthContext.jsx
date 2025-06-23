@@ -58,6 +58,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
+    setAuthBtnsLoading((prev) => ({ ...prev, logout: true }));
     try {
       const data = await logoutUser();
       if (data.message === 'Logged out successfully') {
@@ -70,6 +71,7 @@ export const AuthProvider = ({ children }) => {
       console.warn('Logout failed (fallback to client-only):', err.message);
     } finally {
       setShowLogoutModal(false);
+      setAuthBtnsLoading((prev) => ({ ...prev, logout: false }));
     }
   };
 

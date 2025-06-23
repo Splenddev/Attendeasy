@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import './GroupFind.css';
-import { MdGroups } from 'react-icons/md';
+import { MdClose, MdGroups } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import {
   cancelJoinRequestService,
@@ -8,6 +8,7 @@ import {
   searchGroupsService,
 } from '../../../../services/group.services';
 import Spinner from '../../../../components/Loader/Spinner/Spinner';
+import button from '../../../../components/Button/Button';
 
 const GroupFind = ({ user = {}, onJoin }) => {
   const [query, setQuery] = useState('');
@@ -78,6 +79,7 @@ const GroupFind = ({ user = {}, onJoin }) => {
       }));
       toast.success('Join request sent');
       if (onJoin) onJoin(selectedGroup._id);
+      await fetchGroups();
     } catch (err) {
       console.log(err);
       toast.error('Failed to send join request');
@@ -90,13 +92,15 @@ const GroupFind = ({ user = {}, onJoin }) => {
       await cancelJoinRequestService(groupId);
       setJoinStatus((prev) => ({ ...prev, [groupId]: 'none' }));
       toast.info('Join request cancelled');
+      await fetchGroups();
     } catch (err) {
       console.log(err);
       toast.error('Failed to cancel request');
     }
   };
 
-  const leaveGroup = (groupId) => {
+  const leaveGroup = async (groupId) => {
+    await fetchGroups();
     setJoinStatus((prev) => ({ ...prev, [groupId]: 'none' }));
     // Optional: add leaveGroupService
   };
@@ -147,7 +151,7 @@ const GroupFind = ({ user = {}, onJoin }) => {
                 setCurrentPage(1);
               }}>
               <option value="">All Faculties</option>
-              <option value="Science">Science</option>
+              <option value="Sciences">Sciences</option>
               <option value="Engineering">Engineering</option>
               <option value="Management Sciences">Management Sciences</option>
             </select>
@@ -160,7 +164,7 @@ const GroupFind = ({ user = {}, onJoin }) => {
                 setCurrentPage(1);
               }}>
               <option value="">All Departments</option>
-              <option value="Biochemistry">Biochemistry</option>
+              <option value="Chemistry">Chemistry</option>
               <option value="Computer Science">Computer Science</option>
               <option value="Mechanical Engineering">
                 Mechanical Engineering
@@ -176,11 +180,11 @@ const GroupFind = ({ user = {}, onJoin }) => {
                 setCurrentPage(1);
               }}>
               <option value="">All Levels</option>
-              <option value="100">100</option>
-              <option value="200">200</option>
-              <option value="300">300</option>
-              <option value="400">400</option>
-              <option value="500">500</option>
+              <option value="100L">100L</option>
+              <option value="200L">200L</option>
+              <option value="300L">300L</option>
+              <option value="400L">400L</option>
+              <option value="500L">500L</option>
             </select>
           </div>
           <div className="dropdown">
@@ -256,13 +260,14 @@ const GroupFind = ({ user = {}, onJoin }) => {
                           Private Group
                         </button>
                       ))}
-                    {status === 'pending' && group.visibility === 'public' && (
-                      <button
-                        className="cancel-btn"
-                        onClick={() => cancelRequest(group._id)}>
-                        Cancel
-                      </button>
-                    )}
+                    {status === 'pending' &&
+                      group.visibility === 'public' &&
+                      button.multiple({
+                        name: 'cancel-btn',
+                        element: 'Withdraw',
+                        func: () => cancelRequest(group._id),
+                        icon: MdClose,
+                      })}
                     {status === 'approved' && (
                       <button
                         className="leave-btn"

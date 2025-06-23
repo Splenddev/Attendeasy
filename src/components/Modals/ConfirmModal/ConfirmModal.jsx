@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './ConfirmModal.module.css';
+import Spinner from '../../Loader/Spinner/Spinner';
 
 const ConfirmModal = ({
   isOpen,
@@ -7,6 +8,7 @@ const ConfirmModal = ({
   onConfirm,
   message = '',
   actionText = '',
+  loader,
 }) => {
   if (!isOpen) return null;
 
@@ -24,7 +26,7 @@ const ConfirmModal = ({
           <button
             className={styles.confirm}
             onClick={onConfirm}>
-            {actionText}
+            {loader ? <Spinner scale="0.8" /> : actionText}
           </button>
         </div>
       </div>
