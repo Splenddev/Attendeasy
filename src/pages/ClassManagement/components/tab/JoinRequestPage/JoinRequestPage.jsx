@@ -121,7 +121,9 @@ const JoinRequestPage = ({ group, onAction }) => {
         message={`Are you sure you want to ${modal.action} ${modal.name}'s join request?`}
         onConfirm={handleConfirm}
         onClose={() => setModal({ isOpen: false })}
-        actionText="Yes, Approve"
+        actionText={`Yes, ${
+          modal.action === 'Approved' ? 'Approve' : 'Reject'
+        }`}
       />
     </div>
   );

@@ -37,7 +37,7 @@ const GroupContents = ({ user, group, refreshGroup }) => {
       action === 'approved'
         ? await approveJoinRequestService(group._id, userId)
         : await rejectJoinRequestService(group._id, userId);
-    if (res.status) {
+    if (res.success) {
       await refreshGroup();
     }
   };
