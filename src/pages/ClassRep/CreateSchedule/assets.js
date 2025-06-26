@@ -52,7 +52,7 @@ export const createScheduleFormDataAssets = [
         type: 'input',
         required: true,
         input: {
-          type: 'text',
+          type: 'email',
           placeholder: 'e.g. grace@edu.ng',
         },
       },
@@ -127,7 +127,7 @@ export const createScheduleFormDataAssets = [
         },
       },
       {
-        title: 'Class Location (Lat, Lng)',
+        title: 'Class Location',
         name: 'classLocation',
         type: 'location',
         required: true,

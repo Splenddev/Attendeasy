@@ -1,47 +1,71 @@
-import { useEffect, useState } from 'react';
+// pages/CreateSchedule.jsx
+import React, { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { FormProvider } from 'react-hook-form';
+import { MdAddchart } from 'react-icons/md';
+
 import { useAuth } from '../../../context/AuthContext';
 import { createScheduleFormDataAssets, userCourses } from './assets';
 import DynamicForm from '../../../features/DynamicForm/DynamicForm';
-import { FormProvider } from 'react-hook-form';
 import useScheduleForm from './useScheduleForm';
-import './CreateSchedule.css';
-// import InfoModal from '../../../components/Modals/Info/InfoModal';
 import button from '../../../components/Button/Button';
-import { MdAddchart } from 'react-icons/md';
 import CourseSelector from '../../../components/CourseSelector/CourseSelector';
-import { AnimatePresence, motion } from 'framer-motion';
+import './CreateSchedule.css';
+import { useCreateSchedule } from '../../../hooks/useCreateSchedule';
 
 const CreateSchedule = () => {
+  /* ───────────────────  set page header  ─────────────────── */
   const { setNavTitle } = useAuth();
+  useEffect(() => setNavTitle('Create Schedules'), [setNavTitle]);
+
+  /* ───────────────────  form setup  ──────────────────────── */
+  const { methods } = useScheduleForm(); // provides RHF methods & validation
+  const { handleSubmit, setValue, reset } = methods;
+
+  /* ───────────────────  schedule-creator hook  ───────────── */
+  const { handleCreateSchedule } = useCreateSchedule();
+
+  /* ───────────────────  UI state  ────────────────────────── */
   const [courseSelected, setCourseSelected] = useState(false);
 
-  const { methods, handleSubmit, onSubmit } = useScheduleForm();
-
-  const { setValue } = methods;
-
-  useEffect(() => {
-    setNavTitle('Create Schedules');
-  }, [setNavTitle]);
-
-  const handleCourseSelect = (course) => {
-    setValue('courseCode', course.courseCode);
-    setValue('courseTitle', course.courseTitle);
-    setValue('lecturerName', course.lecturerName);
-    setValue('department', course.department);
-    setValue('faculty', course.faculty);
-    setValue('level', course.level);
-    setCourseSelected(true); // ✅ Enable form
+  /* ───────────────────  helper fns  ──────────────────────── */
+  const onSubmit = async (data) => {
+    await handleCreateSchedule({
+      data,
+      onSuccess: () => {
+        reset(); // clear form
+        setCourseSelected(false);
+      },
+    });
   };
 
+  const handleCourseSelect = (course) => {
+    // Autofill form fields
+    Object.entries({
+      courseCode: course.courseCode,
+      courseTitle: course.courseTitle,
+      lecturerName: course.lecturerName,
+      department: course.department,
+      faculty: course.faculty,
+      level: course.level,
+    }).forEach(([key, value]) => setValue(key, value));
+
+    setCourseSelected(true);
+  };
+
+  /* ───────────────────  render  ──────────────────────────── */
   return (
     <FormProvider {...methods}>
       <h1 className="header">Add a New Schedule</h1>
+
+      {/* course picker */}
       <CourseSelector
         courses={userCourses}
         onSelect={handleCourseSelect}
       />
 
       <div className="form-container">
+        {/* overlay prompts until a course is picked or skipped */}
         <AnimatePresence>
           {!courseSelected && (
             <motion.div
@@ -69,32 +93,34 @@ const CreateSchedule = () => {
           )}
         </AnimatePresence>
 
+        {/* main form */}
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="create-schedule">
           <div className="create-schedule-sections">
             <div className="create-schedule-section">
-              {createScheduleFormDataAssets.slice(0, 3).map((schedule) => (
+              {createScheduleFormDataAssets.slice(0, 3).map((section) => (
                 <DynamicForm
-                  key={schedule.id}
-                  title={schedule.title}
-                  selectOptions={schedule.selectOptions}
+                  key={section.id}
+                  title={section.title}
+                  selectOptions={section.selectOptions}
                 />
               ))}
             </div>
+
             <div className="create-schedule-section">
-              {createScheduleFormDataAssets.slice(3).map((schedule) => (
+              {createScheduleFormDataAssets.slice(3).map((section) => (
                 <DynamicForm
-                  key={schedule.id}
-                  title={schedule.title}
-                  selectOptions={schedule.selectOptions}
+                  key={section.id}
+                  title={section.title}
+                  selectOptions={section.selectOptions}
                 />
               ))}
             </div>
           </div>
+
           {button.multiple({
             icon: MdAddchart,
-            func: () => console.log('submitted'),
             element: 'Add Schedule',
             type: 'submit',
           })}

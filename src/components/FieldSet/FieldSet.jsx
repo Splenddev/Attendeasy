@@ -189,7 +189,7 @@ const FieldSet = ({
         />
       )}
 
-      {type === 'location' && <LocationModal name={name} />}
+      {type === 'location' && <LocationModal fieldName={name} />}
     </motion.div>
   );
 };

@@ -243,6 +243,8 @@ const LocationModal = ({ fieldName }) => {
   const handleConfirm = (data) => {
     setValue(fieldName, data, { shouldValidate: true });
     setOpen(false);
+    console.log(data);
+    console.log(selected);
   };
 
   return (

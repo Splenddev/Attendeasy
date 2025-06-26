@@ -33,7 +33,6 @@ const GroupManagementPage = () => {
     try {
       const res = await fetchGroupService(user.group);
       setGroup(res.data);
-      toast.success(res.message);
     } catch (err) {
       console.error('Failed to fetch group:', err.message);
       toast.error('Failed to fetch group');
@@ -44,12 +43,15 @@ const GroupManagementPage = () => {
 
   useEffect(() => {
     fetchGroup();
-  }, [user?.group]);
+  }, []);
 
   if (loading)
     return (
       <div className="full-page-loader-wrap">
-        <Spinner scale="3" />
+        <Spinner
+          scale="3"
+          size={'30px'}
+        />
       </div>
     );
 

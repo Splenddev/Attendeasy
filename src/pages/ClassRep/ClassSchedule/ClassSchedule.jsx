@@ -6,6 +6,7 @@ import {
   FaStopwatch20,
   FaStopwatch,
   FaCalendarPlus,
+  FaCalendarCheck,
 } from 'react-icons/fa';
 import { FiFileText } from 'react-icons/fi';
 import styles from './ClassSchedule.module.css';
@@ -105,7 +106,7 @@ import { useAuth } from '../../../context/AuthContext';
 import ScheduleCard from './components/ScheduleCard/ScheduleCard';
 import { AlertModal } from '../../../components/Modals';
 import button from '../../../components/Button/Button';
-import { MdAddTask } from 'react-icons/md';
+import { MdAddTask, MdCheck } from 'react-icons/md';
 import { routesNavigate } from '../../../utils/helpers';
 import { useNavigate } from 'react-router-dom';
 
@@ -178,6 +179,7 @@ const ClassSchedule = () => {
       .map(({ timing }) => ({
         courseCode: schedule.courseCode,
         startTime: timing.startTime,
+        endTime: timing.endTime,
       }))
   );
 
@@ -208,29 +210,44 @@ const ClassSchedule = () => {
 
       <div className={styles.daySelector}>
         {weekdays.map((day) => {
-          const { upcoming, active } = dayStatuses[day] || {
-            upcoming: 0,
-            active: 0,
-          };
+          const { upcoming = 0, active = 0 } = dayStatuses[day] || {};
+          const isSelected = day === selectedDay;
+          const isToday = day === weekday;
+          const hasOngoing = active > 0 && isToday;
+          const hasUpcoming = upcoming > 0 && isToday;
+
+          let badge = null;
+          if (hasOngoing) {
+            badge = (
+              <span
+                className={styles.activeBadge}
+                title="Class ongoing">
+                Now
+              </span>
+            );
+          } else if (hasUpcoming) {
+            badge = (
+              <span
+                className={styles.badge}
+                title="Upcoming classes">
+                {upcoming}
+              </span>
+            );
+          } else if (isToday) {
+            badge = (
+              <span className={styles.badge}>
+                <FaCalendarCheck />
+              </span>
+            );
+          }
+
           return (
             <button
               key={day}
-              className={day === selectedDay ? styles.activeDayBtn : ''}
+              className={isSelected ? styles.activeDayBtn : ''}
               onClick={() => setSelectedDay(day)}>
               {day}
-              {active > 0 ? (
-                <span
-                  className={styles.activeBadge}
-                  title="Class ongoing">
-                  Now
-                </span>
-              ) : upcoming > 0 && day === weekday ? (
-                <span
-                  className={styles.badge}
-                  title="Upcoming classes">
-                  {upcoming}
-                </span>
-              ) : null}
+              {badge}
             </button>
           );
         })}
@@ -252,6 +269,7 @@ const ClassSchedule = () => {
                 key={`${schedule.courseCode}-${schedule.lecturerName}`}
                 schedule={schedule}
                 user={user}
+                isToday={selectedDay === weekday}
               />
             ))
           ) : (

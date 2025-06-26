@@ -106,3 +106,41 @@
 .dismissBtn:hover {
   background-color: #1999d5;
 }
+.badgeDone {
+  background-color: #d4edda;
+  color: #2e7d32;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 6px;
+}
+
+.badgeOngoing {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+.badgeUpcoming {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 6px;
+}
+.badgeDone,
+.badgeOngoing,
+.badgeUpcoming {
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  cursor: default;
+}
+
+.badgeOngoing:hover,
+.badgeUpcoming:hover,
+.badgeDone:hover {
+  transform: scale(1.05);
+}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import './ClassRepDashboard.css';
 import { useAuth } from '../../../context/AuthContext';
-import { schedule } from '../ClassSchedule/assets';
+import { scheduleJson } from '../ClassSchedule/assets';
 import AttendanceSection from './AttendanceSection';
 import ScheduleSection from './ScheduleSection';
 import TopSummaryCards from './TopSummaryCards';
@@ -13,7 +13,7 @@ const getTodayName = () =>
 
 const getTodaySchedule = () => {
   const today = getTodayName();
-  return schedule.flatMap((course) =>
+  return scheduleJson.flatMap((course) =>
     course.classDaysTimes
       .filter(({ day }) => day === today)
       .map(({ timing }) => ({
