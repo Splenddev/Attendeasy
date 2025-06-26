@@ -293,6 +293,10 @@ export const scheduleJson = [
         timing: { startTime: '13:00', endTime: '15:00' },
       },
       {
+        day: 'Tuesday',
+        timing: { startTime: '22:00', endTime: '24:00' },
+      },
+      {
         day: 'Wednesday',
         timing: { startTime: '08:00', endTime: '10:00' },
       },
@@ -307,7 +311,7 @@ export const scheduleJson = [
         fileType: 'doc',
         allowedExt: ['.pdf', '.docx'],
         src: 'waste_management_notes.pdf',
-        name: 'Waste Management Notes',
+        name: 'Waste Management Notes On Biological Practices in Nigeria.',
         dateAdded: '2025-06-23',
         timeAdded: '11:00 AM',
         approved: true,

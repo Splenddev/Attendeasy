@@ -1,0 +1,108 @@
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modalBox {
+  background: #fff;
+  color: #1a1a1a;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+  padding: 1.5rem;
+  position: relative;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.headerIcon {
+  font-size: 1.5rem;
+  color: #25aff3;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.modalContent {
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+
+.summary {
+  margin-bottom: 1rem;
+}
+
+.taskList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.taskItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed #e0e0e0;
+}
+
+.code {
+  font-weight: 600;
+  color: #333;
+}
+
+.time {
+  color: #888;
+}
+
+.tip {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #0077cc;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.emptyMessage {
+  text-align: center;
+  color: #555;
+  font-style: italic;
+}
+
+.modalFooter {
+  text-align: right;
+}
+
+.dismissBtn {
+  background-color: #25aff3;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.dismissBtn:hover {
+  background-color: #1999d5;
+}

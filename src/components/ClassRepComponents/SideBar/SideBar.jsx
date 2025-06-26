@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 const SideBar = ({ components, menuActive, setMenuActive }) => {
   const { pathname } = useLocation();
-  const { setUser, setShowLogoutModal } = useAuth();
+  const { setShowLogoutModal } = useAuth();
 
   useEffect(() => {
     setMenuActive(false);

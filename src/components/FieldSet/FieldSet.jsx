@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import DayTimeSelector from './DateTimeSelector/DateTimeSelector';
 import * as Slider from '@radix-ui/react-slider';
 import { variants } from '../../utils/contants';
+import LocationModal from '../LocationModal/LocationModal';
 
 const FieldSet = ({
   options = [],
@@ -70,7 +71,9 @@ const FieldSet = ({
           <MdError />
         </motion.p>
       )}
-      <p className="title cap">{title}</p>
+      <p className="title cap">
+        {title} <b style={{ color: 'var(--red)' }}>{required && '*'}</b>
+      </p>
       <hr />
 
       {/* Input Field */}
@@ -185,6 +188,8 @@ const FieldSet = ({
           setValue={setValue}
         />
       )}
+
+      {type === 'location' && <LocationModal name={name} />}
     </motion.div>
   );
 };

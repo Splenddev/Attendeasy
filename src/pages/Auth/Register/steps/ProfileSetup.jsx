@@ -6,6 +6,7 @@ import { MdCheckCircle, MdCheckCircleOutline } from 'react-icons/md';
 import BtnGroup from '../BtnGroup';
 import { variants } from '../../../../utils/contants';
 import { AnimatePresence, motion } from 'framer-motion';
+import CourseAdder from '../CourseAdder/CourseAdder';
 
 const faculties = ['Sciences', 'Arts', 'Engineering', 'Social Sciences'];
 const departments = {
@@ -37,7 +38,7 @@ const ProfileSetup = ({ onNext, onBack }) => {
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 1024 * 1024) {
+      if (file.size > 2 * 1024 * 1024) {
         setError('Image must be 1MB or less.');
         setTimeout(() => setError(null), 3000);
         return;
@@ -144,6 +145,12 @@ const ProfileSetup = ({ onNext, onBack }) => {
           </motion.p>
         )}
       </AnimatePresence>
+      <CourseAdder
+        onCoursesChange={(updatedCourses) => console.log(updatedCourses)}
+      />
+
+      <hr />
+
       <div className="term-cond">
         <label>
           {watch('terms') ? <MdCheckCircle /> : <MdCheckCircleOutline />}

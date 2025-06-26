@@ -26,7 +26,15 @@ const ConfirmModal = ({
           <button
             className={styles.confirm}
             onClick={onConfirm}>
-            {loader ? <Spinner scale="0.8" /> : actionText}
+            {loader ? (
+              <Spinner
+                size="1.2rem"
+                borderWidth="2px"
+                borderColor="white"
+              />
+            ) : (
+              actionText
+            )}
           </button>
         </div>
       </div>

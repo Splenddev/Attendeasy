@@ -1,125 +1,228 @@
-import { courseCodeOptions } from '../../../utils/contants';
-
 export const createScheduleFormDataAssets = [
   {
     id: 1,
-    title: 'Course Assignment',
+    title: 'Course Info',
     selectOptions: [
       {
         title: 'Course Code',
-        options: courseCodeOptions,
-        type: 'select',
+        name: 'courseCode',
+        type: 'input',
         required: true,
+        input: {
+          type: 'text',
+          placeholder: 'e.g. BCH301',
+        },
       },
       {
         title: 'Course Title',
+        name: 'courseTitle',
         type: 'input',
+        required: true,
         input: {
           type: 'text',
-          placeholder: 'e.g. Analytical Biochemistry',
+          placeholder: 'e.g. Analytical Chemistry',
         },
-        required: true,
       },
       {
-        title: 'Course Unit',
+        title: 'Credit Unit',
+        name: 'courseUnit',
         type: 'select',
-        options: [0, 1, 2, 3, 4, 5],
+        options: ['1', '2', '3', '4', '5'],
         required: true,
       },
     ],
   },
   {
     id: 2,
-    title: 'Schedule Info',
+    title: 'Lecturer Info',
     selectOptions: [
       {
-        title: 'Schedule Title',
+        title: 'Lecturer Name',
+        name: 'lecturerName',
         type: 'input',
+        required: true,
         input: {
           type: 'text',
-          placeholder: 'e.g. Biochemistry Daily Class Schedule',
+          placeholder: 'e.g. Dr. Grace Okoro',
         },
-        required: true,
       },
       {
-        title: 'Semester',
-        type: 'select',
-        options: ['First', 'Second'],
+        title: 'Lecturer Email',
+        name: 'lecturerEmail',
+        type: 'input',
         required: true,
-      },
-      {
-        title: 'Class Days & Times',
-        type: 'dayTimeChoice', // custom-rendered in FieldSet switch or via DynamicForm
-        required: true,
+        input: {
+          type: 'text',
+          placeholder: 'e.g. grace@edu.ng',
+        },
       },
     ],
   },
   {
     id: 3,
-    title: 'Lecturer Info',
+    title: 'Class Details',
     selectOptions: [
       {
-        title: 'Lecturer Name',
+        title: 'Classroom / Venue',
+        name: 'classroomVenue',
         type: 'input',
+        required: true,
         input: {
           type: 'text',
-          placeholder: 'e.g. Dr. Jane Smith',
+          placeholder: 'e.g. Science Complex, Lab 3',
         },
+      },
+      {
+        title: 'Department',
+        name: 'department',
+        type: 'input',
+        required: true,
+        input: {
+          type: 'text',
+          placeholder: 'e.g. Chemistry',
+        },
+      },
+      {
+        title: 'Faculty',
+        name: 'faculty',
+        type: 'input',
+        required: true,
+        input: {
+          type: 'text',
+          placeholder: 'e.g. Science',
+        },
+      },
+      {
+        title: 'Level',
+        name: 'level',
+        type: 'select',
+        options: ['100L', '200L', '300L', '400L', '500L'],
         required: true,
       },
       {
-        title: 'Lecturer Email',
+        title: 'Class Type',
+        name: 'classType',
+        type: 'select',
+        options: ['Physical', 'Virtual'],
+        required: true,
+      },
+      {
+        title: 'Meeting Link (if Virtual)',
+        name: 'virtualLink',
         type: 'input',
-        input: {
-          type: 'email',
-          placeholder: 'e.g. jane.smith@university.edu',
-        },
         required: false,
+        input: {
+          type: 'text',
+          placeholder: 'e.g. https://meet.com/session123',
+        },
+      },
+      {
+        title: 'Max Student Capacity',
+        name: 'maxStudents',
+        type: 'input',
+        required: false,
+        input: {
+          type: 'number',
+          placeholder: 'e.g. 30',
+        },
+      },
+      {
+        title: 'Class Location (Lat, Lng)',
+        name: 'classLocation',
+        type: 'location',
+        required: true,
       },
     ],
   },
   {
     id: 4,
-    title: 'Location',
+    title: 'Class Days & Time',
     selectOptions: [
       {
-        title: 'Classroom / Venue',
-        type: 'input',
-        input: {
-          type: 'text',
-          placeholder: 'e.g. Science Building, Room 101',
-        },
+        title: 'Class Days & Times',
+        name: 'classDaysTimes',
+        type: 'dayTimeChoice',
         required: true,
       },
     ],
   },
   {
     id: 5,
-    title: 'Notes / Extras',
+    title: 'Schedule Settings',
     selectOptions: [
       {
-        title: 'Additional Notes',
-        type: 'textarea',
-        input: {
-          placeholder: 'e.g. Bring lab coat every Friday',
-        },
+        title: 'Repeat Pattern',
+        name: 'repeat',
+        type: 'select',
+        options: ['weekly', 'bi-weekly', 'monthly'],
         required: false,
       },
       {
-        title: 'Reminder Setting',
+        title: 'Reminder Before Class',
+        name: 'notificationLeadTime',
         type: 'select',
         options: [
           { text: 'None', value: '' },
-          { text: '10 min before', value: '0H10M' },
-          { text: '1 hr before', value: '1H0M' },
-          { text: '1 day before', value: '1D' },
+          { text: '10 min before', value: 10 },
+          { text: '30 min before', value: 30 },
+          { text: '1 hr before', value: 60 },
         ],
         required: false,
       },
       {
-        title: 'Schedule Color Tag',
+        title: 'Allow Attendance Marking',
+        name: 'allowAttendanceMarking',
         type: 'select',
-        options: ['Red', 'Blue', 'Green', 'Yellow', 'Purple'],
+        options: ['Yes', 'No'],
+        required: false,
+      },
+      {
+        title: 'Auto-End Class After Duration',
+        name: 'autoEnd',
+        type: 'select',
+        options: ['Yes', 'No'],
+        required: false,
+      },
+      {
+        title: 'Schedule Active',
+        name: 'isActive',
+        type: 'select',
+        options: ['Yes', 'No'],
+        required: false,
+      },
+    ],
+  },
+  {
+    id: 6,
+    title: 'Additional Information',
+    selectOptions: [
+      {
+        title: 'Additional Notes',
+        name: 'notes',
+        type: 'textarea',
+        input: {
+          placeholder: 'E.g. bring lab coat for practicals...',
+        },
+        required: false,
+      },
+    ],
+  },
+  {
+    id: 7,
+    title: 'Media Section',
+    selectOptions: [
+      {
+        title: 'Allow Student Media Uploads',
+        name: 'allowMediaUploads',
+        type: 'choice',
+        choices: ['Yes', 'No'],
+        required: false,
+      },
+      {
+        title: 'Require Approval for Media Uploads',
+        name: 'mediaNeedsApproval',
+        type: 'choice',
+        choices: ['Yes', 'No'],
         required: false,
       },
     ],
@@ -185,3 +288,36 @@ export const others = {
     },
   ],
 };
+export const userCourses = [
+  {
+    courseCode: 'BCH301',
+    courseTitle: 'Analytical Biochemistry',
+    lecturerName: 'Dr. Grace Okoro',
+    department: 'Biochemistry',
+    level: '100L',
+    faculty: 'Sciences',
+  },
+  {
+    courseCode: 'BCH202',
+    courseTitle: 'Metabolism II',
+    lecturerName: 'Prof. Adewale Benson',
+    department: 'Biochemistry',
+    level: '100L',
+    faculty: 'Sciences',
+  },
+  {
+    courseCode: 'BCH201',
+    courseTitle: 'Intro to Biochemistry',
+    lecturerName: 'Prof. Irondi Wale',
+    department: 'Biochemistry',
+    level: '100L',
+    faculty: 'Sciences',
+  },
+  {
+    courseCode: 'BCH202',
+    courseTitle: 'Metabolism II',
+    lecturerName: 'Prof. Adewale Benson',
+    faculty: 'Sciences',
+    level: '100L',
+  },
+];

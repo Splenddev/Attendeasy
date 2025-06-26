@@ -1,0 +1,59 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.dayButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.dayButton {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dayButton:hover {
+  background-color: #f3f3f3;
+}
+
+.active {
+  background-color: #25aff3;
+  color: white;
+  border-color: #25aff3;
+}
+
+.timeInputs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.timeRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dayLabel {
+  width: 100px;
+  font-weight: 500;
+}
+
+.timeInput {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.to {
+  font-weight: 500;
+}

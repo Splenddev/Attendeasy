@@ -1,0 +1,170 @@
+/* LocationModal.module.css */
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.modalBox {
+  background: white;
+  width: 95%;
+  max-width: 600px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  animation: slideUp 0.3s ease;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #25aff3;
+  color: white;
+  padding: 1rem;
+  font-size: 1.1rem;
+}
+
+.closeIcon {
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.mapWrapper {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.searchRow {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.searchInput {
+  flex: 1;
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.geoBtn {
+  padding: 0.55rem;
+  border-radius: 50%;
+  background: #25aff3;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.resultsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 150px;
+  overflow-y: auto;
+  background: #f9f9f9;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.resultsList li {
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.resultsList li:hover {
+  background: #e0f4ff;
+}
+
+.popularRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  padding: 0.4rem 0.8rem;
+  background: #e7f6fd;
+  border: 1px solid #25aff3;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.chip:hover {
+  background: #d4effc;
+}
+
+.actionRow {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.confirmBtn {
+  padding: 0.7rem 1.2rem;
+  background-color: #25aff3;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.confirmBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.spinnerBox {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.triggerBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.1rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #25aff3;
+  background: #f0faff;
+  color: #25aff3;
+  cursor: pointer;
+  margin: 0.5rem 0;
+  font-weight: 500;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

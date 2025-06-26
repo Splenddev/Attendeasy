@@ -1,6 +1,6 @@
 .option-select {
   display: grid;
-  grid-template-columns: 90px 2px 1fr;
+  grid-template-columns: 95px 2px 1fr;
   background: #fff;
   gap: 5px;
   border-bottom: 1px solid var(--light-blue-300);

@@ -1,151 +1,265 @@
-// import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-// import { useAuth } from '../../../context/AuthContext';
-// import { useEffect } from 'react';
-// import { schedule } from './assets';
-// import Schedule from './Schedule/Schedule';
-// import { FaCrown, FaPlus } from 'react-icons/fa';
-// import './ClassSchedule.css';
-// import button from '../../../components/Button/Button';
-// const ClassSchedule = () => {
-//   const navigate = useNavigate();
-//   const location = useLocation();
-//   const { user, setNavTitle } = useAuth();
-//   useEffect(() => {
-//     setNavTitle('Class Schedules');
-//   }, [setNavTitle]);
-//   return (
-//     <div className="class-schedule">
-//       <div className="cap">
-//         <h2>
-//           <FaCrown />
-//           Welcome, {user.name}
-//         </h2>
-//         <NavLink to={'create'}>
-//           {button.multiple({
-//             icon: FaPlus,
-//             name: 'create-schedule-btn',
-//             element: ' New Schedule',
-//           })}
-//         </NavLink>
-//       </div>
-//       <div className="class-schedule-container">
-//         <Schedule
-//           data={schedule}
-//           isClassRep={user.role === 'class-rep'}
-//         />
-//       </div>
-//       <p
-//         onClick={() => {
-//           navigate(location.pathname + '/create');
-//         }}>
-//         Class Schedule
-//       </p>
-//       <p>{location.pathname}</p>
-//     </div>
-//   );
-// };
-
-// export default ClassSchedule;
-
-import React from 'react';
+import { useState, useEffect } from 'react';
 import {
   FaChalkboardTeacher,
-  FaClock,
-  FaMapMarkerAlt,
   FaBookOpen,
+  FaCalendarAlt,
+  FaStopwatch20,
+  FaStopwatch,
+  FaCalendarPlus,
 } from 'react-icons/fa';
-import { FiFileText, FiVideo, FiImage, FiMusic } from 'react-icons/fi';
-import './ClassSchedule.css';
-import { scheduleJson } from './assets';
+import { FiFileText } from 'react-icons/fi';
+import styles from './ClassSchedule.module.css';
 
-const fileTypeIcons = {
-  doc: <FiFileText />,
-  video: <FiVideo />,
-  image: <FiImage />,
-  audio: <FiMusic />,
-};
+const weekdays = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday',
+];
 
-const ScheduleCard = ({ schedule }) => {
-  return (
-    <div className="schedule-card">
-      <div className="header">
-        <h2>
-          {schedule.courseTitle} ({schedule.courseCode})
-        </h2>
-        <span className="repeat">{schedule.repeat.toUpperCase()}</span>
+const OverviewPanel = ({
+  totalCourses,
+  mediaCount,
+  totalLecturers,
+  creatorId,
+  countdown,
+}) => (
+  <div className={styles.overviewPanel}>
+    <h2>Schedule Overview</h2>
+    <div className={styles.overviewStats}>
+      <div>
+        <FaBookOpen /> <strong>{totalCourses}</strong> Courses
       </div>
-
-      <div className="info">
-        <p>
-          <FaChalkboardTeacher /> <strong>{schedule.lecturerName}</strong>
-        </p>
-        <p>
-          <FaMapMarkerAlt /> {schedule.classroomVenue}
-        </p>
-        <p>
-          <FaBookOpen /> {schedule.level} Level - {schedule.department},{' '}
-          {schedule.faculty}
-        </p>
+      <div>
+        <FiFileText /> <strong>{mediaCount}</strong> Media Files
       </div>
-
-      <div className="timings">
-        {schedule.classDaysTimes.map(({ day, timing }) => (
-          <div
-            key={day}
-            className="time-slot">
-            <FaClock className="clock-icon" />
-            <span>
-              <strong>{day}:</strong> {timing.startTime} – {timing.endTime}
-            </span>
-          </div>
-        ))}
+      <div>
+        <FaChalkboardTeacher /> <strong>{totalLecturers}</strong> Lecturers
       </div>
-
-      <div className="media-section">
-        <h4>Attached Media</h4>
-        <ul className="media-list">
-          {schedule.media.map((media) => (
-            <li
-              key={media.id}
-              className={`media-item ${
-                media.approved ? 'approved' : 'pending'
-              }`}>
-              {fileTypeIcons[media.fileType]} <span>{media.name}</span>
-              <small>
-                {media.dateAdded} | {media.timeAdded}
-              </small>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="footer">
-        <p>
-          Attendance Marking:{' '}
-          <strong>
-            {schedule.allowAttendanceMarking ? 'Enabled' : 'Disabled'}
-          </strong>
-        </p>
-        <p>
-          Notification Lead Time:{' '}
-          <strong>{schedule.notificationLeadTime} mins</strong>
-        </p>
+      <div>
+        <FaCalendarAlt /> Created by: <code>{creatorId}</code>
       </div>
     </div>
-  );
+    {countdown && (
+      <p className={styles.countdown}>
+        <FaStopwatch /> Next class starts in: <strong>{countdown}</strong>
+      </p>
+    )}
+  </div>
+);
+
+const formatTimeDiff = (target) => {
+  const now = new Date();
+  const diff = target - now;
+
+  if (diff <= 0) return null;
+
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+  let result = '';
+  if (hours > 0) result += `${hours}h `;
+  if (minutes > 0 || hours > 0) result += `${minutes}m `;
+  result += `${seconds}s`;
+
+  return result.trim();
 };
 
+const getDayStatuses = (data) => {
+  const now = new Date();
+  const statuses = {};
+
+  weekdays.forEach((day) => {
+    let upcoming = 0;
+    let active = 0;
+
+    data.forEach((schedule) => {
+      schedule.classDaysTimes.forEach((t) => {
+        if (t.day === day) {
+          const [hStart, mStart] = t.timing.startTime.split(':').map(Number);
+          const [hEnd, mEnd] = t.timing.endTime.split(':').map(Number);
+
+          const start = new Date();
+          start.setHours(hStart, mStart, 0, 0);
+          const end = new Date();
+          end.setHours(hEnd, mEnd, 0, 0);
+
+          if (now < start) upcoming += 1;
+          else if (now >= start && now <= end) active += 1;
+        }
+      });
+    });
+
+    statuses[day] = { upcoming, active };
+  });
+
+  return statuses;
+};
+
+import { scheduleJson } from './assets';
+import { useAuth } from '../../../context/AuthContext';
+import ScheduleCard from './components/ScheduleCard/ScheduleCard';
+import { AlertModal } from '../../../components/Modals';
+import button from '../../../components/Button/Button';
+import { MdAddTask } from 'react-icons/md';
+import { routesNavigate } from '../../../utils/helpers';
+import { useNavigate } from 'react-router-dom';
+
 const ClassSchedule = () => {
+  const { user, setNavTitle } = useAuth();
+  useEffect(() => {
+    setNavTitle('Class Schedules');
+  }, [setNavTitle]);
+  const scheduleData = scheduleJson;
+
+  const weekday = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+
+  const navigate = useNavigate();
+
+  const [selectedDay, setSelectedDay] = useState(weekday);
+  const [showModal, setShowModal] = useState(true);
+  const [countdown, setCountdown] = useState(null);
+  const [dayStatuses, setDayStatuses] = useState(() =>
+    getDayStatuses(scheduleData)
+  );
+
+  // Update countdown for next class today
+  useEffect(() => {
+    const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+    const now = new Date();
+
+    const upcoming = scheduleData
+      .flatMap((s) =>
+        s.classDaysTimes
+          .filter((t) => t.day === today)
+          .map((t) => {
+            const [h, m] = t.timing.startTime.split(':').map(Number);
+            const classTime = new Date();
+            classTime.setHours(h, m, 0, 0);
+            return { courseCode: s.courseCode, time: classTime };
+          })
+      )
+      .filter((item) => item.time > now)
+      .sort((a, b) => a.time - b.time);
+
+    if (upcoming.length > 0) {
+      const timer = setInterval(() => {
+        const diff = formatTimeDiff(upcoming[0].time);
+        if (diff) setCountdown(diff);
+        else setCountdown(null);
+      }, 1000);
+
+      return () => clearInterval(timer);
+    } else {
+      setCountdown(null);
+    }
+  }, [scheduleData]);
+
+  // Real-time update of badge statuses every minute
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDayStatuses(getDayStatuses(scheduleData));
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, [scheduleData]);
+
+  const filteredSchedules = scheduleData.filter((s) =>
+    s.classDaysTimes.some((t) => t.day === selectedDay)
+  );
+
+  const dayScheduleDetails = scheduleData.flatMap((schedule) =>
+    schedule.classDaysTimes
+      .filter(({ day }) => day === selectedDay)
+      .map(({ timing }) => ({
+        courseCode: schedule.courseCode,
+        startTime: timing.startTime,
+      }))
+  );
+
+  const totalCourses = scheduleData.length;
+  const mediaCount = scheduleData.reduce(
+    (acc, cur) => acc + cur.media.length,
+    0
+  );
+  const uniqueLecturers = [...new Set(scheduleData.map((s) => s.lecturerName))];
+  const creatorId = scheduleData[0]?.createdBy || 'N/A';
+
   return (
-    <div className="schedule-page">
-      <h1>Weekly Class Schedule</h1>
-      <div className="schedule-grid">
-        {scheduleJson.map((schedule) => (
-          <ScheduleCard
-            key={`${schedule.courseCode}-${schedule.lecturerName}`}
-            schedule={schedule}
-          />
-        ))}
+    <div className={styles.schedulePage}>
+      {showModal && (
+        <AlertModal
+          todaySchedules={dayScheduleDetails}
+          onClose={() => setShowModal(false)}
+        />
+      )}
+
+      <OverviewPanel
+        totalCourses={totalCourses}
+        mediaCount={mediaCount}
+        totalLecturers={uniqueLecturers.length}
+        creatorId={creatorId}
+        countdown={countdown}
+      />
+
+      <div className={styles.daySelector}>
+        {weekdays.map((day) => {
+          const { upcoming, active } = dayStatuses[day] || {
+            upcoming: 0,
+            active: 0,
+          };
+          return (
+            <button
+              key={day}
+              className={day === selectedDay ? styles.activeDayBtn : ''}
+              onClick={() => setSelectedDay(day)}>
+              {day}
+              {active > 0 ? (
+                <span
+                  className={styles.activeBadge}
+                  title="Class ongoing">
+                  Now
+                </span>
+              ) : upcoming > 0 && day === weekday ? (
+                <span
+                  className={styles.badge}
+                  title="Upcoming classes">
+                  {upcoming}
+                </span>
+              ) : null}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className={styles.dayGroup}>
+        <div className={styles.dayHeading}>
+          <h2>{selectedDay}</h2>
+          {button.multiple({
+            element: 'Add',
+            icon: FaCalendarPlus,
+            func: () => navigate('create'),
+          })}
+        </div>
+        <div className={styles.scheduleGrid}>
+          {filteredSchedules.length > 0 ? (
+            filteredSchedules.map((schedule) => (
+              <ScheduleCard
+                key={`${schedule.courseCode}-${schedule.lecturerName}`}
+                schedule={schedule}
+                user={user}
+              />
+            ))
+          ) : (
+            <p style={{ padding: '1rem', color: '#64748b' }}>
+              No schedules for this day.
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

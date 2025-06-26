@@ -1,0 +1,162 @@
+/* ============ PAGE ============ */
+.schedulePage {
+  padding: 1.2rem;
+  background-color: #f8fafc;
+  color: #1e293b;
+}
+
+.schedulePage h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.scheduleGrid {
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+/* ============ OVERVIEW ============ */
+.overviewPanel {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.overviewPanel h2 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+
+.overviewStats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.85rem;
+  color: #334155;
+  div {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+}
+
+.countdown {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #0f766e;
+}
+
+/* ============ DAY SELECTOR ============ */
+.daySelector {
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.daySelector button {
+  position: relative;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  border-radius: 8px;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+
+.daySelector button.activeDayBtn {
+  background-color: var(--light-blue-200);
+  border-color: #25aff3;
+  color: #444;
+}
+
+.daySelector button:hover {
+  background: #f5f6f7;
+}
+
+/* ============ BADGE ============ */
+.badge {
+  background-color: #ef4444;
+  color: white;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  position: absolute;
+  top: -6px;
+  right: -6px;
+}
+
+.dayGroup {
+  margin-bottom: 2rem;
+}
+
+.dayHeading {
+  margin-bottom: 1rem;
+  padding-left: 0.6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 4px solid #25aff3;
+}
+
+.dayHeading h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1d4ed8;
+}
+.dayHeading button {
+  padding: 0.6rem 1.4rem;
+  border-radius: 30px;
+  background: var(--main-color);
+  color: #fff;
+}
+
+.badge {
+  background-color: #ef4444;
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  position: absolute;
+  top: -6px;
+  right: -6px;
+}
+
+.activeBadge {
+  background-color: #22c55e; /* green */
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  position: absolute;
+  top: -6px;
+  right: -6px;
+}
+
+.activeDayBtn {
+  background-color: #25aff3;
+  border-color: #25aff3;
+  color: #fff;
+}
+
+/* ============ FOOTER ============ */
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 600px) {
+  .overviewStats {
+    flex-direction: column;
+  }
+
+  .badge {
+    top: 0;
+    right: 0;
+  }
+}
