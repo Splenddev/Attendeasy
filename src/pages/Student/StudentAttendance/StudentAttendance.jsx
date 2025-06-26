@@ -10,7 +10,7 @@ import AttendanceHistory from './AttendanceHistory';
 import MarkEntry from '../../../components/Modals/MarkEntry/MarkEntry';
 import { useState } from 'react';
 import AttendanceCharts from './AttendanceCharts';
-import { schedule } from '../../ClassRep/ClassSchedule/assets';
+import { scheduleJson } from '../../ClassRep/ClassSchedule/assets';
 import UpcomingSchedule from './UpcomingSchedule';
 import { generateSmartTip } from '../../../utils/helpers';
 
@@ -40,7 +40,7 @@ const StudentAttendance = () => {
 
   const smartTip = generateSmartTip(history);
 
-  const todays = getTodaySchedule(schedule);
+  const todays = getTodaySchedule(scheduleJson);
   console.log(todays);
 
   return (
@@ -70,7 +70,7 @@ const StudentAttendance = () => {
           />
         </div>
       )}
-      <UpcomingSchedule schedules={getTodaySchedule(schedule)} />
+      <UpcomingSchedule schedules={getTodaySchedule(scheduleJson)} />
     </div>
   );
 };
