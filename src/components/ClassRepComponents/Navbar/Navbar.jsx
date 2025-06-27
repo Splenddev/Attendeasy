@@ -84,7 +84,7 @@ const Navbar = ({ dropdownAssets = [] }) => {
                 className="dropdown-menus">
                 {[
                   { name: 'home', path: `/${user.role}`, icon: FaHome },
-                  { name: 'my profile', path: '#', icon: FaUserEdit },
+                  { name: 'my profile', path: '/profile', icon: FaUserEdit },
                 ].map(({ name, icon, path }) => {
                   const Icon = icon;
                   return (

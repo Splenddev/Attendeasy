@@ -21,6 +21,7 @@ import { CreateSchedule, Login, Notifications, Register } from '../pages';
 import MarkAttendance from '../pages/Student/MarkAttendance/MarkAttendance';
 import InitialRedirect from '../components/InitialRedirect/InitialRedirect';
 import GroupManagementPage from '../pages/ClassManagement/GroupManagementPage';
+import UserProfilePage from '../pages/UserProfilePage/UserProfilePage';
 
 export const router = createBrowserRouter([
   {
@@ -197,6 +198,14 @@ export const router = createBrowserRouter([
           { path: 'login', element: <Login /> },
           { path: 'register', element: <Register /> },
         ],
+      },
+      {
+        path: 'profile',
+        element: (
+          <Suspense fallback={<Loader />}>
+            <UserProfilePage />
+          </Suspense>
+        ),
       },
       {
         path: 'unauthorized',

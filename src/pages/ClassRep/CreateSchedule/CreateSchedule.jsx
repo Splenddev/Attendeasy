@@ -15,23 +15,20 @@ import { useCreateSchedule } from '../../../hooks/useCreateSchedule';
 
 const CreateSchedule = () => {
   /* ───────────────────  set page header  ─────────────────── */
-  const { setNavTitle } = useAuth();
+  const { setNavTitle, user } = useAuth();
   useEffect(() => setNavTitle('Create Schedules'), [setNavTitle]);
 
-  /* ───────────────────  form setup  ──────────────────────── */
-  const { methods } = useScheduleForm(); // provides RHF methods & validation
+  const { methods } = useScheduleForm();
   const { handleSubmit, setValue, reset } = methods;
 
-  /* ───────────────────  schedule-creator hook  ───────────── */
   const { handleCreateSchedule } = useCreateSchedule();
 
-  /* ───────────────────  UI state  ────────────────────────── */
   const [courseSelected, setCourseSelected] = useState(false);
 
-  /* ───────────────────  helper fns  ──────────────────────── */
   const onSubmit = async (data) => {
     await handleCreateSchedule({
       data,
+      groupId: user.group,
       onSuccess: () => {
         reset(); // clear form
         setCourseSelected(false);

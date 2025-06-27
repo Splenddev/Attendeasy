@@ -1,11 +1,11 @@
 import Schedule from '../../ClassRep/ClassSchedule/Schedule/Schedule';
-import { schedule } from '../../ClassRep/ClassSchedule/assets';
+import { scheduleJson } from '../../ClassRep/ClassSchedule/assets';
 
 const StudentSchedules = () => {
   return (
     <>
       <Schedule
-        data={schedule}
+        data={scheduleJson}
         isClassRep={false}
       />
     </>

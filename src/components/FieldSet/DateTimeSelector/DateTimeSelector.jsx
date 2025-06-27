@@ -1,5 +1,7 @@
-import './DateTimeSelector.css';
+// DateTimeSelector.jsx
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import { MdCheckCircle, MdOutlineCheckCircleOutline } from 'react-icons/md';
+import './DateTimeSelector.css';
 
 const daysOfWeek = [
   'Monday',
@@ -10,27 +12,44 @@ const daysOfWeek = [
   'Saturday',
 ];
 
-const DateTimeSelector = ({ name, watch, setValue }) => {
+const DateTimeSelector = ({ name }) => {
+  const { control, watch, setValue } = useFormContext();
+  const fieldArray = useFieldArray({ control, name });
   const selectedDays = watch(name) || [];
 
+  // Check if a day is already selected
+  const isDaySelected = (day) =>
+    selectedDays.some((entry) => entry.day === day);
+
+  // Get start and end time for a day
+  const getTiming = (day) =>
+    selectedDays.find((entry) => entry.day === day)?.timing || {
+      startTime: '',
+      endTime: '',
+    };
+
+  // Toggle day ON/OFF
   const toggleDay = (day) => {
-    const updated = [...selectedDays];
-    const index = updated.findIndex((d) => d.day === day);
+    const existingIndex = selectedDays.findIndex((entry) => entry.day === day);
 
-    if (index !== -1) {
-      updated.splice(index, 1);
+    if (existingIndex !== -1) {
+      // remove by index
+      fieldArray.remove(existingIndex);
     } else {
-      updated.push({ day, timing: { start: '', end: '' } });
+      // append new
+      fieldArray.append({
+        day,
+        timing: { startTime: '', endTime: '' },
+      });
     }
-
-    setValue(name, updated);
   };
 
+  // Update timing for a selected day
   const updateTime = (day, field, value) => {
-    const updated = [...selectedDays];
-    const index = updated.findIndex((d) => d.day === day);
+    const index = selectedDays.findIndex((entry) => entry.day === day);
     if (index === -1) return;
 
+    const updated = [...selectedDays];
     updated[index] = {
       ...updated[index],
       timing: {
@@ -38,25 +57,19 @@ const DateTimeSelector = ({ name, watch, setValue }) => {
         [field]: value,
       },
     };
-
-    setValue(name, updated);
+    setValue(name, updated, { shouldValidate: true, shouldDirty: true });
   };
-
-  const isDaySelected = (day) => selectedDays.some((d) => d.day === day);
-
-  const getTimingForDay = (day) =>
-    selectedDays.find((d) => d.day === day)?.timing || { start: '', end: '' };
 
   return (
     <div className="day-time-selector">
       {daysOfWeek.map((day) => {
         const selected = isDaySelected(day);
-        const timing = getTimingForDay(day);
+        const timing = getTiming(day);
 
         return (
           <div
-            className="day-block"
-            key={day}>
+            key={day}
+            className="day-block">
             <div
               className="day-label"
               onClick={() => toggleDay(day)}>
@@ -68,16 +81,14 @@ const DateTimeSelector = ({ name, watch, setValue }) => {
               <div className="time-inputs">
                 <input
                   type="time"
-                  value={timing.start}
-                  onChange={(e) => updateTime(day, 'start', e.target.value)}
-                  placeholder="Start Time"
+                  value={timing.startTime}
+                  onChange={(e) => updateTime(day, 'startTime', e.target.value)}
                   required
                 />
                 <input
                   type="time"
-                  value={timing.end}
-                  onChange={(e) => updateTime(day, 'end', e.target.value)}
-                  placeholder="End Time"
+                  value={timing.endTime}
+                  onChange={(e) => updateTime(day, 'endTime', e.target.value)}
                   required
                 />
               </div>

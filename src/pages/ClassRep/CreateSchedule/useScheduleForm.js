@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 
 const useScheduleForm = () => {
-  const methods = useForm();
+  const methods = useForm({ defaultValues: { classDaysTimes: [] } });
 
   const { handleSubmit } = methods;
 

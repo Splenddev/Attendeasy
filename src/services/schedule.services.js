@@ -1,8 +1,8 @@
 // services/scheduleService.js
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:5000/app/schedule/';
-// const API_BASE = 'https://vigilo-server.onrender.com/app/schedule/';
+// const API_BASE = 'http://localhost:5000/app/schedule/';
+const API_BASE = 'https://vigilo-server.onrender.com/app/schedule/';
 
 export const createSchedule = async (scheduleData) => {
   try {
@@ -15,4 +15,11 @@ export const createSchedule = async (scheduleData) => {
       error?.response?.data?.message || 'Schedule creation failed';
     throw new Error(message);
   }
+};
+
+export const fetchSchedulesByGroup = async (groupId) => {
+  const res = await axios.get(`${API_BASE}${groupId}`, {
+    withCredentials: true, // for cookie auth
+  });
+  return res.data;
 };

@@ -8,10 +8,10 @@ import { useFormContext } from 'react-hook-form';
 import { onChoiceChange, toCamelCase } from '../../utils/helpers';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import DayTimeSelector from './DateTimeSelector/DateTimeSelector';
 import * as Slider from '@radix-ui/react-slider';
 import { variants } from '../../utils/contants';
 import LocationModal from '../LocationModal/LocationModal';
+import DateTimeSelector from './DateTimeSelector/DateTimeSelector';
 
 const FieldSet = ({
   options = [],
@@ -181,12 +181,30 @@ const FieldSet = ({
 
       {/* Day/Time Selector */}
       {type === 'dayTimeChoice' && (
-        <DayTimeSelector
-          name={name}
-          register={register}
-          watch={watch}
-          setValue={setValue}
-        />
+        <>
+          <DateTimeSelector name={name} />
+          {/* Hidden input for RHF to track field and allow validation */}
+          <input
+            type="hidden"
+            {...register(name, {
+              required: required ? `${title} is required` : false,
+              validate: (value) => {
+                if (!Array.isArray(value) || value.length === 0) {
+                  return 'Select at least one day';
+                }
+                for (const { timing } of value) {
+                  if (!timing.startTime || !timing.endTime) {
+                    return 'Both start and end times are required';
+                  }
+                  if (timing.startTime >= timing.endTime) {
+                    return 'Start time must be before end time';
+                  }
+                }
+                return true;
+              },
+            })}
+          />
+        </>
       )}
 
       {type === 'location' && <LocationModal fieldName={name} />}

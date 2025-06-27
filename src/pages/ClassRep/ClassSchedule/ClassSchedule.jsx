@@ -3,13 +3,20 @@ import {
   FaChalkboardTeacher,
   FaBookOpen,
   FaCalendarAlt,
-  FaStopwatch20,
   FaStopwatch,
   FaCalendarPlus,
   FaCalendarCheck,
 } from 'react-icons/fa';
 import { FiFileText } from 'react-icons/fi';
 import styles from './ClassSchedule.module.css';
+import { useNavigate } from 'react-router-dom';
+
+import { useAuth } from '../../../context/AuthContext';
+import { useFetchSchedules } from '../../../hooks/useFetchSchedules';
+import ScheduleCard from './components/ScheduleCard/ScheduleCard';
+import { AlertModal } from '../../../components/Modals';
+import button from '../../../components/Button/Button';
+import Spinner from '../../../components/Loader/Spinner/Spinner';
 
 const weekdays = [
   'Monday',
@@ -55,7 +62,6 @@ const OverviewPanel = ({
 const formatTimeDiff = (target) => {
   const now = new Date();
   const diff = target - now;
-
   if (diff <= 0) return null;
 
   const hours = Math.floor(diff / (1000 * 60 * 60));
@@ -70,7 +76,7 @@ const formatTimeDiff = (target) => {
   return result.trim();
 };
 
-const getDayStatuses = (data) => {
+const getDayStatuses = (data = []) => {
   const now = new Date();
   const statuses = {};
 
@@ -79,7 +85,7 @@ const getDayStatuses = (data) => {
     let active = 0;
 
     data.forEach((schedule) => {
-      schedule.classDaysTimes.forEach((t) => {
+      schedule.classDaysTimes?.forEach((t) => {
         if (t.day === day) {
           const [hStart, mStart] = t.timing.startTime.split(':').map(Number);
           const [hEnd, mEnd] = t.timing.endTime.split(':').map(Number);
@@ -101,48 +107,39 @@ const getDayStatuses = (data) => {
   return statuses;
 };
 
-import { scheduleJson } from './assets';
-import { useAuth } from '../../../context/AuthContext';
-import ScheduleCard from './components/ScheduleCard/ScheduleCard';
-import { AlertModal } from '../../../components/Modals';
-import button from '../../../components/Button/Button';
-import { MdAddTask, MdCheck } from 'react-icons/md';
-import { routesNavigate } from '../../../utils/helpers';
-import { useNavigate } from 'react-router-dom';
-
 const ClassSchedule = () => {
   const { user, setNavTitle } = useAuth();
-  useEffect(() => {
-    setNavTitle('Class Schedules');
-  }, [setNavTitle]);
-  const scheduleData = scheduleJson;
-
-  const weekday = new Date().toLocaleDateString('en-US', { weekday: 'long' });
-
   const navigate = useNavigate();
 
+  const weekday = new Date().toLocaleDateString('en-US', { weekday: 'long' });
   const [selectedDay, setSelectedDay] = useState(weekday);
   const [showModal, setShowModal] = useState(true);
   const [countdown, setCountdown] = useState(null);
-  const [dayStatuses, setDayStatuses] = useState(() =>
-    getDayStatuses(scheduleData)
-  );
+  const [dayStatuses, setDayStatuses] = useState({});
 
-  // Update countdown for next class today
+  useEffect(() => {
+    setNavTitle('Class Schedules');
+  }, [setNavTitle]);
+
+  const groupId = user?.group;
+  const { schedules: scheduleData = [], loading } = useFetchSchedules(groupId);
+
+  // Countdown for today
   useEffect(() => {
     const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
     const now = new Date();
 
-    const upcoming = scheduleData
-      .flatMap((s) =>
-        s.classDaysTimes
-          .filter((t) => t.day === today)
-          .map((t) => {
-            const [h, m] = t.timing.startTime.split(':').map(Number);
-            const classTime = new Date();
-            classTime.setHours(h, m, 0, 0);
-            return { courseCode: s.courseCode, time: classTime };
-          })
+    const upcoming = (scheduleData || [])
+      .flatMap(
+        (s) =>
+          s.classDaysTimes
+            ?.filter((t) => t.day === today)
+            .map((t) => {
+              const [h, m] = t.timing.startTime.split(':').map(Number);
+              const classTime = new Date();
+              classTime.setHours(h, m, 0, 0);
+              return { courseCode: s.courseCode, time: classTime };
+            }) || []
       )
       .filter((item) => item.time > now)
       .sort((a, b) => a.time - b.time);
@@ -153,43 +150,62 @@ const ClassSchedule = () => {
         if (diff) setCountdown(diff);
         else setCountdown(null);
       }, 1000);
-
       return () => clearInterval(timer);
     } else {
       setCountdown(null);
     }
   }, [scheduleData]);
 
-  // Real-time update of badge statuses every minute
+  // Update badge statuses every minute
+  useEffect(() => {
+    if (scheduleData?.length) {
+      setDayStatuses(getDayStatuses(scheduleData));
+    }
+  }, [scheduleData]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setDayStatuses(getDayStatuses(scheduleData));
     }, 60000);
-
     return () => clearInterval(interval);
   }, [scheduleData]);
 
-  const filteredSchedules = scheduleData.filter((s) =>
-    s.classDaysTimes.some((t) => t.day === selectedDay)
+  const filteredSchedules = (scheduleData || []).filter((s) =>
+    s.classDaysTimes?.some((t) => t.day === selectedDay)
   );
 
-  const dayScheduleDetails = scheduleData.flatMap((schedule) =>
-    schedule.classDaysTimes
-      .filter(({ day }) => day === selectedDay)
-      .map(({ timing }) => ({
-        courseCode: schedule.courseCode,
-        startTime: timing.startTime,
-        endTime: timing.endTime,
-      }))
+  console.log(filteredSchedules);
+  console.log(scheduleData);
+
+  const dayScheduleDetails = (scheduleData || []).flatMap(
+    (schedule) =>
+      schedule.classDaysTimes
+        ?.filter(({ day }) => day === selectedDay)
+        .map(({ timing }) => ({
+          courseCode: schedule.courseCode,
+          startTime: timing.startTime,
+          endTime: timing.endTime,
+        })) || []
   );
 
   const totalCourses = scheduleData.length;
-  const mediaCount = scheduleData.reduce(
-    (acc, cur) => acc + cur.media.length,
+  const mediaCount = (scheduleData || []).reduce(
+    (acc, cur) => acc + (cur.media?.length || 0),
     0
   );
   const uniqueLecturers = [...new Set(scheduleData.map((s) => s.lecturerName))];
   const creatorId = scheduleData[0]?.createdBy || 'N/A';
+
+  if (loading) {
+    return (
+      <div className={styles.loadingWrapper}>
+        <Spinner
+          size="30px"
+          scale="2"
+        />
+      </div>
+    );
+  }
 
   return (
     <div className={styles.schedulePage}>

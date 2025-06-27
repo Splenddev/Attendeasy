@@ -91,7 +91,7 @@ export const parseTimeToday = (timeString) => {
 export const parseTimeToday2 = (timeString) => {
   const [hours, minutes] = timeString.split(':');
   const date = new Date();
-  date.setHours(Number(hours), Number(minutes));
+  date.setHours(Number(hours), Number(minutes), 0, 0);
   return date;
 };
 export const groupByDay = (schedule) => {
@@ -191,4 +191,16 @@ export const getTodaySchedule = (schedule) => {
       };
     })
     .filter(Boolean); // remove nulls
+};
+
+// utils/helpers.js
+export const timeDiffLabel = (mode, timeHHmm) => {
+  const [h, m] = timeHHmm.split(':').map(Number);
+  const target = new Date();
+  target.setHours(h, m, 0, 0);
+  const diff =
+    mode === 'untilStart' ? target - Date.now() : target - Date.now(); // you can adjust logic if needed
+
+  const mins = Math.max(0, Math.round(diff / 60000));
+  return `${mins}min`;
 };
