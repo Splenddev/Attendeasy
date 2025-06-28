@@ -7,7 +7,7 @@ import { FaArrowRight } from 'react-icons/fa';
 import button from '../../../../components/Button/Button';
 import '../styles/VerificationStep.css';
 import { toast } from 'react-toastify';
-import { verifyUserOtp } from '../../../../services/authService';
+import { verifyUserOtp } from '../../../../services/auth.service';
 
 const VerificationStep = ({
   title = 'Verify Your Email',

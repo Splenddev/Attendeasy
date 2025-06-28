@@ -1,10 +1,9 @@
-// ScheduleCard.jsx
+import { useState } from 'react';
 import {
   FaBookOpen,
   FaChalkboardTeacher,
   FaClock,
   FaMapMarkerAlt,
-  FaPenAlt,
   FaSyncAlt,
 } from 'react-icons/fa';
 import {
@@ -14,24 +13,27 @@ import {
   FiMusic,
   FiDownload,
   FiTrash,
-  FiEdit,
   FiEdit2,
 } from 'react-icons/fi';
 import { HiClock, HiDocumentAdd } from 'react-icons/hi';
-import { RiFileAddLine, RiPulseFill } from 'react-icons/ri';
 import {
   MdDoneAll,
   MdAutoDelete,
   MdMailOutline,
   MdOndemandVideo,
-  MdEditAttributes,
-  MdEditDocument,
   MdFlag,
-  MdPending,
 } from 'react-icons/md';
+import { RiPulseFill } from 'react-icons/ri';
 import { NavLink } from 'react-router-dom';
 import styles from './ScheduleCard.module.css';
-import { parseTimeToday2, timeDiffLabel } from '../../../../../utils/helpers';
+import {
+  formatTimeDiff,
+  parseTimeToday2,
+  timeDiffLabel,
+} from '../../../../../utils/helpers';
+import FileUploadModal from '../../../../../components/Modals/FileUploadModal/FileUploadModal';
+import { useScheduleMedia } from '../../../../../hooks/useScheduleMedia';
+import { ConfirmModal } from '../../../../../components/Modals';
 
 const TODAY = new Date().toLocaleDateString(undefined, { weekday: 'long' });
 
@@ -51,7 +53,19 @@ const fileTypeIcons = {
   audio: <FiMusic />,
 };
 
-const ScheduleCard = ({ user, schedule = {}, isToday = false }) => {
+const ScheduleCard = ({ user, schedule = {}, isToday = false, refresh }) => {
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [selectedMedia, setSelectedMedia] = useState(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
+  const { handleDelete, deleting } = useScheduleMedia({
+    scheduleId: schedule._id,
+    onDeleted: () => {
+      refresh?.();
+      setConfirmOpen(false);
+    },
+  });
+
   const todaySlots = (schedule.classDaysTimes || []).filter(
     (s) => s.day === TODAY
   );
@@ -66,7 +80,6 @@ const ScheduleCard = ({ user, schedule = {}, isToday = false }) => {
     ? 'completed'
     : null;
 
-  /** ─ helpers ─ */
   const metaChip = (label, icon) => (
     <span className={styles.metaChip}>
       {icon} {label}
@@ -75,12 +88,11 @@ const ScheduleCard = ({ user, schedule = {}, isToday = false }) => {
 
   return (
     <article
-      role="article"
       className={`${styles.scheduleCard} ${
         cardStatus ? styles[`card${cardStatus}`] : ''
       }`}
       title={`${schedule.courseTitle} (${schedule.courseCode})`}>
-      {/* ─ header ─ */}
+      {/* Header */}
       <header className={styles.header}>
         <div className={styles.title}>
           <h2>
@@ -89,12 +101,10 @@ const ScheduleCard = ({ user, schedule = {}, isToday = false }) => {
               {schedule.creditUnit} Unit
             </span>
           </h2>
-
           <div className={styles.action}>
             <FiEdit2 />
           </div>
         </div>
-
         <div className={styles.headerBadges}>
           {metaChip(
             schedule.classType,
@@ -111,10 +121,9 @@ const ScheduleCard = ({ user, schedule = {}, isToday = false }) => {
         </div>
       </header>
 
-      {/* ─ status banner (today only) ─ */}
+      {/* Status (if today) */}
       {cardStatus && isToday && (
         <div
-          aria-label={`Class ${cardStatus}`}
           className={`${styles.statusBanner} ${styles[`banner${cardStatus}`]}`}>
           {cardStatus === 'completed' && (
             <>
@@ -123,26 +132,28 @@ const ScheduleCard = ({ user, schedule = {}, isToday = false }) => {
           )}
           {cardStatus === 'ongoing' && (
             <>
-              <RiPulseFill />{' '}
+              <RiPulseFill />
               <span>
-                Ongoing - ends in{' '}
+                Ongoing – ends in{' '}
                 {timeDiffLabel('untilEnd', todaySlots[0].timing.endTime)}
               </span>
             </>
           )}
           {cardStatus === 'upcoming' && (
             <>
-              <HiClock />{' '}
+              <HiClock />
               <span>
                 Starts in{' '}
-                {timeDiffLabel('untilStart', todaySlots[0].timing.startTime)}
+                {formatTimeDiff(
+                  parseTimeToday2(todaySlots[0].timing.startTime)
+                )}
               </span>
             </>
           )}
         </div>
       )}
 
-      {/* ─ lecturer & venue ─ */}
+      {/* Info */}
       <section className={styles.info}>
         <p>
           <FaChalkboardTeacher /> <strong>{schedule.lecturerName}</strong>{' '}
@@ -161,7 +172,7 @@ const ScheduleCard = ({ user, schedule = {}, isToday = false }) => {
         </p>
       </section>
 
-      {/* ─ timings ─ */}
+      {/* Timings */}
       <h4 className={styles.timingsHeader}>Timings</h4>
       <div className={styles.timings}>
         {(schedule.classDaysTimes || []).map(({ day, timing }) => (
@@ -177,22 +188,28 @@ const ScheduleCard = ({ user, schedule = {}, isToday = false }) => {
         ))}
       </div>
 
-      {/* ─ media ─ */}
+      {/* Media Section */}
       <section className={styles.mediaSection}>
         <h4>
           Attached Media{' '}
-          {!schedule.mediaNeedsApproval && (
-            <>
-              <div className={styles.action}>
-                <span
-                  className={styles.approvalFlag}
-                  title="Needs approval">
-                  <MdFlag size={18} />
-                </span>
-                <HiDocumentAdd size={18} />
-              </div>
-            </>
-          )}
+          <div className={styles.action}>
+            {schedule.mediaNeedsApproval && (
+              <span
+                className={styles.approvalFlag}
+                title="Needs approval">
+                <MdFlag size={18} />
+              </span>
+            )}
+            <span className="center">
+              <HiDocumentAdd
+                size={18}
+                title="Upload Media"
+                className={styles.clickableIcon}
+                onClick={() => setShowUploadModal(true)}
+              />
+              Add
+            </span>
+          </div>
         </h4>
 
         {schedule.media.length === 0 ? (
@@ -217,17 +234,31 @@ const ScheduleCard = ({ user, schedule = {}, isToday = false }) => {
                   </small>
                 </div>
                 <div className={styles.actions}>
-                  <FiDownload />
-                  <FiTrash />
+                  <a
+                    href={m.src}
+                    download
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    <FiDownload />
+                  </a>
+                  <button
+                    className={styles.deleteBtn}
+                    onClick={() => {
+                      setSelectedMedia(m);
+                      setConfirmOpen(true);
+                    }}>
+                    <FiTrash />
+                  </button>
                 </div>
               </li>
             ))}
           </ul>
         )}
+
         <NavLink to={`/${user.role}/group-management`}>See all</NavLink>
       </section>
 
-      {/* ─ footer ─ */}
+      {/* Footer */}
       <footer className={styles.footer}>
         {metaChip(
           `Attendance: ${
@@ -241,6 +272,28 @@ const ScheduleCard = ({ user, schedule = {}, isToday = false }) => {
           <MdAutoDelete />
         )}
       </footer>
+
+      {/* Upload Modal */}
+      <FileUploadModal
+        isOpen={showUploadModal}
+        onClose={() => setShowUploadModal(false)}
+        scheduleId={schedule._id}
+        onSuccess={refresh}
+        defaultRequireApproval={schedule.mediaNeedsApproval}
+      />
+
+      {/* Confirm Delete */}
+      <ConfirmModal
+        isOpen={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        onConfirm={() => {
+          console.log(selectedMedia);
+          handleDelete(selectedMedia._id);
+        }}
+        loader={deleting}
+        actionText="Delete"
+        message={`This will delete "${selectedMedia?.name}" permanently.`}
+      />
     </article>
   );
 };

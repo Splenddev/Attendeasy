@@ -1,6 +1,6 @@
 // hooks/useCreateSchedule.js
 import { toast } from 'react-toastify';
-import { createSchedule } from '../services/schedule.services';
+import { createSchedule } from '../services/schedule.service';
 
 export const useCreateSchedule = () => {
   const handleCreateSchedule = async ({ data, groupId, onSuccess }) => {

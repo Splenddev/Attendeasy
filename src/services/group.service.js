@@ -1,8 +1,20 @@
 import axios from 'axios';
 
+// ../services/group.services.js
 // const API_BASE = 'http://localhost:5000/app/groups/';
 const API_BASE = 'https://vigilo-server.onrender.com/app/groups/';
 
+export const fetchGroupService = async (groupId) => {
+  try {
+    const res = await axios.get(`${API_BASE}find/${groupId}`, {
+      withCredentials: true,
+    });
+    return { data: res.data, message: res.data?.message || 'Success' };
+  } catch (err) {
+    console.error('Failed to fetch group:', err.message);
+    throw err.response?.data || { message: 'Failed to fetch group' };
+  }
+};
 export const createGroup = async (data) => {
   try {
     const response = await axios.post(`${API_BASE}create`, data, {
@@ -16,18 +28,6 @@ export const createGroup = async (data) => {
   } catch (error) {
     console.error('Create group error:', error);
     throw error.response?.data || { message: 'Network error' };
-  }
-};
-
-export const fetchGroupService = async (groupId) => {
-  try {
-    const res = await axios.get(`${API_BASE}find/${groupId}`, {
-      withCredentials: true,
-    });
-    return { data: res.data, message: res.data?.message || 'Success' };
-  } catch (err) {
-    console.error('Failed to fetch group:', err.message);
-    throw err.response?.data || { message: 'Failed to fetch group' };
   }
 };
 

@@ -13,7 +13,7 @@ import { MdMarkEmailUnread } from 'react-icons/md';
 import { HiCloudUpload, HiUserAdd, HiUserCircle } from 'react-icons/hi';
 import { BiSolidUserBadge, BiUserCircle } from 'react-icons/bi';
 
-const OverviewTab = ({ group }) => {
+const OverviewTab = ({ group, isClassRep }) => {
   const {
     description,
     members = [],
@@ -22,6 +22,7 @@ const OverviewTab = ({ group }) => {
     isArchived,
     updatedAt,
     joinRequests,
+    mediaUploads,
   } = group;
 
   const formatDate = (dateStr) => {
@@ -56,20 +57,22 @@ const OverviewTab = ({ group }) => {
             <p>{members.length}</p>
           </div>
 
-          <div className="card">
-            <h3>
-              <FaUserClock className="icon" />
-              Join Requests
-            </h3>
-            <p>{joinRequests.length}</p>
-          </div>
+          {isClassRep && (
+            <div className="card">
+              <h3>
+                <FaUserClock className="icon" />
+                Join Requests
+              </h3>
+              <p>{joinRequests.length}</p>
+            </div>
+          )}
 
           <div className="card">
             <h3>
               <HiCloudUpload className="icon" />
               Media Uploads
             </h3>
-            <p>{joinRequests.length}</p>
+            <p>{mediaUploads.length}</p>
           </div>
 
           <div className="card">
@@ -88,13 +91,15 @@ const OverviewTab = ({ group }) => {
             <p>{attendances.length}</p>
           </div>
 
-          <div className="card">
-            <h3>
-              <FaClipboardList className="icon" />
-              Archived
-            </h3>
-            <p>{isArchived ? 'Yes' : 'No'}</p>
-          </div>
+          {isClassRep && (
+            <div className="card">
+              <h3>
+                <FaClipboardList className="icon" />
+                Archived
+              </h3>
+              <p>{isArchived ? 'Yes' : 'No'}</p>
+            </div>
+          )}
         </div>
       </section>
 

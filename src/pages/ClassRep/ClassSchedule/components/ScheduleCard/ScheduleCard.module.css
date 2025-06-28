@@ -34,7 +34,12 @@
   border-radius: 12px;
   font-size: 0.7rem;
   font-weight: 600;
-  place-self: start;
+  place-self: center;
+  white-space: nowrap;
+}
+
+.title .action {
+  margin-left: 5px;
 }
 
 .others {
@@ -225,6 +230,14 @@
   transition: color 0.2s ease;
 }
 
+.clickableIcon {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.clickableIcon:hover {
+  transform: scale(1.15);
+}
+
 .actions svg:first-child {
   color: var(--on-time);
 }
@@ -290,8 +303,6 @@
 
 /* Status banner at top-right */
 .statusBanner {
-  top: 14px;
-  right: 14px;
   padding: 6px 14px;
   font-size: 0.8rem;
   font-weight: bold;
@@ -302,6 +313,7 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   color: #fff;
   cursor: default;
+  place-self: start;
 }
 
 .bannerupcoming {

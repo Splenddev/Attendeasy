@@ -17,6 +17,7 @@ import ScheduleCard from './components/ScheduleCard/ScheduleCard';
 import { AlertModal } from '../../../components/Modals';
 import button from '../../../components/Button/Button';
 import Spinner from '../../../components/Loader/Spinner/Spinner';
+import { formatTimeDiff } from '../../../utils/helpers';
 
 const weekdays = [
   'Monday',
@@ -59,23 +60,6 @@ const OverviewPanel = ({
   </div>
 );
 
-const formatTimeDiff = (target) => {
-  const now = new Date();
-  const diff = target - now;
-  if (diff <= 0) return null;
-
-  const hours = Math.floor(diff / (1000 * 60 * 60));
-  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-  let result = '';
-  if (hours > 0) result += `${hours}h `;
-  if (minutes > 0 || hours > 0) result += `${minutes}m `;
-  result += `${seconds}s`;
-
-  return result.trim();
-};
-
 const getDayStatuses = (data = []) => {
   const now = new Date();
   const statuses = {};
@@ -83,10 +67,13 @@ const getDayStatuses = (data = []) => {
   weekdays.forEach((day) => {
     let upcoming = 0;
     let active = 0;
+    let scheduled = 0; // NEW
 
     data.forEach((schedule) => {
       schedule.classDaysTimes?.forEach((t) => {
         if (t.day === day) {
+          scheduled += 1; // NEW ➊
+
           const [hStart, mStart] = t.timing.startTime.split(':').map(Number);
           const [hEnd, mEnd] = t.timing.endTime.split(':').map(Number);
 
@@ -101,7 +88,7 @@ const getDayStatuses = (data = []) => {
       });
     });
 
-    statuses[day] = { upcoming, active };
+    statuses[day] = { upcoming, active, scheduled }; // NEW ➋
   });
 
   return statuses;
@@ -122,7 +109,11 @@ const ClassSchedule = () => {
   }, [setNavTitle]);
 
   const groupId = user?.group;
-  const { schedules: scheduleData = [], loading } = useFetchSchedules(groupId);
+  const {
+    schedules: scheduleData = [],
+    loading,
+    refetch,
+  } = useFetchSchedules(groupId);
 
   // Countdown for today
   useEffect(() => {
@@ -174,9 +165,6 @@ const ClassSchedule = () => {
     s.classDaysTimes?.some((t) => t.day === selectedDay)
   );
 
-  console.log(filteredSchedules);
-  console.log(scheduleData);
-
   const dayScheduleDetails = (scheduleData || []).flatMap(
     (schedule) =>
       schedule.classDaysTimes
@@ -226,11 +214,18 @@ const ClassSchedule = () => {
 
       <div className={styles.daySelector}>
         {weekdays.map((day) => {
-          const { upcoming = 0, active = 0 } = dayStatuses[day] || {};
           const isSelected = day === selectedDay;
+          const {
+            upcoming = 0,
+            active = 0,
+            scheduled = 0,
+          } = dayStatuses[day] || {};
+
           const isToday = day === weekday;
           const hasOngoing = active > 0 && isToday;
           const hasUpcoming = upcoming > 0 && isToday;
+          const allDoneToday =
+            isToday && scheduled > 0 && active === 0 && upcoming === 0;
 
           let badge = null;
           if (hasOngoing) {
@@ -249,9 +244,11 @@ const ClassSchedule = () => {
                 {upcoming}
               </span>
             );
-          } else if (isToday) {
+          } else if (allDoneToday) {
             badge = (
-              <span className={styles.badge}>
+              <span
+                className={styles.badge}
+                title="All classes completed for today">
                 <FaCalendarCheck />
               </span>
             );
@@ -286,6 +283,7 @@ const ClassSchedule = () => {
                 schedule={schedule}
                 user={user}
                 isToday={selectedDay === weekday}
+                refresh={() => refetch()}
               />
             ))
           ) : (

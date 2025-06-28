@@ -8,7 +8,7 @@ import JoinRequestPage from '../tab/JoinRequestPage/JoinRequestPage';
 import {
   approveJoinRequestService,
   rejectJoinRequestService,
-} from '../../../../services/group.services';
+} from '../../../../services/group.service';
 import { toast } from 'react-toastify';
 
 // Dummy component imports (replace with real ones)
@@ -45,7 +45,12 @@ const GroupContents = ({ user, group, refreshGroup }) => {
   const renderTabContent = () => {
     switch (selectedTab) {
       case 'overview':
-        return <OverviewTab group={group} />;
+        return (
+          <OverviewTab
+            group={group}
+            isClassRep={isClassRep}
+          />
+        );
       case 'members':
         return <MembersTab group={group} />;
       case 'join-requests':

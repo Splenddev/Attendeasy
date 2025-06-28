@@ -13,9 +13,10 @@ import ProfileSetup from './steps/ProfileSetup';
 import BtnGroup from './BtnGroup';
 import { useAuth } from '../../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { sendUserOtp, verifyUserOtp } from '../../../services/authService';
+import { sendUserOtp, verifyUserOtp } from '../../../services/auth.service';
 import button from '../../../components/Button/Button';
 import { FaArrowLeft } from 'react-icons/fa';
+import { formatTimeDiff } from '../../../utils/helpers';
 
 const steps = [
   'Select Role',
@@ -118,11 +119,6 @@ const Register = () => {
   };
 
   // Format seconds as mm:ss
-  const formatTimeLeft = (seconds) => {
-    const m = String(Math.floor(seconds / 60)).padStart(2, '0');
-    const s = String(seconds % 60).padStart(2, '0');
-    return `${m}:${s}`;
-  };
 
   const handleNext = async () => {
     if (step === 1) {
@@ -216,7 +212,7 @@ const Register = () => {
             setLoader2={setVerifyingOtp}
             isOtpSent={isOtpSent}
             timeLeft={timeLeft}
-            formatTimeLeft={formatTimeLeft}
+            formatTimeLeft={formatTimeDiff}
             setOtpVerified={setOtpVerified}
             otpVerified={otpVerified}
           />

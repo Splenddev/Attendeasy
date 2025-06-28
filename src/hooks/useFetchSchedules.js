@@ -1,19 +1,20 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { fetchSchedulesByGroup } from '../services/schedule.services';
+import { fetchSchedulesByGroup } from '../services/schedule.service';
 
 export const useFetchSchedules = (groupId) => {
   const [schedules, setSchedules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
+  const fetchData = () => {
     if (!groupId) return;
 
+    setLoading(true);
     fetchSchedulesByGroup(groupId)
       .then((res) => {
-        console.log(res.data);
         setSchedules(res.data);
+        setError('');
       })
       .catch((err) => {
         const msg = err?.response?.data?.message || 'Failed to load schedules';
@@ -21,7 +22,11 @@ export const useFetchSchedules = (groupId) => {
         toast.error(msg);
       })
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchData();
   }, [groupId]);
 
-  return { schedules, loading, error };
+  return { schedules, loading, error, refetch: fetchData };
 };

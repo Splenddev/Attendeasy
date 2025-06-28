@@ -204,3 +204,24 @@ export const timeDiffLabel = (mode, timeHHmm) => {
   const mins = Math.max(0, Math.round(diff / 60000));
   return `${mins}min`;
 };
+export const formatTimeLeft = (seconds) => {
+  const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+  const s = String(seconds % 60).padStart(2, '0');
+  return `${m}:${s}`;
+};
+
+export const formatTimeDiff = (target) => {
+  const now = new Date();
+  const diff = target - now;
+  if (diff <= 0) return null;
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+  let result = '';
+  if (hours > 0) result += `${hours}h `;
+  if (minutes > 0 || hours > 0) result += `${minutes}m `;
+  result += `${seconds}s`;
+
+  return result.trim();
+};

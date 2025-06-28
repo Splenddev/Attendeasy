@@ -11,11 +11,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Cropper from 'react-easy-crop';
 import './GroupReg.css';
 import getCroppedImg from '../../../../utils/cropImages';
-import { createGroup } from '../../../../services/group.services';
+import { createGroup } from '../../../../services/group.service';
 import Spinner from '../../../../components/Loader/Spinner/Spinner';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { getUser } from '../../../../services/authService';
+import { getUser } from '../../../../services/auth.service';
 axios.defaults.withCredentials = true;
 
 const GroupReg = () => {

@@ -1,5 +1,5 @@
 // utils/auth.js
-import { getUser } from '../services/authService';
+import { getUser } from '../services/auth.service';
 
 export const getUserFromLocalStorageOrAPI = async () => {
   const stored = localStorage.getItem('user');

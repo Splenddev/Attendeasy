@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { attendance } from '../assets/assets';
 import { getUserFromLocalStorageOrAPI } from '../utils/auth';
 import axios from 'axios';
-import { loginUser, logoutUser, registerUser } from '../services/authService';
+import { loginUser, logoutUser, registerUser } from '../services/auth.service';
 import { toast } from 'react-toastify';
 
 axios.defaults.withCredentials = true;

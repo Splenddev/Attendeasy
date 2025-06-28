@@ -12,7 +12,7 @@ import { useAuth } from '../../context/AuthContext';
 import GroupSidebar from './components/GroupSidebar/GroupSidebar';
 import GroupContents from './components/GroupContents/GroupContents';
 import GroupRegFind from './features/GroupRegFind/GroupRegFind';
-import { fetchGroupService } from '../../services/group.services';
+import { fetchGroupService } from '../../services/group.service';
 import { toast } from 'react-toastify';
 import Spinner from '../../components/Loader/Spinner/Spinner';
 

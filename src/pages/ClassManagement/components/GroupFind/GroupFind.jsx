@@ -6,7 +6,7 @@ import {
   cancelJoinRequestService,
   joinGroupService,
   searchGroupsService,
-} from '../../../../services/group.services';
+} from '../../../../services/group.service';
 import Spinner from '../../../../components/Loader/Spinner/Spinner';
 import button from '../../../../components/Button/Button';
 

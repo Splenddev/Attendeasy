@@ -22,7 +22,7 @@ import {
 } from 'react-icons/fa';
 import styles from './UserProfilePage.module.css';
 import { useAuth } from '../../context/AuthContext';
-import { fetchGroupService } from '../../services/group.services';
+import { fetchGroupService } from '../../services/group.service';
 import Spinner from '../../components/Loader/Spinner/Spinner';
 import { MdGroups } from 'react-icons/md';
 
