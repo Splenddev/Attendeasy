@@ -1,11 +1,12 @@
 import axios from 'axios';
-// const API_BASE = 'http://localhost:5000/app/auth/';
-const API_BASE = 'https://vigilo-server.onrender.com/app/auth/';
+import { API_BASE } from '../utils/apiBaseUrl';
+const AUTH_API_BASE = `${API_BASE}auth/`;
+// const AUTH_API_BASE = `${API_BASE}auth/`;
 axios.defaults.withCredentials = true;
 
 export const registerUser = async (formData) => {
   try {
-    const response = await axios.post(`${API_BASE}register`, formData, {
+    const response = await axios.post(`${AUTH_API_BASE}register`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data', // if image is included
       },
@@ -19,7 +20,7 @@ export const registerUser = async (formData) => {
 
 export const loginUser = async (formData) => {
   try {
-    const response = await axios.post(`${API_BASE}login`, formData);
+    const response = await axios.post(`${AUTH_API_BASE}login`, formData);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -29,7 +30,7 @@ export const loginUser = async (formData) => {
 
 export const logoutUser = async () => {
   try {
-    const response = await axios.post(`${API_BASE}logout`);
+    const response = await axios.post(`${AUTH_API_BASE}logout`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -38,7 +39,7 @@ export const logoutUser = async () => {
 };
 
 export const sendUserOtp = async (email) => {
-  const response = await axios.post(`${API_BASE}send-otp`, { email });
+  const response = await axios.post(`${AUTH_API_BASE}send-otp`, { email });
   console.log(email);
   try {
     console.log(response);
@@ -51,7 +52,10 @@ export const sendUserOtp = async (email) => {
 
 export const verifyUserOtp = async (email, otp) => {
   try {
-    const response = await axios.post(`${API_BASE}verify-otp`, { email, otp });
+    const response = await axios.post(`${AUTH_API_BASE}verify-otp`, {
+      email,
+      otp,
+    });
     return response.data;
   } catch (error) {
     console.log(error);
@@ -61,7 +65,7 @@ export const verifyUserOtp = async (email, otp) => {
 
 export const getUser = async () => {
   try {
-    const res = await axios.get(`${API_BASE}me`, {
+    const res = await axios.get(`${AUTH_API_BASE}me`, {
       withCredentials: true,
     });
     return await res.data; // should return user object

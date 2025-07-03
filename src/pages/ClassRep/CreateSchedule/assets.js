@@ -25,7 +25,7 @@ export const createScheduleFormDataAssets = [
       },
       {
         title: 'Credit Unit',
-        name: 'courseUnit',
+        name: 'creditUnit',
         type: 'select',
         options: ['1', '2', '3', '4', '5'],
         required: true,
@@ -152,7 +152,7 @@ export const createScheduleFormDataAssets = [
     selectOptions: [
       {
         title: 'Repeat Pattern',
-        name: 'repeat',
+        name: 'repeatPattern',
         type: 'select',
         options: ['weekly', 'bi-weekly', 'monthly'],
         required: false,
@@ -214,13 +214,6 @@ export const createScheduleFormDataAssets = [
       {
         title: 'Allow Student Media Uploads',
         name: 'allowMediaUploads',
-        type: 'choice',
-        choices: ['Yes', 'No'],
-        required: false,
-      },
-      {
-        title: 'Require Approval for Media Uploads',
-        name: 'mediaNeedsApproval',
         type: 'choice',
         choices: ['Yes', 'No'],
         required: false,
@@ -296,6 +289,7 @@ export const userCourses = [
     department: 'Biochemistry',
     level: '100L',
     faculty: 'Sciences',
+    creditUnit: 2,
   },
   {
     courseCode: 'BCH202',
@@ -304,6 +298,7 @@ export const userCourses = [
     department: 'Biochemistry',
     level: '100L',
     faculty: 'Sciences',
+    creditUnit: 1,
   },
   {
     courseCode: 'BCH201',
@@ -312,6 +307,7 @@ export const userCourses = [
     department: 'Biochemistry',
     level: '100L',
     faculty: 'Sciences',
+    creditUnit: 1,
   },
   {
     courseCode: 'BCH202',
@@ -319,5 +315,6 @@ export const userCourses = [
     lecturerName: 'Prof. Adewale Benson',
     faculty: 'Sciences',
     level: '100L',
+    creditUnit: 3,
   },
 ];

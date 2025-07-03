@@ -5,7 +5,11 @@ import {
   MdOutlineCheckCircleOutline,
 } from 'react-icons/md';
 import { useFormContext } from 'react-hook-form';
-import { onChoiceChange, toCamelCase } from '../../utils/helpers';
+import {
+  catenateCredentialsSecure,
+  onChoiceChange,
+  toCamelCase,
+} from '../../utils/helpers';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import * as Slider from '@radix-ui/react-slider';
@@ -23,6 +27,8 @@ const FieldSet = ({
   required = false,
   disabled = false,
   fontSize = '14px',
+  fieldName,
+  readOnly = false,
 }) => {
   const {
     register,
@@ -33,9 +39,11 @@ const FieldSet = ({
   } = useFormContext();
 
   const validationRules = required ? { required: `${title} is required` } : {};
-  const name = toCamelCase(title);
+  const name = fieldName || toCamelCase(title);
 
   const inputValue = watch(name) ?? (input.type === 'range' ? [100] : '');
+
+  const classLocation = watch('classLocation');
 
   useEffect(() => {
     if (input.type === 'range' && !watch(name)) {
@@ -86,8 +94,11 @@ const FieldSet = ({
             </div>
             <Slider.Root
               className="SliderRoot"
-              value={inputValue}
-              onValueChange={(val) => setValue(name, val)}
+              value={[Number(inputValue)]}
+              onValueChange={(val) => {
+                const newVal = val[0];
+                setValue(name, newVal, { shouldValidate: true });
+              }}
               min={20}
               max={200}
               step={20}>
@@ -96,14 +107,26 @@ const FieldSet = ({
               </Slider.Track>
               <Slider.Thumb className="SliderThumb" />
             </Slider.Root>
-            <div className="option-range-value">{inputValue[0]}m</div>
+            <div className="option-range-value">{inputValue}m</div>
           </div>
+        ) : readOnly ? (
+          <input
+            type="text"
+            value={catenateCredentialsSecure([getValues(name)], {
+              maxLength: 10,
+              obfuscate: true,
+            })}
+            readOnly
+            {...register(name, validationRules)}
+            className="readonly-input"
+          />
         ) : (
           <input
             type={input.type}
             placeholder={input.placeholder}
             {...register(name, validationRules)}
-            autoComplete="off"
+            step={input.step}
+            disabled={disabled}
           />
         ))}
 
@@ -185,7 +208,8 @@ const FieldSet = ({
           <DateTimeSelector name={name} />
           {/* Hidden input for RHF to track field and allow validation */}
           <input
-            type="hidden"
+            type="text"
+            className="visually-hidden"
             {...register(name, {
               required: required ? `${title} is required` : false,
               validate: (value) => {
@@ -207,7 +231,23 @@ const FieldSet = ({
         </>
       )}
 
-      {type === 'location' && <LocationModal fieldName={name} />}
+      {type === 'location' && (
+        <div style={{ position: 'relative' }}>
+          {classLocation && (
+            <p style={{ fontSize: '14px', padding: '10px' }}>
+              {classLocation.label}
+            </p>
+          )}
+          <LocationModal fieldName={name} />
+          <input
+            type="text"
+            className="visually-hidden"
+            {...register(name, {
+              required: required ? `${title} is required` : false,
+            })}
+          />
+        </div>
+      )}
     </motion.div>
   );
 };

@@ -3,13 +3,7 @@
   padding: 1rem;
   gap: 1rem;
 }
-.full-page-loader-wrap {
-  height: calc(100vh - 60px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
+
 .group-not-found {
   text-align: center;
   padding: 60px 24px;

@@ -114,7 +114,7 @@ const ScheduleCard = ({ user, schedule = {}, isToday = false, refresh }) => {
               <MdOndemandVideo />
             )
           )}
-          {metaChip(schedule.repeat, <FaSyncAlt />)}
+          {metaChip(schedule.repeat || schedule.repeatPattern, <FaSyncAlt />)}
           {schedule.isActive
             ? metaChip('ACTIVE', <RiPulseFill />)
             : metaChip('INACTIVE', <MdAutoDelete />)}
@@ -191,7 +191,7 @@ const ScheduleCard = ({ user, schedule = {}, isToday = false, refresh }) => {
       {/* Media Section */}
       <section className={styles.mediaSection}>
         <h4>
-          Attached Media{' '}
+          Attached Materials{' '}
           <div className={styles.action}>
             {schedule.mediaNeedsApproval && (
               <span

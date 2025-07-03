@@ -1,12 +1,13 @@
 import axios from 'axios';
+import { API_BASE } from '../utils/apiBaseUrl';
 
-// const API_BASE = 'http://localhost:5000/app/schedule/';
-const API_BASE = 'https://vigilo-server.onrender.com/app/schedule/';
+const MEDIA_API_BASE = `${API_BASE}schedule/`;
+// const MEDIA_API_BASE = `${API_BASE}schedule/`;
 
 export const uploadScheduleMedia = async (scheduleId, formData, onProgress) => {
   try {
     const response = await axios.post(
-      `${API_BASE}${scheduleId}/media`,
+      `${MEDIA_API_BASE}${scheduleId}/media`,
       formData,
       {
         headers: {
@@ -27,7 +28,7 @@ export const uploadScheduleMedia = async (scheduleId, formData, onProgress) => {
 export const deleteScheduleMedia = async (scheduleId, mediaId) => {
   try {
     const response = await axios.delete(
-      `${API_BASE}${scheduleId}/media/${mediaId}`
+      `${MEDIA_API_BASE}${scheduleId}/media/${mediaId}`
     );
     return response.data;
   } catch (error) {

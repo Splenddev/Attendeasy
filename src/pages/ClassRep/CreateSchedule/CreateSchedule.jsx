@@ -19,10 +19,12 @@ const CreateSchedule = () => {
   useEffect(() => setNavTitle('Create Schedules'), [setNavTitle]);
 
   const { methods } = useScheduleForm();
-  const { handleSubmit, setValue, reset } = methods;
+  const { handleSubmit, setValue, reset, watch } = methods;
 
   const { handleCreateSchedule } = useCreateSchedule();
 
+  const classTimes = watch('classDaysTimes');
+  const classLocation = watch('classLocation');
   const [courseSelected, setCourseSelected] = useState(false);
 
   const onSubmit = async (data) => {
@@ -45,6 +47,7 @@ const CreateSchedule = () => {
       department: course.department,
       faculty: course.faculty,
       level: course.level,
+      creditUnit: course.creditUnit,
     }).forEach(([key, value]) => setValue(key, value));
 
     setCourseSelected(true);
@@ -53,7 +56,11 @@ const CreateSchedule = () => {
   /* ───────────────────  render  ──────────────────────────── */
   return (
     <FormProvider {...methods}>
-      <h1 className="header">Add a New Schedule</h1>
+      <h1
+        className="header"
+        onClick={() => console.log(classTimes, classLocation)}>
+        Add a New Schedule
+      </h1>
 
       {/* course picker */}
       <CourseSelector

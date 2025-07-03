@@ -1,12 +1,13 @@
 // services/scheduleService.js
 import axios from 'axios';
+import { API_BASE } from '../utils/apiBaseUrl';
 
-// const API_BASE = 'http://localhost:5000/app/schedule/';
-const API_BASE = 'https://vigilo-server.onrender.com/app/schedule/';
+const SCHEDULE_API_BASE = `${API_BASE}schedule/`;
+// const SCHEDULE_API_BASE = `${API_BASE}schedule/`;
 
 export const createSchedule = async (scheduleData) => {
   try {
-    const res = await axios.post(`${API_BASE}create`, scheduleData, {
+    const res = await axios.post(`${SCHEDULE_API_BASE}create`, scheduleData, {
       withCredentials: true, // 🔥 Send cookies
     });
     return res.data;
@@ -18,7 +19,7 @@ export const createSchedule = async (scheduleData) => {
 };
 
 export const fetchSchedulesByGroup = async (groupId) => {
-  const res = await axios.get(`${API_BASE}${groupId}`, {
+  const res = await axios.get(`${SCHEDULE_API_BASE}${groupId}`, {
     withCredentials: true, // for cookie auth
   });
   return res.data;

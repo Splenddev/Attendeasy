@@ -1,6 +1,11 @@
 import React from 'react';
 import styles from './CourseSelector.module.css';
-import { MdPerson, MdSchool, MdLayers } from 'react-icons/md';
+import {
+  MdPerson,
+  MdSchool,
+  MdLayers,
+  MdOutlineInterests,
+} from 'react-icons/md';
 import { FaBriefcase } from 'react-icons/fa';
 
 const CourseSelector = ({ courses, onSelect }) => {
@@ -34,6 +39,11 @@ const CourseSelector = ({ courses, onSelect }) => {
             <div className={styles.courseInfo}>
               <FaBriefcase size={16} />
               <span>{course.faculty}</span>
+            </div>
+
+            <div className={styles.courseInfo}>
+              <MdOutlineInterests size={16} />
+              <span>{course.creditUnit}</span>
             </div>
           </div>
         ))}

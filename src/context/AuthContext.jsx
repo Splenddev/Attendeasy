@@ -66,11 +66,12 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
         toast.success(data.message);
         window.location.href('/');
+        setShowLogoutModal(false);
       }
     } catch (err) {
       console.warn('Logout failed (fallback to client-only):', err.message);
+      toast.warn(err?.response?.message || 'Logout failed');
     } finally {
-      setShowLogoutModal(false);
       setAuthBtnsLoading((prev) => ({ ...prev, logout: false }));
     }
   };

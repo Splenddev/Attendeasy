@@ -50,145 +50,207 @@ export const formDataAssets2 = [
     ],
   },
 ];
+
 export const formDataAssets = [
+  /* ─────────── Session Basics ─────────── */
   {
-    id: 'course-info',
-    title: 'Course Info',
+    id: 'session-basics',
+    title: 'Session Basics',
     selectOptions: [
       {
-        title: 'Course Code',
-        options: courseCodeOptions,
-        type: 'select',
+        name: 'groupId',
+        title: 'Group',
+        type: 'input',
+        input: { type: 'text', placeholder: 'Select a schedule' },
+        required: true,
+        disabled: true,
+        readOnly: true,
+      },
+      {
+        name: 'scheduleId',
+        title: 'Schedule',
+        type: 'input',
+        input: { type: 'text', placeholder: 'Select a schedule' },
+        required: true,
+        disabled: true,
+        readOnly: true,
+      },
+      {
+        name: 'classDate',
+        title: 'Class Date',
+        type: 'input',
+        input: { type: 'date' },
         required: true,
       },
       {
-        title: 'Course Title',
+        name: 'classTime.day',
+        title: 'Day of Week',
+        type: 'select',
+        options: [
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday',
+          'Friday',
+          'Saturday',
+          'Sunday',
+        ],
+        required: true,
+      },
+      {
+        name: 'classTime.start',
+        title: 'Start',
+        type: 'input',
+        input: { type: 'time' },
+        required: true,
+      },
+      {
+        name: 'classTime.end',
+        title: 'End',
+        type: 'input',
+        input: { type: 'time' },
+        required: true,
+      },
+    ],
+  },
+
+  /* ─────────── Location & Geofence ─────────── */
+  {
+    id: 'location',
+    title: 'Class Location',
+    selectOptions: [
+      {
+        name: 'location.latitude',
+        title: 'Latitude',
+        type: 'input',
+        input: { type: 'number', step: '0.0001', placeholder: 'e.g. 6.5244' },
+        required: true,
+      },
+      {
+        name: 'location.longitude',
+        title: 'Longitude',
+        type: 'input',
+        input: { type: 'number', step: '0.0001', placeholder: 'e.g. 3.3792' },
+        required: true,
+      },
+      {
+        name: 'location.radiusMeters',
+        title: 'Radius (m)',
+        type: 'input',
+        required: true,
+        input: { type: 'range' },
+      },
+    ],
+  },
+
+  /* ─────────── Entry Window ─────────── */
+  {
+    id: 'entry-window',
+    title: 'Entry Window',
+    selectOptions: [
+      {
+        name: 'entry.start',
+        title: 'Marking Opens',
+        type: 'select',
+        options: [
+          { text: 'At class start', value: '0H0M' },
+          { text: '5 min after start', value: '0H5M' },
+          { text: '10 min after start', value: '0H10M' },
+          { text: '30 min after start', value: '0H30M' },
+        ],
+        required: true,
+      },
+      {
+        name: 'entry.end',
+        title: 'Marking Closes',
+        type: 'select',
+        options: [
+          { text: '30 min window', value: '0H30M' },
+          { text: '1 hour window', value: '1H0M' },
+          { text: '1 h 30 min window', value: '1H30M' },
+          { text: 'Full class duration', value: 'FULL' },
+        ],
+        required: true,
+      },
+    ],
+  },
+
+  /* ─────────── Marking Configuration ─────────── */
+  {
+    id: 'marking-config',
+    title: 'Marking Configuration',
+    selectOptions: [
+      {
+        name: 'attendanceType',
+        title: 'Attendance Type',
+        type: 'select',
+        options: ['physical', 'virtual'],
+        required: true,
+      },
+      {
+        name: 'markingConfig.type',
+        title: 'Detail Level',
+        type: 'select',
+        options: [
+          { text: 'Strict (Present / Absent)', value: 'strict' },
+          { text: 'Detailed (On‑time / Late / etc.)', value: 'detailed' },
+        ],
+        required: true,
+      },
+      {
+        name: 'markingConfig.mode',
+        title: 'Marking Mode',
+        type: 'select',
+        options: [
+          { text: 'No Code (geo or click)', value: 'no_code' },
+          { text: 'Requires One‑Time Code', value: 'code' },
+        ],
+        required: true,
+      },
+    ],
+  },
+
+  /* ─────────── Lecturer Info (auto / editable) ─────────── */
+  {
+    id: 'lecturer-info',
+    title: 'Lecturer (auto‑filled from schedule, editable)',
+    selectOptions: [
+      {
+        name: 'lecturer.name',
+        title: 'Name',
+        type: 'input',
+        input: { type: 'text', placeholder: 'e.g. Dr Adaobi Eze' },
+        required: false,
+      },
+      {
+        name: 'lecturer.email',
+        title: 'Email',
+        type: 'input',
+        input: { type: 'email', placeholder: 'e.g. adaobi@school.edu' },
+        required: false,
+      },
+    ],
+  },
+
+  /* ─────────── Optional Notes ─────────── */
+  {
+    id: 'notes',
+    title: 'Session Notes (optional)',
+    selectOptions: [
+      {
+        name: 'notes',
+        title: 'Notes',
         type: 'input',
         input: {
           type: 'text',
-          placeholder: 'e.g. Analytical Biochemistry',
+          placeholder: 'e.g. First lecture; high turnout expected',
         },
-        required: true,
-      },
-      {
-        title: 'Unit',
-        options: [0, 1, 2, 3, 4, 5],
-        type: 'select',
-        required: true,
-      },
-      {
-        title: 'Semester',
-        options: ['First', 'Second'],
-        type: 'select',
-        required: true,
-      },
-    ],
-  },
-  {
-    id: 'lecturer-info',
-    title: 'Lecturer Info',
-    selectOptions: [
-      {
-        title: 'Name',
-        type: 'input',
-        input: { type: 'text', placeholder: 'eg. Mr. John Doe' },
-        required: true,
-      },
-      {
-        title: 'Email',
-        type: 'input',
-        input: {
-          type: 'email',
-          placeholder: 'eg. johndoe123@gmail.com',
-        },
-        required: true,
-      },
-    ],
-  },
-  {
-    id: 'timing',
-    title: 'Timing',
-    selectOptions: [
-      {
-        title: 'Class Start',
-        type: 'input',
-        input: { type: 'time' },
-        required: true,
-      },
-      {
-        title: 'Class End',
-        type: 'input',
-        input: { type: 'time' },
-        required: true,
-      },
-      {
-        title: 'Entry Start',
-        type: 'select',
-        options: [
-          { text: '10 min after class start', value: '0H10M' },
-          { text: '30 min after class start', value: '0H30M' },
-          { text: '1 hr after class start', value: '1H0M' },
-          { text: '1 hr 30 min after class start', value: '1H30M' },
-          { text: 'Manual' },
-        ],
-        required: true,
-      },
-      {
-        required: true,
-        title: 'Entry End',
-        type: 'select',
-        options: [
-          { text: '10 min after entry start', value: '0H10M' },
-          { text: '30 min after entry start', value: '0H30M' },
-          { text: '1 hr after entry start', value: '1H0M' },
-          { text: '1 hr 30 min after entry start', value: '1H30M' },
-          { text: 'Manual' },
-        ],
-      },
-      {
-        title: 'Date',
-        type: 'input',
-        required: true,
-        input: { type: 'date' },
-      },
-    ],
-  },
-  {
-    id: 'marking',
-    title: 'Marking',
-    selectOptions: [
-      {
-        required: true,
-        title: 'Type',
-        options: ['Strict ( P / A only )', 'Detailed ( P / A / L )'],
-        type: 'select',
-      },
-      {
-        title: 'Mode',
-        options: ['No Code', 'Code'],
-        required: true,
-        type: 'select',
-      },
-      {
-        required: true,
-        title: 'Other Types',
-        type: 'choice',
-        choices: [
-          'C - Conference / Official Duty',
-          'E - Excused',
-          'F - Family Emergency',
-          'M - Medical',
-          'O - Others (Speciify)',
-          'P - Personal Reasons',
-          'R - Religious Observance',
-          'S - Suspension',
-          'T - Travel',
-        ],
-        choiceMode: 'multiple',
+        required: false,
       },
     ],
   },
 ];
+
 export const list = [
   {
     name: 'Splendid Felix',

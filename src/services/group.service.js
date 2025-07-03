@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 // ../services/group.services.js
-// const API_BASE = 'http://localhost:5000/app/groups/';
-const API_BASE = 'https://vigilo-server.onrender.com/app/groups/';
+const API_BASE = 'http://localhost:5000/app/groups/';
+// const API_BASE = 'https://vigilo-server.onrender.com/app/groups/';
 
 export const fetchGroupService = async (groupId) => {
   try {

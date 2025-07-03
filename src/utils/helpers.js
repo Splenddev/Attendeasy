@@ -225,3 +225,33 @@ export const formatTimeDiff = (target) => {
 
   return result.trim();
 };
+
+export function catenateCredentialsSecure(
+  values = [],
+  {
+    maxLength = 20,
+    separator = '-',
+    casing = 'upper',
+    mask = false,
+    obfuscate = false,
+  } = {}
+) {
+  if (!Array.isArray(values)) return '';
+
+  let result = values.filter(Boolean).join(separator);
+
+  // Apply casing
+  if (casing === 'lower') result = result.toLowerCase();
+  else if (casing === 'upper') result = result.toUpperCase();
+
+  if (mask) {
+    return '*'.repeat(Math.min(result.length, maxLength));
+  }
+
+  if (obfuscate && result.length > maxLength) {
+    const visible = result.slice(0, maxLength - 3);
+    return visible + '***';
+  }
+
+  return result.length > maxLength ? result.slice(0, maxLength) : result;
+}

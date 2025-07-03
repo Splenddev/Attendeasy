@@ -1,22 +1,31 @@
 import { useForm } from 'react-hook-form';
 // import { useAuth } from '../../../context/AuthContext';
 import { selectOneStudent, selectAllStudents } from './attendanceHelpers';
+import { useCreateAttendance } from '../../../hooks/useAttendance';
+import { toast } from 'react-toastify';
 
-const useAttendanceForm = () => {
-  const methods = useForm({ defaultValues: { students: [] } });
+const useAttendanceForm = (groupId) => {
+  const methods = useForm({ defaultValues: {} });
+
+  const { submit, loading, error } = useCreateAttendance();
   // const { setAttendanceList } = useAuth();
   const { handleSubmit, setValue, watch, getValues } = methods;
 
   const selectedStudents = watch('students');
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const formData = {
       ...data,
-      students: selectedStudents,
-      list: [],
+      groupId,
     };
     alert('submitted');
     console.log(formData);
+    try {
+      const res = await submit(formData);
+      alert('Attendance created: ' + res.attendance.attendanceId);
+    } catch (err) {
+      toast.error('Failed: ' + err.message);
+    }
     // setAttendanceList((prev) => [...prev, formData]);
   };
 

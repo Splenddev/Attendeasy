@@ -202,7 +202,11 @@ const GroupFind = ({ user = {}, onJoin }) => {
 
       {loading ? (
         <div className="group-results-loader">
-          <Spinner scale="5" />
+          <Spinner
+            scale="5"
+            size="35px"
+            borderWidth="2px"
+          />
           <p>Loading...</p>
         </div>
       ) : groups.length === 0 ? (

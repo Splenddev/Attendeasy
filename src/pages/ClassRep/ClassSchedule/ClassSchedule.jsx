@@ -186,10 +186,11 @@ const ClassSchedule = () => {
 
   if (loading) {
     return (
-      <div className={styles.loadingWrapper}>
+      <div className="full-page-loader-wrap">
         <Spinner
-          size="30px"
-          scale="2"
+          size="35px"
+          scale="2.5"
+          borderWidth="2px"
         />
       </div>
     );

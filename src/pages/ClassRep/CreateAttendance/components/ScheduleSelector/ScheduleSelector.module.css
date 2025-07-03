@@ -1,0 +1,158 @@
+.wrapper {
+  height: 100%;
+  background: #fff;
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.label {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.required {
+  color: var(--red);
+}
+
+.cardGrid {
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  margin: 1rem 0;
+}
+
+/* === Shared Card Base === */
+.card {
+  padding: 1.5rem;
+  border: 2px solid var(--outline);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  box-shadow: var(--shadow-sm, 0 2px 5px rgba(0, 0, 0, 0.04));
+}
+
+/* === Schedule Card === */
+.scheduleCard {
+  background: #ffffff;
+}
+
+.scheduleCard:hover {
+  background: var(--blue-light);
+  border-color: var(--main-color);
+  box-shadow: var(--shadow-md, 0 4px 10px rgba(37, 175, 243, 0.12));
+  transform: translateY(-2px);
+}
+
+.scheduleCard h3 {
+  font-size: 1.15rem;
+  color: #222;
+  margin-bottom: 0.4rem;
+}
+
+.scheduleCard p {
+  font-size: 0.95rem;
+  color: #555;
+  margin: 0.2rem 0;
+}
+
+.dayTimeCard {
+  border: 2px dashed var(--main-color-light);
+  text-align: center;
+  padding: 1rem;
+}
+
+.dayTimeCard:hover {
+  background: var(--blue-light);
+  border-color: var(--main-color);
+}
+
+.dayTimeCard h4 {
+  font-size: 1rem;
+  color: var(--main-color);
+  margin-bottom: 0.3rem;
+}
+
+.dayTimeCard p {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* === Selected State === */
+.selected {
+  border-color: var(--main-color);
+  background: linear-gradient(145deg, var(--blue-light), #ffffff);
+  box-shadow: 0 0 0 3px rgba(37, 175, 243, 0.2);
+}
+
+/* === Info, Error, Warning === */
+.info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.errorBox {
+  background: #fff4f4;
+  border: 1px solid #f1b0b7;
+  padding: 1rem;
+  border-radius: 8px;
+  color: var(--red);
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.error {
+  font-size: 0.9rem;
+  color: var(--red);
+}
+
+.warning {
+  margin-top: 1.5rem;
+  color: var(--red);
+  font-weight: 600;
+  text-align: center;
+  background: #fff5f5;
+  border: 1px solid #f5c6cb;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+}
+
+/* === Buttons === */
+.retryButton {
+  background: none;
+  color: var(--main-color);
+  font-weight: bold;
+  border: none;
+  margin-top: 0.5rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.retryButton:hover {
+  text-decoration: underline;
+}
+
+.linkRow {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.linkButton {
+  background-color: var(--main-color);
+  color: var(--white);
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.linkButton:hover {
+  background-color: #1a94d6; /* optional override */
+}

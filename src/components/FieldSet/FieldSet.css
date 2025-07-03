@@ -3,7 +3,7 @@
   grid-template-columns: 95px 2px 1fr;
   background: #fff;
   gap: 5px;
-  border-bottom: 1px solid var(--light-blue-300);
+  border-bottom: 1px solid var(--outline);
   border-radius: 3px;
   width: 100%;
   padding: 0 10px;
@@ -31,7 +31,7 @@
   border: none;
   height: 100%;
   width: 1px;
-  background: var(--light-blue-300);
+  background: var(--outline);
 }
 
 .option-select input {
@@ -118,7 +118,6 @@
   padding: 5px 8px;
 }
 
-/* Visually Hidden for Accessibility */
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -129,7 +128,6 @@
   border: 0;
 }
 
-/* Radix Slider Styles */
 .SliderRoot {
   position: relative;
   display: flex;
@@ -140,7 +138,7 @@
 }
 
 .SliderTrack {
-  background-color: var(--light-blue-300);
+  background-color: var(--outline);
   position: relative;
   flex-grow: 1;
   height: 4px;

@@ -49,8 +49,9 @@ const GroupManagementPage = () => {
     return (
       <div className="full-page-loader-wrap">
         <Spinner
-          scale="3"
-          size={'30px'}
+          size="35px"
+          scale="2.5"
+          borderWidth="2px"
         />
       </div>
     );

@@ -24,7 +24,6 @@
   }
 }
 
-
 .c-attendance-filter {
   gap: 10px;
   display: flex;
@@ -40,6 +39,7 @@
   border-radius: 20px;
   width: 100%;
   overflow: hidden;
+  place-self: start;
 }
 .search_name input {
   padding: 10px;

@@ -3,24 +3,18 @@ import { MdPublish, MdSave } from 'react-icons/md';
 import { FormProvider } from 'react-hook-form';
 import button from '../../../components/Button/Button';
 import DynamicForm from '../../../features/DynamicForm/DynamicForm';
-import { formDataAssets, formDataAssets2 } from '../../../utils/contants';
+import { formDataAssets } from '../../../utils/contants';
 import { useAuth } from '../../../context/AuthContext';
 import useAttendanceForm from './useAttendanceForm';
 import { useEffect } from 'react';
 import { InfoModal } from '../../../components/Modals';
 import { useInfoModal } from '../../../context/infoModalContext';
 import { infoModalContent } from '../../../components/Modals/Info/infoModalContent';
+import ScheduleSelector from './components/ScheduleSelector/ScheduleSelector';
 
 const CreateAttendance = () => {
   const { setNavTitle, user } = useAuth();
-  const {
-    methods,
-    handleSubmit,
-    onSubmit,
-    selectedStudents,
-    toggleStudent,
-    setAllStudents,
-  } = useAttendanceForm();
+  const { methods, handleSubmit, onSubmit } = useAttendanceForm();
 
   useEffect(() => {
     setNavTitle('Create Attendance');
@@ -49,6 +43,9 @@ const CreateAttendance = () => {
           </div>
 
           <div className="create-attendance-sections">
+            <div className="schedule-selector-wrapper">
+              <ScheduleSelector />
+            </div>
             <div className="create-attendance-section left">
               {formDataAssets.map((data) => (
                 <DynamicForm
@@ -58,26 +55,6 @@ const CreateAttendance = () => {
                   selectOptions={data.selectOptions}
                 />
               ))}
-            </div>
-
-            <div className="create-attendance-section right">
-              {formDataAssets2.map((data) => (
-                <DynamicForm
-                  key={data.id}
-                  id={data.id}
-                  title={data.title}
-                  selectOptions={data.selectOptions}
-                />
-              ))}
-              <DynamicForm
-                view="grid"
-                title="students"
-                id="students"
-                selectOptions={[{}]}
-                selectedStudents={selectedStudents}
-                toggleStudent={toggleStudent}
-                setAllStudents={setAllStudents}
-              />
             </div>
           </div>
         </form>
