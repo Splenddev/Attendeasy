@@ -59,32 +59,34 @@ export const formDataAssets = [
     selectOptions: [
       {
         name: 'groupId',
-        title: 'Group',
+        title: 'Group ID',
         type: 'input',
         input: { type: 'text', placeholder: 'Select a schedule' },
         required: true,
         disabled: true,
         readOnly: true,
+        catenate: true,
       },
       {
         name: 'scheduleId',
-        title: 'Schedule',
+        title: 'Schedule ID',
         type: 'input',
         input: { type: 'text', placeholder: 'Select a schedule' },
         required: true,
+        catenate: true,
         disabled: true,
         readOnly: true,
       },
       {
         name: 'classDate',
-        title: 'Class Date',
+        title: 'Date',
         type: 'input',
         input: { type: 'date' },
         required: true,
       },
       {
         name: 'classTime.day',
-        title: 'Day of Week',
+        title: 'Day',
         type: 'select',
         options: [
           'Monday',
@@ -210,7 +212,6 @@ export const formDataAssets = [
     ],
   },
 
-  /* ─────────── Lecturer Info (auto / editable) ─────────── */
   {
     id: 'lecturer-info',
     title: 'Lecturer (auto‑filled from schedule, editable)',
@@ -221,6 +222,7 @@ export const formDataAssets = [
         type: 'input',
         input: { type: 'text', placeholder: 'e.g. Dr Adaobi Eze' },
         required: false,
+        readOnly: true,
       },
       {
         name: 'lecturer.email',
@@ -228,6 +230,7 @@ export const formDataAssets = [
         type: 'input',
         input: { type: 'email', placeholder: 'e.g. adaobi@school.edu' },
         required: false,
+        readOnly: true,
       },
     ],
   },

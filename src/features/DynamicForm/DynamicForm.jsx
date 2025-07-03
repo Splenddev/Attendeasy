@@ -135,7 +135,8 @@ const DynamicForm = ({
                 required={item.required}
                 fieldName={item.name}
                 disabled={item.disabled}
-                readOnly={true}
+                readOnly={item.readOnly}
+                catenate={item.catenate}
               />
             ))}
           </div>

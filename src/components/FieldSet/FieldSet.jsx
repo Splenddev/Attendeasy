@@ -29,6 +29,7 @@ const FieldSet = ({
   fontSize = '14px',
   fieldName,
   readOnly = false,
+  catenate = false,
 }) => {
   const {
     register,
@@ -42,6 +43,8 @@ const FieldSet = ({
   const name = fieldName || toCamelCase(title);
 
   const inputValue = watch(name) ?? (input.type === 'range' ? [100] : '');
+
+  const catenateValues = getValues(name);
 
   const classLocation = watch('classLocation');
 
@@ -112,10 +115,14 @@ const FieldSet = ({
         ) : readOnly ? (
           <input
             type="text"
-            value={catenateCredentialsSecure([getValues(name)], {
-              maxLength: 10,
-              obfuscate: true,
-            })}
+            value={
+              !catenate || catenate === false
+                ? catenateValues
+                : catenateCredentialsSecure([catenateValues], {
+                    maxLength: 10,
+                    obfuscate: true,
+                  })
+            }
             readOnly
             {...register(name, validationRules)}
             className="readonly-input"

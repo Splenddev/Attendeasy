@@ -1,12 +1,13 @@
 import axios from 'axios';
+import { API_BASE } from '../utils/apiBaseUrl';
 
 // ../services/group.services.js
-const API_BASE = 'http://localhost:5000/app/groups/';
-// const API_BASE = 'https://vigilo-server.onrender.com/app/groups/';
+const GROUP_API_BASE = `${API_BASE}groups/`;
+// const GROUP_API_BASE = `${API_BASE}groups/`;
 
 export const fetchGroupService = async (groupId) => {
   try {
-    const res = await axios.get(`${API_BASE}find/${groupId}`, {
+    const res = await axios.get(`${GROUP_API_BASE}find/${groupId}`, {
       withCredentials: true,
     });
     return { data: res.data, message: res.data?.message || 'Success' };
@@ -17,7 +18,7 @@ export const fetchGroupService = async (groupId) => {
 };
 export const createGroup = async (data) => {
   try {
-    const response = await axios.post(`${API_BASE}create`, data, {
+    const response = await axios.post(`${GROUP_API_BASE}create`, data, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -33,7 +34,7 @@ export const createGroup = async (data) => {
 
 export const searchGroupsService = async (params) => {
   try {
-    const res = await axios.get(`${API_BASE}search`, {
+    const res = await axios.get(`${GROUP_API_BASE}search`, {
       params,
       withCredentials: true,
     });
@@ -46,7 +47,7 @@ export const searchGroupsService = async (params) => {
 
 export const joinGroupService = async (groupId) => {
   try {
-    const res = await axios.post(`${API_BASE}${groupId}/join`, null, {
+    const res = await axios.post(`${GROUP_API_BASE}${groupId}/join`, null, {
       withCredentials: true,
     });
     return res.data;
@@ -58,7 +59,7 @@ export const joinGroupService = async (groupId) => {
 
 export const cancelJoinRequestService = async (groupId) => {
   try {
-    const res = await axios.delete(`${API_BASE}${groupId}/join`, {
+    const res = await axios.delete(`${GROUP_API_BASE}${groupId}/join`, {
       withCredentials: true,
     });
     return res.data;
@@ -71,7 +72,7 @@ export const cancelJoinRequestService = async (groupId) => {
 export const approveJoinRequestService = async (groupId, studentId) => {
   try {
     const res = await axios.patch(
-      `${API_BASE}${groupId}/approve-request/${studentId}`,
+      `${GROUP_API_BASE}${groupId}/approve-request/${studentId}`,
       null,
       { withCredentials: true }
     );
@@ -85,7 +86,7 @@ export const approveJoinRequestService = async (groupId, studentId) => {
 export const rejectJoinRequestService = async (groupId, studentId) => {
   try {
     const res = await axios.patch(
-      `${API_BASE}${groupId}/reject-request/${studentId}`,
+      `${GROUP_API_BASE}${groupId}/reject-request/${studentId}`,
       null,
       { withCredentials: true }
     );

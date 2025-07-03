@@ -23,7 +23,6 @@ const CreateSchedule = () => {
 
   const { handleCreateSchedule } = useCreateSchedule();
 
-  const classTimes = watch('classDaysTimes');
   const classLocation = watch('classLocation');
   const [courseSelected, setCourseSelected] = useState(false);
 
@@ -58,7 +57,7 @@ const CreateSchedule = () => {
     <FormProvider {...methods}>
       <h1
         className="header"
-        onClick={() => console.log(classTimes, classLocation)}>
+        onClick={() => console.log(classLocation)}>
         Add a New Schedule
       </h1>
 
