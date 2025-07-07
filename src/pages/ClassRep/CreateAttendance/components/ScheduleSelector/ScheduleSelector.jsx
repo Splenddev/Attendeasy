@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Spinner from '../../../../../components/Loader/Spinner/Spinner';
 import { catenateCredentialsSecure } from '../../../../../utils/helpers';
 
-const ScheduleSelector = () => {
+const ScheduleSelector = ({ setGroupId, setSchedId }) => {
   const {
     setValue,
     formState: { errors },
@@ -28,8 +28,13 @@ const ScheduleSelector = () => {
       setValue('lecturer.name', selectedSchedule.lecturerName || '');
       setValue('lecturer.email', selectedSchedule.lecturerEmail || '');
       setValue('groupId', selectedSchedule.groupId || '');
+      setGroupId(selectedSchedule.groupId);
     }
   }, [selectedSchedule, setValue]);
+
+  useEffect(() => {
+    setSchedId(selectedScheduleId);
+  }, [selectedScheduleId, setSchedId]);
 
   return (
     <div className={styles.wrapper}>

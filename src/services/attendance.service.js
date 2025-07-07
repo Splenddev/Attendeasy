@@ -10,9 +10,7 @@ export const createAttendance = async (payload) => {
 
 // Get all attendance sessions for a group
 export const getGroupAttendances = async (groupId) => {
-  const res = await axios.get(
-    `${ATTENDANCE_API_BASE}api/attendance/group/${groupId}`
-  );
+  const res = await axios.get(`${ATTENDANCE_API_BASE}groups/${groupId}`);
   return res.data;
 };
 

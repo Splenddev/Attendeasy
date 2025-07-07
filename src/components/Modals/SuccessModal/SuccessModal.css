@@ -1,0 +1,84 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.6);
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.success-modal {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 32px;
+  width: 90%;
+  max-width: 420px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: bounceIn 0.4s ease-out;
+}
+
+.success-icon {
+  font-size: 60px;
+  color: #22c55e; /* Tailwind green-500 */
+  margin-bottom: 12px;
+}
+
+.modal-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #222;
+}
+
+.modal-message {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #444;
+}
+
+.modal-details {
+  margin-top: 20px;
+  text-align: left;
+  font-size: 15px;
+  background: #f6f9fc;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.btn-close {
+  margin-top: 25px;
+  padding: 10px 20px;
+  background: #25aff3;
+  color: white;
+  border: none;
+  border-radius: 28px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.btn-close:hover {
+  background: #1e96d6;
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

@@ -4,7 +4,6 @@ import '../styles/ProfileSetup.css';
 import FieldSet from '../../../../components/FieldSet/FieldSet';
 import { MdCheckCircle, MdCheckCircleOutline } from 'react-icons/md';
 import BtnGroup from '../BtnGroup';
-import { variants } from '../../../../utils/contants';
 import { AnimatePresence, motion } from 'framer-motion';
 import CourseAdder from '../CourseAdder/CourseAdder';
 
@@ -28,6 +27,7 @@ const ProfileSetup = ({ onNext, onBack }) => {
   } = useFormContext();
 
   const selectedFaculty = watch('faculty');
+  const selectedRole = watch('role');
   const values = getValues();
 
   const [preview, setPreview] = useState(() =>
@@ -51,12 +51,25 @@ const ProfileSetup = ({ onNext, onBack }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const valid = await trigger(['faculty', 'department', 'level', 'terms']);
+
+    const courses = watch('courses') || [];
+
     if (!valid) {
       setError('Please complete all required fields and agree to the terms.');
       setTimeout(() => setError(null), 3000);
       return;
     }
+
+    if (selectedRole === 'class-rep' && courses.length < 3) {
+      setError('As a Class Rep, you must add at least 3 courses.');
+      setTimeout(() => setError(null), 3000);
+      return;
+    }
+
+    setValue('courses', courses); // inject into form data
+
     if (onNext) onNext();
   };
 
@@ -126,28 +139,41 @@ const ProfileSetup = ({ onNext, onBack }) => {
         required={true}
       />
 
-      {error && (
-        <p
-          className="error-text"
-          style={{ marginTop: '15px' }}>
-          {error}
-        </p>
-      )}
       <AnimatePresence>
-        {errors.terms && (
+        {error && (
           <motion.p
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
             className="error-text"
             style={{ marginTop: '15px' }}>
-            You must agree to the terms.
+            {error}
           </motion.p>
         )}
       </AnimatePresence>
-      <CourseAdder
-        onCoursesChange={(updatedCourses) => console.log(updatedCourses)}
-      />
+
+      {/* Only for class reps */}
+      {selectedRole === 'class-rep' && (
+        <>
+          <h3 style={{ marginTop: '20px' }}>Your Courses</h3>
+          <p className="hint">You must add at least 3 courses to proceed.</p>
+
+          <CourseAdder />
+
+          <AnimatePresence>
+            {error?.includes('Class Rep') && (
+              <motion.p
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="error-text"
+                style={{ marginTop: '15px' }}>
+                {error}
+              </motion.p>
+            )}
+          </AnimatePresence>
+        </>
+      )}
 
       <hr />
 

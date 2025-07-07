@@ -76,6 +76,7 @@ const Register = () => {
       level: '',
       username: '',
       matricNumber: '',
+      courses: [],
     },
 
     mode: 'onChange',
@@ -129,7 +130,6 @@ const Register = () => {
         'password',
       ]);
       if (!valid) return;
-      // Send OTP automatically when moving to verify step
     }
 
     if (step === 3) {
@@ -146,23 +146,26 @@ const Register = () => {
   };
 
   const onSubmit = async (data) => {
-    const { otp0, otp1, otp2, otp3, otp4, otp5, terms, ...userData } = data;
+    const { otp0, otp1, otp2, otp3, otp4, otp5, terms, courses, ...userData } =
+      data;
+
     setAuthBtnsLoading((prev) => ({ ...prev, submit: true }));
 
     try {
       const formData = new FormData();
 
-      // Append all key-value pairs
       for (const key in userData) {
-        if (key === 'profilePicture') {
+        if (key === 'profilePicture' && userData.profilePicture) {
           formData.append('profilePicture', userData.profilePicture);
         } else {
           formData.append(key, userData[key]);
         }
       }
 
+      formData.append('courses', JSON.stringify(courses || []));
+
       const result = await register(formData);
-      console.log(result);
+
       if (result.success) {
         toast.success(result.message || 'Account created');
         setDirection(1);
@@ -176,9 +179,6 @@ const Register = () => {
     } finally {
       setAuthBtnsLoading((prev) => ({ ...prev, submit: false }));
     }
-
-    console.log('Submitted:', data);
-    // Add API submission logic here
   };
 
   const renderStep = () => {

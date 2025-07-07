@@ -27,12 +27,12 @@ export const useCreateAttendance = () => {
   return { submit, loading, error };
 };
 
-export const useFetchGroupAttendances = () => {
+export const useFetchGroupAttendances = (groupId) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetch = useCallback(async (groupId) => {
+  const fetch = useCallback(async () => {
     try {
       setLoading(true);
       const res = await getGroupAttendances(groupId);

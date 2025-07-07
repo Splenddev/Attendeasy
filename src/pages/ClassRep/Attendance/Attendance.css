@@ -219,43 +219,7 @@
     padding-top: 20px;
   }
 }
-.c-attendance-group.grid {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-.c-attendance-group.list .label {
-  display: none;
-}
-.c-attendance-group .letter-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-left: 10px;
-}
-.c-attendance-group .letter-header hr {
-  width: 100%;
-  height: 1px;
-  background: #a3a3a3;
-  border: none;
-}
-.c-attendance-students.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 150px));
-  gap: 15px;
-}
-.c-attendance-student {
-  padding: 20px;
-}
-.c-attendance-student.list {
-  font-size: max(1.05vw, 15px);
-  display: grid;
-  grid-template-columns: 1fr 0.5fr 0.5fr 0.5fr 0.5fr;
-  align-items: center;
-  gap: 10px;
-  /* border-bottom: 1px solid #a7a7a7; */
-}
+
 .c-attendance-lists-properties {
   display: grid;
   grid-template-columns: 1fr 0.5fr 0.5fr 0.5fr 0.5fr;
@@ -263,130 +227,55 @@
   border-bottom: 1px solid #a7a7a7;
   padding: 10px;
 }
-.c-attendance-student.grid {
-  background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  border-radius: 20px;
-  gap: 15px;
-  box-shadow: 0px 0px 5px #a7a7a7;
-}
-.student-name {
-  gap: 10px;
-}
-.c-attendance-student.grid .student-name {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.c-attendance-student.list .student-name {
-  display: grid;
-  grid-template-columns: 30px 1fr;
-  align-items: center;
-}
-.student-name .name {
-  text-align: center;
-}
-.grid .student-name .name {
-  font-weight: 600;
-  font-size: 16px;
-}
-.c-attendance-student .student-img {
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--main-color);
-  color: #fff;
-}
-.student-img .role-icon {
-  position: absolute;
-  right: -5px;
-  top: -5px;
-  height: 16px;
-  width: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2px;
-  border-radius: 50%;
-  background: var(--red);
-}
-.c-attendance-student.grid .student-img {
-  height: 60px;
-  width: 60px;
-  font-size: 20px;
-  & .role-icon {
-    display: none;
-  }
-}
-.c-attendance-student.list .student-img {
-  position: relative;
-  height: 30px;
-  width: 30px;
-  font-size: 10px;
-}
-.c-attendance-student .marks {
-  display: flex;
-  gap: 15px;
-  width: 100%;
-  &.grid {
-    justify-content: center;
-  }
-}
-.c-attendance-student .mark {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  &.grid {
-    height: 33px;
-    width: 33px;
-    background: #ededed;
-    border-radius: 50%;
-  }
-  &.grid.present {
-    background: #22a876;
-    color: #fff;
-  }
-  &.grid.absent {
-    background: #e3340f;
-    color: #fff;
-  }
-  &.grid.late {
-    background: #fbc948;
-    color: #fff;
-  }
-  &.list.present {
-    color: var(--green);
-  }
-  &.list.absent {
-    color: var(--red);
-  }
-  &.list.late {
-    color: #fbc948;
-  }
-}
+
 .cap {
   text-transform: capitalize;
 }
-@media (max-width: 600px) {
-  .c-attendance-student.list {
-    grid-template-columns: 1fr 0.5fr 0.5fr 0.5fr 0.5fr;
-  }
-  .c-attendance-lists-properties {
-    grid-template-columns: 1fr 0.5fr 0.5fr 0.5fr;
-    & p:nth-child(2) {
-      display: none;
-    }
-  }
-  .c-attendance-student.list .student-name {
-    display: flex;
-    flex-direction: column;
-  }
-  .list .role {
-    display: none;
-  }
+
+.empty-attendance-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  color: var(--gray-600);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+}
+
+.empty-image {
+  width: 160px;
+  height: auto;
+  margin-bottom: 24px;
+  opacity: 0.92;
+  transition: transform 0.4s ease;
+}
+
+.empty-image:hover {
+  transform: scale(1.05);
+}
+
+.empty-attendance-state h4 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--gray-800);
+  font-family: var(--font-sen);
+}
+
+.empty-attendance-state button {
+  padding: 10px 20px;
+  margin-top: 15px;
+  border-radius: 30px;
+  background: var(--main-color);
+  color: #fff;
+}
+
+.empty-attendance-state p {
+  font-size: 1rem;
+  max-width: 400px;
+  line-height: 1.6;
+  color: var(--gray-500);
+  font-family: var(--font-outfit);
 }

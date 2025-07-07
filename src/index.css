@@ -121,6 +121,11 @@ html.dark {
 .others {
   color: var(--others);
 }
+.aic {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
 .class-status {
   color: #fff;
   place-self: start;

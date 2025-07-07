@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }) => {
     setAuthBtnsLoading((prev) => ({ ...prev, logout: true }));
     try {
       const data = await logoutUser();
-      if (data.message === 'Logged out successfully') {
+      if (data.success) {
         localStorage.removeItem('user');
         setUser(null);
         toast.success(data.message);

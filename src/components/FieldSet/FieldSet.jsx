@@ -42,15 +42,18 @@ const FieldSet = ({
   const validationRules = required ? { required: `${title} is required` } : {};
   const name = fieldName || toCamelCase(title);
 
-  const inputValue = watch(name) ?? (input.type === 'range' ? [100] : '');
+  const defaultRadius = 100;
+
+  const inputValue =
+    input.type === 'range' ? watch(name) ?? defaultRadius : watch(name) ?? '';
 
   const catenateValues = getValues(name);
 
   const classLocation = watch('classLocation');
 
   useEffect(() => {
-    if (input.type === 'range' && !watch(name)) {
-      setValue(name, [100]);
+    if (input.type === 'range' && watch(name) == null) {
+      setValue(name, defaultRadius);
     }
   }, []);
 

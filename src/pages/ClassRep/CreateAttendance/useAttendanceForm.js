@@ -1,44 +1,78 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-// import { useAuth } from '../../../context/AuthContext';
-import { selectOneStudent, selectAllStudents } from './attendanceHelpers';
 import { useCreateAttendance } from '../../../hooks/useAttendance';
 import { toast } from 'react-toastify';
 
-const useAttendanceForm = (groupId) => {
+const useAttendanceForm = (groupId, scheduleId) => {
   const methods = useForm({ defaultValues: {} });
+  const { handleSubmit, watch, reset } = methods;
 
-  const { submit, loading, error } = useCreateAttendance();
-  // const { setAttendanceList } = useAuth();
-  const { handleSubmit, setValue, watch, getValues } = methods;
+  const [modalError, setModalError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successData, setSuccessData] = useState(false);
 
+  const { submit, loading } = useCreateAttendance();
   const selectedStudents = watch('students');
 
   const onSubmit = async (data) => {
+    if (
+      data.location?.radiusMeters &&
+      Array.isArray(data.location.radiusMeters)
+    ) {
+      data.location.radiusMeters = data.location.radiusMeters[0];
+    }
+
     const formData = {
       ...data,
       groupId,
+      scheduleId,
     };
-    alert('submitted');
-    console.log(formData);
+
     try {
       const res = await submit(formData);
-      alert('Attendance created: ' + res.attendance.attendanceId);
+      if (res.success) {
+        setModalError(null);
+        setShowModal(false);
+        toast.success(res.message || 'Success');
+        setSuccessData({
+          message: res.message,
+          details: {
+            AttendanceID: res.attendance?.attendanceId,
+            Date: res.attendance?.classDate,
+            Status: res.attendance?.status,
+          },
+        });
+        setShowSuccess(true);
+        reset();
+      } else {
+        toast.error(res.message);
+        setModalError(res);
+        setShowModal(true);
+      }
     } catch (err) {
-      toast.error('Failed: ' + err.message);
-    }
-    // setAttendanceList((prev) => [...prev, formData]);
-  };
+      const errData = err.response?.data || {
+        message: err.message,
+        code: 'REQUEST_FAILED',
+      };
 
-  const toggleStudent = (name) => selectOneStudent(setValue, name, getValues);
-  const setAllStudents = () => selectAllStudents(setValue, getValues);
+      setModalError(errData);
+      setShowModal(true);
+    }
+  };
 
   return {
     methods,
     handleSubmit,
     onSubmit,
     selectedStudents,
-    toggleStudent,
-    setAllStudents,
+    modalError,
+    setModalError,
+    showModal,
+    setShowModal,
+    showSuccess,
+    successData,
+    setShowSuccess,
   };
 };
 

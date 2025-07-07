@@ -14,21 +14,20 @@ const DateFilter = ({ setFilteredAttendance, attendanceList }) => {
 
   const filterData = () => {
     const filtered = attendanceList.filter((item) => {
-      if (!item.DateCreated) return false; // skip if no time property
+      if (!item.classDate) return false;
       try {
-        const itemDate = parseISO(item.DateCreated);
+        const itemDate = parseISO(item.classDate);
         return itemDate.toDateString() === currDate.toDateString();
       } catch {
-        return false; // skip if parseISO fails
+        return false; 
       }
     });
     setFilteredAttendance(filtered);
   };
 
-
   useEffect(() => {
     filterData();
-  }, [currDate, attendanceList]); // Added attendanceList to deps in case it changes
+  }, [currDate, attendanceList]); 
 
   const handleDateChange = (date) => {
     if (date >= minDate && date <= maxDate) {

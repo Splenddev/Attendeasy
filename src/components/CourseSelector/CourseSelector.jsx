@@ -1,14 +1,7 @@
-import React from 'react';
 import styles from './CourseSelector.module.css';
-import {
-  MdPerson,
-  MdSchool,
-  MdLayers,
-  MdOutlineInterests,
-} from 'react-icons/md';
-import { FaBriefcase } from 'react-icons/fa';
+import { MdPerson, MdSchool, MdAdd, MdMail } from 'react-icons/md';
 
-const CourseSelector = ({ courses, onSelect }) => {
+const CourseSelector = ({ courses, onSelect, onAdd }) => {
   return (
     <div className={styles.courseSelector}>
       <h3>Select a Course</h3>
@@ -22,31 +15,29 @@ const CourseSelector = ({ courses, onSelect }) => {
             <div className={styles.courseTitle}>{course.courseTitle}</div>
 
             <div className={styles.courseInfo}>
-              <MdPerson size={16} />
-              <span>{course.lecturerName}</span>
+              <MdPerson size={18} />
+              <span>{course.lecturer.name}</span>
             </div>
 
             <div className={styles.courseInfo}>
-              <MdSchool size={16} />
-              <span>{course.level}</span>
+              <MdMail size={18} />
+              <span>{course.lecturer.email}</span>
             </div>
 
             <div className={styles.courseInfo}>
-              <MdLayers size={16} />
-              <span>{course.department}</span>
-            </div>
-
-            <div className={styles.courseInfo}>
-              <FaBriefcase size={16} />
-              <span>{course.faculty}</span>
-            </div>
-
-            <div className={styles.courseInfo}>
-              <MdOutlineInterests size={16} />
-              <span>{course.creditUnit}</span>
+              <MdSchool size={18} />
+              <span>{course.unit} unit</span>
             </div>
           </div>
         ))}
+        <div
+          className={styles.courseCard}
+          onClick={onAdd}>
+          <div className={styles.addCourse}>
+            <MdAdd />
+            Add new Course
+          </div>
+        </div>
       </div>
     </div>
   );
