@@ -12,7 +12,7 @@
   border-radius: 6px;
   border: none;
   outline: none;
-  background: var(--light-blue-200);
+  background: var(--blue-light);
 }
 input[type='checkbox'] {
   /* display: none; */

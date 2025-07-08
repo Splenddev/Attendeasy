@@ -10,6 +10,7 @@ import {
   rejectJoinRequestService,
 } from '../../../../services/group.service';
 import { toast } from 'react-toastify';
+import GroupCloudTab from '../tab/GroupCloudTab/GroupCloudTab';
 
 // Dummy component imports (replace with real ones)
 // import Announcements from './tabs/Announcements';
@@ -71,8 +72,8 @@ const GroupContents = ({ user, group, refreshGroup }) => {
       //   return <Schedule user={user} />;
       // case 'attendance':
       //   return <Attendance user={user} />;
-      // case 'materials':
-      //   return <Materials user={user} />;
+      case 'materials':
+        return <GroupCloudTab user={user} />;
       default:
         return <div>Tab not found.</div>;
     }

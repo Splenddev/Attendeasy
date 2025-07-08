@@ -30,7 +30,7 @@
   padding: 1rem;
   border-radius: 8px;
   transition: all ease 0.1s;
-  background: var(--light-blue-200);
+  background: var(--main-color-light);
   h3 {
     display: grid;
     grid-template-columns: 35px 1fr;

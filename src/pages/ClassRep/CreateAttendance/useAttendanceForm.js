@@ -4,7 +4,13 @@ import { useCreateAttendance } from '../../../hooks/useAttendance';
 import { toast } from 'react-toastify';
 
 const useAttendanceForm = (groupId, scheduleId) => {
-  const methods = useForm({ defaultValues: {} });
+  const methods = useForm({
+    defaultValues: {
+      location: {
+        radiusMeters: 100,
+      },
+    },
+  });
   const { handleSubmit, watch, reset } = methods;
 
   const [modalError, setModalError] = useState(null);
@@ -21,14 +27,6 @@ const useAttendanceForm = (groupId, scheduleId) => {
       Array.isArray(data.location.radiusMeters)
     ) {
       data.location.radiusMeters = data.location.radiusMeters[0];
-    }
-
-    if (
-      typeof data.location?.latitude === 'string' ||
-      typeof data.location?.longitude === 'string'
-    ) {
-      data.location?.latitude === parseInt(data.location?.latitude);
-      data.location?.longitude === parseInt(data.location?.longitude);
     }
 
     const formData = {

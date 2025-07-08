@@ -65,7 +65,6 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('user');
         setUser(null);
         toast.success(data.message);
-        window.location.href('/');
         setShowLogoutModal(false);
       }
     } catch (err) {

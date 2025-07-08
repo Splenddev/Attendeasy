@@ -134,7 +134,10 @@ const FieldSet = ({
           <input
             type={input.type}
             placeholder={input.placeholder}
-            {...register(name, validationRules)}
+            {...register(name, {
+              ...validationRules,
+              valueAsNumber: input.type === 'number',
+            })}
             step={input.step}
             disabled={disabled}
           />

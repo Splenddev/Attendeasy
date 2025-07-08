@@ -144,10 +144,10 @@
   background-color: #ffcccc;
 }
 .card-actions button:nth-child(3) {
-  background-color: var(--light-blue-200);
+  background-color: var(---blue-light);
   color: var(--main-color);
 }
 
 .card-actions button:nth-child(3):hover {
-  background-color: var(--light-blue-300);
+  background-color: var(--blue-light);
 }

@@ -54,7 +54,7 @@ export const formDataAssets2 = [
 export const formDataAssets = [
   {
     id: 'session-basics',
-    title: 'Session Basics',
+    title: 'Schedule Basics',
     selectOptions: [
       {
         name: 'groupId',

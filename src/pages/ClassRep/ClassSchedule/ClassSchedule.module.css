@@ -71,7 +71,7 @@
 }
 
 .daySelector button.activeDayBtn {
-  background-color: var(--light-blue-200);
+  background-color: var();
   border-color: #25aff3;
   color: #444;
 }

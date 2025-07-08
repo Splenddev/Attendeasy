@@ -214,7 +214,7 @@
   & .entry {
     padding: 15px;
     border-radius: 8px;
-    background: var(--light-blue-200);
+    background: var(--blue-light);
     & p {
       color: var(--main-color);
       display: grid;
