@@ -51,7 +51,25 @@
 
 .actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
+  gap: 5px;
+}
+.actions button {
+  border-radius: 20px;
+  padding: 0.4rem 1rem;
+  &.settingsBtn {
+    padding: 9px;
+    color: var(--text-muted);
+    background: transparent;
+    font-size: 1rem;
+  }
+  &.refreshBtn {
+    background: var(--btn-bg);
+    box-shadow: var(--btn-shadow-sm);
+    &:hover {
+      box-shadow: var(--btn-shadow-sm-hover);
+    }
+  }
 }
 
 .settingsIcon {

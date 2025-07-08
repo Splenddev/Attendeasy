@@ -4,6 +4,7 @@ import { MdSettings } from 'react-icons/md';
 import BannerImage from '../BannerImage/BannerImage';
 import styles from './GroupSidebar.module.css';
 import { FiRefreshCcw } from 'react-icons/fi';
+import button from '../../../../components/Button/Button';
 
 const GroupSidebar = ({ group, refresh }) => {
   return (
@@ -19,8 +20,17 @@ const GroupSidebar = ({ group, refresh }) => {
 
         <div className={styles.sidebarContents}>
           <div className={styles.actions}>
-            <MdSettings className={styles.settingsIcon} />
-            <FiRefreshCcw onClick={refresh} />
+            {button.icon({
+              icon: MdSettings,
+              name: styles.settingsBtn + ' center',
+            })}
+
+            {button.multiple({
+              icon: FiRefreshCcw,
+              name: styles.refreshBtn,
+              func: refresh,
+              element: 'Refresh',
+            })}
           </div>
 
           <div className={styles.info}>
@@ -38,7 +48,7 @@ const GroupSidebar = ({ group, refresh }) => {
                 src={group.creator?.avatar || '/main_class-rep_avatar.png'}
                 alt="Class Rep"
               />
-              <p>{group.creator?.name || 'Class Representative'}</p>
+              <p>Owner: {group.creator?.name || 'Class Representative'}</p>
             </div>
           </div>
         </div>

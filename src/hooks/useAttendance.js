@@ -1,8 +1,9 @@
 // src/hooks/useAttendance.js
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
   createAttendance,
   getGroupAttendances,
+  getGroupTabAttendances,
   markAttendance,
   submitAbsencePlea,
 } from '../services/attendance.service';
@@ -45,6 +46,31 @@ export const useFetchGroupAttendances = (groupId) => {
   }, []);
 
   return { data, fetch, loading, error };
+};
+export const useFetchGroupTabAttendances = (groupId) => {
+  const [data, setData] = useState(null); // it’s an object, not array
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const fetch = useCallback(async () => {
+    if (!groupId) return;
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await getGroupTabAttendances(groupId);
+      setData(res.data);
+    } catch (err) {
+      setError(err.message || 'Something went wrong');
+    } finally {
+      setLoading(false);
+    }
+  }, [groupId]);
+
+  useEffect(() => {
+    fetch();
+  }, [fetch]);
+
+  return { data, refetch: fetch, loading, error };
 };
 
 export const useMarkAttendance = () => {

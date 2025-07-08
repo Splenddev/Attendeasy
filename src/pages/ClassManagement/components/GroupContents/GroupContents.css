@@ -1,11 +1,27 @@
 .group-contents {
-  display: grid;
+  display: flex;
   flex-direction: column;
-  flex: 1;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
-/* tabs */
+/* Tabs container */
 .tab-container {
-  overflow: hidden;
-  margin-bottom: 2rem;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Ensure tab buttons scroll on small screen */
+.tab-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Content area */
+.tab-content {
+  width: 100%;
+  overflow-x: auto;
+  box-sizing: border-box;
 }

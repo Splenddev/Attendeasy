@@ -1,143 +1,182 @@
-import React from 'react';
+import styles from './GroupCloudTab.module.css';
 import {
-  FaFolderOpen,
-  FaFilePdf,
-  FaFileVideo,
   FaFileAlt,
-  FaUpload,
+  FaFileVideo,
+  FaMusic,
+  FaCloudUploadAlt,
+  FaSearch,
+  FaEllipsisV,
 } from 'react-icons/fa';
-import styles from './GroupCloudTab.module.css'; // use CSS modules
 
-const fileSummary = [
+const files = [
   {
-    type: 'Documents',
-    count: 118,
-    size: '4.6 MB',
-    icon: <FaFilePdf color="#d9534f" />,
+    name: 'Berserk Vol 32.pdf',
+    size: '25 MB',
+    date: '2025/8/16',
+    type: 'pdf',
+    users: ['+3'],
   },
   {
-    type: 'Videos',
-    count: 5,
-    size: '19.2 MB',
-    icon: <FaFileVideo color="#5bc0de" />,
+    name: 'Invoice Dec 23.doc',
+    size: '44 GB',
+    date: '2025/8/16',
+    type: 'doc',
+    users: ['+5'],
   },
   {
-    type: 'Audio',
-    count: 0,
-    size: '0 MB',
-    icon: <FaFileAlt color="#f0ad4e" />,
-  },
-  {
-    type: 'Images',
-    count: 0,
-    size: '0 MB',
-    icon: <FaFileAlt color="#5cb85c" />,
+    name: 'Screenshot 22.jpg',
+    size: '78 TB',
+    date: '2025/8/16',
+    type: 'img',
+    users: ['+2'],
   },
 ];
 
 const GroupCloudTab = () => {
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
+    <div className={styles.page}>
+      {/* Header */}
+      <div className={styles.header}>
         <h2>Group Cloud</h2>
-        <p>All files (8 total)</p>
-      </header>
-
-      <div className={styles.grid}>
-        {fileSummary.map((item) => (
-          <div
-            key={item.type}
-            className={styles.card}>
-            <div className={styles.icon}>{item.icon}</div>
-            <div className={styles.content}>
-              <strong>{item.type}</strong>
-              <p>{item.count} files</p>
-              <p>{item.size} used</p>
-            </div>
-          </div>
-        ))}
-
-        <div className={styles.uploadCard}>
-          <FaUpload size={24} />
-          <p>Upload or drag and drop</p>
-          <button>Choose File</button>
+        <div className={styles.views}>
+          <button className={styles.active}>Normal View</button>
+          <button>List View</button>
+          <button>Card View</button>
         </div>
       </div>
 
-      <section className={styles.bottomSection}>
-        <div className={styles.recentActivity}>
-          <h3>Recent Activity</h3>
-          <div className={styles.activityItem}>
-            <FaFilePdf className={styles.pdfIcon} />
-            <span>You viewed a new file: Biochemistry.pdf</span>
-            <small>2025-07-08 at 16:15</small>
-          </div>
-          <div className={styles.activityItem}>
-            <FaFileVideo className={styles.videoIcon} />
-            <span>Musa submitted a video</span>
-            <small>2025-07-07 at 15:30</small>
-            <div className={styles.actionButtons}>
-              <button className={styles.approve}>Approve</button>
-              <button className={styles.reject}>Reject</button>
+      <div className={styles.content}>
+        {/* Left Column */}
+        <div className={styles.main}>
+          {/* Folder Summary Cards */}
+          <div className={styles.folders}>
+            <div className={styles.folderCard}>
+              <FaFileAlt />
+              <div>
+                <h4>Files</h4>
+                <p>118 files – 2.8 GB</p>
+              </div>
             </div>
+            <div className={styles.folderCard}>
+              <FaFileVideo />
+              <div>
+                <h4>Videos</h4>
+                <p>16 files – 128.1 TB</p>
+              </div>
+            </div>
+            <div className={styles.folderCard}>
+              <FaMusic />
+              <div>
+                <h4>Audio</h4>
+                <p>1,228 files – 155 MB</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Upload Box */}
+          <div className={styles.uploadBox}>
+            <FaCloudUploadAlt size={40} />
+            <p>Click here to upload your file or drag.</p>
+            <small>Supported formats: SVG, JPG, PNG (10MB max)</small>
+          </div>
+
+          {/* Files Table */}
+          <div className={styles.filesSection}>
+            <div className={styles.filesHeader}>
+              <h4>
+                My Files <span>({files.length} Total)</span>
+              </h4>
+              <div className={styles.fileSearch}>
+                <FaSearch />
+                <input
+                  type="text"
+                  placeholder="Search files"
+                />
+              </div>
+              <button className={styles.filterBtn}>Filter</button>
+            </div>
+
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>File Name</th>
+                  <th>Size</th>
+                  <th>Last Modified</th>
+                  <th>User Permission</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {files.map((file, idx) => (
+                  <tr key={idx}>
+                    <td>{file.name}</td>
+                    <td>{file.size}</td>
+                    <td>{file.date}</td>
+                    <td>{file.users.join(', ')}</td>
+                    <td>
+                      <FaEllipsisV />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
 
-        <div className={styles.storageBox}>
-          <h4>My Storage</h4>
-          <div className={styles.storageRing}>
+        {/* Right Sidebar */}
+        <aside className={styles.sidebar}>
+          <h3>My Storage</h3>
+          <div className={styles.chart}>
             <svg
               width="100"
               height="100"
               viewBox="0 0 36 36">
-              <path
-                d="M18 2.0845
-                  a 15.9155 15.9155 0 0 1 0 31.831
-                  a 15.9155 15.9155 0 0 1 0 -31.831"
+              <circle
+                cx="18"
+                cy="18"
+                r="15.9155"
                 fill="none"
-                stroke="#ddd"
-                strokeWidth="2"
+                stroke="#eee"
+                strokeWidth="3"
               />
-              <path
-                d="M18 2.0845
-                  a 15.9155 15.9155 0 0 1 0 80"
+              <circle
+                cx="18"
+                cy="18"
+                r="15.9155"
                 fill="none"
                 stroke="#25aff3"
-                strokeWidth="2"
-                strokeDasharray="86, 100"
+                strokeWidth="3"
+                strokeDasharray="70, 100"
+                transform="rotate(-90 18 18)"
               />
             </svg>
-            <div className={styles.usedLabel}>86.12 MB</div>
+            <span className={styles.usageText}>36.12 MB</span>
           </div>
-          <ul className={styles.usageBreakdown}>
+
+          <ul className={styles.breakdown}>
             <li>
-              <span
-                className={styles.dot}
-                style={{ backgroundColor: '#d9534f' }}></span>{' '}
-              Documents (4.6MB)
+              <span style={{ background: '#d9534f' }}></span> Documents (4.6MB)
             </li>
             <li>
-              <span
-                className={styles.dot}
-                style={{ backgroundColor: '#5bc0de' }}></span>{' '}
-              Videos (19.2MB)
+              <span style={{ background: '#5bc0de' }}></span> Videos (19.2MB)
             </li>
             <li>
-              <span
-                className={styles.dot}
-                style={{ backgroundColor: '#f0ad4e' }}></span>{' '}
-              Audio (0MB)
-            </li>
-            <li>
-              <span
-                className={styles.dot}
-                style={{ backgroundColor: '#5cb85c' }}></span>{' '}
-              Images (0MB)
+              <span style={{ background: '#333' }}></span> Audio (0MB)
             </li>
           </ul>
+
           <small>Total Storage: 50MB</small>
-        </div>
-      </section>
+
+          <div className={styles.recent}>
+            <h4>Recent Activity</h4>
+            <ul>
+              <li>Uploaded 2 files – July 8</li>
+              <li>Deleted 1 file – July 7</li>
+              <li>Viewed a file – July 6</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
     </div>
   );
 };

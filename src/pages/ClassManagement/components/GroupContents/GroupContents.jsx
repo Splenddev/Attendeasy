@@ -11,6 +11,9 @@ import {
 } from '../../../../services/group.service';
 import { toast } from 'react-toastify';
 import GroupCloudTab from '../tab/GroupCloudTab/GroupCloudTab';
+import AttendanceTab from '../tab/AttendanceTab/AttendanceTab';
+import { useFetchGroupTabAttendances } from '../../../../hooks/useAttendance';
+import Spinner from '../../../../components/Loader/Spinner/Spinner';
 
 // Dummy component imports (replace with real ones)
 // import Announcements from './tabs/Announcements';
@@ -43,6 +46,10 @@ const GroupContents = ({ user, group, refreshGroup }) => {
     }
   };
 
+  const { data, loading, error, refetch } = useFetchGroupTabAttendances(
+    user.group
+  );
+
   const renderTabContent = () => {
     switch (selectedTab) {
       case 'overview':
@@ -70,8 +77,16 @@ const GroupContents = ({ user, group, refreshGroup }) => {
         );
       // case 'schedule':
       //   return <Schedule user={user} />;
-      // case 'attendance':
-      //   return <Attendance user={user} />;
+      case 'attendance':
+        return (
+          <AttendanceTab
+            data={data}
+            error={error}
+            loading={loading}
+            retry={refetch}
+            isClassRep={isClassRep}
+          />
+        );
       case 'materials':
         return <GroupCloudTab user={user} />;
       default:

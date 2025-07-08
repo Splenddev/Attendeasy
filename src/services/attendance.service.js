@@ -14,6 +14,11 @@ export const getGroupAttendances = async (groupId) => {
   return res.data;
 };
 
+export const getGroupTabAttendances = async (groupId) => {
+  const res = await axios.get(`${ATTENDANCE_API_BASE}group-tab/${groupId}`);
+  return res.data;
+};
+
 // Get single attendance session
 export const getAttendanceById = async (attendanceId) => {
   const res = await axios.get(
