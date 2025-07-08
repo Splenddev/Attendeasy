@@ -89,7 +89,7 @@ const Attendance = () => {
     return (
       <div className="attendance-loading-state">
         <img
-          src="/illustrations/loading-attendance.svg"
+          src="/illustrations/loading.svg"
           alt="Loading attendance"
           className="attendance-loading-illustration"
         />
