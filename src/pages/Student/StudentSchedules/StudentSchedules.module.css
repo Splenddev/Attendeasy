@@ -1,0 +1,178 @@
+:root {
+  --primary-color: #25aff3;
+  --card-bg: #ffffff;
+  --bg-light: #f8fafd;
+  --text-dark: #1d1d1f;
+  --text-muted: #5e6773;
+  --border-light: #e0e6ed;
+  --radius: 16px;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.schedulePage {
+  padding: 2.5rem;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.subtext {
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+.weeklyGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.75rem;
+  margin-bottom: 2rem;
+}
+
+.dayColumn {
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease;
+}
+
+.dayColumn:hover {
+  transform: translateY(-2px);
+}
+
+.dayTitle {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+}
+
+.classCard {
+  background-color: #f0faff;
+  border: 1px solid var(--primary-color);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.classCard h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.classCard p {
+  margin: 0.25rem 0;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.mediaPreview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.mediaImg {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border-light);
+}
+
+.nextClass {
+  margin-top: 2.5rem;
+}
+
+.nextClass h2 {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.nextCard {
+  background: linear-gradient(to right, #25aff3, #1f8edb);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  color: #fff;
+  box-shadow: var(--shadow);
+}
+
+.nextCard h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.nextCard p {
+  margin: 0.25rem 0;
+}
+
+.actions {
+  margin-top: 1rem;
+}
+
+.actions button {
+  background-color: #fff;
+  color: var(--primary-color);
+  font-weight: 600;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-right: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease;
+}
+
+.actions button:hover {
+  background-color: #f0faff;
+}
+
+.upcomingList {
+  margin-top: 3rem;
+}
+
+.upcomingList h2 {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.upcomingList ul {
+  list-style: none;
+  padding: 0;
+}
+
+.upcomingList li {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.95rem;
+  gap: 1rem;
+  color: var(--text-dark);
+}
+
+.dayTag {
+  font-weight: 600;
+  color: var(--primary-color);
+  min-width: 80px;
+}
+
+.timeTag {
+  font-weight: 500;
+  min-width: 100px;
+  color: var(--text-muted);
+}
+
+.courseTag {
+  flex: 1;
+  font-weight: 500;
+}
