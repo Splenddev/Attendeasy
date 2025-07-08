@@ -7,9 +7,9 @@ import {
 } from '../services/courses.service.js';
 import { toast } from 'react-toastify';
 
-const useCourses = () => {
+const useCourses = (autoFetch = true) => {
   const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(autoFetch);
 
   const fetchCourses = async () => {
     try {
@@ -17,7 +17,7 @@ const useCourses = () => {
       const data = await getCourses();
       setCourses(data.courses || []);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.message || 'Failed to fetch courses.');
     } finally {
       setLoading(false);
     }
@@ -29,7 +29,7 @@ const useCourses = () => {
       setCourses((prev) => [...prev, newCourse]);
       toast.success('Course added.');
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.message || 'Failed to add course.');
     }
   };
 
@@ -41,14 +41,14 @@ const useCourses = () => {
       );
       setCourses((prev) =>
         prev.map((c) =>
-          c.courseCode.toLowerCase() === courseCode.toLowerCase()
+          c.courseCode.toUpperCase() === courseCode.toUpperCase()
             ? updatedCourse
             : c
         )
       );
       toast.success('Course updated.');
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.message || 'Failed to update course.');
     }
   };
 
@@ -57,18 +57,39 @@ const useCourses = () => {
       await deleteCourse(courseCode);
       setCourses((prev) =>
         prev.filter(
-          (c) => c.courseCode.toLowerCase() !== courseCode.toLowerCase()
+          (c) => c.courseCode.toUpperCase() !== courseCode.toUpperCase()
         )
       );
       toast.info('Course removed.');
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.message || 'Failed to remove course.');
     }
   };
 
   useEffect(() => {
-    fetchCourses();
-  }, []);
+    let didCancel = false;
+
+    const loadCourses = async () => {
+      setLoading(true);
+      try {
+        const data = await getCourses();
+        if (!didCancel) setCourses(data.courses || []);
+      } catch (error) {
+        if (!didCancel)
+          toast.error(error.message || 'Failed to fetch courses.');
+      } finally {
+        if (!didCancel) setLoading(false);
+      }
+    };
+
+    if (autoFetch) {
+      loadCourses();
+    }
+
+    return () => {
+      didCancel = true;
+    };
+  }, [autoFetch]);
 
   return {
     courses,

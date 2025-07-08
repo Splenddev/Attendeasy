@@ -1,6 +1,18 @@
 .page {
   max-width: 800px;
-  /* padding: 1rem; */
+  background: #fff;
+  padding: 1rem;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #555;
+}
+
+.illustration {
+  max-width: 250px;
+  margin-bottom: 1rem;
 }
 
 .header {

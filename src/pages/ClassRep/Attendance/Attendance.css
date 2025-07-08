@@ -1,6 +1,49 @@
 .c-attendance {
   padding: 10px;
 }
+
+.attendance-loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background-color: #f8fafc;
+  border-radius: 10px;
+  text-align: center;
+  border: 1px dashed #cbd5e1;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.attendance-loading-illustration {
+  width: 180px;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+.attendance-loading-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+
+.attendance-loading-subtext {
+  font-size: 0.95rem;
+  color: #475569;
+  margin-bottom: 1.5rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .c-attendance-date {
   display: flex;
   justify-content: end;

@@ -18,7 +18,7 @@
 }
 
 .courseList::-webkit-scrollbar-thumb {
-  background-color: #25aff3;
+  background-color: var(--main-color);
   border-radius: 4px;
 }
 
@@ -26,7 +26,7 @@
   flex: 0 0 auto;
   cursor: pointer;
   background: #ffffff;
-  border: 1px solid #25aff3;
+  border: 1px solid var(--main-color);
   border-radius: 12px;
   padding: 1rem 1.2rem;
   width: 240px;
@@ -35,6 +35,16 @@
   justify-content: space-between;
   transition: all 0.25s ease-in-out;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  position: relative;
+}
+
+.check {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  color: var(--main-color);
+  box-shadow: 0 6px 12px rgba(37, 175, 243, 0.15);
+  border-radius: 20px;
 }
 
 .courseCard:hover {
@@ -43,7 +53,7 @@
 
 .courseCard h4 {
   font-size: 1.1rem;
-  color: #25aff3;
+  color: var(--main-color);
   margin-bottom: 4px;
 }
 
@@ -58,14 +68,14 @@
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
   font-size: 0.9rem;
   color: #333;
   margin-bottom: 0.5rem;
 }
 
 .courseCard .courseInfo svg {
-  color: #25aff3;
+  color: var(--main-color);
   flex-shrink: 0;
 }
 
@@ -74,7 +84,7 @@
 }
 
 .courseCard {
-  sc.courseSelector {
+  .courseSelector {
     padding: 1rem;
     overflow-x: hidden;
   }
@@ -94,7 +104,7 @@
     margin-bottom: 0.5rem;
     scroll-snap-type: x mandatory;
     scrollbar-width: thin;
-    scrollbar-color: #25aff3 #f1f1f1;
+    scrollbar-color: var(--main-color) #f1f1f1;
   }
 
   .courseList::-webkit-scrollbar {
@@ -102,7 +112,7 @@
   }
 
   .courseList::-webkit-scrollbar-thumb {
-    background-color: #25aff3;
+    background-color: var(--main-color);
     border-radius: 6px;
   }
 
@@ -111,7 +121,7 @@
     flex: 0 0 auto;
     background: #fff;
     border: 1px solid #e0e0e0;
-    border-left: 5px solid #25aff3;
+    border-left: 5px solid var(--main-color);
     border-radius: 12px;
     padding: 1rem 1.2rem;
     width: 250px;
@@ -131,7 +141,7 @@
   .courseCard h4 {
     font-size: 1.1rem;
     font-weight: 600;
-    color: #25aff3;
+    color: var(--main-color);
     margin-bottom: 4px;
   }
 
@@ -154,7 +164,7 @@
   }
 
   .courseInfo svg {
-    color: #25aff3;
+    color: var(--main-color);
     flex-shrink: 0;
   }
 
@@ -162,7 +172,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #25aff3;
+    color: var(--main-color);
     font-weight: 600;
     font-size: 0.95rem;
     height: 100%;
@@ -173,8 +183,8 @@
 
   .courseCard:last-child {
     background-color: #f8fbfd;
-    border: 2px dashed #25aff3;
-    color: #25aff3;
+    border: 2px dashed var(--main-color);
+    color: var(--main-color);
   }
 
   .courseCard:last-child:hover {

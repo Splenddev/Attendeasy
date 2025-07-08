@@ -14,6 +14,7 @@ import SessionInfo from './components/SessionInfo/SessionInfo';
 import Students from './components/Students/Students';
 import { useFetchGroupAttendances } from '../../../hooks/useAttendance';
 import { useAuth } from '../../../context/AuthContext';
+import Spinner from '../../../components/Loader/Spinner/Spinner';
 
 const Attendance = () => {
   const { user } = useAuth();
@@ -85,7 +86,28 @@ const Attendance = () => {
   };
 
   if (loading) {
-    return <p className="loading-state">Fetching attendance records...</p>;
+    return (
+      <div className="attendance-loading-state">
+        <img
+          src="/illustrations/loading-attendance.svg"
+          alt="Loading attendance"
+          className="attendance-loading-illustration"
+        />
+        <div className="attendance-loading-content">
+          <p className="attendance-loading-title">
+            Fetching Attendance Records...
+          </p>
+          <p className="attendance-loading-subtext">
+            Please hold on while we load attendance data for your class. This
+            may take a few seconds.
+          </p>
+          <Spinner
+            size="32px"
+            scale="1"
+          />
+        </div>
+      </div>
+    );
   }
 
   if (error) {
@@ -176,10 +198,12 @@ const Attendance = () => {
         </div>
       </div>
 
-      <p className="c-attendance-length">
-        Filtered <span>{sortedAttendance.length}</span> of{' '}
-        <span>{attendanceList.length}</span> attendance
-      </p>
+      {attendanceList.length > 0 && (
+        <p className="c-attendance-length">
+          Filtered <span>{sortedAttendance.length}</span> of{' '}
+          <span>{attendanceList.length}</span> attendance
+        </p>
+      )}
 
       {sortedAttendance.length === 0 ? (
         <div className="empty-attendance-state">

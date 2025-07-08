@@ -1,7 +1,15 @@
+import { useState } from 'react';
 import styles from './CourseSelector.module.css';
-import { MdPerson, MdSchool, MdAdd, MdMail } from 'react-icons/md';
+import {
+  MdPerson,
+  MdSchool,
+  MdAdd,
+  MdMail,
+  MdCheckCircle,
+} from 'react-icons/md';
 
 const CourseSelector = ({ courses, onSelect, onAdd }) => {
+  const [selected, setSelected] = useState(null);
   return (
     <div className={styles.courseSelector}>
       <h3>Select a Course</h3>
@@ -10,7 +18,15 @@ const CourseSelector = ({ courses, onSelect, onAdd }) => {
           <div
             key={i}
             className={styles.courseCard}
-            onClick={() => onSelect(course)}>
+            onClick={() => {
+              onSelect(course);
+              setSelected(course.courseCode);
+            }}>
+            {selected === course.courseCode && (
+              <span className={`center ${styles.check}`}>
+                <MdCheckCircle />
+              </span>
+            )}
             <h4>{course.courseCode}</h4>
             <div className={styles.courseTitle}>{course.courseTitle}</div>
 

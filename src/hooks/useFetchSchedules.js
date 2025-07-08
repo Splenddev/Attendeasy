@@ -4,7 +4,7 @@ import { fetchSchedulesByGroup } from '../services/schedule.service';
 
 export const useFetchSchedules = (groupId) => {
   const [schedules, setSchedules] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const fetchData = () => {

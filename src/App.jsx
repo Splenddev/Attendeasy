@@ -1,17 +1,31 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import 'leaflet/dist/leaflet.css';
-import DevRoleSwitcher from './components/DevRoleSwitcher';
 import 'react-toastify/dist/ReactToastify.css';
+
+import DevRoleSwitcher from './components/DevRoleSwitcher';
 import { ToastContainer } from 'react-toastify';
 import { useAuth } from './context/AuthContext';
 import { ConfirmModal } from './components/Modals';
+import JoinGroupPrompt from './components/JoinGroupPrompt/JoinGroupPrompt';
 
 const App = () => {
-  const { setShowLogoutModal, showLogoutModal, logout, authBtnsLoading } =
+  const { setShowLogoutModal, showLogoutModal, logout, authBtnsLoading, user } =
     useAuth();
+
+  const role = user?.role?.toLowerCase();
+  const location = useLocation();
+
+  const isOnGroupPage = location.pathname.startsWith(
+    `/${role}/group-management`
+  );
+
+  const shouldShowJoinGroupPrompt =
+    user?.isLoggedIn && !user?.group && !isOnGroupPage;
+
   return (
     <>
       <ToastContainer position="top-center" />
+
       <ConfirmModal
         isOpen={showLogoutModal}
         onClose={() => setShowLogoutModal(false)}
@@ -20,7 +34,9 @@ const App = () => {
         actionText="Logout"
         message="You’re about to log out of your account."
       />
-      <Outlet />
+
+      {shouldShowJoinGroupPrompt ? <JoinGroupPrompt role={role} /> : <Outlet />}
+
       <DevRoleSwitcher />
     </>
   );

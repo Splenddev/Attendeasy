@@ -16,19 +16,20 @@ import Spinner from '../../../components/Loader/Spinner/Spinner';
 import PopupBox from '../../../components/Modals/PopupBox/PopupBox';
 import CourseAdder from '../../Auth/Register/CourseAdder/CourseAdder';
 import ManagerCourse from '../ManageCourse/ManageCourse';
+import { FiPlus, FiRefreshCw } from 'react-icons/fi';
 
 const CreateSchedule = () => {
   const { setNavTitle, user } = useAuth();
   useEffect(() => setNavTitle('Create Schedules'), [setNavTitle]);
 
-  const { courses, refetch, loading } = useCourses();
+  const [openPopup, setOpenPopup] = useState(false);
+
+  const { courses, refetch, loading } = useCourses('fetch');
 
   const { methods } = useScheduleForm();
   const { handleSubmit, setValue, reset, watch } = methods;
 
   const { handleCreateSchedule } = useCreateSchedule();
-
-  const [openPopup, setOpenPopup] = useState(false);
 
   const classLocation = watch('classLocation');
   const [courseSelected, setCourseSelected] = useState(false);
@@ -52,6 +53,9 @@ const CreateSchedule = () => {
       lecturerName: course.lecturer.name,
       creditUnit: course.unit,
       lecturerEmail: course.lecturer.email,
+      faculty: user.faculty,
+      department: user.department,
+      level: user.level,
     }).forEach(([key, value]) => setValue(key, value));
 
     setCourseSelected(true);
@@ -66,16 +70,28 @@ const CreateSchedule = () => {
           Add a New Schedule
         </h1>
         {loading ? (
-          <div className="">
+          <div className="loaderWrapper">
             <Spinner
               size="25px"
               scale=".8"
             />
           </div>
         ) : !courses.length ? (
-          <div>
-            No course<button onClick={refetch}>Retry</button>
-            <button onClick={() => setOpenPopup(true)}>Add Course</button>
+          <div className="fallbackActions">
+            <p>No course found.</p>
+            <div className="buttonGroup">
+              {button.multiple({
+                disabled: loading,
+                icon: FiRefreshCw,
+                element: 'Retry',
+                func: refetch,
+              })}
+              {button.multiple({
+                icon: FiPlus,
+                element: 'Add Course',
+                func: () => setOpenPopup(true),
+              })}
+            </div>
           </div>
         ) : (
           <CourseSelector

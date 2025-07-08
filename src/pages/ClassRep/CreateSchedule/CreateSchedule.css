@@ -85,6 +85,50 @@
   background: #1992cc;
 }
 
+.loaderWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80px;
+}
+
+.fallbackActions {
+  text-align: center;
+  /* background-color: #fff; */
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1rem auto;
+  width: 90vw;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.fallbackActions p {
+  font-size: 0.95rem;
+  color: #334155;
+  margin-bottom: 0.75rem;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.buttonGroup button {
+  background-color: #25aff3;
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.buttonGroup button:hover {
+  background-color: #199ddf;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

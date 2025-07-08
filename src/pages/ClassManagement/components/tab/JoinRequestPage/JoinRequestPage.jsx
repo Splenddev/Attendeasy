@@ -50,7 +50,21 @@ const JoinRequestPage = ({ group, onAction }) => {
       </div>
 
       {joinRequests.length === 0 ? (
-        <p className={styles.empty}>No join requests at the moment.</p>
+        <div className={styles.emptyState}>
+          <img
+            src="/illustrations/empty.svg"
+            alt="No join requests"
+            className={styles.illustration}
+          />
+          <h3>No Join Requests</h3>
+          <p>
+            You're all caught up! Students who want to join your group will
+            appear here.
+          </p>
+          <p>
+            Share your group code or link with your classmates so they can join.
+          </p>
+        </div>
       ) : (
         <div className={styles.list}>
           {joinRequests.map((req) => {
