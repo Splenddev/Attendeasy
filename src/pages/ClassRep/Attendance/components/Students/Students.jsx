@@ -201,14 +201,13 @@ const Students = ({ group, view }) => {
               className={`c-attendance-student ${view}`}>
               <div className="student-name">
                 <div className="student-img">
-                  {st.name
-                    .split(' ')
-                    .map((n) => n[0].toUpperCase())
-                    .join('')}
-                  <span className="role-icon">
-                    {st.role === 'rep' ? <FaCrown /> : <FaUserGraduate />}
-                  </span>
-                </div>
+  {st.name?.split(' ')
+    .map((n) => n?.[0]?.toUpperCase() || '')
+    .join('') || '??'}
+  <span className="role-icon">
+    {st.role === 'rep' ? <FaCrown /> : <FaUserGraduate />}
+  </span>
+</div>
                 <p className="name">{st.name}</p>
               </div>
 
