@@ -23,6 +23,14 @@ const useAttendanceForm = (groupId, scheduleId) => {
       data.location.radiusMeters = data.location.radiusMeters[0];
     }
 
+    if (
+      typeof data.location?.latitude === 'string' ||
+      typeof data.location?.longitude === 'string'
+    ) {
+      data.location?.latitude === parseInt(data.location?.latitude);
+      data.location?.longitude === parseInt(data.location?.longitude);
+    }
+
     const formData = {
       ...data,
       groupId,
