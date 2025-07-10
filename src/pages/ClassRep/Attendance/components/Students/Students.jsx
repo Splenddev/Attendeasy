@@ -202,9 +202,9 @@ const Students = ({ group, view }) => {
               <div className="student-name">
                 <div className="student-img">
                   {st.name
-                    .split(' ')
-                    .map((n) => n[0].toUpperCase())
-                    .join('')}
+                    ?.split(' ')
+                    .map((n) => n?.[0]?.toUpperCase() || '')
+                    .join('') || '??'}
                   <span className="role-icon">
                     {st.role === 'rep' ? <FaCrown /> : <FaUserGraduate />}
                   </span>
