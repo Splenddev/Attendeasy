@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { API_BASE } from '../utils/apiBaseUrl';
 const ATTENDANCE_API_BASE = `${API_BASE}attendance/`;
-// const ATTENDANCE_API_BASE = `${API_BASE}attendance/`;
+
 // Create new attendance session
 export const createAttendance = async (payload) => {
   const res = await axios.post(`${ATTENDANCE_API_BASE}create`, payload);
