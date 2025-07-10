@@ -161,38 +161,38 @@ export const formatTime = (time) => {
 export const getFileIconClass = (ext) => {
   switch (ext) {
     case 'pdf':
-      return FaFilePdf;
+      return { icon: FaFilePdf, color: '#e74c3c' };
     case 'doc':
     case 'docx':
-      return FaFileWord;
+      return { icon: FaFileWord, color: '#2b7cd3' };
     case 'xls':
     case 'xlsx':
-      return FaFileExcel;
+      return { icon: FaFileExcel, color: '#27ae60' };
     case 'jpg':
     case 'jpeg':
     case 'png':
     case 'gif':
     case 'bmp':
-      return FaFileImage;
+      return { icon: FaFileImage, color: '#f39c12' };
     case 'zip':
     case 'rar':
     case '7z':
-      return FaFileArchive;
+      return { icon: FaFileArchive, color: '#8e44ad' };
     case 'mp4':
     case 'mov':
     case 'avi':
     case 'webm':
     case 'video':
-      return FaFileVideo;
+      return { icon: FaFileVideo, color: '#d35400' };
     case 'mp3':
     case 'audio':
     case 'wav':
     case 'ogg':
-      return FaFileAudio;
+      return { icon: FaFileAudio, color: '#16a085' };
     case 'txt':
     case 'md':
-      return FaFileAlt;
+      return { icon: FaFileAlt, color: '#95a5a6' };
     default:
-      return AiFillFileUnknown;
+      return { icon: AiFillFileUnknown, color: '#7f8c8d' };
   }
 };

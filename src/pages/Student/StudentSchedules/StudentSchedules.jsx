@@ -34,7 +34,7 @@ const StudentSchedules = () => {
     <div className={styles.wrapper}>
       <div className={styles.container}>
         <header className={styles.header}>
-          <h1>My Class Schedule</h1>
+          <h1>My Class Schedules</h1>
           <p>View and manage your class schedule and course materials</p>
         </header>
 

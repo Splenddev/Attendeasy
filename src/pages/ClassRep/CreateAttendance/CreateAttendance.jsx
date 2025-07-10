@@ -29,7 +29,7 @@ const CreateAttendance = () => {
     showSuccess,
     successData,
     setShowSuccess,
-  } = useAttendanceForm(groupId);
+  } = useAttendanceForm(groupId, schedId);
 
   useEffect(() => {
     setNavTitle('Create Attendance');

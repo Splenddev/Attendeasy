@@ -6,19 +6,19 @@ import ClassStatus from '../../ClassRep/ClassRepDashboard/ClassStatus';
 import button from '../../../components/Button/Button';
 
 const AttendanceCard = ({ att, isModal, setIsModal }) => {
-  const start = parseTimeToday2(att.Class_Start);
-  const end = parseTimeToday2(att.Class_End);
+  const start = parseTimeToday2(att.classTime?.start);
+  const end = parseTimeToday2(att.classTime?.end);
   const now = new Date();
 
   const status =
     now < start ? 'not-started' : now < end ? 'in-progress' : 'ended';
-  const entryStart = parseTime2(att.Class_Start, att.Entry_Start);
-  const entryEnd = parseTime2(entryStart, att.Entry_End);
+  const entryStart = parseTime2(att.classTime?.start, att.entry?.start);
+  const entryEnd = parseTime2(entryStart, att.entry?.end);
 
   return (
     <div className="today-attendance-card">
       <div className="top">
-        <p>{att.Code}</p>
+        <p>{att.courseCode}</p>
         <div className="status">
           <ClassStatus status={status} />
         </div>
@@ -26,11 +26,11 @@ const AttendanceCard = ({ att, isModal, setIsModal }) => {
       <div className="mid">
         <p>
           <GiTeacher />
-          {att.Name}
+          {att.lecturer?.name}
         </p>
         <p>
           <MdLocationPin />
-          {att.Location}
+          {att.location?.latitude}, {att.location?.longitude}
         </p>
         <div className="entries">
           <div className="entry">
@@ -38,14 +38,14 @@ const AttendanceCard = ({ att, isModal, setIsModal }) => {
               <FaClock />
               Class Start
             </p>
-            <h3>{att.Class_Start}</h3>
+            <h3>{att.classTime?.start}</h3>
           </div>
           <div className="entry">
             <p>
               <FaFlagCheckered />
               Class End
             </p>
-            <h3>{att.Class_End}</h3>
+            <h3>{att.classTime?.end}</h3>
           </div>
           <div className="entry">
             <p>
@@ -65,7 +65,8 @@ const AttendanceCard = ({ att, isModal, setIsModal }) => {
       </div>
       {button.normal({
         element: 'Mark',
-        func: () => setIsModal(true),
+        func: () =>
+          setIsModal({ visible: true, maxRange: att.location?.radiusMeters }),
         //disabled: status !== 'in-progress'
       })}
     </div>

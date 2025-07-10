@@ -64,10 +64,9 @@ function GoToMyLocationButton({ onLocationFound }) {
   );
 }
 
-const MarkEntry = ({ onClose, visible }) => {
+const MarkEntry = ({ onClose, visible, maxDistance = 10 }) => {
   const [userLocation, setUserLocation] = useState(null);
   const [distance, setDistance] = useState(null);
-  const maxDistance = 100;
   const [status, setStatus] = useState('idle');
   const [userAddress, setUserAddress] = useState(null);
   const [classAddress, setClassAddress] = useState(null);
@@ -189,13 +188,12 @@ const MarkEntry = ({ onClose, visible }) => {
         return '';
     }
   };
-
   return (
     <div className="mark-entry-modal">
       <div className="modal-header">
         <h2>Mark Entry</h2>
         <button
-          onClick={() => onClose(false)}
+          onClick={() => onClose({ visible: false, maxRange: 0 })}
           className="close-button"
           title="Close modal">
           <MdClose />

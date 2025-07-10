@@ -1,7 +1,8 @@
 import HistoryCard from './HistoryCard';
 import button from '../../../components/Button/Button';
+import Spinner from '../../../components/Loader/Spinner/Spinner';
 
-const AttendanceHistory = () => {
+const AttendanceHistory = ({ history = [], loading = true, user = {} }) => {
   const mockHistory = [
     {
       date: 'Wed, Aug 14, 2023',
@@ -44,12 +45,42 @@ const AttendanceHistory = () => {
           {button.normal({ element: 'next', name: 'btn' })}
         </div>
         <div className="s-attendance-history-cards">
-          {mockHistory.map((item, i) => (
-            <HistoryCard
-              key={i}
-              {...item}
-            />
-          ))}
+          {loading ? (
+            <div>
+              <Spinner
+                size="35px"
+                borderWidth="2px"
+              />
+            </div>
+          ) : !history ? (
+            <p>No data</p>
+          ) : (
+            history
+              .filter((h) =>
+                h.studentRecords.some((r) => r.studentId === user._id)
+              )
+              .map((item, i) => {
+                const student = item.studentRecords.find(
+                  (r) => r.studentId === user._id
+                );
+                if (!student) return null; // extra safety
+
+                const { status, checkIn, checkOut, code = 'None' } = student;
+
+                return (
+                  <HistoryCard
+                    key={i}
+                    date={item.classDate}
+                    time={item.classTime}
+                    status={status}
+                    checkIn={checkIn}
+                    checkOut={checkOut}
+                    code={code}
+                    location={item.location?.latitude} // fixed typo
+                  />
+                );
+              })
+          )}
         </div>
       </div>
     </section>

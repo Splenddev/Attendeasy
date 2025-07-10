@@ -53,6 +53,30 @@ export const formDataAssets2 = [
 
 export const formDataAssets = [
   {
+    id: 'course-info',
+    title: 'Course Info',
+    selectOptions: [
+      {
+        name: 'courseCode',
+        title: 'Course Code',
+        type: 'input',
+        input: { type: 'text', placeholder: 'Select a schedule' },
+        required: true,
+        disabled: true,
+        readOnly: true,
+      },
+      {
+        name: 'courseTitle',
+        title: 'Course Title',
+        type: 'input',
+        input: { type: 'text', placeholder: 'Select a schedule' },
+        required: true,
+        disabled: true,
+        readOnly: true,
+      },
+    ],
+  },
+  {
     id: 'session-basics',
     title: 'Schedule Basics',
     selectOptions: [

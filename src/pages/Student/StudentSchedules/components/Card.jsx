@@ -10,6 +10,8 @@ import {
 } from 'react-icons/fi';
 import { formatTime, getFileIconClass } from './utils';
 import styles from '../StudentSchedules.module.css';
+import button from '../../../../components/Button/Button';
+import { FaStickyNote } from 'react-icons/fa';
 
 const Card = ({ schedule, isExpanded, onToggle }) => {
   return (
@@ -28,8 +30,9 @@ const Card = ({ schedule, isExpanded, onToggle }) => {
             <FiMapPin /> {schedule.classroomVenue}
           </span>
           <span>
-            <FiClock /> Next:{' '}
-            {formatTime(schedule.classDaysTimes[0].timing.startTime)}
+            <FiClock /> Time:{' '}
+            {formatTime(schedule.classDaysTimes[0].timing.startTime)} -{' '}
+            {formatTime(schedule.classDaysTimes[0].timing.endTime)}
           </span>
         </div>
 
@@ -60,16 +63,24 @@ const Card = ({ schedule, isExpanded, onToggle }) => {
                 <strong>Materials:</strong>
               </p>
               {schedule.media?.map((file) => {
-                const Icon = getFileIconClass(file.fileType);
+                const { icon, color } = getFileIconClass(file.fileType);
+                const Icon = icon;
                 return (
                   <div
                     key={file.id}
                     className={styles.mediaRow}>
-                    <Icon />
-                    <span>{file.name}</span>
+                    <span className={styles.file}>
+                      <Icon color={color} />
+                      <p>{file.name}</p>
+                    </span>
                     <FiDownload />
                   </div>
                 );
+              })}
+              {button.multiple({
+                icon: FaStickyNote,
+                element: 'View attencance.',
+                name: styles.attBtn,
               })}
             </div>
           </motion.div>

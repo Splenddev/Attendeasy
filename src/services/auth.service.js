@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { API_BASE } from '../utils/apiBaseUrl';
 const AUTH_API_BASE = `${API_BASE}auth/`;
-// const AUTH_API_BASE = `${API_BASE}auth/`;
 axios.defaults.withCredentials = true;
 
 export const registerUser = async (formData) => {

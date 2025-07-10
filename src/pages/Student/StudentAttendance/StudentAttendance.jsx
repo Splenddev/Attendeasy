@@ -13,21 +13,31 @@ import AttendanceCharts from './AttendanceCharts';
 import { scheduleJson } from '../../ClassRep/ClassSchedule/assets';
 import UpcomingSchedule from './UpcomingSchedule';
 import { generateSmartTip } from '../../../utils/helpers';
+import { useFetchGroupAttendances } from '../../../hooks/useAttendance';
 
 const StudentAttendance = () => {
   const { setNavTitle, user } = useAuth();
-  const [markEntryModal, setMarkEntryModal] = useState(false);
-  const [history, setHistory] = useState(attendance); // Or fetch from API
+  const [markEntryModal, setMarkEntryModal] = useState({
+    visible: false,
+    maxRange: 0,
+  });
+  const [history, setHistory] = useState(attendance);
+
+  const { data, loading, fetch, error } = useFetchGroupAttendances(user.group);
 
   useEffect(() => {
     setNavTitle('My Attendance');
   }, [setNavTitle]);
 
+  useEffect(() => {
+    fetch();
+  }, []);
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const filtered = history.filter((att) => {
-    const attDate = new Date(att.DateCreated);
+  const filtered = data.filter((att) => {
+    const attDate = new Date(att.classDate);
     attDate.setHours(0, 0, 0, 0);
     return attDate.getTime() === today.getTime();
   });
@@ -41,7 +51,6 @@ const StudentAttendance = () => {
   const smartTip = generateSmartTip(history);
 
   const todays = getTodaySchedule(scheduleJson);
-  console.log(todays);
 
   return (
     <div className="s-attendance">
@@ -61,12 +70,17 @@ const StudentAttendance = () => {
         setMarkEntryModal={setMarkEntryModal}
       />
 
-      <AttendanceHistory data={history} />
-      {markEntryModal && (
+      <AttendanceHistory
+        history={data}
+        loading={loading}
+        user={user}
+      />
+      {markEntryModal.visible && (
         <div className="modal-wrap">
           <MarkEntry
             onClose={setMarkEntryModal}
-            visible={markEntryModal}
+            visible={markEntryModal.visible}
+            maxDistance={markEntryModal.maxRange}
           />
         </div>
       )}

@@ -26,6 +26,8 @@ const ScheduleSelector = ({ setGroupId, setSchedId }) => {
   useEffect(() => {
     if (selectedSchedule) {
       setValue('lecturer.name', selectedSchedule.lecturerName || '');
+      setValue('courseTitle', selectedSchedule.courseTitle || '');
+      setValue('courseCode', selectedSchedule.courseCode || '');
       setValue('lecturer.email', selectedSchedule.lecturerEmail || '');
       setValue('groupId', selectedSchedule.groupId || '');
       setGroupId(selectedSchedule.groupId);

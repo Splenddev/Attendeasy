@@ -230,7 +230,6 @@
 }
 
 /* attendance history */
-/* .s-attendance-history{} */
 .s-attendance-history-wrap {
   display: flex;
   flex-direction: column;
@@ -286,9 +285,10 @@
     gap: 8px;
     border-radius: 20px;
     border: 1px solid #000;
-    padding: 5px 10px;
+    font-size: 0.9rem;
+    padding: 0.2rem 0.65rem;
     & svg {
-      font-size: 7px;
+      font-size: 5px;
     }
   }
 }
@@ -297,9 +297,10 @@
 }
 .s-attendance-history-card .bottom {
   display: flex;
+  color: var(--gray-600);
+  font-size: 0.95rem;
   & span {
     font-weight: 600;
-    font-size: 17px;
   }
   & p {
     margin-left: auto;
@@ -308,6 +309,16 @@
     gap: 5px;
   }
 }
+
+.s-attendance-history-card .submit-plea {
+  padding: 0.5rem 1rem;
+  place-self: end;
+  margin-top: 0.8rem;
+  border-radius: 2rem;
+  background: var(--accent-color);
+  color: var(--gray-100);
+}
+
 .modal-wrap {
   position: fixed;
   width: 100%;

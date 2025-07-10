@@ -50,7 +50,6 @@ export const createScheduleFormDataAssets = [
         title: 'Lecturer Email',
         name: 'lecturerEmail',
         type: 'input',
-        required: true,
         input: {
           type: 'email',
           placeholder: 'e.g. grace@edu.ng',
