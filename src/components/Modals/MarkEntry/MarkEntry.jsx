@@ -11,8 +11,11 @@ import {
 import L from 'leaflet';
 import { MdClose } from 'react-icons/md';
 import './MarkEntry.css';
+import { markGeoEntry } from '../../../services/attendance.service';
+import { toast } from 'react-toastify';
+import { parseAxiosError } from '../../../utils/axiosErrorHandler';
 
-const classLocation = { lat: 6.5762, lng: 3.3521 };
+const classLocation = { lat: 6.44805, lng: 3.39013 }; // Replace with dynamic value if needed
 
 const classIcon = L.icon({
   iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
@@ -64,7 +67,15 @@ function GoToMyLocationButton({ onLocationFound }) {
   );
 }
 
-const MarkEntry = ({ onClose, visible, maxDistance = 10 }) => {
+const MarkEntry = ({
+  onClose,
+  visible,
+  maxDistance = 10,
+  attendanceId,
+  mode,
+  setModalError,
+  setShowModal,
+}) => {
   const [userLocation, setUserLocation] = useState(null);
   const [distance, setDistance] = useState(null);
   const [status, setStatus] = useState('idle');
@@ -188,12 +199,44 @@ const MarkEntry = ({ onClose, visible, maxDistance = 10 }) => {
         return '';
     }
   };
+
+  const submitCheckIn = async () => {
+    if (!userLocation) return alert('Location not available.');
+    if (status !== 'within') return alert('You are not within range.');
+    if (!attendanceId) return alert('No attendance session provided.');
+
+    try {
+      const res = await markGeoEntry(attendanceId, userLocation, mode);
+      if (res.success) toast.success(res.message || 'Marked successfully!');
+      onClose({
+        visible: false,
+        maxRange: 0,
+        attendanceId: '',
+        mode: '',
+      });
+    } catch (err) {
+      console.log(err);
+      console.log(userLocation);
+      const msg = err.response?.data?.message || 'Failed to mark attendance.';
+      toast.error(`❌ ${msg}`);
+      setModalError(parseAxiosError(err));
+      setShowModal(true);
+    }
+  };
+
   return (
     <div className="mark-entry-modal">
       <div className="modal-header">
         <h2>Mark Entry</h2>
         <button
-          onClick={() => onClose({ visible: false, maxRange: 0 })}
+          onClick={() =>
+            onClose({
+              visible: false,
+              maxRange: 0,
+              attendanceId: '',
+              mode: '',
+            })
+          }
           className="close-button"
           title="Close modal">
           <MdClose />
@@ -275,6 +318,15 @@ const MarkEntry = ({ onClose, visible, maxDistance = 10 }) => {
         }>
         {status === 'checking' ? 'Stop Tracking' : 'Check Location'}
       </button>
+
+      {status === 'within' && (
+        <button
+          className="submit-button"
+          onClick={submitCheckIn}
+          style={{ marginTop: '10px' }}>
+          ✅ Submit Check-in
+        </button>
+      )}
     </div>
   );
 };

@@ -1,12 +1,24 @@
 import React from 'react';
 import { FaLock } from 'react-icons/fa';
-import { MdSettings } from 'react-icons/md';
+import { MdLogout, MdSettings } from 'react-icons/md';
 import BannerImage from '../BannerImage/BannerImage';
 import styles from './GroupSidebar.module.css';
 import { FiRefreshCcw } from 'react-icons/fi';
 import button from '../../../../components/Button/Button';
+import { leaveGroupService } from '../../../../services/group.service';
+import { toast } from 'react-toastify';
 
-const GroupSidebar = ({ group, refresh }) => {
+const GroupSidebar = ({ group, refresh, user }) => {
+  const handleLeave = async () => {
+    try {
+      const result = await leaveGroupService();
+      toast.success(result.message);
+      // Optionally update UI or redirect
+    } catch (err) {
+      toast.error(err.message || 'Error leaving group');
+    }
+  };
+
   return (
     <aside className={`center ${styles.sidebar}`}>
       <div className={styles.sidebarGrid}>
@@ -55,6 +67,13 @@ const GroupSidebar = ({ group, refresh }) => {
       </div>
       <hr />
       <p className={styles.bannerLabel}>Group Profile</p>
+      {user.role === 'student' &&
+        button.multiple({
+          icon: MdLogout,
+          element: 'Leave Group',
+          func: handleLeave,
+          name: styles.leave_group_btn,
+        })}
     </aside>
   );
 };

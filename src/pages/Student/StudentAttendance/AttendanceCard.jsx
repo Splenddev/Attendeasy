@@ -4,8 +4,9 @@ import { GiTeacher } from 'react-icons/gi';
 import { parseTime2, parseTimeToday2 } from '../../../utils/helpers';
 import ClassStatus from '../../ClassRep/ClassRepDashboard/ClassStatus';
 import button from '../../../components/Button/Button';
+import { attendance } from '../../../assets/assets';
 
-const AttendanceCard = ({ att, isModal, setIsModal }) => {
+const AttendanceCard = ({ att, isModal, setIsModal, student }) => {
   const start = parseTimeToday2(att.classTime?.start);
   const end = parseTimeToday2(att.classTime?.end);
   const now = new Date();
@@ -64,9 +65,14 @@ const AttendanceCard = ({ att, isModal, setIsModal }) => {
         </div>
       </div>
       {button.normal({
-        element: 'Mark',
+        element: !student.checkIn.time ? 'Check In' : 'Check Out',
         func: () =>
-          setIsModal({ visible: true, maxRange: att.location?.radiusMeters }),
+          setIsModal({
+            visible: true,
+            maxRange: att.location?.radiusMeters,
+            attendanceId: att._id,
+            mode: !student.checkIn.time ? 'checkIn' : 'checkOut',
+          }),
         //disabled: status !== 'in-progress'
       })}
     </div>

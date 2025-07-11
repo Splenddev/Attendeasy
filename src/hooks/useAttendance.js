@@ -4,7 +4,6 @@ import {
   createAttendance,
   getGroupAttendances,
   getGroupTabAttendances,
-  markAttendance,
   submitAbsencePlea,
 } from '../services/attendance.service';
 
@@ -71,26 +70,6 @@ export const useFetchGroupTabAttendances = (groupId) => {
   }, [fetch]);
 
   return { data, refetch: fetch, loading, error };
-};
-
-export const useMarkAttendance = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const mark = useCallback(async (attendanceId, payload) => {
-    try {
-      setLoading(true);
-      const res = await markAttendance(attendanceId, payload);
-      return res;
-    } catch (err) {
-      setError(err.message);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  return { mark, loading, error };
 };
 
 export const useSubmitPlea = () => {

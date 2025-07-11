@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useCreateAttendance } from '../../../hooks/useAttendance';
 import { toast } from 'react-toastify';
+import { parseAxiosError } from '../../../utils/axiosErrorHandler';
 
 const useAttendanceForm = (groupId, scheduleId) => {
   const methods = useForm({
@@ -57,12 +58,8 @@ const useAttendanceForm = (groupId, scheduleId) => {
         setShowModal(true);
       }
     } catch (err) {
-      const errData = err.response?.data || {
-        message: err.message,
-        code: 'REQUEST_FAILED',
-      };
+      setModalError(parseAxiosError(err));
 
-      setModalError(errData);
       setShowModal(true);
     }
   };

@@ -5,6 +5,7 @@ import { getUserFromLocalStorageOrAPI } from '../utils/auth';
 import axios from 'axios';
 import { loginUser, logoutUser, registerUser } from '../services/auth.service';
 import { toast } from 'react-toastify';
+import { connectSocket } from '../utils/socket';
 
 axios.defaults.withCredentials = true;
 
@@ -32,6 +33,12 @@ export const AuthProvider = ({ children }) => {
     };
     syncUser();
   }, []);
+
+  useEffect(() => {
+    if (user?._id) {
+      connectSocket(user._id);
+    }
+  }, [user]);
 
   const register = async (formData) => {
     try {

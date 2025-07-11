@@ -14,14 +14,20 @@ import { scheduleJson } from '../../ClassRep/ClassSchedule/assets';
 import UpcomingSchedule from './UpcomingSchedule';
 import { generateSmartTip } from '../../../utils/helpers';
 import { useFetchGroupAttendances } from '../../../hooks/useAttendance';
+import ErrorModal from '../../../components/Modals/ErrorModal/ErrorModal';
 
 const StudentAttendance = () => {
   const { setNavTitle, user } = useAuth();
   const [markEntryModal, setMarkEntryModal] = useState({
     visible: false,
     maxRange: 0,
+    attendanceId: '',
+    mode: '',
   });
   const [history, setHistory] = useState(attendance);
+
+  const [modalError, setModalError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const { data, loading, fetch, error } = useFetchGroupAttendances(user.group);
 
@@ -62,13 +68,14 @@ const StudentAttendance = () => {
 
       {smartTip && <p className="smart-tip">{smartTip}</p>}
 
-      <AttendanceCharts summary={summary} />
-
       <TodayAttendance
         data={filtered}
         markEntryModal={markEntryModal}
         setMarkEntryModal={setMarkEntryModal}
+        user={user}
       />
+
+      <AttendanceCharts summary={summary} />
 
       <AttendanceHistory
         history={data}
@@ -81,10 +88,25 @@ const StudentAttendance = () => {
             onClose={setMarkEntryModal}
             visible={markEntryModal.visible}
             maxDistance={markEntryModal.maxRange}
+            attendanceId={markEntryModal.attendanceId}
+            mode={markEntryModal.mode}
+            setModalError={setModalError}
+            setShowModal={setShowModal}
           />
         </div>
       )}
       <UpcomingSchedule schedules={getTodaySchedule(scheduleJson)} />
+
+      <ErrorModal
+        isOpen={showModal}
+        error={modalError}
+        onClose={() => setShowModal(false)}
+      />
+      {/* <SuccessModal
+        isOpen={showSuccess}
+        data={successData}
+        onClose={() => setShowSuccess(false)}
+      /> */}
     </div>
   );
 };

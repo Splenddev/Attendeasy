@@ -1,6 +1,6 @@
 import AttendanceCard from './AttendanceCard';
 
-const TodayAttendance = ({ data, markEntryModal, setMarkEntryModal }) => {
+const TodayAttendance = ({ data, markEntryModal, setMarkEntryModal, user }) => {
   return (
     <section className="s-attendance-today">
       <header className="heading">
@@ -10,14 +10,20 @@ const TodayAttendance = ({ data, markEntryModal, setMarkEntryModal }) => {
         {data.length <= 0 ? (
           <p className="no-class">No attendance today</p>
         ) : (
-          data.map((att, i) => (
-            <AttendanceCard
-              isModal={markEntryModal}
-              setIsModal={setMarkEntryModal}
-              key={i}
-              att={att}
-            />
-          ))
+          data.map((att, i) => {
+            const student = att.studentRecords.find(
+              (r) => r.studentId === user._id
+            );
+            return (
+              <AttendanceCard
+                isModal={markEntryModal}
+                setIsModal={setMarkEntryModal}
+                key={i}
+                att={att}
+                student={student}
+              />
+            );
+          })
         )}
       </div>
     </section>

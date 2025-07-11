@@ -1,9 +1,7 @@
 import axios from 'axios';
 import { API_BASE } from '../utils/apiBaseUrl';
 
-// ../services/group.services.js
 const GROUP_API_BASE = `${API_BASE}groups/`;
-// const GROUP_API_BASE = `${API_BASE}groups/`;
 
 export const fetchGroupService = async (groupId) => {
   try {
@@ -16,6 +14,7 @@ export const fetchGroupService = async (groupId) => {
     throw err.response?.data || { message: 'Failed to fetch group' };
   }
 };
+
 export const createGroup = async (data) => {
   try {
     const response = await axios.post(`${GROUP_API_BASE}create`, data, {
@@ -24,7 +23,6 @@ export const createGroup = async (data) => {
       },
       withCredentials: true,
     });
-
     return response.data;
   } catch (error) {
     console.error('Create group error:', error);
@@ -94,5 +92,17 @@ export const rejectJoinRequestService = async (groupId, studentId) => {
   } catch (err) {
     console.error('Reject join request error:', err.message);
     throw err.response?.data || { message: 'Failed to reject request' };
+  }
+};
+
+export const leaveGroupService = async () => {
+  try {
+    const res = await axios.post(`${GROUP_API_BASE}leave`, null, {
+      withCredentials: true,
+    });
+    return res.data;
+  } catch (err) {
+    console.error('Leave group error:', err.message);
+    throw err.response?.data || { message: 'Failed to leave group' };
   }
 };

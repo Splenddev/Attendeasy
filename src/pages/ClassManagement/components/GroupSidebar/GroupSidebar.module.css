@@ -124,6 +124,15 @@
   color: #333;
   text-align: center;
 }
+
+.leave_group_btn {
+  margin-top: 0.4rem;
+  padding: 0.4rem 1rem;
+  background: var(--absent-light);
+  border: 1px solid var(--absent);
+  color: var(--absent);
+  border-radius: 2rem;
+}
 @media (max-width: 768px) {
   .sidebarGrid {
     flex-direction: column;

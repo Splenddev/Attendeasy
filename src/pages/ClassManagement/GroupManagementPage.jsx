@@ -86,6 +86,7 @@ const GroupManagementPage = () => {
       <GroupSidebar
         group={group}
         refresh={fetchGroup}
+        user={user}
       />
       <GroupContents
         user={user}

@@ -44,3 +44,23 @@ export const submitAbsencePlea = async ({ attendanceId, payload }) => {
   );
   return res.data;
 };
+export const markGeoEntry = async (
+  attendanceId,
+  userLocation = {},
+  mode = 'checkIn'
+) => {
+  const res = await axios.post(
+    `${ATTENDANCE_API_BASE}mark-entry/${attendanceId}`,
+    {
+      method: 'geo',
+      mode,
+      time: new Date(),
+      location: {
+        latitude: userLocation.lat,
+        longitude: userLocation.lng,
+      },
+    },
+    { withCredentials: true }
+  );
+  return res.data;
+};

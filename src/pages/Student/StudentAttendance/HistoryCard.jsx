@@ -5,7 +5,7 @@ import {
   FaStickyNote,
 } from 'react-icons/fa';
 import { MdLocationPin } from 'react-icons/md';
-import { dateFormatter } from '../../../utils/helpers';
+import { dateFormatter, timeFormatter } from '../../../utils/helpers';
 import button from '../../../components/Button/Button';
 
 const HistoryCard = ({
@@ -48,13 +48,13 @@ const HistoryCard = ({
           <p>
             <FaSignInAlt /> Check In
           </p>
-          <h3>{checkIn?.time ? checkIn?.time : '-'}</h3>
+          <h3>{checkIn?.time ? timeFormatter(checkIn?.time) : '-'}</h3>
         </div>
         <div className="entry">
           <p>
             <FaSignOutAlt /> Check Out
           </p>
-          <h3>{checkOut?.time ? checkOut?.time : '-'}</h3>
+          <h3>{checkOut?.time ? timeFormatter(checkOut?.time) : '-'}</h3>
         </div>
       </div>
       <div className="bottom">
