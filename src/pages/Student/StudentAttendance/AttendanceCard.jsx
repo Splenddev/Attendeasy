@@ -64,17 +64,18 @@ const AttendanceCard = ({ att, isModal, setIsModal, student }) => {
           </div>
         </div>
       </div>
-      {button.normal({
-        element: !student.checkIn.time ? 'Check In' : 'Check Out',
-        func: () =>
-          setIsModal({
-            visible: true,
-            maxRange: att.location?.radiusMeters,
-            attendanceId: att._id,
-            mode: !student.checkIn.time ? 'checkIn' : 'checkOut',
-          }),
-        //disabled: status !== 'in-progress'
-      })}
+      {student &&
+        button.normal({
+          element: !student.checkIn.time ? 'Check In' : 'Check Out',
+          func: () =>
+            setIsModal({
+              visible: true,
+              maxRange: att.location?.radiusMeters,
+              attendanceId: att._id,
+              mode: !student.checkIn.time ? 'checkIn' : 'checkOut',
+            }),
+          //disabled: status !== 'in-progress'
+        })}
     </div>
   );
 };
