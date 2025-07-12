@@ -30,10 +30,6 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    fetchNotifications();
-  }, [user?._id]);
-
   // 🔌 Setup socket connection and listeners
   useEffect(() => {
     if (!user?._id) return;
@@ -81,6 +77,7 @@ export const NotificationProvider = ({ children }) => {
     loading,
     updateAll,
     removeNotification,
+    fetchNotifications,
   };
 
   return (

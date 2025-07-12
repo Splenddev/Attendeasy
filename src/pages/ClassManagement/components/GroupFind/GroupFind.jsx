@@ -95,7 +95,7 @@ const GroupFind = ({ user = {}, onJoin }) => {
       await fetchGroups();
     } catch (err) {
       console.log(err);
-      toast.error('Failed to cancel request');
+      toast.error(err.message || 'Failed to cancel request');
     }
   };
 

@@ -7,13 +7,26 @@ import { FiRefreshCcw } from 'react-icons/fi';
 import button from '../../../../components/Button/Button';
 import { leaveGroupService } from '../../../../services/group.service';
 import { toast } from 'react-toastify';
+import { getUser } from '../../../../services/auth.service';
 
-const GroupSidebar = ({ group, refresh, user }) => {
+const GroupSidebar = ({ group, refresh, user, updateUser }) => {
   const handleLeave = async () => {
     try {
       const result = await leaveGroupService();
-      toast.success(result.message);
-      // Optionally update UI or redirect
+      if (result.success) {
+        try {
+          const res = await getUser();
+          if (res.success) {
+            updateUser(res.user);
+          }
+        } catch (fetchErr) {
+          console.error(
+            'Failed to refresh user after group creation:',
+            fetchErr
+          );
+        }
+        toast.success(result.message);
+      }
     } catch (err) {
       toast.error(err.message || 'Error leaving group');
     }

@@ -50,7 +50,10 @@ const Navbar = ({ dropdownAssets = [] }) => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="dropdown-notifications">
-              <NotificationPanel onClose={setIsDropdown} />
+              <NotificationPanel
+                onClose={setIsDropdown}
+                user={user}
+              />
             </motion.div>
           )}
         </AnimatePresence>

@@ -19,7 +19,7 @@ import Spinner from '../../components/Loader/Spinner/Spinner';
 const GroupManagementPage = () => {
   const [group, setGroup] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { user, setNavTitle } = useAuth();
+  const { user, setNavTitle, updateUser } = useAuth();
 
   useEffect(() => setNavTitle('Group Management'), [setNavTitle]);
 
@@ -87,6 +87,7 @@ const GroupManagementPage = () => {
         group={group}
         refresh={fetchGroup}
         user={user}
+        updateUser={updateUser}
       />
       <GroupContents
         user={user}

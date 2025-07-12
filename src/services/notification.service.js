@@ -11,18 +11,14 @@ export const getMyNotifications = async () => {
 };
 
 export const markAllAsRead = async () => {
-  const res = await axios.patch(
-    `${NOTIFICATION_API_BASE}/mark-all-read`,
-    null,
-    {
-      withCredentials: true,
-    }
-  );
+  const res = await axios.patch(`${NOTIFICATION_API_BASE}mark-all-read`, null, {
+    withCredentials: true,
+  });
   return res.data;
 };
 
 export const deleteNotification = async (notificationId) => {
-  const res = await axios.delete(`${NOTIFICATION_API_BASE}/${notificationId}`, {
+  const res = await axios.delete(`${NOTIFICATION_API_BASE}${notificationId}`, {
     withCredentials: true,
   });
   return res.data;
