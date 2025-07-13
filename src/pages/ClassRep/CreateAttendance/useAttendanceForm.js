@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useCreateAttendance } from '../../../hooks/useAttendance';
 import { toast } from 'react-toastify';
-import { parseAxiosError } from '../../../utils/axiosErrorHandler';
+import { useErrorModal } from '../../../hooks/useErrorModal';
 
 const useAttendanceForm = (groupId, scheduleId) => {
   const methods = useForm({
@@ -14,8 +14,8 @@ const useAttendanceForm = (groupId, scheduleId) => {
   });
   const { handleSubmit, watch, reset } = methods;
 
-  const [modalError, setModalError] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+  const { open } = useErrorModal();
+
   const [showSuccess, setShowSuccess] = useState(false);
   const [successData, setSuccessData] = useState(false);
 
@@ -39,8 +39,6 @@ const useAttendanceForm = (groupId, scheduleId) => {
     try {
       const res = await submit(formData);
       if (res.success) {
-        setModalError(null);
-        setShowModal(false);
         toast.success(res.message || 'Success');
         setSuccessData({
           message: res.message,
@@ -54,13 +52,11 @@ const useAttendanceForm = (groupId, scheduleId) => {
         reset();
       } else {
         toast.error(res.message);
-        setModalError(res);
-        setShowModal(true);
+        open(res);
       }
     } catch (err) {
-      setModalError(parseAxiosError(err));
-
-      setShowModal(true);
+      toast.error(err.message || 'error');
+      open(err);
     }
   };
 
@@ -69,13 +65,10 @@ const useAttendanceForm = (groupId, scheduleId) => {
     handleSubmit,
     onSubmit,
     selectedStudents,
-    modalError,
-    setModalError,
-    showModal,
-    setShowModal,
     showSuccess,
     successData,
     setShowSuccess,
+    loading,
   };
 };
 

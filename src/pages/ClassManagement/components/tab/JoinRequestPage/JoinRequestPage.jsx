@@ -85,7 +85,7 @@ const JoinRequestPage = ({ group, onAction }) => {
                 key={user}
                 className={styles.card}>
                 <img
-                  src={avatar || '/student-avatar.png'}
+                  src={avatar || '/main_student_avatar.png'}
                   alt={name}
                   className={styles.avatar}
                 />

@@ -15,6 +15,7 @@ import GroupRegFind from './features/GroupRegFind/GroupRegFind';
 import { fetchGroupService } from '../../services/group.service';
 import { toast } from 'react-toastify';
 import Spinner from '../../components/Loader/Spinner/Spinner';
+import { useErrorModal } from '../../hooks/useErrorModal';
 
 const GroupManagementPage = () => {
   const [group, setGroup] = useState(null);
@@ -22,6 +23,8 @@ const GroupManagementPage = () => {
   const { user, setNavTitle, updateUser } = useAuth();
 
   useEffect(() => setNavTitle('Group Management'), [setNavTitle]);
+
+  const { open } = useErrorModal();
 
   const fetchGroup = async () => {
     if (!user?.group) {
@@ -36,6 +39,7 @@ const GroupManagementPage = () => {
     } catch (err) {
       console.error('Failed to fetch group:', err.message);
       toast.error('Failed to fetch group');
+      open(err);
     } finally {
       setLoading(false);
     }

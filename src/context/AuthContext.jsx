@@ -6,6 +6,7 @@ import axios from 'axios';
 import { loginUser, logoutUser, registerUser } from '../services/auth.service';
 import { toast } from 'react-toastify';
 import { connectSocket } from '../utils/socket';
+import useUserSocketListener from '../hooks/useUserSocketListener ';
 
 axios.defaults.withCredentials = true;
 
@@ -87,6 +88,8 @@ export const AuthProvider = ({ children }) => {
     setUser(updated);
     localStorage.setItem('user', JSON.stringify(updated));
   };
+
+  useUserSocketListener();
 
   const value = {
     user,

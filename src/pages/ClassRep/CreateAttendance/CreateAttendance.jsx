@@ -11,8 +11,8 @@ import { InfoModal } from '../../../components/Modals';
 import { useInfoModal } from '../../../context/infoModalContext';
 import { infoModalContent } from '../../../components/Modals/Info/infoModalContent';
 import ScheduleSelector from './components/ScheduleSelector/ScheduleSelector';
-import ErrorModal from '../../../components/Modals/ErrorModal/ErrorModal';
 import SuccessModal from '../../../components/Modals/SuccessModal/SuccessModal';
+import Spinner from '../../../components/Loader/Spinner/Spinner';
 
 const CreateAttendance = () => {
   const { setNavTitle, user } = useAuth();
@@ -23,12 +23,10 @@ const CreateAttendance = () => {
     methods,
     handleSubmit,
     onSubmit,
-    showModal,
-    setShowModal,
-    modalError,
     showSuccess,
     successData,
     setShowSuccess,
+    loading,
   } = useAttendanceForm(groupId, schedId);
 
   useEffect(() => {
@@ -51,7 +49,14 @@ const CreateAttendance = () => {
               {button.multiple({ icon: MdSave, element: 'save as draft' })}
               {button.multiple({
                 icon: MdPublish,
-                element: 'publish',
+                element: loading ? (
+                  <Spinner
+                    size="20px"
+                    borderColor="white"
+                  />
+                ) : (
+                  'publish'
+                ),
                 type: 'submit',
               })}
             </div>
@@ -82,11 +87,6 @@ const CreateAttendance = () => {
         modalId={modalId}
         onClose={closeModal}
         infoModalContent={infoModalContent}
-      />
-      <ErrorModal
-        isOpen={showModal}
-        error={modalError}
-        onClose={() => setShowModal(false)}
       />
       <SuccessModal
         isOpen={showSuccess}

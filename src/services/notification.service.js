@@ -1,25 +1,17 @@
-import axios from 'axios';
-import { API_BASE } from '../utils/apiBaseUrl';
-
-const NOTIFICATION_API_BASE = `${API_BASE}notifications/`;
+import api from './api';
+const NOTIFICATION_API_BASE = `notifications/`;
 
 export const getMyNotifications = async () => {
-  const res = await axios.get(NOTIFICATION_API_BASE, {
-    withCredentials: true,
-  });
+  const res = await api.get(NOTIFICATION_API_BASE);
   return res.data;
 };
 
 export const markAllAsRead = async () => {
-  const res = await axios.patch(`${NOTIFICATION_API_BASE}mark-all-read`, null, {
-    withCredentials: true,
-  });
+  const res = await api.patch(`${NOTIFICATION_API_BASE}mark-all-read`);
   return res.data;
 };
 
 export const deleteNotification = async (notificationId) => {
-  const res = await axios.delete(`${NOTIFICATION_API_BASE}${notificationId}`, {
-    withCredentials: true,
-  });
+  const res = await api.delete(`${NOTIFICATION_API_BASE}${notificationId}`);
   return res.data;
 };

@@ -1,25 +1,12 @@
-// services/scheduleService.js
-import axios from 'axios';
-import { API_BASE } from '../utils/apiBaseUrl';
-
-const SCHEDULE_API_BASE = `${API_BASE}schedule/`;
+import api from './api';
+const SCHEDULE_API_BASE = `schedule/`;
 
 export const createSchedule = async (scheduleData) => {
-  try {
-    const res = await axios.post(`${SCHEDULE_API_BASE}create`, scheduleData, {
-      withCredentials: true,
-    });
-    return res.data;
-  } catch (error) {
-    const message =
-      error?.response?.data?.message || 'Schedule creation failed';
-    throw new Error(message);
-  }
+  const res = await api.post(`${SCHEDULE_API_BASE}create`, scheduleData);
+  return res.data;
 };
 
 export const fetchSchedulesByGroup = async (groupId) => {
-  const res = await axios.get(`${SCHEDULE_API_BASE}${groupId}`, {
-    withCredentials: true,
-  });
+  const res = await api.get(`${SCHEDULE_API_BASE}${groupId}`);
   return res.data;
 };

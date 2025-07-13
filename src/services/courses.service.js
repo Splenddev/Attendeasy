@@ -1,52 +1,26 @@
-import axios from 'axios';
-import { API_BASE } from '../utils/apiBaseUrl';
+import api from './api'; // central axios instance with interceptors
+const COURSE_BASE_URL = `courses/`;
 
-const COURSE_BASE_URL = `${API_BASE}courses/`;
-
+// Fetch courses assigned to the current user
 export const getCourses = async () => {
-  try {
-    const res = await axios.get(`${COURSE_BASE_URL}my-courses`, {
-      withCredentials: true,
-    });
-    return res.data;
-  } catch (error) {
-    const message = error?.response?.data?.message || 'Course fetching failed';
-    throw new Error(message);
-  }
+  const res = await api.get(`${COURSE_BASE_URL}my-courses`);
+  return res.data;
 };
 
+// Create a new course
 export const createCourse = async (data) => {
-  try {
-    const res = await axios.post(`${COURSE_BASE_URL}add`, data, {
-      withCredentials: true,
-    });
-    return res.data;
-  } catch (error) {
-    const message = error?.response?.data?.message || 'Course creation failed';
-    throw new Error(message);
-  }
+  const res = await api.post(`${COURSE_BASE_URL}add`, data);
+  return res.data;
 };
 
+// Edit an existing course
 export const editCourse = async (courseCode, data) => {
-  try {
-    const res = await axios.put(`${COURSE_BASE_URL}edit/${courseCode}`, data, {
-      withCredentials: true,
-    });
-    return res.data;
-  } catch (error) {
-    const message = error?.response?.data?.message || 'Course editing failed';
-    throw new Error(message);
-  }
+  const res = await api.put(`${COURSE_BASE_URL}edit/${courseCode}`, data);
+  return res.data;
 };
 
+// Delete a course
 export const deleteCourse = async (courseCode) => {
-  try {
-    const res = await axios.delete(`${COURSE_BASE_URL}delete/${courseCode}`, {
-      withCredentials: true,
-    });
-    return res.data;
-  } catch (error) {
-    const message = error?.response?.data?.message || 'Course deletion failed';
-    throw new Error(message);
-  }
+  const res = await api.delete(`${COURSE_BASE_URL}delete/${courseCode}`);
+  return res.data;
 };

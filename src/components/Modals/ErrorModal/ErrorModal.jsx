@@ -1,11 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './ErrorModal.css';
 import { MdErrorOutline } from 'react-icons/md';
+import { registerErrorModal } from '../../../hooks/useErrorModal';
 
-const ErrorModal = ({ isOpen, onClose, error }) => {
-  if (!isOpen || !error) return null;
+const ErrorModal = () => {
+  const [modal, setModal] = useState({
+    isOpen: false,
+    error: {
+      title: 'Unexpected Error',
+      message: '',
+      code: '',
+      errors: [],
+    },
+  });
 
-  const { message, code, errors, ...rest } = error;
+  useEffect(() => {
+    registerErrorModal(setModal);
+  }, []);
+
+  if (!modal.isOpen) return null;
+
+  const error = modal.error || {};
+  const {
+    title = 'Application Error',
+    message,
+    code,
+    status,
+    errors = [],
+    timestamp,
+    ...rest
+  } = error;
+
+  const initiator = modal.initiator || 'Unknown Source';
 
   return (
     <div className="em-backdrop">
@@ -15,7 +41,7 @@ const ErrorModal = ({ isOpen, onClose, error }) => {
             size={28}
             className="em-icon"
           />
-          <h2>Error</h2>
+          <h2>{title}</h2>
         </div>
 
         <div className="em-body">
@@ -28,7 +54,30 @@ const ErrorModal = ({ isOpen, onClose, error }) => {
             </div>
           )}
 
-          {errors?.length > 0 && (
+          {status && (
+            <div className="em-field">
+              <span className="em-label">Status:</span>
+              <span className="em-value">{status}</span>
+            </div>
+          )}
+
+          {initiator && (
+            <div className="em-field">
+              <span className="em-label">Initiator:</span>
+              <span className="em-value initiator">{initiator}</span>
+            </div>
+          )}
+
+          {timestamp && (
+            <div className="em-field">
+              <span className="em-label">Time:</span>
+              <span className="em-value">
+                {new Date(timestamp).toLocaleString()}
+              </span>
+            </div>
+          )}
+
+          {errors.length > 0 && (
             <div className="em-errors">
               <h4>Issues:</h4>
               <ul>
@@ -51,7 +100,7 @@ const ErrorModal = ({ isOpen, onClose, error }) => {
 
         <div className="em-footer">
           <button
-            onClick={onClose}
+            onClick={() => setModal((m) => ({ ...m, isOpen: false }))}
             className="em-close-btn">
             Close
           </button>

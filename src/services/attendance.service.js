@@ -1,36 +1,34 @@
-import axios from 'axios';
-import { API_BASE } from '../utils/apiBaseUrl';
-const ATTENDANCE_API_BASE = `${API_BASE}attendance/`;
+import api from './api';
+
+const ATTENDANCE_API_BASE = `attendance/`;
 
 // Create new attendance session
 export const createAttendance = async (payload) => {
-  const res = await axios.post(`${ATTENDANCE_API_BASE}create`, payload);
+  const res = await api.post(`${ATTENDANCE_API_BASE}create`, payload);
   return res.data;
 };
 
 // Get all attendance sessions for a group
 export const getGroupAttendances = async (groupId) => {
-  const res = await axios.get(`${ATTENDANCE_API_BASE}groups/${groupId}`);
+  const res = await api.get(`${ATTENDANCE_API_BASE}groups/${groupId}`);
   return res.data;
 };
 
 export const getGroupTabAttendances = async (groupId) => {
-  const res = await axios.get(`${ATTENDANCE_API_BASE}group-tab/${groupId}`);
+  const res = await api.get(`${ATTENDANCE_API_BASE}group-tab/${groupId}`);
   return res.data;
 };
 
 // Get single attendance session
 export const getAttendanceById = async (attendanceId) => {
-  const res = await axios.get(
-    `${ATTENDANCE_API_BASE}api/attendance/${attendanceId}`
-  );
+  const res = await api.get(`${ATTENDANCE_API_BASE}${attendanceId}`);
   return res.data;
 };
 
 // Mark attendance (student)
 export const markAttendance = async ({ attendanceId, payload }) => {
-  const res = await axios.post(
-    `${ATTENDANCE_API_BASE}api/attendance/mark/${attendanceId}`,
+  const res = await api.post(
+    `${ATTENDANCE_API_BASE}mark/${attendanceId}`,
     payload
   );
   return res.data;
@@ -38,18 +36,20 @@ export const markAttendance = async ({ attendanceId, payload }) => {
 
 // Submit absence plea
 export const submitAbsencePlea = async ({ attendanceId, payload }) => {
-  const res = await axios.post(
-    `${ATTENDANCE_API_BASE}api/attendance/plea/${attendanceId}`,
+  const res = await api.post(
+    `${ATTENDANCE_API_BASE}plea/${attendanceId}`,
     payload
   );
   return res.data;
 };
+
+// Mark geolocation-based entry
 export const markGeoEntry = async (
   attendanceId,
   userLocation = {},
   mode = 'checkIn'
 ) => {
-  const res = await axios.post(
+  const res = await api.post(
     `${ATTENDANCE_API_BASE}mark-entry/${attendanceId}`,
     {
       method: 'geo',
@@ -59,8 +59,8 @@ export const markGeoEntry = async (
         latitude: userLocation.lat,
         longitude: userLocation.lng,
       },
-    },
-    { withCredentials: true }
+    }
   );
+
   return res.data;
 };

@@ -95,11 +95,7 @@ const MembersTab = ({ group = {} }) => {
             key={member.id}
             className="member-card">
             <img
-              src={
-                member.avatar
-                  ? member.avatar
-                  : `/main_${member.role}_avatar.png`
-              }
+              src={member.avatar ? member.avatar : `/main_student_avatar.png`}
               alt={member.name}
               className="member-avatar"
             />

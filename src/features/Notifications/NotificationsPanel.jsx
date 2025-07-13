@@ -19,7 +19,7 @@ const NotificationsPanel = ({ onClose, user }) => {
 
   useEffect(() => {
     fetchNotifications();
-  }, [notifications]);
+  }, []);
 
   const handleDeny = async (reqType) => {};
   const handleAccept = async (studentId, reqType) => {

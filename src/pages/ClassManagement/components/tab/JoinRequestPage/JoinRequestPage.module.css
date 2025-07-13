@@ -1,5 +1,4 @@
 .page {
-  max-width: 800px;
   background: #fff;
   padding: 1rem;
 }
@@ -85,8 +84,8 @@
 }
 
 .avatar {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   object-fit: cover;
   margin-right: 1rem;
@@ -97,6 +96,12 @@
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
+  strong {
+    font-size: 0.9rem;
+  }
+  span {
+    font-size: 13px;
+  }
 }
 
 .time {
@@ -134,6 +139,7 @@
   text-transform: capitalize;
   font-weight: 600;
   padding: 4px 10px;
+  font-size: 0.85rem;
   border-radius: 12px;
 }
 

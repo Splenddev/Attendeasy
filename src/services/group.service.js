@@ -1,108 +1,58 @@
-import axios from 'axios';
-import { API_BASE } from '../utils/apiBaseUrl';
+import api from './api'; // central axios instance
+const GROUP_API_BASE = `groups/`;
 
-const GROUP_API_BASE = `${API_BASE}groups/`;
-
+// Fetch specific group
 export const fetchGroupService = async (groupId) => {
-  try {
-    const res = await axios.get(`${GROUP_API_BASE}find/${groupId}`, {
-      withCredentials: true,
-    });
-    return { data: res.data, message: res.data?.message || 'Success' };
-  } catch (err) {
-    console.error('Failed to fetch group:', err.message);
-    throw err.response?.data || { message: 'Failed to fetch group' };
-  }
+  const res = await api.get(`${GROUP_API_BASE}find/${groupId}`);
+  return { data: res.data, message: res.data?.message || 'Success' };
 };
 
+// Create a new group (with image)
 export const createGroup = async (data) => {
-  try {
-    const response = await axios.post(`${GROUP_API_BASE}create`, data, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-      withCredentials: true,
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Create group error:', error);
-    throw error.response?.data || { message: 'Network error' };
-  }
+  const res = await api.post(`${GROUP_API_BASE}create`, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return res.data;
 };
 
+// Search groups with filters (department, faculty, etc.)
 export const searchGroupsService = async (params) => {
-  try {
-    const res = await axios.get(`${GROUP_API_BASE}search`, {
-      params,
-      withCredentials: true,
-    });
-    return res.data;
-  } catch (err) {
-    console.error('Search groups error:', err.message);
-    throw err.response?.data || { message: 'Group search failed' };
-  }
+  const res = await api.get(`${GROUP_API_BASE}search`, { params });
+  return res.data;
 };
 
+// Send join request to group
 export const joinGroupService = async (groupId) => {
-  try {
-    const res = await axios.post(`${GROUP_API_BASE}${groupId}/join`, null, {
-      withCredentials: true,
-    });
-    return res.data;
-  } catch (err) {
-    console.error('Join group error:', err.message);
-    throw err.response?.data || { message: 'Failed to join group' };
-  }
+  const res = await api.post(`${GROUP_API_BASE}${groupId}/join`);
+  return res.data;
 };
 
+// Cancel join request
 export const cancelJoinRequestService = async (groupId) => {
-  try {
-    const res = await axios.delete(`${GROUP_API_BASE}${groupId}/join`, {
-      withCredentials: true,
-    });
-    return res.data;
-  } catch (err) {
-    console.error('Cancel join request error:', err.message);
-    throw err.response?.data || { message: 'Failed to cancel join request' };
-  }
+  const res = await api.delete(`${GROUP_API_BASE}${groupId}/join`);
+  return res.data;
 };
 
+// Approve join request
 export const approveJoinRequestService = async (groupId, studentId) => {
-  try {
-    const res = await axios.patch(
-      `${GROUP_API_BASE}${groupId}/approve-request/${studentId}`,
-      null,
-      { withCredentials: true }
-    );
-    return res.data;
-  } catch (err) {
-    console.error('Approve join request error:', err.message);
-    throw err.response?.data || { message: 'Failed to approve request' };
-  }
+  const res = await api.patch(
+    `${GROUP_API_BASE}${groupId}/approve-request/${studentId}`
+  );
+  return res.data;
 };
 
+// Reject join request
 export const rejectJoinRequestService = async (groupId, studentId) => {
-  try {
-    const res = await axios.patch(
-      `${GROUP_API_BASE}${groupId}/reject-request/${studentId}`,
-      null,
-      { withCredentials: true }
-    );
-    return res.data;
-  } catch (err) {
-    console.error('Reject join request error:', err.message);
-    throw err.response?.data || { message: 'Failed to reject request' };
-  }
+  const res = await api.patch(
+    `${GROUP_API_BASE}${groupId}/reject-request/${studentId}`
+  );
+  return res.data;
 };
 
+// Leave current group
 export const leaveGroupService = async () => {
-  try {
-    const res = await axios.post(`${GROUP_API_BASE}leave`, null, {
-      withCredentials: true,
-    });
-    return res.data;
-  } catch (err) {
-    console.error('Leave group error:', err.message);
-    throw err.response?.data || { message: 'Failed to leave group' };
-  }
+  const res = await api.post(`${GROUP_API_BASE}leave`);
+  return res.data;
 };

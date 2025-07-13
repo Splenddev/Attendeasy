@@ -82,7 +82,7 @@ const GroupFind = ({ user = {}, onJoin }) => {
       await fetchGroups();
     } catch (err) {
       console.log(err);
-      toast.error('Failed to send join request');
+      toast.error(err.message || 'Failed to send join request');
     }
     setShowModal(false);
   };

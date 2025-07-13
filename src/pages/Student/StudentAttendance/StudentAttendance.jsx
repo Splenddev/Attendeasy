@@ -14,7 +14,6 @@ import { scheduleJson } from '../../ClassRep/ClassSchedule/assets';
 import UpcomingSchedule from './UpcomingSchedule';
 import { generateSmartTip } from '../../../utils/helpers';
 import { useFetchGroupAttendances } from '../../../hooks/useAttendance';
-import ErrorModal from '../../../components/Modals/ErrorModal/ErrorModal';
 
 const StudentAttendance = () => {
   const { setNavTitle, user } = useAuth();
@@ -25,9 +24,6 @@ const StudentAttendance = () => {
     mode: '',
   });
   const [history, setHistory] = useState(attendance);
-
-  const [modalError, setModalError] = useState(null);
-  const [showModal, setShowModal] = useState(false);
 
   const { data, loading, fetch, error } = useFetchGroupAttendances(user.group);
 
@@ -90,18 +86,11 @@ const StudentAttendance = () => {
             maxDistance={markEntryModal.maxRange}
             attendanceId={markEntryModal.attendanceId}
             mode={markEntryModal.mode}
-            setModalError={setModalError}
-            setShowModal={setShowModal}
           />
         </div>
       )}
       <UpcomingSchedule schedules={getTodaySchedule(scheduleJson)} />
 
-      <ErrorModal
-        isOpen={showModal}
-        error={modalError}
-        onClose={() => setShowModal(false)}
-      />
       {/* <SuccessModal
         isOpen={showSuccess}
         data={successData}

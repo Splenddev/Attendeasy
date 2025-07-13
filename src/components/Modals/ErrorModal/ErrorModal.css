@@ -76,7 +76,8 @@
   color: #b30000;
 }
 
-.em-details {
+.em-details,
+.em-stack {
   margin-top: 16px;
   background: #f6f6f6;
   padding: 12px;

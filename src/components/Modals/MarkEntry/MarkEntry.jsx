@@ -13,7 +13,6 @@ import { MdClose } from 'react-icons/md';
 import './MarkEntry.css';
 import { markGeoEntry } from '../../../services/attendance.service';
 import { toast } from 'react-toastify';
-import { parseAxiosError } from '../../../utils/axiosErrorHandler';
 
 const classLocation = { lat: 6.44805, lng: 3.39013 }; // Replace with dynamic value if needed
 
@@ -73,8 +72,6 @@ const MarkEntry = ({
   maxDistance = 10,
   attendanceId,
   mode,
-  setModalError,
-  setShowModal,
 }) => {
   const [userLocation, setUserLocation] = useState(null);
   const [distance, setDistance] = useState(null);
@@ -219,8 +216,6 @@ const MarkEntry = ({
       console.log(userLocation);
       const msg = err.response?.data?.message || 'Failed to mark attendance.';
       toast.error(`❌ ${msg}`);
-      setModalError(parseAxiosError(err));
-      setShowModal(true);
     }
   };
 
