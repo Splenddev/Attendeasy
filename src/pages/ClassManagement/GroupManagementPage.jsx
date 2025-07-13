@@ -16,15 +16,15 @@ import { fetchGroupService } from '../../services/group.service';
 import { toast } from 'react-toastify';
 import Spinner from '../../components/Loader/Spinner/Spinner';
 import { useErrorModal } from '../../hooks/useErrorModal';
+import useGroupSocketListener from '../../hooks/useGroupSocketListener ';
 
 const GroupManagementPage = () => {
   const [group, setGroup] = useState(null);
   const [loading, setLoading] = useState(true);
   const { user, setNavTitle, updateUser } = useAuth();
+  const { open } = useErrorModal();
 
   useEffect(() => setNavTitle('Group Management'), [setNavTitle]);
-
-  const { open } = useErrorModal();
 
   const fetchGroup = async () => {
     if (!user?.group) {
@@ -45,9 +45,18 @@ const GroupManagementPage = () => {
     }
   };
 
+  // ✅ Fetch group data on mount
   useEffect(() => {
     fetchGroup();
   }, []);
+
+  // ✅ Listen for socket updates and refresh group
+  useGroupSocketListener((payload) => {
+    if (payload.groupId === user?.group) {
+      console.log('🔄 Refreshing group data due to socket event:', payload);
+      fetchGroup();
+    }
+  });
 
   if (loading)
     return (
@@ -70,7 +79,6 @@ const GroupManagementPage = () => {
           alt="Group Not Found"
           className="group-not-found-image"
         />
-
         <h2>Oops! Group not found</h2>
         <p>
           We couldn’t load the group data. It may not exist or something went
