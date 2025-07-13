@@ -5,7 +5,7 @@ import {
   getMyNotifications,
   markAllAsRead,
 } from '../services/notification.service';
-import { connectSocket, getSocket } from '../utils/socket';
+import { connectSocket } from '../utils/socket';
 import { toast } from 'react-toastify';
 
 const NotificationContext = createContext();
@@ -13,32 +13,36 @@ const NotificationContext = createContext();
 export const NotificationProvider = ({ children }) => {
   const { user } = useAuth();
   const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // ⏳ first fetch loading only
 
-  // 🔁 Load existing notifications
-  const fetchNotifications = async () => {
+  // ✅ Fetch notifications (can be used silently or with loader)
+  const fetchNotifications = async ({ silent = false } = {}) => {
     if (!user?._id) return;
+
+    if (!silent) setLoading(true); // only show loader on first fetch
 
     try {
       const res = await getMyNotifications(user._id);
       setNotifications(res.data || []);
     } catch (err) {
       console.error('🔴 Failed to load notifications:', err);
-      toast.error('Could not load notifications.');
+      if (!silent) toast.error('Could not load notifications.');
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 
-  // 🔌 Setup socket connection and listeners
+  // 🔌 Setup socket listener
   useEffect(() => {
     if (!user?._id) return;
 
-    const socket = connectSocket(user._id); // ✅ now guaranteed to exist
+    const socket = connectSocket(user._id);
 
-    const handleNewNotification = (data) => {
-      setNotifications((prev) => [data, ...prev]);
-      toast.info(data.message || '🔔 New notification received');
+    const handleNewNotification = () => {
+      // ✅ Silently refetch to ensure up-to-date list
+      fetchNotifications({ silent: true });
+      // (Optional) also toast — or show minimal UI cue
+      toast.info('🔔 New notification received');
     };
 
     socket.on('notification:new', handleNewNotification);
@@ -48,7 +52,14 @@ export const NotificationProvider = ({ children }) => {
     };
   }, [user?._id]);
 
-  // ✅ Mark all notifications as read
+  // ✅ Initial load
+  useEffect(() => {
+    if (user?._id) {
+      fetchNotifications(); // loader shown only here
+    }
+  }, [user?._id]);
+
+  // ✅ Mark all as read
   const updateAll = async () => {
     try {
       await markAllAsRead(user._id);
@@ -61,7 +72,7 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
-  // ❌ Delete a notification
+  // ✅ Delete one notification
   const removeNotification = async (id) => {
     try {
       await deleteNotification(id);
@@ -72,16 +83,16 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
-  const value = {
-    notifications,
-    loading,
-    updateAll,
-    removeNotification,
-    fetchNotifications,
-  };
-
   return (
-    <NotificationContext.Provider value={value}>
+    <NotificationContext.Provider
+      value={{
+        notifications,
+        loading,
+        updateAll,
+        removeNotification,
+        fetchNotifications,
+      }}
+    >
       {children}
     </NotificationContext.Provider>
   );
