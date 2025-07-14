@@ -1,0 +1,53 @@
+.att-status-badge {
+  align-items: center;
+  gap: 0.5rem;
+  padding: 10px 14px;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out;
+  width: 100%;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.att-status-badge svg {
+  margin-top: -1px;
+}
+
+.att-status-badge.active {
+  background-color: var(--green);
+  animation: pulseGreen 2s infinite;
+  box-shadow: 0 0 8px #00b89480;
+}
+
+.att-status-badge.closed {
+  background-color: #d63031;
+  box-shadow: 0 0 6px #d6303180;
+}
+
+.att-status-badge.upcoming {
+  background-color: #0984e3;
+  box-shadow: 0 0 6px #0984e380;
+}
+
+.att-status-badge.finalizing {
+  background-color: #6c5ce7;
+  box-shadow: 0 0 6px #6c5ce780;
+}
+
+@keyframes pulseGreen {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 184, 148, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(0, 184, 148, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 184, 148, 0);
+  }
+}

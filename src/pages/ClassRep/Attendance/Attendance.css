@@ -212,11 +212,12 @@
   }
   & .action {
     display: flex;
-    justify-content: end;
+    /* justify-content: end; */
     gap: 10px;
+    flex-wrap: wrap;
     white-space: nowrap;
     & button {
-      padding: 10px 15px;
+      padding: 0.55rem 1rem;
       border: none;
       border-radius: 20px;
       display: flex;

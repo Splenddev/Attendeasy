@@ -6,6 +6,7 @@ import {
   finalizeSession,
   getGroupAttendances,
   getGroupTabAttendances,
+  reopenSession,
   submitAbsencePlea,
 } from '../services/attendance.service';
 import { useErrorModal } from './useErrorModal';
@@ -55,7 +56,6 @@ export const useCreateAttendance = () => {
 };
 export const useFinalizeAttendance = () => {
   const { open: openError } = useErrorModal();
-  const { open: openSuccess } = useSuccessModal();
   const [finalizing, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -63,7 +63,6 @@ export const useFinalizeAttendance = () => {
     try {
       setLoading(true);
       const res = await finalizeSession(attendanceId);
-      openSuccess(res);
       return res;
     } catch (err) {
       setError(err.message);
@@ -76,6 +75,27 @@ export const useFinalizeAttendance = () => {
 
   return { finalize, finalizing, error };
 };
+export const useReopenAttendance = () => {
+  const { open: openError } = useErrorModal();
+  const [opening, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const reopen = useCallback(async (attendanceId) => {
+    try {
+      setLoading(true);
+      const res = await reopenSession(attendanceId);
+      return res;
+    } catch (err) {
+      setError(err.message);
+      openError(err);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  return { reopen, opening, error };
+};
 
 export const useFetchGroupAttendances = (groupId) => {
   const [data, setData] = useState([]);
@@ -87,6 +107,7 @@ export const useFetchGroupAttendances = (groupId) => {
       setLoading(true);
       const res = await getGroupAttendances(groupId);
       setData(res.attendances || []);
+      setError(null);
     } catch (err) {
       setError(err.message);
     } finally {

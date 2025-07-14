@@ -39,8 +39,8 @@ const App = () => {
         actionText="Logout"
         message="You’re about to log out of your account."
       />
-      <ErrorModal />
       <SuccessModal />
+      <ErrorModal />
 
       {shouldShowJoinGroupPrompt ? <JoinGroupPrompt role={role} /> : <Outlet />}
 

@@ -69,6 +69,11 @@ export const finalizeSession = async (attendanceId) => {
 
   return res.data;
 };
+export const reopenSession = async (attendanceId) => {
+  const res = await api.post(`${ATTENDANCE_API_BASE}re-open/${attendanceId}`);
+
+  return res.data;
+};
 export const deleteSession = async (attendanceId) => {
   const res = await api.delete(`${ATTENDANCE_API_BASE}${attendanceId}`);
 

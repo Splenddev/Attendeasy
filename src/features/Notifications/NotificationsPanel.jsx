@@ -2,9 +2,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MdClose, MdPerson } from 'react-icons/md';
 import styles from './NotificationsPanel.module.css';
 import { useNotification } from '../../context/NotificationContext';
-import { approveJoinRequestService } from '../../services/group.service';
+import {
+  approveJoinRequestService,
+  rejectJoinRequestService,
+} from '../../services/group.service';
 import { toast } from 'react-toastify';
-import { useEffect } from 'react';
 
 const fileNameFromPath = (path) => path.split('/').pop();
 
@@ -14,23 +16,29 @@ const NotificationsPanel = ({ onClose, user }) => {
     updateAll,
     removeNotification,
     loading,
-    fetchNotifications,
   } = useNotification();
 
-  useEffect(() => {
-    fetchNotifications();
-  }, []);
-
-  const handleDeny = async (reqType) => {};
-  const handleAccept = async (studentId, reqType) => {
-    if (reqType !== 'approveJoinRequest') return toast.info('Success');
-
+  const handleAction = async (type, { studentId, reqType, noteId }) => {
     try {
-      const res = await approveJoinRequestService(user.group, studentId);
-      if (res.success) toast.success('Accepted');
+      if (reqType === 'approveJoinRequest') {
+        const res = await approveJoinRequestService(user.group, studentId);
+        if (res.success) {
+          toast.success('✅ Join request approved');
+          removeNotification(noteId);
+        }
+      } else if (reqType === 'denyJoinRequest') {
+        // Implement deny service call here
+        const res = await rejectJoinRequestService(user.group, studentId);
+        if (res.success) {
+          toast.success('🚫 Join request denied');
+          removeNotification(noteId);
+        }
+      } else {
+        toast.info('ℹ️ Action completed');
+      }
     } catch (error) {
-      console.log(error);
-      toast.error(error.message || 'Error!');
+      console.error(`Action "${reqType}" failed:`, error);
+      toast.error(error.message || '⚠️ Action failed');
     }
   };
 
@@ -94,7 +102,13 @@ const NotificationsPanel = ({ onClose, user }) => {
                     <div className={styles.buttons}>
                       {note.actionDeny && (
                         <button
-                          onClick={handleDeny}
+                          onClick={() =>
+                            handleAction('deny', {
+                              studentId: note.from,
+                              reqType: note.actionDeny,
+                              noteId: note._id,
+                            })
+                          }
                           className={styles.deny}>
                           Deny
                         </button>
@@ -102,7 +116,11 @@ const NotificationsPanel = ({ onClose, user }) => {
                       {note.actionApprove && (
                         <button
                           onClick={() =>
-                            handleAccept(note.from, note.actionApprove)
+                            handleAction('approve', {
+                              studentId: note.from,
+                              reqType: note.actionApprove,
+                              noteId: note._id,
+                            })
                           }
                           className={styles.approve}>
                           Approve

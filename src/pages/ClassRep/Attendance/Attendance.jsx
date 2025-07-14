@@ -4,7 +4,13 @@ import './Attendance.css';
 import { AnimatePresence, motion } from 'framer-motion';
 import { MdGridView, MdLocationPin, MdFlag } from 'react-icons/md';
 import { RiGraduationCapFill } from 'react-icons/ri';
-import { LuDownload, LuListTodo } from 'react-icons/lu';
+import {
+  LuBookOpen,
+  LuCalendarCheck2,
+  LuDownload,
+  LuListTodo,
+  LuMailOpen,
+} from 'react-icons/lu';
 import {
   FaCalendarCheck,
   FaEnvelopeOpen,
@@ -15,17 +21,24 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { DateFilter } from '../../../components';
 import button from '../../../components/Button/Button';
-import { routesNavigate } from '../../../utils/helpers';
+import {
+  dateFormatter,
+  routesNavigate,
+  timeFormatter,
+} from '../../../utils/helpers';
 import SessionInfo from './components/SessionInfo/SessionInfo';
 import Students from './components/Students/Students';
 import {
   useDeleteAttendance,
   useFetchGroupAttendances,
   useFinalizeAttendance,
+  useReopenAttendance,
 } from '../../../hooks/useAttendance';
 import { useAuth } from '../../../context/AuthContext';
 import Spinner from '../../../components/Loader/Spinner/Spinner';
-import { FiTrash } from 'react-icons/fi';
+import { FiLoader, FiTrash } from 'react-icons/fi';
+import { useSuccessModal } from '../../../hooks/useSuccessModal';
+import AttStatus from './components/AttStatus/AttStatus';
 
 const Attendance = () => {
   const { user } = useAuth();
@@ -39,6 +52,10 @@ const Attendance = () => {
   } = useFetchGroupAttendances(groupId);
 
   const { deleteAttendance, loading: deleting } = useDeleteAttendance();
+
+  const { reopen, opening } = useReopenAttendance();
+
+  const { open: openSuccess } = useSuccessModal();
 
   useEffect(() => {
     if (groupId) fetch(groupId);
@@ -130,7 +147,7 @@ const Attendance = () => {
       <div className="error-state">
         <h4>Failed to load attendance data</h4>
         <p>{error}</p>
-        <button onClick={() => fetch()}>Retry</button>
+        <button onClick={() => fetch(groupId)}>Retry</button>
       </div>
     );
   }
@@ -229,8 +246,8 @@ const Attendance = () => {
           />
           <h4>No attendance sessions yet</h4>
           <p>
-            You haven’t created any attendance records yet. Once you do, they'll
-            show up here.
+            You haven’t created any attendance records yet for this date. Once
+            you do, they'll show up here.
           </p>
           <button onClick={() => navigate('create')}>Create</button>
         </div>
@@ -246,16 +263,59 @@ const Attendance = () => {
 
                 <section className="action">
                   <button className="time">
-                    <FaEnvelopeOpen /> <span>Submit to lecturer</span>
+                    <LuMailOpen /> <span>Submit to lecturer</span>
                   </button>
                   <button className="time">
                     <LuDownload />
                   </button>
-                  {button.multiple({
-                    icon: FaCalendarCheck,
-                    element: finalizing ? <Spinner size="20px" /> : 'finalize',
-                    func: () => finalize(session._id),
-                  })}
+                  {session.status !== 'closed' &&
+                    timeFormatter(session.classTime.end) <
+                      timeFormatter(null) &&
+                    button.multiple({
+                      icon: LuCalendarCheck2,
+                      element: finalizing ? (
+                        <Spinner size="20px" />
+                      ) : (
+                        'finalize'
+                      ),
+                      func: () => {
+                        const res = finalize(session._id);
+                        if (res.success) {
+                          openSuccess({
+                            title: 'Attendance Finalized',
+                            message: res.message,
+                            details: {
+                              Present: res.stats.totalPresent,
+                              'On Time': res.stats.onTime,
+                              late: res.stats.late,
+                              leftEarly: res.stats.leftEarly,
+                              absent: res.stats.absent,
+                              withPlea: res.stats.withPlea,
+                            },
+                          });
+                        }
+                      },
+                    })}
+
+                  {session.status === 'closed' &&
+                    button.multiple({
+                      icon: opening ? FiLoader : LuBookOpen,
+                      element: opening ? '' : 'Reopen Session',
+                      loader: opening,
+                      func: () => {
+                        const res = reopen(session._id);
+                        if (res.success) {
+                          openSuccess({
+                            title: 'Attendance Reopened',
+                            message: res.message,
+                            details: {
+                              AttendanceId: res.attendanceId,
+                            },
+                          });
+                        }
+                      },
+                    })}
+
                   {button.multiple({
                     icon: FiTrash,
                     element: deleting ? <Spinner size="20px" /> : 'Trash',
@@ -265,6 +325,8 @@ const Attendance = () => {
                     },
                   })}
                 </section>
+
+                <AttStatus status={session.status} />
               </div>
 
               <div className={`c-attendance-lists ${view}`}>

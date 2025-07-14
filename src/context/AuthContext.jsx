@@ -6,6 +6,7 @@ import axios from 'axios';
 import { loginUser, logoutUser, registerUser } from '../services/auth.service';
 import { toast } from 'react-toastify';
 import { connectSocket } from '../utils/socket';
+import { joinGroupRoom, leaveGroupRoom } from '../utils/socketRooms';
 
 axios.defaults.withCredentials = true;
 
@@ -36,9 +37,16 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (user?._id) {
-      connectSocket(user._id);
+      connectSocket(user._id, user.group);
     }
   }, [user]);
+
+  useEffect(() => {
+    if (user?._id && user?.group) {
+      joinGroupRoom(user.group);
+      return () => leaveGroupRoom(user.group);
+    }
+  }, [user?._id, user?.group]);
 
   const register = async (formData) => {
     try {

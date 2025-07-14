@@ -32,7 +32,6 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
-  // 🔌 Setup socket listener
   useEffect(() => {
     if (!user?._id) return;
 
@@ -40,13 +39,20 @@ export const NotificationProvider = ({ children }) => {
 
     const handleNewNotification = () => {
       fetchNotifications({ silent: true });
-      toast.info('🔔 New notification received');
+      toast.info('🔔 New personal notification');
+    };
+
+    const handleGroupNotification = (data) => {
+      fetchNotifications({ silent: true });
+      toast.info(`📢 ${data.title || 'Group Notification'}: ${data.message}`);
     };
 
     socket.on('notification:new', handleNewNotification);
+    socket.on('group-notification', handleGroupNotification);
 
     return () => {
       socket.off('notification:new', handleNewNotification);
+      socket.off('group-notification', handleGroupNotification);
     };
   }, [user?._id]);
 
