@@ -13,6 +13,7 @@ import { MdClose } from 'react-icons/md';
 import './MarkEntry.css';
 import { markGeoEntry } from '../../../services/attendance.service';
 import { toast } from 'react-toastify';
+import useDisableScroll from '../../../hooks/useDisableScroll';
 
 const classLocation = { lat: 6.44805, lng: 3.39013 }; // Replace with dynamic value if needed
 
@@ -73,6 +74,8 @@ const MarkEntry = ({
   attendanceId,
   mode,
 }) => {
+  useDisableScroll(visible);
+
   const [userLocation, setUserLocation] = useState(null);
   const [distance, setDistance] = useState(null);
   const [status, setStatus] = useState('idle');
@@ -319,7 +322,7 @@ const MarkEntry = ({
           className="submit-button"
           onClick={submitCheckIn}
           style={{ marginTop: '10px' }}>
-          ✅ Submit Check-in
+          Submit {mode}
         </button>
       )}
     </div>

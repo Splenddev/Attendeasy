@@ -65,6 +65,8 @@ const AttendanceCard = ({ att, isModal, setIsModal, student }) => {
         </div>
       </div>
       {student &&
+        !student.checkIn.time &&
+        !student.checkOut.time &&
         button.normal({
           element: !student.checkIn.time ? 'Check In' : 'Check Out',
           func: () =>

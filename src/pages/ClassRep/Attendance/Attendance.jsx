@@ -5,16 +5,27 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { MdGridView, MdLocationPin, MdFlag } from 'react-icons/md';
 import { RiGraduationCapFill } from 'react-icons/ri';
 import { LuDownload, LuListTodo } from 'react-icons/lu';
-import { FaEnvelopeOpen, FaList, FaPlus, FaSearch } from 'react-icons/fa';
+import {
+  FaCalendarCheck,
+  FaEnvelopeOpen,
+  FaList,
+  FaPlus,
+  FaSearch,
+} from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { DateFilter } from '../../../components';
 import button from '../../../components/Button/Button';
 import { routesNavigate } from '../../../utils/helpers';
 import SessionInfo from './components/SessionInfo/SessionInfo';
 import Students from './components/Students/Students';
-import { useFetchGroupAttendances } from '../../../hooks/useAttendance';
+import {
+  useDeleteAttendance,
+  useFetchGroupAttendances,
+  useFinalizeAttendance,
+} from '../../../hooks/useAttendance';
 import { useAuth } from '../../../context/AuthContext';
 import Spinner from '../../../components/Loader/Spinner/Spinner';
+import { FiTrash } from 'react-icons/fi';
 
 const Attendance = () => {
   const { user } = useAuth();
@@ -26,6 +37,8 @@ const Attendance = () => {
     loading,
     error,
   } = useFetchGroupAttendances(groupId);
+
+  const { deleteAttendance, loading: deleting } = useDeleteAttendance();
 
   useEffect(() => {
     if (groupId) fetch(groupId);
@@ -51,6 +64,8 @@ const Attendance = () => {
   const filteredByCourse = filteredAttendance.filter((s) =>
     course ? s.courseCode?.toLowerCase() === course.toLowerCase() : true
   );
+
+  const { finalize, finalizing } = useFinalizeAttendance();
 
   const sortedAttendance = filteredByCourse.sort(
     (a, b) => new Date(a.classDate) - new Date(b.classDate)
@@ -236,6 +251,19 @@ const Attendance = () => {
                   <button className="time">
                     <LuDownload />
                   </button>
+                  {button.multiple({
+                    icon: FaCalendarCheck,
+                    element: finalizing ? <Spinner size="20px" /> : 'finalize',
+                    func: () => finalize(session._id),
+                  })}
+                  {button.multiple({
+                    icon: FiTrash,
+                    element: deleting ? <Spinner size="20px" /> : 'Trash',
+                    func: async () => {
+                      const res = await deleteAttendance(session._id);
+                      if (res.success) fetch(groupId);
+                    },
+                  })}
                 </section>
               </div>
 

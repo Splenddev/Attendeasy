@@ -8,10 +8,14 @@ import { useAuth } from './context/AuthContext';
 import { ConfirmModal } from './components/Modals';
 import JoinGroupPrompt from './components/JoinGroupPrompt/JoinGroupPrompt';
 import ErrorModal from './components/Modals/ErrorModal/ErrorModal';
+import useUserSocketListener from './hooks/useUserSocketListener ';
+import SuccessModal from './components/Modals/SuccessModal/SuccessModal';
 
 const App = () => {
   const { setShowLogoutModal, showLogoutModal, logout, authBtnsLoading, user } =
     useAuth();
+
+  useUserSocketListener();
 
   const role = user?.role?.toLowerCase();
   const location = useLocation();
@@ -36,6 +40,7 @@ const App = () => {
         message="You’re about to log out of your account."
       />
       <ErrorModal />
+      <SuccessModal />
 
       {shouldShowJoinGroupPrompt ? <JoinGroupPrompt role={role} /> : <Outlet />}
 

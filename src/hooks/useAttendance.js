@@ -2,22 +2,49 @@
 import { useState, useCallback, useEffect } from 'react';
 import {
   createAttendance,
+  deleteSession,
+  finalizeSession,
   getGroupAttendances,
   getGroupTabAttendances,
   submitAbsencePlea,
 } from '../services/attendance.service';
-
+import { useErrorModal } from './useErrorModal';
+import { useSuccessModal } from './useSuccessModal';
 export const useCreateAttendance = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const { open: openError } = useErrorModal();
+  const { open: openSuccess } = useSuccessModal();
 
   const submit = useCallback(async (formData) => {
     try {
       setLoading(true);
       const res = await createAttendance(formData);
+      if (res.success) {
+        openSuccess({
+          title: 'Attendance created',
+          message: res.message,
+          details: {
+            AttendanceID: res.attendance.id,
+            Date: res.attendance.classDate,
+            TotalStudent: res.attendance.totalStudents,
+            status: res.attendance.status,
+          },
+        });
+      } else {
+        openError({
+          initiator: 'Create Attendance',
+          res,
+        });
+      }
       return res;
     } catch (err) {
       setError(err.message);
+      openError({
+        initiator: 'Create Attendance',
+        ...err?.response?.data,
+      });
       throw err;
     } finally {
       setLoading(false);
@@ -25,6 +52,29 @@ export const useCreateAttendance = () => {
   }, []);
 
   return { submit, loading, error };
+};
+export const useFinalizeAttendance = () => {
+  const { open: openError } = useErrorModal();
+  const { open: openSuccess } = useSuccessModal();
+  const [finalizing, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const finalize = useCallback(async (attendanceId) => {
+    try {
+      setLoading(true);
+      const res = await finalizeSession(attendanceId);
+      openSuccess(res);
+      return res;
+    } catch (err) {
+      setError(err.message);
+      openError(err);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  return { finalize, finalizing, error };
 };
 
 export const useFetchGroupAttendances = (groupId) => {
@@ -90,4 +140,44 @@ export const useSubmitPlea = () => {
   }, []);
 
   return { submit, loading, error };
+};
+
+export const useDeleteAttendance = () => {
+  const [loading, setLoading] = useState(false);
+  const { open: openError } = useErrorModal();
+  const { open: openSuccess } = useSuccessModal();
+
+  const deleteAttendance = async (attendanceId) => {
+    setLoading(true);
+    try {
+      const data = await deleteSession(attendanceId);
+      if (data.success) {
+        openSuccess({
+          title: 'Attendance Deleted',
+          message: data.message,
+          details: {
+            AttendanceID: data.data.attendanceId,
+            Date: data.data.classDate,
+          },
+        });
+      } else {
+        openError({
+          initiator: 'Delete Attendance',
+          data,
+        });
+      }
+      return { success: data.success, data: data.data };
+    } catch (err) {
+      openError({
+        initiator: 'Delete Attendance',
+        ...err,
+      });
+      console.log(err.message);
+      return { success: false, error: err };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { deleteAttendance, loading };
 };

@@ -64,7 +64,7 @@ hr {
   margin: 16px 0;
   padding: 14px 16px;
   background-color: #f0f4ff;
-  border-left: 5px solid #4a7cf7;
+  border-left: 5px solid var(--main-color);
   font-weight: 600;
   font-size: 1.05rem;
   color: #1e2a78;
@@ -76,15 +76,15 @@ hr {
 
 .check-button {
   width: 100%;
-  background-color: #4a7cf7;
+  background-color: var(--main-color);
   color: #fff;
   font-size: 1.15rem;
   font-weight: 600;
   padding: 14px 0;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .check-button:disabled {
@@ -93,7 +93,8 @@ hr {
 }
 
 .check-button:hover:not(:disabled) {
-  background-color: #3563d6;
+  background-color: var(--accent-color);
+  border-radius: 30px;
 }
 .goto-location-button {
   position: absolute;
@@ -114,5 +115,19 @@ hr {
 }
 
 .goto-location-button:hover {
-  background-color: #0056b3;
+  background-color: var(--accent-color);
+}
+.mark-entry-modal .submit-button {
+  width: 100%;
+  padding: 14px 0;
+  font-size: 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--main-color);
+  background: #fff;
+  transition: all 0.3s ease;
+  &:hover {
+    color: #fff;
+    border-radius: 30px;
+    background-color: var(--accent-color);
+  }
 }

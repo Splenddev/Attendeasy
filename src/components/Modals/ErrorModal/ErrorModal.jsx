@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import './ErrorModal.css';
 import { MdErrorOutline } from 'react-icons/md';
 import { registerErrorModal } from '../../../hooks/useErrorModal';
+import errorSound from '../../../assets/sounds/error.mp3'; // ⬅️ Add your file here
+import useDisableScroll from '../../../hooks/useDisableScroll';
 
 const ErrorModal = () => {
   const [modal, setModal] = useState({
@@ -13,10 +15,24 @@ const ErrorModal = () => {
       errors: [],
     },
   });
+  useDisableScroll(modal.isOpen);
 
   useEffect(() => {
     registerErrorModal(setModal);
   }, []);
+
+  useEffect(() => {
+    if (modal.isOpen) {
+      // 🔊 Play error sound
+      const sound = new Audio(errorSound);
+      sound.play().catch((e) => {
+        if (import.meta.env.DEV) console.warn('Failed to play error sound:', e);
+      });
+      if (navigator.vibrate) {
+        navigator.vibrate(200);
+      }
+    }
+  }, [modal.isOpen]);
 
   if (!modal.isOpen) return null;
 

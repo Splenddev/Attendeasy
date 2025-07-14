@@ -13,8 +13,8 @@ const useUserSocketListener = () => {
 
     const handleUserRefresh = async () => {
       try {
-        const freshUser = await getUser(); // calls /auth/me
-        updateUser(freshUser);
+        const res = await getUser(); // calls /auth/me
+        updateUser(res.user);
         console.log('🔁 User updated from server via socket');
       } catch (err) {
         console.warn('Failed to refresh user:', err.message);

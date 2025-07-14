@@ -64,3 +64,13 @@ export const markGeoEntry = async (
 
   return res.data;
 };
+export const finalizeSession = async (attendanceId) => {
+  const res = await api.post(`${ATTENDANCE_API_BASE}finalize/${attendanceId}`);
+
+  return res.data;
+};
+export const deleteSession = async (attendanceId) => {
+  const res = await api.delete(`${ATTENDANCE_API_BASE}${attendanceId}`);
+
+  return res.data;
+};
