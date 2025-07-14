@@ -137,6 +137,7 @@ const DynamicForm = ({
                 disabled={item.disabled}
                 readOnly={item.readOnly}
                 catenate={item.catenate}
+                mapToValue={item.mapToValue}
               />
             ))}
           </div>

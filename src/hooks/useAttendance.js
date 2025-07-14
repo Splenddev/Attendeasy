@@ -113,9 +113,9 @@ export const useFetchGroupAttendances = (groupId) => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [groupId]);
 
-  return { data, fetch, loading, error };
+  return { data, fetch, loading, error, setData };
 };
 export const useFetchGroupTabAttendances = (groupId) => {
   const [data, setData] = useState(null); // it’s an object, not array

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import './Attendance.css';
 
+// eslint-disable-next-line no-unused-vars
 import { AnimatePresence, motion } from 'framer-motion';
 import { MdGridView, MdLocationPin, MdFlag } from 'react-icons/md';
 import { RiGraduationCapFill } from 'react-icons/ri';
@@ -11,21 +12,11 @@ import {
   LuListTodo,
   LuMailOpen,
 } from 'react-icons/lu';
-import {
-  FaCalendarCheck,
-  FaEnvelopeOpen,
-  FaList,
-  FaPlus,
-  FaSearch,
-} from 'react-icons/fa';
+import { FaList, FaPlus, FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { DateFilter } from '../../../components';
 import button from '../../../components/Button/Button';
-import {
-  dateFormatter,
-  routesNavigate,
-  timeFormatter,
-} from '../../../utils/helpers';
+import { routesNavigate, timeFormatter } from '../../../utils/helpers';
 import SessionInfo from './components/SessionInfo/SessionInfo';
 import Students from './components/Students/Students';
 import {
@@ -39,17 +30,35 @@ import Spinner from '../../../components/Loader/Spinner/Spinner';
 import { FiLoader, FiTrash } from 'react-icons/fi';
 import { useSuccessModal } from '../../../hooks/useSuccessModal';
 import AttStatus from './components/AttStatus/AttStatus';
+import useAttendanceSocket from '../../../hooks/useAttendanceSocket';
+import { toast } from 'react-toastify';
 
 const Attendance = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const groupId = user?.group;
+
   const {
     data: attendanceList,
     fetch,
     loading,
     error,
   } = useFetchGroupAttendances(groupId);
+
+  useAttendanceSocket(groupId, {
+    onUpdate: () => {
+      console.log('🆕 Attendance updated');
+      fetch(groupId);
+    },
+    onProgress: (data) => {
+      console.log('✅ Student marked in:', data);
+      toast.success(`${data.studentName} marked as ${data.status}`);
+    },
+    onFlagged: (data) => {
+      console.warn('🚩 Flagged entry:', data);
+      // maybe notify or update local list
+    },
+  });
 
   const { deleteAttendance, loading: deleting } = useDeleteAttendance();
 
@@ -66,6 +75,10 @@ const Attendance = () => {
   const [marked, setMarked] = useState('');
   const [view, setView] = useState('list');
   const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    setFilteredAttendance(attendanceList);
+  }, [attendanceList]);
 
   const allCourses = useMemo(
     () => [...new Set(attendanceList.map((s) => s.courseCode).filter(Boolean))],

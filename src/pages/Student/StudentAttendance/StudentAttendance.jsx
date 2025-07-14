@@ -22,6 +22,7 @@ const StudentAttendance = () => {
     maxRange: 0,
     attendanceId: '',
     mode: '',
+    location: { lat: 0, lng: 0 },
   });
   const [history, setHistory] = useState(attendance);
 
@@ -86,6 +87,7 @@ const StudentAttendance = () => {
             maxDistance={markEntryModal.maxRange}
             attendanceId={markEntryModal.attendanceId}
             mode={markEntryModal.mode}
+            classLocation={markEntryModal.location}
           />
         </div>
       )}

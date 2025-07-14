@@ -70,12 +70,17 @@ const AttendanceCard = ({ att, setIsModal, student }) => {
       ) : (
         button.normal({
           element: !student.checkIn.time ? 'Check In' : 'Check Out',
+          disabled: status === 'ended',
           func: () =>
             setIsModal({
               visible: true,
               maxRange: att.location?.radiusMeters,
               attendanceId: att._id,
               mode: !student.checkIn.time ? 'checkIn' : 'checkOut',
+              location: {
+                lat: att.location?.latitude,
+                lng: att.location?.longitude,
+              },
             }),
           //disabled: status !== 'in-progress'
         })

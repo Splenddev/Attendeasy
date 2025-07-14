@@ -11,25 +11,36 @@ export const onChoiceChange = (
   choiceMode,
   title,
   setValue,
-  getValues
+  getValues,
+  mapToValue = null // Optional mapping: e.g., { Yes: true, No: false }
 ) => {
   const current = { ...checkedChoices };
 
   if (choiceMode === 'multiple') {
     current[choice] = !current[choice];
   } else {
+    // Ensure only one is selected
     Object.keys(current).forEach((key) => (current[key] = false));
     current[choice] = true;
   }
 
+  setValue(`${title}_choices`, current); // For UI rendering
+
+  // === CASE 1: Boolean or scalar choice (e.g. Yes/No) ===
+  if (mapToValue) {
+    const mapped = mapToValue[choice];
+    setValue(title, mapped);
+    return;
+  }
+
+  // === CASE 2: Complex choice (e.g. day with time) ===
   const timeValue = getValues('classStartTime') || '';
 
   const selectedArray = Object.keys(current)
     .filter((key) => current[key])
     .map((day) => ({ day, time: timeValue }));
 
-  setValue(`${title}_choices`, current); // for UI
-  setValue(`${title}`, selectedArray);
+  setValue(title, selectedArray);
 };
 
 export const select = (type, setValue, selected, list, getValues) => {

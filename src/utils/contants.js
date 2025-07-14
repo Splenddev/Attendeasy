@@ -275,6 +275,22 @@ export const formDataAssets = [
       },
     ],
   },
+  {
+    id: 'auto-finalization',
+    title: 'Auto Finalization',
+    selectOptions: [
+      {
+        name: 'autoEnd',
+        title: 'Auto-End Attendance',
+        type: 'select',
+        options: [
+          { text: 'Yes (Finalize automatically)', value: true },
+          { text: 'No (Finalize manually)', value: false },
+        ],
+        required: true,
+      },
+    ],
+  },
 ];
 
 export const list = [

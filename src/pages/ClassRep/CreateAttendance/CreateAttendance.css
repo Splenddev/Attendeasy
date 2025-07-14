@@ -66,6 +66,7 @@
   flex-direction: column;
   gap: 15px;
   overflow-y: auto;
+  overflow-x: hidden;
   min-height: 0;
 }
 .create-attendance-section {

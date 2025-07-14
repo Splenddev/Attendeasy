@@ -15,7 +15,7 @@ import { markGeoEntry } from '../../../services/attendance.service';
 import { toast } from 'react-toastify';
 import useDisableScroll from '../../../hooks/useDisableScroll';
 
-const classLocation = { lat: 6.44805, lng: 3.39013 }; // Replace with dynamic value if needed
+// const classLocation = { lat: 6.44805, lng: 3.39013 }; // Replace with dynamic value if needed
 
 const classIcon = L.icon({
   iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
@@ -73,6 +73,7 @@ const MarkEntry = ({
   maxDistance = 10,
   attendanceId,
   mode,
+  classLocation = { lat: 0, lng: 0 },
 }) => {
   useDisableScroll(visible);
 
@@ -228,12 +229,10 @@ const MarkEntry = ({
         <h2>Mark Entry</h2>
         <button
           onClick={() =>
-            onClose({
+            onClose((p) => ({
+              ...p,
               visible: false,
-              maxRange: 0,
-              attendanceId: '',
-              mode: '',
-            })
+            }))
           }
           className="close-button"
           title="Close modal">

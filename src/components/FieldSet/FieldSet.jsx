@@ -30,6 +30,7 @@ const FieldSet = ({
   fieldName,
   readOnly = false,
   catenate = false,
+  mapToValue = null,
 }) => {
   const {
     register,
@@ -204,7 +205,8 @@ const FieldSet = ({
                       choiceMode,
                       name,
                       setValue,
-                      getValues
+                      getValues,
+                      mapToValue
                     )
                   }
                   className="visually-hidden"
