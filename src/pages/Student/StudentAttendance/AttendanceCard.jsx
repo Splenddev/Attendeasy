@@ -4,9 +4,8 @@ import { GiTeacher } from 'react-icons/gi';
 import { parseTime2, parseTimeToday2 } from '../../../utils/helpers';
 import ClassStatus from '../../ClassRep/ClassRepDashboard/ClassStatus';
 import button from '../../../components/Button/Button';
-import { attendance } from '../../../assets/assets';
 
-const AttendanceCard = ({ att, isModal, setIsModal, student }) => {
+const AttendanceCard = ({ att, setIsModal, student }) => {
   const start = parseTimeToday2(att.classTime?.start);
   const end = parseTimeToday2(att.classTime?.end);
   const now = new Date();
@@ -64,9 +63,11 @@ const AttendanceCard = ({ att, isModal, setIsModal, student }) => {
           </div>
         </div>
       </div>
-      {student &&
-        !student.checkIn.time &&
-        !student.checkOut.time &&
+      {!student ? (
+        <></>
+      ) : student.checkIn.time && student.checkOut.time ? (
+        <p>Marked</p>
+      ) : (
         button.normal({
           element: !student.checkIn.time ? 'Check In' : 'Check Out',
           func: () =>
@@ -77,7 +78,8 @@ const AttendanceCard = ({ att, isModal, setIsModal, student }) => {
               mode: !student.checkIn.time ? 'checkIn' : 'checkOut',
             }),
           //disabled: status !== 'in-progress'
-        })}
+        })
+      )}
     </div>
   );
 };
