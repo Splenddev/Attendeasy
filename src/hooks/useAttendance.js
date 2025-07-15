@@ -97,26 +97,37 @@ export const useReopenAttendance = () => {
   return { reopen, opening, error };
 };
 
-export const useFetchGroupAttendances = (groupId) => {
+export const useFetchGroupAttendances = (groupId, autoFetch = false) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetch = useCallback(async () => {
-    try {
-      setLoading(true);
-      const res = await getGroupAttendances(groupId);
-      setData(res.attendances || []);
-      setError(null);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }, [groupId]);
+  const fetch = useCallback(
+    async (id) => {
+      const group = id || groupId;
+      if (!group) return;
+
+      try {
+        setLoading(true);
+        const res = await getGroupAttendances(group);
+        setData(res.attendances || []);
+        setError(null);
+      } catch (err) {
+        setError(err.message || 'Failed to fetch attendance');
+      } finally {
+        setLoading(false);
+      }
+    },
+    [groupId]
+  );
+
+  useEffect(() => {
+    if (autoFetch && groupId) fetch(groupId);
+  }, [autoFetch, groupId, fetch]);
 
   return { data, fetch, loading, error, setData };
 };
+
 export const useFetchGroupTabAttendances = (groupId) => {
   const [data, setData] = useState(null); // it’s an object, not array
   const [loading, setLoading] = useState(false);
