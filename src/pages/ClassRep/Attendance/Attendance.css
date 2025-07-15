@@ -6,42 +6,94 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  min-height: 50vh;
   padding: 2rem;
-  background-color: #f8fafc;
-  border-radius: 10px;
   text-align: center;
+  background-color: #f9fafb;
   border: 1px dashed #cbd5e1;
-  animation: fadeIn 0.3s ease-in-out;
+  border-radius: 12px;
+  animation: fadeIn 0.4s ease-in-out;
 }
 
-.attendance-loading-illustration {
-  width: 180px;
-  height: auto;
+.attendance-loading-state img {
+  width: 160px;
+  max-width: 90%;
   margin-bottom: 1rem;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.08));
 }
 
-.attendance-loading-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #0f172a;
-  margin-bottom: 0.5rem;
+.attendance-loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
 }
 
-.attendance-loading-subtext {
-  font-size: 0.95rem;
-  color: #475569;
-  margin-bottom: 1.5rem;
+.attendance-loading-content p {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: #334155;
+  margin: 0;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: scale(0.98);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1);
   }
+}
+
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #fecaca;
+  background-color: #fff1f2;
+  text-align: center;
+  min-height: 50vh;
+  gap: 1rem;
+  color: #b91c1c;
+  animation: fadeIn 0.4s ease-in-out;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.error-state h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+  color: #b91c1c;
+}
+
+.error-state p {
+  font-size: 1rem;
+  color: #7f1d1d;
+  max-width: 400px;
+  word-break: break-word;
+  margin: 0;
+}
+
+.error-state button {
+  background-color: #ef4444;
+  color: #ffffff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.error-state button:hover {
+  background-color: #dc2626;
 }
 
 .c-attendance-date {
@@ -289,7 +341,7 @@
   background: #fff;
 }
 
-.empty-image {
+.empty-attendance-state img {
   width: 160px;
   height: auto;
   margin-bottom: 24px;

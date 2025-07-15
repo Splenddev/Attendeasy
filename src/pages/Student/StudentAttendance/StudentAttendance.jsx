@@ -42,20 +42,27 @@ const StudentAttendance = () => {
     setNavTitle('My Attendance');
   }, [setNavTitle]);
 
-  useAttendanceSocket(groupId, {
-    onUpdate: () => {
-      console.log('🆕 Attendance update');
-      fetch(groupId);
-    },
+  useAttendanceSocket(user.group, {
+    onUpdate: () => fetch(user.group),
     onProgress: (data) => {
-      if (data?.studentId !== userIdRef.current) {
+      if (data?.studentId !== user._id) {
         toast.info(`${data?.studentName} just checked in`);
       }
     },
     onFlagged: (data) => {
-      if (data?.studentId === userIdRef.current) {
+      if (data?.studentId === user._id) {
         toast.warn('⚠️ Your attendance was flagged. Please check.');
       }
+    },
+    onDeleted: (data) => {
+      toast.error(`🚫 Attendance deleted for ${data.classDate}`);
+      fetch(user.group); // optionally refetch
+    },
+    onReopened: (data) => {
+      toast.info(
+        `🔁 Attendance reopened for ${data.courseCode} on ${data.classDate}`
+      );
+      fetch(user.group);
     },
   });
 

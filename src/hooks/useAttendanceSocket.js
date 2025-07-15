@@ -1,36 +1,43 @@
 // hooks/useAttendanceSocket.js
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { getSocket } from '../utils/socket';
 
 const useAttendanceSocket = (groupId, handlers = {}) => {
+  const handlersRef = useRef(handlers);
+
+  // Keep handlers up to date without reattaching listeners
+  useEffect(() => {
+    handlersRef.current = handlers;
+  }, [handlers]);
+
   useEffect(() => {
     const socket = getSocket();
     if (!socket || !groupId) return;
 
     socket.emit('join-room', groupId);
 
-    const events = {
-      'attendance:update': handlers.onUpdate,
-      'attendance:progress': handlers.onProgress,
-      'attendance:flagged': handlers.onFlagged,
-      'attendance:summary': handlers.onSummary,
+    const boundEvents = {
+      'attendance:update': (data) => handlersRef.current?.onUpdate?.(data),
+      'attendance:progress': (data) => handlersRef.current?.onProgress?.(data),
+      'attendance:flagged': (data) => handlersRef.current?.onFlagged?.(data),
+      'attendance:summary': (data) => handlersRef.current?.onSummary?.(data),
+      'attendance:deleted': (data) => handlersRef.current?.onDeleted?.(data),
+      'attendance:reopened': (data) => handlersRef.current?.onReopened?.(data),
     };
 
-    for (const [event, callback] of Object.entries(events)) {
-      if (callback) {
-        socket.on(event, callback);
-      }
+    for (const [event, listener] of Object.entries(boundEvents)) {
+      socket.on(event, listener);
     }
 
     return () => {
-      for (const [event, callback] of Object.entries(events)) {
-        if (callback) {
-          socket.off(event, callback);
-        }
+      for (const [event, listener] of Object.entries(boundEvents)) {
+        socket.off(event, listener);
       }
       socket.emit('leave-room', groupId);
     };
-  }, [groupId, handlers]);
+  }, [groupId]);
+
+  return null; // optional if used as effect-only
 };
 
 export default useAttendanceSocket;

@@ -3,7 +3,7 @@ import './Attendance.css';
 
 // eslint-disable-next-line no-unused-vars
 import { AnimatePresence, motion } from 'framer-motion';
-import { MdGridView, MdLocationPin, MdFlag } from 'react-icons/md';
+import { MdGridView } from 'react-icons/md';
 import { RiGraduationCapFill } from 'react-icons/ri';
 import {
   LuBookOpen,
@@ -45,30 +45,79 @@ const Attendance = () => {
     error,
   } = useFetchGroupAttendances(groupId);
 
-  useAttendanceSocket(groupId, {
-    onUpdate: () => {
-      console.log('🆕 Attendance updated');
-      fetch(groupId);
-    },
-    onProgress: (data) => {
-      console.log('✅ Student marked in:', data);
-      toast.success(`${data.studentName} marked as ${data.status}`);
-    },
-    onFlagged: (data) => {
-      console.warn('🚩 Flagged entry:', data);
-      // maybe notify or update local list
-    },
-  });
-
   const { deleteAttendance, loading: deleting } = useDeleteAttendance();
-
+  const { finalize, finalizing } = useFinalizeAttendance();
   const { reopen, opening } = useReopenAttendance();
-
   const { open: openSuccess } = useSuccessModal();
 
   useEffect(() => {
     if (groupId) fetch(groupId);
   }, [groupId, fetch]);
+
+  useAttendanceSocket(groupId, {
+    onUpdate: () => {
+      console.log('📡 Attendance updated');
+      fetch(groupId);
+    },
+    onProgress: (data) => {
+      if (data?.studentName && data?.status) {
+        toast.success(`✅ ${data.studentName} marked as ${data.status}`);
+      }
+    },
+    onFlagged: (data) => {
+      if (data?.studentName) {
+        toast.warning(`🚩 ${data.studentName}'s check-in was flagged`);
+      }
+    },
+    onSummary: (summary) => {
+      console.log('📊 Attendance summary update:', summary);
+      // Optionally update charts, stats, or local state here
+    },
+    onDeleted: (data) => {
+      toast.info(`🗑️ Attendance session deleted`);
+      fetch(groupId); // re-fetch list after deletion
+    },
+    onReopened: (data) => {
+      toast.success(`🔄 ${data.courseCode || 'A session'} was reopened`);
+      fetch(groupId); // re-fetch list after reopen
+    },
+  });
+
+  const handleReopen = async (id) => {
+    const res = await reopen(id);
+    if (res?.success) {
+      openSuccess({
+        title: 'Attendance Reopened',
+        message: res.message,
+        details: {
+          AttendanceId: res.attendanceId,
+        },
+      });
+    }
+  };
+
+  const handleFinalize = async (id) => {
+    const res = await finalize(id);
+    if (res?.success) {
+      openSuccess({
+        title: 'Attendance Finalized',
+        message: res.message,
+        details: {
+          Present: res.stats.totalPresent,
+          'On Time': res.stats.onTime,
+          Late: res.stats.late,
+          'Left Early': res.stats.leftEarly,
+          Absent: res.stats.absent,
+          'With Plea': res.stats.withPlea,
+        },
+      });
+    }
+  };
+
+  const handleDelete = async (id) => {
+    const res = await deleteAttendance(id);
+    if (res?.success) fetch(groupId);
+  };
 
   const [filteredAttendance, setFilteredAttendance] = useState(attendanceList);
   const [course, setCourse] = useState('');
@@ -94,8 +143,6 @@ const Attendance = () => {
   const filteredByCourse = filteredAttendance.filter((s) =>
     course ? s.courseCode?.toLowerCase() === course.toLowerCase() : true
   );
-
-  const { finalize, finalizing } = useFinalizeAttendance();
 
   const sortedAttendance = filteredByCourse.sort(
     (a, b) => new Date(a.classDate) - new Date(b.classDate)
@@ -136,20 +183,10 @@ const Attendance = () => {
         <img
           src="/illustrations/loading.svg"
           alt="Loading attendance"
-          className="attendance-loading-illustration"
         />
         <div className="attendance-loading-content">
-          <p className="attendance-loading-title">
-            Fetching Attendance Records...
-          </p>
-          <p className="attendance-loading-subtext">
-            Please hold on while we load attendance data for your class. This
-            may take a few seconds.
-          </p>
-          <Spinner
-            size="32px"
-            scale="1"
-          />
+          <p>Fetching Attendance Records...</p>
+          <Spinner size="32px" />
         </div>
       </div>
     );
@@ -255,25 +292,23 @@ const Attendance = () => {
           <img
             src="/illustrations/create.svg"
             alt="No attendance sessions"
-            className="empty-image"
           />
           <h4>No attendance sessions yet</h4>
           <p>
-            You haven’t created any attendance records yet for this date. Once
-            you do, they'll show up here.
+            You haven’t created any attendance records for this selected date
+            yet.
           </p>
           <button onClick={() => navigate('create')}>Create</button>
         </div>
       ) : (
-        sortedAttendance.map((session, idx) => (
-          <AnimatePresence key={session.attendanceId || idx}>
+        sortedAttendance.map((session) => (
+          <AnimatePresence key={session.attendanceId}>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               className="c-attendance-session">
               <div className="c-attendance-info">
                 <SessionInfo session={session} />
-
                 <section className="action">
                   <button className="time">
                     <LuMailOpen /> <span>Submit to lecturer</span>
@@ -289,56 +324,23 @@ const Attendance = () => {
                       element: finalizing ? (
                         <Spinner size="20px" />
                       ) : (
-                        'finalize'
+                        'Finalize'
                       ),
-                      func: () => {
-                        const res = finalize(session._id);
-                        if (res.success) {
-                          openSuccess({
-                            title: 'Attendance Finalized',
-                            message: res.message,
-                            details: {
-                              Present: res.stats.totalPresent,
-                              'On Time': res.stats.onTime,
-                              late: res.stats.late,
-                              leftEarly: res.stats.leftEarly,
-                              absent: res.stats.absent,
-                              withPlea: res.stats.withPlea,
-                            },
-                          });
-                        }
-                      },
+                      func: () => handleFinalize(session._id),
                     })}
-
                   {session.status === 'closed' &&
                     button.multiple({
                       icon: opening ? FiLoader : LuBookOpen,
                       element: opening ? '' : 'Reopen Session',
                       loader: opening,
-                      func: () => {
-                        const res = reopen(session._id);
-                        if (res.success) {
-                          openSuccess({
-                            title: 'Attendance Reopened',
-                            message: res.message,
-                            details: {
-                              AttendanceId: res.attendanceId,
-                            },
-                          });
-                        }
-                      },
+                      func: () => handleReopen(session._id),
                     })}
-
                   {button.multiple({
                     icon: FiTrash,
                     element: deleting ? <Spinner size="20px" /> : 'Trash',
-                    func: async () => {
-                      const res = await deleteAttendance(session._id);
-                      if (res.success) fetch(groupId);
-                    },
+                    func: () => handleDelete(session._id),
                   })}
                 </section>
-
                 <AttStatus status={session.status} />
               </div>
 
@@ -358,13 +360,9 @@ const Attendance = () => {
                     <img
                       src="/illustrations/empty.svg"
                       alt="No student records"
-                      className="empty-image"
                     />
                     <h4>No students recorded yet</h4>
-                    <p>
-                      This attendance session has no student records at the
-                      moment.
-                    </p>
+                    <p>This attendance session has no student records yet.</p>
                   </div>
                 ) : (
                   groupStudents(session.studentRecords).map((group) => (
