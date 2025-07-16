@@ -1,6 +1,18 @@
 export const routesNavigate = (path) => {
   window.location.href = path;
 };
+
+export function formatName(name = '') {
+  const parts = name.trim().split(/\s+/);
+
+  if (parts.length === 0) return '';
+
+  const firstName = parts[0];
+  const initials = parts.slice(1).map((n) => n[0].toUpperCase() + '.');
+
+  return [firstName, ...initials].join(' ');
+}
+
 export const checkboxChange = (key, setState, state) => {
   setState((prev) => ({ ...prev, [key]: !prev[key] }));
   console.log(state);
@@ -12,7 +24,7 @@ export const onChoiceChange = (
   title,
   setValue,
   getValues,
-  mapToValue = null // Optional mapping: e.g., { Yes: true, No: false }
+  mapToValue = null
 ) => {
   const current = { ...checkedChoices };
 

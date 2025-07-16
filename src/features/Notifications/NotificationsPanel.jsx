@@ -7,6 +7,8 @@ import {
   rejectJoinRequestService,
 } from '../../services/group.service';
 import { toast } from 'react-toastify';
+import button from '../../components/Button/Button';
+import { FiRefreshCcw } from 'react-icons/fi';
 
 const fileNameFromPath = (path) => path.split('/').pop();
 
@@ -14,6 +16,7 @@ const NotificationsPanel = ({ onClose, user }) => {
   const {
     notifications = [],
     updateAll,
+    fetchNotifications,
     removeNotification,
     loading,
   } = useNotification();
@@ -66,7 +69,14 @@ const NotificationsPanel = ({ onClose, user }) => {
         {loading ? (
           <p className={styles.empty}>Loading notifications...</p>
         ) : notifications.length === 0 ? (
-          <p className={styles.empty}>No notifications found.</p>
+          <div className={styles.empty_wrap}>
+            <p className={styles.empty}>No notifications found.</p>
+            {button.multiple({
+              icon: FiRefreshCcw,
+              element: 'Retry',
+              func: () => fetchNotifications(),
+            })}
+          </div>
         ) : (
           <AnimatePresence>
             {notifications.map((note, idx) => (

@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import './GroupFind.css';
-import { MdClose, MdGroups } from 'react-icons/md';
+import { MdClose, MdGroups, MdSend } from 'react-icons/md';
+import { FiLoader } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import {
   cancelJoinRequestService,
@@ -9,6 +10,7 @@ import {
 } from '../../../../services/group.service';
 import Spinner from '../../../../components/Loader/Spinner/Spinner';
 import button from '../../../../components/Button/Button';
+import { formatName } from '../../../../utils/helpers';
 
 const GroupFind = ({ user = {}, onJoin }) => {
   const [query, setQuery] = useState('');
@@ -46,7 +48,7 @@ const GroupFind = ({ user = {}, onJoin }) => {
       setGroups(res.groups || []);
       setJoinStatus(res.joinStatus || {}); // Optional if returned
     } catch (err) {
-      toast.error('Failed to fetch groups');
+      toast.error(err.message || 'Failed to fetch groups');
       console.error('Fetch error:', err.message);
     } finally {
       setLoading(false);
@@ -71,6 +73,7 @@ const GroupFind = ({ user = {}, onJoin }) => {
 
   const confirmJoin = async () => {
     if (!selectedGroup) return;
+    setLoaders((prev) => ({ ...prev, join: true }));
     try {
       await joinGroupService(selectedGroup._id);
       setJoinStatus((prev) => ({
@@ -83,8 +86,10 @@ const GroupFind = ({ user = {}, onJoin }) => {
     } catch (err) {
       console.log(err);
       toast.error(err.message || 'Failed to send join request');
+    } finally {
+      setLoaders((prev) => ({ ...prev, join: false }));
+      setShowModal(false);
     }
-    setShowModal(false);
   };
 
   const cancelRequest = async (groupId) => {
@@ -222,64 +227,74 @@ const GroupFind = ({ user = {}, onJoin }) => {
               <div
                 key={group._id}
                 className="find-group-card">
-                <div className="found-group-banner center">
-                  {group.bannerUrl ? (
-                    <img
-                      src={group.bannerUrl}
-                      alt="Group Banner"
-                      className="group-banner-img"
-                    />
-                  ) : (
-                    <MdGroups
-                      size={140}
-                      color="grey"
-                    />
-                  )}
-                </div>
-                <div className="info">
+                <section className="found-group-cover">
+                  <div className="found-group-banner ">
+                    {group.bannerUrl ? (
+                      <img
+                        src={group.bannerUrl}
+                        alt="Group Banner"
+                        className="group-banner-img"
+                      />
+                    ) : (
+                      <MdGroups
+                        size={140}
+                        color="grey"
+                      />
+                    )}
+                  </div>
                   <div className="found-group-header">
                     <h3>{group.groupName}</h3>
+                    <p>
+                      Faculty of {group.faculty} | {group.department} Dpt.
+                    </p>
+                  </div>
+                </section>
+                <div className="info">
+                  <p>
+                    <span className="heading">Level</span>
+                    {formatName(group.level)}
+                  </p>
+                  <p>
+                    <span className="heading">Type</span>
                     <span
                       className={`found-grp-tag ${group.visibility?.toLowerCase()}`}>
                       {group.visibility}
                     </span>
-                  </div>
-                  <p>
-                    {group.department} — {group.level} Level
                   </p>
                   <p>
-                    <strong>Class Rep:</strong> {group.creator.name}
+                    <span className="heading">Class Rep</span>
+                    {formatName(group.creator.name)}
                   </p>
-                  <div className="actions">
-                    {renderStatusBadge(status)}
-                    {status === 'none' &&
-                      (group.visibility === 'public' ? (
-                        <button onClick={() => handleJoinRequest(group)}>
-                          Request to Join
-                        </button>
-                      ) : (
-                        <button
-                          className="disabled-btn"
-                          disabled>
-                          Private Group
-                        </button>
-                      ))}
-                    {status === 'pending' &&
-                      group.visibility === 'public' &&
-                      button.multiple({
-                        name: 'cancel-btn',
-                        element: 'Withdraw',
-                        func: () => cancelRequest(group._id),
-                        icon: MdClose,
-                      })}
-                    {status === 'approved' && (
-                      <button
-                        className="leave-btn"
-                        onClick={() => leaveGroup(group._id)}>
-                        Leave Group
+                </div>
+                <div className="actions">
+                  {renderStatusBadge(status)}
+                  {status === 'none' &&
+                    (group.visibility === 'public' ? (
+                      <button onClick={() => handleJoinRequest(group)}>
+                        Join
                       </button>
-                    )}
-                  </div>
+                    ) : (
+                      <button
+                        className="disabled-btn"
+                        disabled>
+                        Private Group
+                      </button>
+                    ))}
+                  {status === 'pending' &&
+                    group.visibility === 'public' &&
+                    button.multiple({
+                      name: 'cancel-btn',
+                      element: 'Withdraw',
+                      func: () => cancelRequest(group._id),
+                      icon: MdClose,
+                    })}
+                  {status === 'approved' && (
+                    <button
+                      className="leave-btn"
+                      onClick={() => leaveGroup(group._id)}>
+                      Leave Group
+                    </button>
+                  )}
                 </div>
               </div>
             );
@@ -315,11 +330,15 @@ const GroupFind = ({ user = {}, onJoin }) => {
             </p>
             <div className="modal-actions">
               <button onClick={() => setShowModal(false)}>Cancel</button>
-              <button
-                className="confirm"
-                onClick={confirmJoin}>
-                Yes, Send Request
-              </button>
+              {button.multiple({
+                icon: loaders.join ? FiLoader : MdSend,
+                func: () => {
+                  confirmJoin();
+                },
+                name: 'confirm',
+                element: loaders.join ? 'Sending...' : 'Yes, Send',
+                loader: loaders.join,
+              })}
             </div>
           </div>
         </div>
