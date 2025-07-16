@@ -43,7 +43,10 @@ const StudentAttendance = () => {
   }, [setNavTitle]);
 
   useAttendanceSocket(user.group, {
-    onUpdate: () => fetch(user.group),
+    onUpdate: () => {
+      console.log('⚡ attendance:update received');
+      fetch();
+    },
     onProgress: (data) => {
       if (data?.studentId !== user._id) {
         toast.info(`${data?.studentName} just checked in`);
@@ -79,7 +82,8 @@ const StudentAttendance = () => {
   const filtered = useMemo(() => {
     return data.filter((att) => {
       if (!att.classDate) return false;
-      const attDate = new Date(att.classDate);
+      const [year, month, day] = att.classDate.split('-').map(Number);
+      const attDate = new Date(year, month - 1, day); // local
       attDate.setHours(0, 0, 0, 0);
       return attDate.getTime() === today.getTime();
     });

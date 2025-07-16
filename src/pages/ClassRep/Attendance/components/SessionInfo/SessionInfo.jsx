@@ -1,4 +1,5 @@
 import {
+  FaBookOpen,
   FaChalkboardTeacher,
   FaClock,
   FaRegCalendarCheck,
@@ -30,9 +31,17 @@ const SessionInfo = ({
         },
         {
           icon: FaRegCalendarCheck,
-          text: `Date: ${
+          text: `Attendance Date: ${
             session.classDate ? dateFormatter(session.classDate) : '—'
           }`,
+        },
+        {
+          icon: FaBookOpen,
+          text: `Course Code: ${session.courseCode}`,
+        },
+        {
+          icon: FaBookOpen,
+          text: `Course Title: ${session.courseTitle}`,
         },
         {
           icon: FaClock,

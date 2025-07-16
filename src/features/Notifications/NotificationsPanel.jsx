@@ -8,7 +8,7 @@ import {
 } from '../../services/group.service';
 import { toast } from 'react-toastify';
 import button from '../../components/Button/Button';
-import { FiRefreshCcw } from 'react-icons/fi';
+import { FiRefreshCcw, FiRefreshCw } from 'react-icons/fi';
 
 const fileNameFromPath = (path) => path.split('/').pop();
 
@@ -63,6 +63,12 @@ const NotificationsPanel = ({ onClose, user }) => {
             onClick={updateAll}>
             Mark All Read
           </button>
+          {button.multiple({
+            icon: FiRefreshCw,
+            name: styles.tab,
+            func: () => fetchNotifications(),
+            element: 'Reload',
+          })}
         </div>
       </div>
       <div className={styles.notification_list}>

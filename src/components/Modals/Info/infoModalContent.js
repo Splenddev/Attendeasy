@@ -16,142 +16,166 @@ import {
   MdStraighten,
   MdGroup,
   MdViewModule,
+  MdPhonelinkLock,
+  MdWifi,
+  MdAccessTime,
+  MdCached,
+  MdCampaign,
+  MdPolicy,
 } from 'react-icons/md';
 
 export const infoModalContent = [
   {
     id: 'course-info',
-    title: 'Course Information',
+    title: 'Course Info',
     points: [
       {
         icon: MdLibraryBooks,
-        text: 'Course Code: Select the unique identifier for the course (e.g., BCH301, BCH303).',
+        text: 'Course Code: Auto-filled from the selected schedule (e.g., BCH301).',
       },
       {
         icon: MdDescription,
-        text: 'Course Title: Enter the official name of the course (e.g., Analytical Biochemistry).',
+        text: 'Course Title: Auto-filled from the selected schedule (e.g., Analytical Biochemistry).',
+      },
+    ],
+  },
+  {
+    id: 'session-basics',
+    title: 'Schedule Basics',
+    points: [
+      {
+        icon: MdGroup,
+        text: 'Group ID: Automatically assigned from schedule context.',
       },
       {
-        icon: FaGraduationCap,
-        text: 'Credit Units: Number of credits assigned to this course (0 to 5).',
+        icon: MdLibraryBooks,
+        text: 'Schedule ID: Unique schedule this session is derived from.',
       },
       {
         icon: MdEvent,
-        text: 'Semester: Select the academic period in which the course is offered (First or Second).',
+        text: 'Class Date: The calendar day this session will hold.',
+      },
+      {
+        icon: MdTimelapse,
+        text: 'Day: Expected day of the week for the session.',
+      },
+      {
+        icon: MdTimer,
+        text: 'Start & End: Time range the class will be active.',
+      },
+    ],
+  },
+  {
+    id: 'location',
+    title: 'Class Location',
+    points: [
+      {
+        icon: MdLocationOn,
+        text: 'Latitude & Longitude: GPS coordinates of the class venue.',
+      },
+      {
+        icon: MdStraighten,
+        text: 'Radius (m): Geofence boundary for valid attendance check-ins.',
+      },
+    ],
+  },
+  {
+    id: 'entry-window',
+    title: 'Entry Window',
+    points: [
+      {
+        icon: MdTimelapse,
+        text: 'Marking Opens: When students are first allowed to check in (relative to start time).',
+      },
+      {
+        icon: MdTimer,
+        text: 'Marking Closes: How long the window stays open (e.g., 30 mins or full class).',
+      },
+    ],
+  },
+  {
+    id: 'marking-config',
+    title: 'Marking Configuration',
+    points: [
+      {
+        icon: MdLibraryBooks,
+        text: 'Attendance Type: Specify if session is physical (location locked) or virtual.',
+      },
+      {
+        icon: MdNumbers,
+        text: 'Detail Level: Choose between strict (Present/Absent) or detailed (Late, Left Early).',
+      },
+      {
+        icon: MdAssignment,
+        text: 'Marking Mode: Code-based (requires OTP) or No Code (click or geo only).',
       },
     ],
   },
   {
     id: 'lecturer-info',
-    title: 'Instructor Details',
+    title: 'Lecturer',
     points: [
       {
         icon: MdPerson,
-        text: 'Lecturer Name: Enter the official name of the instructor (e.g., Mr. John Doe).',
+        text: 'Name: Auto-filled from schedule, read-only.',
       },
       {
         icon: MdMessage,
-        text: `Email Address: Lecturer's email for direct emailing of attendance sheets (e.g., johndoe123@gmail.com).`,
+        text: 'Email: Auto-filled for future notification and export use.',
       },
     ],
   },
   {
-    id: 'timing',
-    title: 'Class Schedule',
+    id: 'notes',
+    title: 'Session Notes',
+    points: [
+      {
+        icon: MdDescription,
+        text: 'Notes: Additional context like “first lecture,” “practical session,” etc.',
+      },
+    ],
+  },
+  {
+    id: 'auto-finalization',
+    title: 'Auto Finalization',
     points: [
       {
         icon: MdTimer,
-        text: 'Class Start & End Time: Specify when lectures commence and conclude.',
-      },
-      {
-        icon: MdTimelapse,
-        text: `Attendance Entry Window:
-Define the timeframe students can mark attendance.
-
-Entry Start: Choose when students can start marking attendance:
-
-10 min, 30 min, or 1 hr after class start: Automatically opens attendance after the specified time.
-
-Manual: You’ll manually start the attendance window when ready.
-
-Entry End: Choose when attendance closes:
-
-Options are relative to entry start (e.g., 10 min after it begins).
-
-Manual: You’ll manually stop the attendance at your chosen time.`,
-      },
-      {
-        icon: MdEvent,
-        text: 'Date: Select the date of the lecture session.',
+        text: 'Auto-End Attendance: Whether the session automatically finalizes when time is up.',
       },
     ],
   },
   {
-    id: 'marking',
-    title: 'Attendance Tracking',
+    id: 'advanced-settings',
+    title: 'Advanced Settings',
     points: [
       {
-        icon: MdAssignment,
-        text: `Attendance Mode:
-Choose how students mark their attendance:
-
-No Code – Students can mark attendance without entering any code.
-
-Coded Start – A unique code is generated and required for students to enter before they can mark attendance. This adds a layer of verification.`,
+        icon: MdPolicy,
+        text: 'Mark Once: Prevent multiple attendance entries from a student.',
       },
-      {
-        icon: MdNumbers,
-        text: 'Marking Type: Choose between Strict (Present/Absent only) or Detailed (Present/Absent/Late).',
-      },
-      {
-        icon: MdDescription,
-        text: 'Excused/Medical Absences: Enable options for documented absences like Excused (E) or Medical (M).',
-      },
-    ],
-  },
-  {
-    id: 'optional-enhancements',
-    title: 'Additional Features',
-    points: [
-      {
-        icon: MdNotifications,
-        text: 'Reminders: Notify students about upcoming lectures.',
-      },
-      {
-        icon: MdPhotoCamera,
-        text: 'Proof of Absence: Require documentation for missed classes.',
-      },
-      {
-        icon: MdUploadFile,
-        text: 'Export Preferences: Choose formats to save or share attendance records.',
-      },
-    ],
-  },
-  {
-    id: 'tracking',
-    title: 'Location-Based Attendance',
-    points: [
-      {
-        icon: MdLocationOn,
-        text: 'Class Location: Define the official venue for lectures.',
-      },
-      {
-        icon: MdStraighten,
-        text: 'Entry Proximity: Set distance limits for attendance marking.',
-      },
-    ],
-  },
-  {
-    id: 'students',
-    title: 'Student Management',
-    points: [
       {
         icon: MdGroup,
-        text: 'Individual Selection: Manually add specific students.',
+        text: 'Allow Late Joiners: Can students who joined the group after creation participate?',
       },
       {
-        icon: MdViewModule,
-        text: 'Bulk Selection: Add multiple students at once or import data.',
+        icon: MdPhonelinkLock,
+        text: 'Device Lock: One mark per unique device.',
+      },
+      {
+        icon: MdWifi,
+        text: 'IP Restriction: Restrict one attendance mark per IP network.',
+      },
+      {
+        icon: MdCached,
+        text: 'Recurring Session: Automatically repeat this session weekly.',
+      },
+      {
+        icon: MdNotifications,
+        text: 'Notify On Start: Send email or push notification when session begins.',
+      },
+      {
+        icon: MdAccessTime,
+        text: 'Minimum Presence Duration: Student must remain present for a minimum duration (e.g., 45 mins) to be counted.',
       },
     ],
   },
