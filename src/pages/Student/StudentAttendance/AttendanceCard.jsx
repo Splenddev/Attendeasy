@@ -89,13 +89,22 @@ const AttendanceCard = ({ att, setIsModal, student }) => {
             <h3>{entryEnd}</h3>
           </div>
         </div>
-        <div>
+        <div
+          className={`countdown-timer ${
+            timeLeft <= 0 ? 'deadline-passed' : ''
+          }`}>
           {timeLeft > 0 ? (
-            <span>
-              ⏳ Time left: {minutes}m {seconds}s
-            </span>
+            <>
+              <span className="icon">⏳</span>
+              <span>
+                Time left: {minutes}m {seconds}s
+              </span>
+            </>
           ) : (
-            <span>⚠️ Deadline passed</span>
+            <>
+              <span className="icon">⚠️</span>
+              <span>Deadline passed</span>
+            </>
           )}
         </div>
       </div>
