@@ -14,7 +14,7 @@ const useAttendanceSocket = (groupId, handlers = {}) => {
     const socket = getSocket();
     if (!socket || !groupId) return;
 
-    socket.emit('join-room', groupId);
+    socket.emit('joinGroup', String(groupId));
 
     const boundEvents = {
       'attendance:update': (data) => handlersRef.current?.onUpdate?.(data),
@@ -33,7 +33,7 @@ const useAttendanceSocket = (groupId, handlers = {}) => {
       for (const [event, listener] of Object.entries(boundEvents)) {
         socket.off(event, listener);
       }
-      socket.emit('leave-room', groupId);
+      socket.emit('leaveGroup', groupId);
     };
   }, [groupId]);
 

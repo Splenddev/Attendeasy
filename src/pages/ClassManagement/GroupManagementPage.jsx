@@ -69,7 +69,13 @@ const GroupManagementPage = () => {
       </div>
     );
 
-  if (!user.group) return <GroupRegFind user={user} />;
+  if (!user.group)
+    return (
+      <GroupRegFind
+        user={user}
+        fetchGroup={fetchGroup}
+      />
+    );
 
   if (!group)
     return (

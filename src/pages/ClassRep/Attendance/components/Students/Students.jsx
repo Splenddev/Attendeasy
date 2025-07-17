@@ -152,15 +152,29 @@ const MoreInfoModal = ({ isOpen, closed, data }) => {
               <strong className="aic">
                 <FaExclamationTriangle /> Flagged:
               </strong>
+
               <div>
-                <strong>Reasons:</strong> {flagged.reasons.join(', ')}
+                <strong>Reasons:</strong>
+                <ul className="flagged-reasons-list">
+                  {flagged.reasons.map((reason, idx) => (
+                    <li key={idx}>
+                      <strong>{reason.code}</strong>
+                      {reason.note && ` — ${reason.note}`}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <div>
-                <strong>Note:</strong> {flagged.note}
-              </div>
+
+              {flagged.note && (
+                <div>
+                  <strong>Note:</strong> {flagged.note}
+                </div>
+              )}
+
               <div>
                 <strong>By:</strong> {flagged.flaggedBy}
               </div>
+
               <div>
                 <strong>At:</strong> {timeFormatter(flagged.flaggedAt)}
               </div>

@@ -14,6 +14,7 @@ import './MarkEntry.css';
 import { markGeoEntry } from '../../../services/attendance.service';
 import { toast } from 'react-toastify';
 import useDisableScroll from '../../../hooks/useDisableScroll';
+import { useErrorModal } from '../../../hooks/useErrorModal';
 
 // const classLocation = { lat: 6.44805, lng: 3.39013 }; // Replace with dynamic value if needed
 
@@ -86,6 +87,8 @@ const MarkEntry = ({
   const [errorMessage, setErrorMessage] = useState('');
   const watchId = useRef(null);
 
+  const { open: openError } = useErrorModal();
+
   useEffect(() => {
     document.body.style.overflow = visible ? 'hidden' : '';
     return () => {
@@ -152,7 +155,7 @@ const MarkEntry = ({
         {
           enableHighAccuracy: true,
           maximumAge: 5000,
-          timeout: 10000,
+          timeout: 15000,
         }
       );
     } else {
@@ -216,10 +219,7 @@ const MarkEntry = ({
         mode: '',
       });
     } catch (err) {
-      console.log(err);
-      console.log(userLocation);
-      const msg = err.response?.data?.message || 'Failed to mark attendance.';
-      toast.error(`❌ ${msg}`);
+      openError(err);
     }
   };
 

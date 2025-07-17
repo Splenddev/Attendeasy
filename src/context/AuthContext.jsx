@@ -3,7 +3,12 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { attendance } from '../assets/assets';
 import { getUserFromLocalStorageOrAPI } from '../utils/auth';
 import axios from 'axios';
-import { loginUser, logoutUser, registerUser } from '../services/auth.service';
+import {
+  getUser,
+  loginUser,
+  logoutUser,
+  registerUser,
+} from '../services/auth.service';
 import { toast } from 'react-toastify';
 import { connectSocket } from '../utils/socket';
 import { joinGroupRoom, leaveGroupRoom } from '../utils/socketRooms';
@@ -29,17 +34,30 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const syncUser = async () => {
       const storedUser = await getUserFromLocalStorageOrAPI();
-      setUser(storedUser); // null or { isLoggedIn: true, role: ..., ... }
+
+      // 🔁 If user has no group, try syncing from server anyway
+      if (!storedUser?.group && storedUser?._id) {
+        try {
+          const fresh = await getUser();
+          updateUser(fresh.user);
+          return;
+        } catch (err) {
+          console.error('❌ Failed to refresh user from API:', err);
+        }
+      }
+
+      setUser(storedUser);
       setLoading(false);
     };
     syncUser();
   }, []);
 
   useEffect(() => {
-    if (user?._id) {
-      connectSocket(user._id, user.group);
+    if (user?._id && user.group) {
+      joinGroupRoom(user.group);
+      return () => leaveGroupRoom(user.group);
     }
-  }, [user]);
+  }, [user?._id, user?.group]);
 
   useEffect(() => {
     if (user?._id && user?.group) {

@@ -108,21 +108,6 @@ export const formDataAssets = [
         required: true,
       },
       {
-        name: 'classTime.day',
-        title: 'Day',
-        type: 'select',
-        options: [
-          'Monday',
-          'Tuesday',
-          'Wednesday',
-          'Thursday',
-          'Friday',
-          'Saturday',
-          'Sunday',
-        ],
-        required: true,
-      },
-      {
         name: 'classTime.start',
         title: 'Start',
         type: 'input',

@@ -4,6 +4,23 @@ import { GiTeacher } from 'react-icons/gi';
 import { parseTime2, parseTimeToday2 } from '../../../utils/helpers';
 import ClassStatus from '../../ClassRep/ClassRepDashboard/ClassStatus';
 import button from '../../../components/Button/Button';
+import { useCountdown } from '../../../hooks/useCountdown';
+
+const getDeadlineTime = (att, mode = 'checkin') => {
+  if (!att?.classTime || !att?.entry) return null;
+
+  const offset = 10; // minutes – we'll later move this to backend config
+
+  if (mode === 'checkIn') {
+    return parseTimeToday2(parseTime2(att.classTime.start, `${offset}M`));
+  }
+
+  if (mode === 'checkOut') {
+    return parseTimeToday2(parseTime2(att.classTime.end, `-${offset}M`));
+  }
+
+  return null;
+};
 
 const AttendanceCard = ({ att, setIsModal, student }) => {
   const start = parseTimeToday2(att.classTime?.start);
@@ -14,6 +31,16 @@ const AttendanceCard = ({ att, setIsModal, student }) => {
     now < start ? 'not-started' : now < end ? 'in-progress' : 'ended';
   const entryStart = parseTime2(att.classTime?.start, att.entry?.start);
   const entryEnd = parseTime2(entryStart, att.entry?.end);
+
+  const deadline = getDeadlineTime(
+    att,
+    !student.checkIn.time ? 'checkIn' : 'checkOut'
+  ); // type is 'checkin' or 'checkout'
+
+  // const tooLateToCheckIn = now > getDeadlineTime(att, 'checkin');
+  // const tooEarlyToCheckOut = now < getDeadlineTime(att, 'checkout');
+
+  const { minutes, seconds, timeLeft } = useCountdown(deadline);
 
   return (
     <div className="today-attendance-card">
@@ -62,6 +89,15 @@ const AttendanceCard = ({ att, setIsModal, student }) => {
             <h3>{entryEnd}</h3>
           </div>
         </div>
+        <div>
+          {timeLeft > 0 ? (
+            <span>
+              ⏳ Time left: {minutes}m {seconds}s
+            </span>
+          ) : (
+            <span>⚠️ Deadline passed</span>
+          )}
+        </div>
       </div>
       {!student ? (
         <></>
@@ -70,7 +106,9 @@ const AttendanceCard = ({ att, setIsModal, student }) => {
       ) : (
         button.normal({
           element: !student.checkIn.time ? 'Check In' : 'Check Out',
-          disabled: status === 'ended',
+          disabled:
+            status === 'ended' ||
+            (status === 'not-started' && !att.allowEarlyCheckInOut),
           func: () =>
             setIsModal({
               visible: true,

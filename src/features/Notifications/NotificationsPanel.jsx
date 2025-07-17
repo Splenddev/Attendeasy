@@ -9,10 +9,11 @@ import {
 import { toast } from 'react-toastify';
 import button from '../../components/Button/Button';
 import { FiRefreshCcw, FiRefreshCw } from 'react-icons/fi';
+import useDisableScroll from '../../hooks/useDisableScroll';
 
 const fileNameFromPath = (path) => path.split('/').pop();
 
-const NotificationsPanel = ({ onClose, user }) => {
+const NotificationsPanel = ({ onClose, user, openState }) => {
   const {
     notifications = [],
     updateAll,
@@ -20,6 +21,8 @@ const NotificationsPanel = ({ onClose, user }) => {
     removeNotification,
     loading,
   } = useNotification();
+
+  useDisableScroll(openState);
 
   const handleAction = async (type, { studentId, reqType, noteId }) => {
     try {
@@ -102,7 +105,7 @@ const NotificationsPanel = ({ onClose, user }) => {
                   ) : (
                     <MdPerson size={20} />
                   )}
-                  {note.isNew && <span className={styles.dot}></span>}
+                  {note.unread && <span className={styles.dot}></span>}
                 </div>
                 <div className={styles.notification_content}>
                   <p>{note.message}</p>

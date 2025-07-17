@@ -10,6 +10,8 @@ import JoinGroupPrompt from './components/JoinGroupPrompt/JoinGroupPrompt';
 import ErrorModal from './components/Modals/ErrorModal/ErrorModal';
 import useUserSocketListener from './hooks/useUserSocketListener ';
 import SuccessModal from './components/Modals/SuccessModal/SuccessModal';
+import 'nprogress/nprogress.css';
+import NavigationProgress from './components/NavigationProgress';
 
 const App = () => {
   const { setShowLogoutModal, showLogoutModal, logout, authBtnsLoading, user } =
@@ -29,6 +31,7 @@ const App = () => {
 
   return (
     <>
+      <NavigationProgress />
       <ToastContainer position="top-center" />
 
       <ConfirmModal

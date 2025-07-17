@@ -18,7 +18,7 @@ const Navbar = ({ dropdownAssets = [] }) => {
 
   const { notifications } = useNotification();
 
-  const unreadCount = notifications.filter((n) => !n.unread).length;
+  const unreadCount = notifications.filter((n) => n.unread).length;
 
   return (
     <nav className="navbar">
@@ -41,7 +41,7 @@ const Navbar = ({ dropdownAssets = [] }) => {
               }))
             }
           />
-          {unreadCount > 0 && <div className="badge">{unreadCount}</div>}
+          {unreadCount > 0 && <span className="badge">{unreadCount}</span>}
         </div>
         <AnimatePresence>
           {isDropdown.notifications && (
@@ -53,6 +53,7 @@ const Navbar = ({ dropdownAssets = [] }) => {
               <NotificationPanel
                 onClose={setIsDropdown}
                 user={user}
+                openState={isDropdown.notifications}
               />
             </motion.div>
           )}

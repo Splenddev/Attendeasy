@@ -7,11 +7,53 @@ import { useErrorModal } from '../../../hooks/useErrorModal';
 const useAttendanceForm = (groupId, scheduleId) => {
   const methods = useForm({
     defaultValues: {
+      courseCode: '',
+      courseTitle: '',
+      lecturer: {
+        name: '',
+        email: '',
+      },
+      classDate: '', // YYYY-MM-DD string
+      classTime: {
+        start: '', // e.g., '14:00'
+        end: '', // e.g., '16:00'
+      },
+      entry: {
+        start: '0H5M',
+        end: '1H0M',
+      },
+      attendanceType: 'physical',
+
       location: {
+        latitude: null,
+        longitude: null,
         radiusMeters: 100,
+      },
+
+      markingConfig: {
+        type: 'strict',
+        mode: 'no_code',
+      },
+
+      settings: {
+        markOnce: true,
+        allowLateJoiners: true,
+        lateThreshold: 10,
+        pleaWindow: 3,
+        proofRequirement: 'none',
+        enableCheckInOut: false,
+        allowEarlyCheckInOut: false,
+        allowLateCheckInOut: true,
+        minimumPresenceDuration: 45,
+        autoCheckOut: true,
+        deviceLock: true,
+        ipRestriction: false,
+        repeatable: false,
+        notifyOnStart: true,
       },
     },
   });
+
   const { handleSubmit, watch, reset } = methods;
 
   const { open } = useErrorModal();

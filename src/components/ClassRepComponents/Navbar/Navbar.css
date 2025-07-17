@@ -35,14 +35,15 @@
   align-items: center;
   justify-content: center;
   position: absolute;
-  top: 9px;
-  right: 10px;
+  top: 6px;
+  right: 8px;
   background: #d61515;
   color: #fff;
-  height: 15px;
-  width: 15px;
+  height: 20px;
+  width: 20px;
+  padding: 3px;
   border-radius: 50%;
-  font-size: 12px;
+  font-size: 11px;
   border: 2px solid #fff;
 }
 .alert svg {

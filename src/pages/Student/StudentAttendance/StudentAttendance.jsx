@@ -38,16 +38,13 @@ const StudentAttendance = () => {
 
   const { data, loading, fetch } = useFetchGroupAttendances(groupId);
 
-  useEffect(() => {
-    setNavTitle('My Attendance');
-  }, [setNavTitle]);
-
-  useAttendanceSocket(user.group, {
+  useAttendanceSocket(groupId, {
     onUpdate: () => {
       console.log('⚡ attendance:update received');
       fetch();
     },
     onProgress: (data) => {
+      fetch();
       if (data?.studentId !== user._id) {
         toast.info(`${data?.studentName} just checked in`);
       }
@@ -70,6 +67,10 @@ const StudentAttendance = () => {
   });
 
   useEffect(() => {
+    setNavTitle('My Attendance');
+  }, [setNavTitle]);
+
+  useEffect(() => {
     fetch();
   }, [fetch]);
 
@@ -82,10 +83,14 @@ const StudentAttendance = () => {
   const filtered = useMemo(() => {
     return data.filter((att) => {
       if (!att.classDate) return false;
-      const [year, month, day] = att.classDate.split('-').map(Number);
-      const attDate = new Date(year, month - 1, day); // local
+
+      const attDate = new Date(att.classDate);
       attDate.setHours(0, 0, 0, 0);
-      return attDate.getTime() === today.getTime();
+
+      const isToday = attDate.getTime() === today.getTime();
+      const isRelevantStatus = ['active', 'upcoming'].includes(att.status);
+
+      return isToday && isRelevantStatus;
     });
   }, [data, today]);
 

@@ -60,6 +60,7 @@ const Attendance = () => {
       fetch(groupId);
     },
     onProgress: (data) => {
+      fetch(groupId);
       if (data?.studentName && data?.status) {
         toast.success(`✅ ${data.studentName} marked as ${data.status}`);
       }
@@ -125,9 +126,9 @@ const Attendance = () => {
   const [view, setView] = useState('list');
   const [search, setSearch] = useState('');
 
-  useEffect(() => {
-    setFilteredAttendance(attendanceList);
-  }, [attendanceList]);
+  // useEffect(() => {
+  //   setFilteredAttendance(attendanceList);
+  // }, [attendanceList]);
 
   const allCourses = useMemo(
     () => [...new Set(attendanceList.map((s) => s.courseCode).filter(Boolean))],

@@ -18,7 +18,7 @@ import { toast } from 'react-toastify';
 import { getUser } from '../../../../services/auth.service';
 axios.defaults.withCredentials = true;
 
-const GroupReg = () => {
+const GroupReg = ({ fetchGroup }) => {
   const { user, updateUser } = useAuth();
 
   const [step, setStep] = useState(1); // Step 1 = form, Step 2 = preview
@@ -226,6 +226,7 @@ const GroupReg = () => {
           );
         }
         toast.success(result.message);
+        fetchGroup();
       }
     } catch (err) {
       console.error('Error creating group:', err.response?.data || err.message);
