@@ -7,7 +7,10 @@ export const Tabs = ({ tabs, selected, onChange }) => {
         <li
           key={tab.key}
           className={`tab ${selected === tab.key ? 'active' : ''}`}
-          onClick={() => onChange(tab.key)}>
+          onClick={() => {
+            console.log(selected);
+            onChange(tab.key);
+          }}>
           {tab.label}
         </li>
       ))}

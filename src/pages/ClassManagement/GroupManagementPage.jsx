@@ -21,6 +21,8 @@ import useGroupSocketListener from '../../hooks/useGroupSocketListener ';
 const GroupManagementPage = () => {
   const [group, setGroup] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [selectedTab, setSelectedTab] = useState('overview');
+
   const { user, setNavTitle, updateUser } = useAuth();
   const { open } = useErrorModal();
 
@@ -106,8 +108,12 @@ const GroupManagementPage = () => {
         refresh={fetchGroup}
         user={user}
         updateUser={updateUser}
+        selectedTab={selectedTab}
+        setSelectedTab={setSelectedTab}
       />
       <GroupContents
+        selectedTab={selectedTab}
+        setSelectedTab={setSelectedTab}
         user={user}
         group={group}
         refreshGroup={fetchGroup}

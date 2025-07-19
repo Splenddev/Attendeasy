@@ -81,13 +81,13 @@ const MoreInfoModal = ({ isOpen, closed, data }) => {
             {checkOut?.time ? timeFormatter(checkOut.time) : '—'}
           </li>
           <li>
-            <strong>Departure Delta:</strong> {departureDeltaMinutes} min
+            <strong>Departure Delta:</strong> {departureDeltaMinutes || '?'} min
           </li>
           <li>
-            <strong>Duration:</strong> {durationMinutes} min
+            <strong>Duration:</strong> {durationMinutes || 0} min
           </li>
           <li>
-            <strong>Marked By:</strong> {markedBy}
+            <strong>Marked By:</strong> {markedBy || 'None'}
           </li>
           <li>
             <strong>Within Range:</strong>{' '}

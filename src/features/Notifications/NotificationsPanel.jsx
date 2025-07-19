@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import button from '../../components/Button/Button';
 import { FiRefreshCcw, FiRefreshCw } from 'react-icons/fi';
 import useDisableScroll from '../../hooks/useDisableScroll';
+import { renderTypeIcon } from '../../utils/helpers';
 
 const fileNameFromPath = (path) => path.split('/').pop();
 
@@ -88,73 +89,83 @@ const NotificationsPanel = ({ onClose, user, openState }) => {
           </div>
         ) : (
           <AnimatePresence>
-            {notifications.map((note, idx) => (
-              <motion.div
-                key={note._id || idx}
-                initial={{ opacity: 0, translateY: 10 }}
-                animate={{ opacity: 1, translateY: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.25 }}
-                className={styles.notification_item}>
-                <div className={styles.avatar}>
-                  {note.image ? (
-                    <img
-                      src={note.image}
-                      alt="icon"
-                    />
-                  ) : (
-                    <MdPerson size={20} />
-                  )}
-                  {note.unread && <span className={styles.dot}></span>}
-                </div>
-                <div className={styles.notification_content}>
-                  <p>{note.message}</p>
-                  <span className={styles.time}>
-                    {new Date(note.createdAt).toLocaleString()}
-                  </span>
-                  {note.userMedia && (
-                    <div className={styles.file_box}>
-                      <span>{fileNameFromPath(note.userMedia)}</span>
-                    </div>
-                  )}
-                  {(note.actionApprove || note.actionDeny) && (
-                    <div className={styles.buttons}>
-                      {note.actionDeny && (
-                        <button
-                          onClick={() =>
-                            handleAction('deny', {
-                              studentId: note.from,
-                              reqType: note.actionDeny,
-                              noteId: note._id,
-                            })
-                          }
-                          className={styles.deny}>
-                          Deny
-                        </button>
-                      )}
-                      {note.actionApprove && (
-                        <button
-                          onClick={() =>
-                            handleAction('approve', {
-                              studentId: note.from,
-                              reqType: note.actionApprove,
-                              noteId: note._id,
-                            })
-                          }
-                          className={styles.approve}>
-                          Approve
-                        </button>
-                      )}
-                    </div>
-                  )}
-                  <button
-                    className={styles.delete}
-                    onClick={() => removeNotification(note._id)}>
-                    Delete
-                  </button>
-                </div>
-              </motion.div>
-            ))}
+            {notifications.map((note, idx) => {
+              const { icon, meta } = renderTypeIcon(
+                note.type,
+                note.relatedType
+              );
+
+              return (
+                <motion.div
+                  key={note._id || idx}
+                  initial={{ opacity: 0, translateY: 10 }}
+                  animate={{ opacity: 1, translateY: 0 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.25 }}
+                  className={styles.notification_item}>
+                  <div className={styles.avatar}>
+                    {note.image ? (
+                      <img
+                        src={note.image}
+                        alt="icon"
+                      />
+                    ) : (
+                      <div>
+                        {icon}
+                        <span>{meta.title}</span>
+                      </div>
+                    )}
+                    {note.unread && <span className={styles.dot}></span>}
+                  </div>
+                  <div className={styles.notification_content}>
+                    <p>{note.message}</p>
+                    <span className={styles.time}>
+                      {new Date(note.createdAt).toLocaleString()}
+                    </span>
+                    {note.userMedia && (
+                      <div className={styles.file_box}>
+                        <span>{fileNameFromPath(note.userMedia)}</span>
+                      </div>
+                    )}
+                    {(note.actionApprove || note.actionDeny) && (
+                      <div className={styles.buttons}>
+                        {note.actionDeny && (
+                          <button
+                            onClick={() =>
+                              handleAction('deny', {
+                                studentId: note.from,
+                                reqType: note.actionDeny,
+                                noteId: note._id,
+                              })
+                            }
+                            className={styles.deny}>
+                            Deny
+                          </button>
+                        )}
+                        {note.actionApprove && (
+                          <button
+                            onClick={() =>
+                              handleAction('approve', {
+                                studentId: note.from,
+                                reqType: note.actionApprove,
+                                noteId: note._id,
+                              })
+                            }
+                            className={styles.approve}>
+                            Approve
+                          </button>
+                        )}
+                      </div>
+                    )}
+                    <button
+                      className={styles.delete}
+                      onClick={() => removeNotification(note._id)}>
+                      Delete
+                    </button>
+                  </div>
+                </motion.div>
+              );
+            })}
           </AnimatePresence>
         )}
       </div>

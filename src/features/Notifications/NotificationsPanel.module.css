@@ -189,3 +189,62 @@
   font-size: 14px;
   color: #777;
 }
+
+.iconWrapper {
+  padding: 0.5rem;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.iconWrapper:hover {
+  transform: scale(1.1);
+}
+
+.iconShadow {
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.15));
+}
+
+/* Background color classes */
+.announcementBg {
+  background-color: #fef3c7; /* amber-100 */
+}
+
+.approvalBg {
+  background-color: #d1fae5; /* green-100 */
+}
+
+.flagBg {
+  background-color: #fee2e2; /* red-100 */
+}
+
+.mediaBg {
+  background-color: #dbeafe; /* blue-100 */
+}
+
+.infoBg {
+  background-color: #bae6fd; /* sky-100 */
+}
+
+.deadlineBg {
+  background-color: #ffedd5; /* orange-100 */
+}
+
+.reminderBg {
+  background-color: #ede9fe; /* violet-100 */
+}
+
+.scheduleBg {
+  background-color: #e0e7ff; /* indigo-100 */
+}
+
+.attendanceBg {
+  background-color: #d1fae5; /* emerald-100 */
+}
+
+.defaultBg {
+  background-color: #f3f4f6; /* gray-100 */
+}

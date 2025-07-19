@@ -14,6 +14,7 @@ import GroupCloudTab from '../tab/GroupCloudTab/GroupCloudTab';
 import AttendanceTab from '../tab/AttendanceTab/AttendanceTab';
 import { useFetchGroupTabAttendances } from '../../../../hooks/useAttendance';
 import Spinner from '../../../../components/Loader/Spinner/Spinner';
+import GroupSettings from '../GroupSettings/GroupSettings';
 
 // Dummy component imports (replace with real ones)
 // import Announcements from './tabs/Announcements';
@@ -21,10 +22,15 @@ import Spinner from '../../../../components/Loader/Spinner/Spinner';
 // import Attendance from './tabs/Attendance';
 // import Materials from './tabs/Materials';
 
-const GroupContents = ({ user, group, refreshGroup }) => {
+const GroupContents = ({
+  user,
+  group,
+  refreshGroup,
+  selectedTab = 'overview',
+  setSelectedTab = null,
+}) => {
   const isClassRep = user?.role === 'class-rep';
   const isStudent = user?.role === 'student';
-  const [selectedTab, setSelectedTab] = useState('overview');
 
   const tabs = [
     { key: 'overview', label: 'Overview' },
@@ -34,6 +40,7 @@ const GroupContents = ({ user, group, refreshGroup }) => {
     { key: 'schedule', label: 'Schedule' },
     { key: 'attendance', label: 'Attendance' },
     { key: 'materials', label: 'Materials' },
+    { key: 'settings', label: 'Settings' },
   ].filter((tab) => tab.show === undefined || tab.show);
 
   const handleJoinRequestAction = async (userId, action) => {
@@ -75,8 +82,8 @@ const GroupContents = ({ user, group, refreshGroup }) => {
             announcements={group.announcements}
           />
         );
-      // case 'schedule':
-      //   return <Schedule user={user} />;
+      case 'settings':
+        return <GroupSettings user={user} />;
       case 'attendance':
         return (
           <AttendanceTab

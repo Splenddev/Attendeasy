@@ -9,7 +9,7 @@ import { leaveGroupService } from '../../../../services/group.service';
 import { toast } from 'react-toastify';
 import { getUser } from '../../../../services/auth.service';
 
-const GroupSidebar = ({ group, refresh, user, updateUser }) => {
+const GroupSidebar = ({ group, refresh, user, updateUser, setSelectedTab }) => {
   const handleLeave = async () => {
     try {
       const result = await leaveGroupService();
@@ -48,6 +48,7 @@ const GroupSidebar = ({ group, refresh, user, updateUser }) => {
             {button.icon({
               icon: MdSettings,
               name: styles.settingsBtn + ' center',
+              func: () => setSelectedTab('settings'),
             })}
 
             {button.multiple({

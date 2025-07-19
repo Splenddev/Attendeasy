@@ -1,0 +1,13 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding-top: 0.5rem;
+}
+
+.icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  color: var(--main-color);
+  flex-shrink: 0;
+}

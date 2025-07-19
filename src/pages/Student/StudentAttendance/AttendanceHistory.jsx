@@ -3,36 +3,6 @@ import button from '../../../components/Button/Button';
 import Spinner from '../../../components/Loader/Spinner/Spinner';
 
 const AttendanceHistory = ({ history = [], loading = true, user = {} }) => {
-  const mockHistory = [
-    {
-      date: 'Wed, Aug 14, 2023',
-      time: '03:00 - 05:00',
-      status: 'on-time',
-      checkIn: '03:00',
-      checkOut: '03:10',
-      code: 'BCH315',
-      location: 'Auditorium',
-    },
-    {
-      date: 'Wed, Aug 15, 2023',
-      time: '03:00 - 05:00',
-      status: 'late',
-      checkIn: '04:00',
-      checkOut: '04:10',
-      code: 'BCH305',
-      location: 'Admin',
-    },
-    {
-      date: 'Wed, Aug 13, 2023',
-      time: '03:00 - 05:00',
-      status: 'absent',
-      checkIn: '03:00',
-      checkOut: '03:10',
-      code: 'BCH315',
-      location: 'Auditorium',
-    },
-  ];
-
   return (
     <section className="s-attendance-history">
       <header className="heading">
@@ -76,7 +46,10 @@ const AttendanceHistory = ({ history = [], loading = true, user = {} }) => {
                     checkIn={checkIn}
                     checkOut={checkOut}
                     code={code}
-                    location={item.location?.latitude} // fixed typo
+                    location={item.location?.latitude}
+                    attStatus={item.status}
+                    courseCode={item.courseCode}
+                    courseTitle={item.courseTitle}
                   />
                 );
               })

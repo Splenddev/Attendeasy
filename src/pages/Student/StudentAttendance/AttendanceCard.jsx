@@ -1,12 +1,13 @@
 import { FaClock, FaFlagCheckered } from 'react-icons/fa';
 import { MdLocationPin } from 'react-icons/md';
 import { GiTeacher } from 'react-icons/gi';
+import { LuHourglass } from 'react-icons/lu';
 import { parseTime2, parseTimeToday2 } from '../../../utils/helpers';
 import ClassStatus from '../../ClassRep/ClassRepDashboard/ClassStatus';
 import button from '../../../components/Button/Button';
 import { useCountdown } from '../../../hooks/useCountdown';
 
-const getDeadlineTime = (att, mode = 'checkin') => {
+const getDeadlineTime = (att, mode = 'checkIn') => {
   if (!att?.classTime || !att?.entry) return null;
 
   const offset = 10; // minutes – we'll later move this to backend config
@@ -95,9 +96,14 @@ const AttendanceCard = ({ att, setIsModal, student }) => {
           }`}>
           {timeLeft > 0 ? (
             <>
-              <span className="icon">⏳</span>
+              <span className="icon">
+                <LuHourglass />
+              </span>
               <span>
-                Time left: {minutes}m {seconds}s
+                Time left until session opens:{' '}
+                <span className="highlight">
+                  {minutes}m {seconds}s
+                </span>
               </span>
             </>
           ) : (

@@ -16,6 +16,9 @@ const HistoryCard = ({
   checkOut,
   code,
   location,
+  attStatus,
+  courseCode,
+  courseTitle,
 }) => {
   const style = status === 'on-time' ? 'main-color' : status;
 
@@ -25,6 +28,12 @@ const HistoryCard = ({
       style={{
         borderLeft: `6px solid var(--${style})`,
       }}>
+      <div className="att_card_heading">
+        <h3 className="course_code">{courseCode}</h3>
+        <span className="course_title">{courseTitle}</span>
+        <span className={`status_tag ${attStatus}`}>{attStatus}</span>
+      </div>
+
       <div className="top">
         <p>
           {dateFormatter(date)}

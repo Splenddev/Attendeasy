@@ -1,0 +1,105 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.input {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+}
+
+.settingItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.settingText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.settingTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #2563eb;
+}
+
+.smallIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.settingDescription {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.card {
+  background-color: #f9fafb;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+.cardTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 0.75rem;
+}
+
+.cardActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.warningButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #fef3c7;
+  color: #92400e;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.warningButton:hover {
+  background-color: #fde68a;
+}

@@ -1,0 +1,108 @@
+.formWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.input:focus,
+.textarea:focus,
+select:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+.textarea {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  resize: none;
+  max-height: 100px;
+  height: 60px;
+  outline: none;
+  min-height: 60px;
+}
+
+.twoColGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.threeColGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .twoColGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .threeColGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.avatarSection {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.avatarPlaceholder {
+  width: 4rem;
+  height: 4rem;
+  background-color: #e5e7eb;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatarIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #9ca3af;
+}
+
+.uploadButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--main-color);
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.uploadButton:hover {
+  background-color: var(--accent-color);
+}
+
+.uploadIcon {
+  width: 1rem;
+  height: 1rem;
+}

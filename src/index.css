@@ -201,6 +201,10 @@ button {
   animation: spin 1.5s infinite linear;
 }
 
+.highlight {
+  color: var(--red);
+}
+
 .full-page-loader-wrap {
   height: calc(100vh - 60px);
   display: flex;
