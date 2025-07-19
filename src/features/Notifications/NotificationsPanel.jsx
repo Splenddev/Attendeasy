@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import button from '../../components/Button/Button';
 import { FiRefreshCcw, FiRefreshCw } from 'react-icons/fi';
 import useDisableScroll from '../../hooks/useDisableScroll';
-import { renderTypeIcon } from '../../utils/helpers';
+import { renderTypeIcon } from './IconRenderer';
 
 const fileNameFromPath = (path) => path.split('/').pop();
 
