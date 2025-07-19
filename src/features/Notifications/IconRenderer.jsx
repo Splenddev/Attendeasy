@@ -10,7 +10,7 @@ import {
   FaBullhorn,
 } from 'react-icons/fa';
 
-import styles from '../features/Notifications/NotificationsPanel.module.css';
+import styles from './NotificationsPanel.module.css';
 
 export function renderTypeIcon(type, relatedType = null) {
   const baseProps = {
