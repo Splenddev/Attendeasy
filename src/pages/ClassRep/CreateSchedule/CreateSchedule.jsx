@@ -139,6 +139,7 @@ const CreateSchedule = () => {
                     key={section.id}
                     title={section.title}
                     selectOptions={section.selectOptions}
+                    methods={methods}
                   />
                 ))}
               </div>

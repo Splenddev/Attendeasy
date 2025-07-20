@@ -16,7 +16,7 @@ import './Students.css';
 import useDisableScroll from '../../../../../hooks/useDisableScroll';
 
 const finalStatusLetter = (status) =>
-  status === 'on_time'
+  status === 'on_time' || status === 'present'
     ? 'P'
     : status === 'late'
     ? 'L'
@@ -75,21 +75,57 @@ const MoreInfoModal = ({ isOpen, closed, data }) => {
             <strong>Check In Status:</strong> {checkInStatus || 'None'}
           </li>
           <li>
-            <strong>Check In Status:</strong> {checkOutStatus || 'None'}
+            <strong>Check Out Status:</strong> {checkOutStatus || 'None'}
           </li>
           <li>
-            <strong>Arrival:</strong>{' '}
+            <strong>Arrival Time:</strong>{' '}
             {checkIn?.time ? timeFormatter(checkIn.time) : '—'}
           </li>
           <li>
-            <strong>Arrival Delta:</strong> {arrivalDeltaMinutes || '?'} min
+            <strong>Arrival Delta:</strong>{' '}
+            <span
+              style={{
+                color:
+                  arrivalDeltaMinutes > 0
+                    ? 'red'
+                    : arrivalDeltaMinutes < 0
+                    ? 'green'
+                    : 'black',
+              }}>
+              {typeof arrivalDeltaMinutes === 'number'
+                ? arrivalDeltaMinutes === 0
+                  ? 'On time'
+                  : arrivalDeltaMinutes > 0
+                  ? `Late by ${arrivalDeltaMinutes} min`
+                  : `Early by ${Math.abs(arrivalDeltaMinutes)} min`
+                : '?'}
+            </span>
           </li>
+
           <li>
-            <strong>Departure:</strong>{' '}
+            <strong>Departure Time:</strong>{' '}
             {checkOut?.time ? timeFormatter(checkOut.time) : '—'}
           </li>
           <li>
-            <strong>Departure Delta:</strong> {departureDeltaMinutes || '?'} min
+            <strong>Departure Delta:</strong>
+
+            <span
+              style={{
+                color:
+                  departureDeltaMinutes === 0
+                    ? 'green'
+                    : departureDeltaMinutes > 0
+                    ? 'var(--late)'
+                    : 'red',
+              }}>
+              {typeof departureDeltaMinutes === 'number'
+                ? departureDeltaMinutes === 0
+                  ? 'On time'
+                  : departureDeltaMinutes > 0
+                  ? `Stayed ${departureDeltaMinutes} min late`
+                  : `Left early by ${Math.abs(departureDeltaMinutes)} min`
+                : '?'}
+            </span>
           </li>
           <li>
             <strong>Duration:</strong> {durationMinutes || 0} min
@@ -243,12 +279,13 @@ const Students = ({ group, view }) => {
                   'excused',
                   'pending',
                   'partial',
+                  'present',
                 ].map((type) => (
                   <div
                     key={type}
                     className={`mark ${
                       st.finalStatus === type
-                        ? type === 'on_time'
+                        ? type === 'on_time' || type === 'present'
                           ? 'present'
                           : type === 'left_early'
                           ? 'left_early'

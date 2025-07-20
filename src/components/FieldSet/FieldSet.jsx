@@ -31,6 +31,8 @@ const FieldSet = ({
   readOnly = false,
   catenate = false,
   mapToValue = null,
+  enabled = false,
+  methods = {},
 }) => {
   const {
     register,
@@ -38,7 +40,7 @@ const FieldSet = ({
     watch,
     formState: { errors, isSubmitting },
     getValues,
-  } = useFormContext();
+  } = methods;
 
   const validationRules = required ? { required: `${title} is required` } : {};
   const name = fieldName || toCamelCase(title);
@@ -87,7 +89,7 @@ const FieldSet = ({
         </motion.p>
       )}
       <p className="title cap">
-        {title} <b style={{ color: 'var(--red)' }}>{required && '*'}</b>
+        {title} <b className="highlight">{required && '*'}</b>
       </p>
       <hr />
 

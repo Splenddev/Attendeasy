@@ -19,8 +19,8 @@ const useAttendanceForm = (groupId, scheduleId) => {
         end: '', // e.g., '16:00'
       },
       entry: {
-        start: '0H5M',
-        end: '1H0M',
+        start: '0H5M', // Parsed as minutes before start time
+        end: '1H0M', // Parsed as minutes after start time
       },
       attendanceType: 'physical',
 
@@ -31,25 +31,25 @@ const useAttendanceForm = (groupId, scheduleId) => {
       },
 
       markingConfig: {
-        type: 'strict',
-        mode: 'no_code',
+        type: 'strict', // 'strict' | 'flexible'
+        mode: 'no_code', // 'no_code' | 'code'
       },
 
       settings: {
-        markOnce: true,
-        allowLateJoiners: true,
-        lateThreshold: 10,
-        pleaWindow: 3,
-        proofRequirement: 'none',
-        enableCheckInOut: false,
-        allowEarlyCheckInOut: false,
-        allowLateCheckInOut: true,
-        minimumPresenceDuration: 45,
-        autoCheckOut: true,
-        deviceLock: true,
-        ipRestriction: false,
-        repeatable: false,
-        notifyOnStart: true,
+        markOnce: true, // Prevent double marking
+        allowLateJoiners: true, // Whether students who joined after creation can mark
+        lateThreshold: 10, // Minutes after classStart to count as late
+        pleaWindow: 3, // Days allowed to submit plea
+        proofRequirement: 'none', // 'none' | 'selfie' | 'document'
+        enableCheckInOut: true, // Enable both check-in and check-out
+        allowEarlyCheckIn: false, // Allow check-in/out before window
+        allowLateCheckIn: true, // Allow check-in/out after window
+        allowEarlyCheckOut: false, // Separate for check-out
+        allowLateCheckOut: true, // Separate for check-out
+        minimumPresenceDuration: 45, // Used to validate if student stayed long enough
+        autoCheckOut: true, // System auto-checks out after duration
+        repeatable: false, // Is this session recurring?
+        notifyOnStart: true, // Notify students on creation
       },
     },
   });

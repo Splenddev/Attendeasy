@@ -16,8 +16,8 @@ import { toast } from 'react-toastify';
 import useDisableScroll from '../../../hooks/useDisableScroll';
 import { useErrorModal } from '../../../hooks/useErrorModal';
 
-// const classLocation = { lat: 6.44805, lng: 3.39013 }; // Replace with dynamic value if needed
-// const classLocation = { lat: 6.518496, lng: 3.360898 }; // Replace with dynamic value if needed
+// const classLocation = { lat: 6.619645, lng: 3.361175 };
+// const classLocation = { lat: 6.577118, lng: 3.352079 }; // Replace with dynamic value if needed
 
 const classIcon = L.icon({
   iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',

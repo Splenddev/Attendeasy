@@ -205,7 +205,7 @@
   width: 95%;
   max-width: 540px;
   overflow-y: auto;
-  max-height: 95vh;
+  max-height: 90vh;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   padding: 24px;

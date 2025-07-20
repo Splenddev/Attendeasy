@@ -77,6 +77,7 @@ const CreateAttendance = () => {
                   id={data.id}
                   title={data.title}
                   selectOptions={data.selectOptions}
+                  methods={methods}
                 />
               ))}
             </div>

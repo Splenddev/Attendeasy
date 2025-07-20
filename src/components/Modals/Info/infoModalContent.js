@@ -158,14 +158,6 @@ export const infoModalContent = [
         text: 'Allow Late Joiners: Can students who joined the group after creation participate?',
       },
       {
-        icon: MdPhonelinkLock,
-        text: 'Device Lock: One mark per unique device.',
-      },
-      {
-        icon: MdWifi,
-        text: 'IP Restriction: Restrict one attendance mark per IP network.',
-      },
-      {
         icon: MdCached,
         text: 'Recurring Session: Automatically repeat this session weekly.',
       },
@@ -176,6 +168,30 @@ export const infoModalContent = [
       {
         icon: MdAccessTime,
         text: 'Minimum Presence Duration: Student must remain present for a minimum duration (e.g., 45 mins) to be counted.',
+      },
+      {
+        icon: MdPhotoCamera,
+        text: 'Proof Requirement: Whether students must take a selfie when marking attendance.',
+      },
+      {
+        icon: MdAssignment,
+        text: 'Enable Check-Out: Allow sessions to require both check-in and check-out actions.',
+      },
+      {
+        icon: MdTimer,
+        text: 'Allow Early Check-In: Permit students to check in before the scheduled window.',
+      },
+      {
+        icon: MdTimelapse,
+        text: 'Allow Late Check-In: Permit check-in after the entry window closes.',
+      },
+      {
+        icon: MdTimer,
+        text: 'Allow Early Check-Out: Permit students to check out before class ends.',
+      },
+      {
+        icon: MdTimelapse,
+        text: 'Allow Late Check-Out: Permit students to check out after the session ends.',
       },
     ],
   },
