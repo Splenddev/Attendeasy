@@ -15,7 +15,7 @@ import { MdFlag } from 'react-icons/md';
 import './Students.css';
 import useDisableScroll from '../../../../../hooks/useDisableScroll';
 
-const statusLetter = (status) =>
+const finalStatusLetter = (status) =>
   status === 'on_time'
     ? 'P'
     : status === 'late'
@@ -24,8 +24,8 @@ const statusLetter = (status) =>
     ? 'E'
     : status === 'excused'
     ? 'X'
-    : status === 'pending'
-    ? '?' // new icon
+    : status === 'partial'
+    ? 'R'
     : 'A';
 
 const MoreInfoModal = ({ isOpen, closed, data }) => {
@@ -35,7 +35,7 @@ const MoreInfoModal = ({ isOpen, closed, data }) => {
 
   const {
     name,
-    status,
+    finalStatus,
     checkIn,
     checkOut,
     arrivalDeltaMinutes,
@@ -48,6 +48,8 @@ const MoreInfoModal = ({ isOpen, closed, data }) => {
     penaltyPoints,
     flagged,
     warningsIssued,
+    checkInStatus,
+    checkOutStatus,
   } = data;
 
   const needsCheckout = !checkOut?.time;
@@ -67,7 +69,13 @@ const MoreInfoModal = ({ isOpen, closed, data }) => {
         <h3>{name}'s Attendance Details</h3>
         <ul>
           <li>
-            <strong>Status:</strong> {status}
+            <strong>Final Status:</strong> {finalStatus || 'None'}
+          </li>
+          <li>
+            <strong>Check In Status:</strong> {checkInStatus || 'None'}
+          </li>
+          <li>
+            <strong>Check In Status:</strong> {checkOutStatus || 'None'}
           </li>
           <li>
             <strong>Arrival:</strong>{' '}
@@ -234,11 +242,12 @@ const Students = ({ group, view }) => {
                   'left_early',
                   'excused',
                   'pending',
+                  'partial',
                 ].map((type) => (
                   <div
                     key={type}
                     className={`mark ${
-                      st.status === type
+                      st.finalStatus === type
                         ? type === 'on_time'
                           ? 'present'
                           : type === 'left_early'
@@ -248,7 +257,7 @@ const Students = ({ group, view }) => {
                           : 'late'
                         : ''
                     } ${view}`}>
-                    {statusLetter(type)}
+                    {finalStatusLetter(type)}
                   </div>
                 ))}
               </div>

@@ -58,6 +58,10 @@ const StudentAttendance = () => {
       toast.error(`🚫 Attendance deleted for ${data.classDate}`);
       fetch(user.group); // optionally refetch
     },
+    onClosed: (data) => {
+      toast.error(`🚫 Attendance deleted for ${data.classDate}`);
+      fetch(user.group); // optionally refetch
+    },
     onReopened: (data) => {
       toast.info(
         `🔁 Attendance reopened for ${data.courseCode} on ${data.classDate}`

@@ -3,7 +3,7 @@ import { useAuth } from './AuthContext';
 import {
   deleteNotification,
   getMyNotifications,
-  markAllAsRead,
+  markAsRead,
 } from '../services/notification.service';
 import { connectSocket } from '../utils/socket';
 import { toast } from 'react-toastify';
@@ -13,25 +13,31 @@ const NotificationContext = createContext();
 export const NotificationProvider = ({ children }) => {
   const { user } = useAuth();
   const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(true); // ⏳ first fetch loading only
+  const [loading, setLoading] = useState({
+    fetch: true,
+    markOne: false,
+    markAll: false,
+    deleteOne: false,
+    deleteAll: false,
+  });
 
-  // ✅ Fetch notifications (can be used silently or with loader)
+  // ✅ Fetch user notifications
   const fetchNotifications = async ({ silent = false } = {}) => {
     if (!user?._id) return;
-
-    if (!silent) setLoading(true); // only show loader on first fetch
+    if (!silent) setLoading((l) => ({ ...l, fetch: true }));
 
     try {
-      const res = await getMyNotifications(user._id);
+      const res = await getMyNotifications();
       setNotifications(res.data || []);
     } catch (err) {
       console.error('🔴 Failed to load notifications:', err);
       if (!silent) toast.error('Could not load notifications.');
     } finally {
-      if (!silent) setLoading(false);
+      if (!silent) setLoading((l) => ({ ...l, fetch: false }));
     }
   };
 
+  // ✅ Real-time listeners
   useEffect(() => {
     if (!user?._id) return;
 
@@ -56,34 +62,71 @@ export const NotificationProvider = ({ children }) => {
     };
   }, [user?._id]);
 
-  // ✅ Initial load
   useEffect(() => {
-    if (user?._id) {
-      fetchNotifications(); // loader shown only here
-    }
+    if (user?._id) fetchNotifications();
   }, [user?._id]);
 
-  // ✅ Mark all as read
-  const updateAll = async () => {
+  // ✅ Mark ALL as read
+  const markAllNotificationsAsRead = async () => {
+    setLoading((l) => ({ ...l, markAll: true }));
     try {
-      await markAllAsRead(user._id);
+      await markAsRead();
+
+      const hasUnread = notifications.some((n) => n.unread);
+      const targetUnread = hasUnread ? false : true;
+
       setNotifications((prev) =>
-        prev.map((n) => ({ ...n, isNew: false, read: true }))
+        prev.map((n) => ({ ...n, unread: targetUnread }))
       );
     } catch (err) {
-      console.error('Error marking notifications as read:', err);
+      console.error('Error marking all notifications as read:', err);
       toast.error('Failed to mark all as read');
+    } finally {
+      setLoading((l) => ({ ...l, markAll: false }));
     }
   };
 
-  // ✅ Delete one notification
+  // ✅ Mark ONE as read (optional)
+  const markNotificationAsRead = async (id) => {
+    setLoading((l) => ({ ...l, markOne: true }));
+    try {
+      await markAsRead(id);
+      setNotifications((prev) =>
+        prev.map((n) => (n._id === id ? { ...n, unread: !n.unread } : n))
+      );
+    } catch (err) {
+      console.error('Error marking notification as read:', err);
+      toast.error('Failed to mark notification as read');
+    } finally {
+      setLoading((l) => ({ ...l, markOne: false }));
+    }
+  };
+
+  // ✅ Delete ONE notification
   const removeNotification = async (id) => {
+    setLoading((l) => ({ ...l, deleteOne: true }));
     try {
       await deleteNotification(id);
       setNotifications((prev) => prev.filter((n) => n._id !== id));
     } catch (err) {
       console.error('Error deleting notification:', err);
       toast.error('Failed to delete notification');
+    } finally {
+      setLoading((l) => ({ ...l, deleteOne: false }));
+    }
+  };
+
+  // ✅ Delete ALL notifications
+  const removeAllNotifications = async () => {
+    setLoading((l) => ({ ...l, deleteAll: true }));
+    try {
+      await deleteNotification(); // no ID = delete all
+      setNotifications([]);
+    } catch (err) {
+      console.error('Error deleting all notifications:', err);
+      toast.error('Failed to delete all notifications');
+    } finally {
+      setLoading((l) => ({ ...l, deleteAll: false }));
     }
   };
 
@@ -92,9 +135,11 @@ export const NotificationProvider = ({ children }) => {
       value={{
         notifications,
         loading,
-        updateAll,
-        removeNotification,
         fetchNotifications,
+        markAllNotificationsAsRead,
+        markNotificationAsRead,
+        removeNotification,
+        removeAllNotifications,
       }}>
       {children}
     </NotificationContext.Provider>

@@ -6,12 +6,18 @@ export const getMyNotifications = async () => {
   return res.data;
 };
 
-export const markAllAsRead = async () => {
-  const res = await api.patch(`${NOTIFICATION_API_BASE}mark-all-read`);
+export const markAsRead = async (notificationId) => {
+  const endpoint = notificationId
+    ? `${NOTIFICATION_API_BASE}${notificationId}`
+    : NOTIFICATION_API_BASE;
+  const res = await api.patch(endpoint);
   return res.data;
 };
 
 export const deleteNotification = async (notificationId) => {
-  const res = await api.delete(`${NOTIFICATION_API_BASE}${notificationId}`);
+  const endpoint = notificationId
+    ? `${NOTIFICATION_API_BASE}${notificationId}`
+    : NOTIFICATION_API_BASE;
+  const res = await api.delete(endpoint);
   return res.data;
 };

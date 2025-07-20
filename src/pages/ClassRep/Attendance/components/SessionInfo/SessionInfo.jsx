@@ -6,6 +6,7 @@ import {
 } from 'react-icons/fa';
 import { dateFormatter } from '../../../../../utils/helpers';
 import { MdLocationPin } from 'react-icons/md';
+import { LuCloudCog, LuZap, LuZapOff } from 'react-icons/lu';
 
 const SessionInfo = ({
   session = {
@@ -42,6 +43,10 @@ const SessionInfo = ({
         {
           icon: FaBookOpen,
           text: `Course Title: ${session.courseTitle}`,
+        },
+        {
+          icon: session.autoEnd ? LuZap : LuZapOff,
+          text: `Auto End: ${session.autoEnd ? 'Yes' : 'No'}`,
         },
         {
           icon: FaClock,

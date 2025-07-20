@@ -126,10 +126,6 @@ const Attendance = () => {
   const [view, setView] = useState('list');
   const [search, setSearch] = useState('');
 
-  // useEffect(() => {
-  //   setFilteredAttendance(attendanceList);
-  // }, [attendanceList]);
-
   const allCourses = useMemo(
     () => [...new Set(attendanceList.map((s) => s.courseCode).filter(Boolean))],
     [attendanceList]
@@ -139,6 +135,7 @@ const Attendance = () => {
     P: ['on_time'],
     L: ['late', 'left_early'],
     A: ['absent', 'excused'],
+    X: ['partial'],
   };
 
   const filteredByCourse = filteredAttendance.filter((s) =>
@@ -152,7 +149,7 @@ const Attendance = () => {
   const groupStudents = (students = []) => {
     const filtered = students.filter((st) => {
       const matchesStatus =
-        marked === '' || mapLetterToStatus[marked]?.includes(st.status);
+        marked === '' || mapLetterToStatus[marked]?.includes(st.finalStatus);
       const matchesSearch =
         search === '' || st.name.toLowerCase().includes(search.toLowerCase());
       return matchesStatus && matchesSearch;

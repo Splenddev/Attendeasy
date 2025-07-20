@@ -1,5 +1,5 @@
 import './CreateAttendance.css';
-import { MdPublish, MdSave } from 'react-icons/md';
+import { MdSave } from 'react-icons/md';
 import { FormProvider } from 'react-hook-form';
 import button from '../../../components/Button/Button';
 import DynamicForm from '../../../features/DynamicForm/DynamicForm';
@@ -13,6 +13,7 @@ import { infoModalContent } from '../../../components/Modals/Info/infoModalConte
 import ScheduleSelector from './components/ScheduleSelector/ScheduleSelector';
 import SuccessModal from '../../../components/Modals/SuccessModal/SuccessModal';
 import Spinner from '../../../components/Loader/Spinner/Spinner';
+import { LuClipboardList, LuSaveAll } from 'react-icons/lu';
 
 const CreateAttendance = () => {
   const { setNavTitle, user } = useAuth();
@@ -46,9 +47,9 @@ const CreateAttendance = () => {
               Created By <span>{user.name}</span>
             </p>
             <div className="create-attendance-header-action">
-              {button.multiple({ icon: MdSave, element: 'save as draft' })}
+              {button.multiple({ icon: LuSaveAll, element: 'save as draft' })}
               {button.multiple({
-                icon: MdPublish,
+                icon: LuClipboardList,
                 element: loading ? (
                   <Spinner
                     size="20px"
@@ -80,6 +81,19 @@ const CreateAttendance = () => {
               ))}
             </div>
           </div>
+          {button.multiple({
+            icon: LuClipboardList,
+            element: loading ? (
+              <Spinner
+                size="20px"
+                borderColor="white"
+              />
+            ) : (
+              'publish'
+            ),
+            type: 'submit',
+            name: 'publish-attendance-btn',
+          })}
         </form>
       </FormProvider>
       <InfoModal

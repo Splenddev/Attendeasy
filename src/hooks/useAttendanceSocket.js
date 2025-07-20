@@ -19,6 +19,7 @@ const useAttendanceSocket = (groupId, handlers = {}) => {
     const boundEvents = {
       'attendance:update': (data) => handlersRef.current?.onUpdate?.(data),
       'attendance:progress': (data) => handlersRef.current?.onProgress?.(data),
+      'attendance:closed': (data) => handlersRef.current?.onProgress?.(data),
       'attendance:flagged': (data) => handlersRef.current?.onFlagged?.(data),
       'attendance:summary': (data) => handlersRef.current?.onSummary?.(data),
       'attendance:deleted': (data) => handlersRef.current?.onDeleted?.(data),

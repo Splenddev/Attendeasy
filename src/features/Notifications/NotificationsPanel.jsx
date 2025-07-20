@@ -8,20 +8,36 @@ import {
 } from '../../services/group.service';
 import { toast } from 'react-toastify';
 import button from '../../components/Button/Button';
-import { FiRefreshCcw, FiRefreshCw } from 'react-icons/fi';
+import {
+  FiLoader,
+  FiMoreVertical,
+  FiRefreshCcw,
+  FiRefreshCw,
+  FiTrash2,
+} from 'react-icons/fi';
 import useDisableScroll from '../../hooks/useDisableScroll';
-import { renderTypeIcon } from '../../utils/helpers';
+import { renderMediaTypeIcon } from '../IconRenderer/IconRenderer';
+import { LuCheckCheck, LuTrash } from 'react-icons/lu';
+import { useState } from 'react';
 
 const fileNameFromPath = (path) => path.split('/').pop();
 
 const NotificationsPanel = ({ onClose, user, openState }) => {
   const {
     notifications = [],
-    updateAll,
+    loading = {},
     fetchNotifications,
+    markAllNotificationsAsRead,
+    markNotificationAsRead,
     removeNotification,
-    loading,
+    removeAllNotifications,
   } = useNotification();
+
+  const hasUnread = notifications.some((n) => n.unread);
+
+  const { fetch, markOne, markAll, deleteOne, deleteAll } = loading;
+
+  const [openNoteId, setOpenNoteId] = useState(null);
 
   useDisableScroll(openState);
 
@@ -49,6 +65,10 @@ const NotificationsPanel = ({ onClose, user, openState }) => {
     }
   };
 
+  const toggleOptions = (noteId) => {
+    setOpenNoteId((prevId) => (prevId === noteId ? null : noteId));
+  };
+
   return (
     <div className={styles.notification_container}>
       <div className={styles.notification_header}>
@@ -61,22 +81,31 @@ const NotificationsPanel = ({ onClose, user, openState }) => {
           />
         </h3>
         <div className={styles.tabs}>
-          <button className={`${styles.tab} ${styles.active}`}>View All</button>
-          <button
-            className={styles.tab}
-            onClick={updateAll}>
-            Mark All Read
-          </button>
+          {button.multiple({
+            icon: markAll ? FiLoader : LuCheckCheck,
+            name: styles.tab + ' ' + styles.markAll,
+            func: () => markAllNotificationsAsRead(),
+            element: `Mark All ${hasUnread ? 'Read' : 'Unread'}`,
+            loader: markAll,
+          })}
+          {button.multiple({
+            icon: deleteAll ? FiLoader : FiTrash2,
+            name: styles.tab + ' ' + styles.delete,
+            func: () => removeAllNotifications(),
+            element: 'Delete All',
+            loader: deleteAll,
+          })}
           {button.multiple({
             icon: FiRefreshCw,
-            name: styles.tab,
+            name: styles.tab + ' ' + styles.reload,
             func: () => fetchNotifications(),
             element: 'Reload',
+            loader: fetch,
           })}
         </div>
       </div>
       <div className={styles.notification_list}>
-        {loading ? (
+        {fetch ? (
           <p className={styles.empty}>Loading notifications...</p>
         ) : notifications.length === 0 ? (
           <div className={styles.empty_wrap}>
@@ -90,10 +119,7 @@ const NotificationsPanel = ({ onClose, user, openState }) => {
         ) : (
           <AnimatePresence>
             {notifications.map((note, idx) => {
-              const { icon, meta } = renderTypeIcon(
-                note.type,
-                note.relatedType
-              );
+              const { icon } = renderMediaTypeIcon(note.type, note.relatedType);
 
               return (
                 <motion.div
@@ -102,7 +128,9 @@ const NotificationsPanel = ({ onClose, user, openState }) => {
                   animate={{ opacity: 1, translateY: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.25 }}
-                  className={styles.notification_item}>
+                  className={`${styles.notification_item} ${
+                    note.unread && styles.dot
+                  }`}>
                   <div className={styles.avatar}>
                     {note.image ? (
                       <img
@@ -110,12 +138,8 @@ const NotificationsPanel = ({ onClose, user, openState }) => {
                         alt="icon"
                       />
                     ) : (
-                      <div>
-                        {icon}
-                        <span>{meta.title}</span>
-                      </div>
+                      <>{icon}</>
                     )}
-                    {note.unread && <span className={styles.dot}></span>}
                   </div>
                   <div className={styles.notification_content}>
                     <p>{note.message}</p>
@@ -157,11 +181,32 @@ const NotificationsPanel = ({ onClose, user, openState }) => {
                         )}
                       </div>
                     )}
-                    <button
-                      className={styles.delete}
-                      onClick={() => removeNotification(note._id)}>
-                      Delete
-                    </button>
+                  </div>
+                  <div className={styles.more}>
+                    <FiMoreVertical onClick={() => toggleOptions(note._id)} />
+                    {openNoteId === note._id && (
+                      <>
+                        <div className={styles.pointer}></div>
+                        <ul className={styles.more_option}>
+                          <li onClick={() => markNotificationAsRead(note._id)}>
+                            {markOne ? (
+                              <FiLoader className="spin" />
+                            ) : (
+                              <LuCheckCheck />
+                            )}
+                            Mark as {note.unread ? 'Read' : 'Unread'}
+                          </li>
+                          <li onClick={() => removeNotification(note._id)}>
+                            {deleteOne ? (
+                              <FiLoader className="spin" />
+                            ) : (
+                              <LuTrash />
+                            )}
+                            Delete
+                          </li>
+                        </ul>
+                      </>
+                    )}
                   </div>
                 </motion.div>
               );
