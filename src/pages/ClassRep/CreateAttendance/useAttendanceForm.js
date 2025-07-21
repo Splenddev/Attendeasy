@@ -41,11 +41,11 @@ const useAttendanceForm = (groupId, scheduleId) => {
         lateThreshold: 10, // Minutes after classStart to count as late
         pleaWindow: 3, // Days allowed to submit plea
         proofRequirement: 'none', // 'none' | 'selfie' | 'document'
-        enableCheckInOut: true, // Enable both check-in and check-out
+        enableCheckInOut: false, // Enable both check-in and check-out
         allowEarlyCheckIn: false, // Allow check-in/out before window
         allowLateCheckIn: true, // Allow check-in/out after window
         allowEarlyCheckOut: false, // Separate for check-out
-        allowLateCheckOut: true, // Separate for check-out
+        allowLateCheckOut: false,
         minimumPresenceDuration: 45, // Used to validate if student stayed long enough
         autoCheckOut: true, // System auto-checks out after duration
         repeatable: false, // Is this session recurring?

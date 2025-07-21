@@ -15,8 +15,9 @@ import { markGeoEntry } from '../../../services/attendance.service';
 import { toast } from 'react-toastify';
 import useDisableScroll from '../../../hooks/useDisableScroll';
 import { useErrorModal } from '../../../hooks/useErrorModal';
+import { FiLoader } from 'react-icons/fi';
 
-// const classLocation = { lat: 6.619645, lng: 3.361175 };
+// const classLocation = { lat: 6.599345, lng: 3.368875 };
 // const classLocation = { lat: 6.577118, lng: 3.352079 }; // Replace with dynamic value if needed
 
 const classIcon = L.icon({
@@ -205,10 +206,14 @@ const MarkEntry = ({
     }
   };
 
+  const [loading, setLoading] = useState(false);
+
   const submitCheckIn = async () => {
     if (!userLocation) return alert('Location not available.');
     if (status !== 'within') return alert('You are not within range.');
     if (!attendanceId) return alert('No attendance session provided.');
+
+    setLoading(true);
 
     try {
       const res = await markGeoEntry(attendanceId, userLocation, mode);
@@ -221,6 +226,8 @@ const MarkEntry = ({
       });
     } catch (err) {
       openError(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -322,6 +329,7 @@ const MarkEntry = ({
           className="submit-button"
           onClick={submitCheckIn}
           style={{ marginTop: '10px' }}>
+          {loading && <FiLoader className="spin" />}
           Submit {mode}
         </button>
       )}

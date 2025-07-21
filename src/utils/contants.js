@@ -133,14 +133,14 @@ export const formDataAssets = [
         name: 'location.latitude',
         title: 'Latitude',
         type: 'input',
-        input: { type: 'number', step: '0.0001', placeholder: 'e.g. 6.5244' },
+        input: { type: 'number', step: '0.000001', placeholder: 'e.g. 6.5244' },
         required: true,
       },
       {
         name: 'location.longitude',
         title: 'Longitude',
         type: 'input',
-        input: { type: 'number', step: '0.0001', placeholder: 'e.g. 3.3792' },
+        input: { type: 'number', step: '0.000001', placeholder: 'e.g. 3.3792' },
         required: true,
       },
       {
@@ -334,6 +334,7 @@ export const formDataAssets = [
         name: 'settings.allowEarlyCheckOut',
         title: 'Allow Early Check-Out',
         dependsOn: 'settings.enableCheckInOut',
+        dependsOnKey: 'enabled',
         type: 'select',
         options: [
           { text: 'Yes (anytime check-out)', value: true },
@@ -345,6 +346,7 @@ export const formDataAssets = [
         name: 'settings.allowLateCheckOut',
         title: 'Allow Late Check-Out',
         type: 'select',
+        dependsOnKey: 'enabled',
         dependsOn: 'settings.enableCheckInOut',
         options: [
           { text: 'Yes (after end time)', value: true },

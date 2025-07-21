@@ -33,6 +33,7 @@ const FieldSet = ({
   mapToValue = null,
   enabled = false,
   methods = {},
+  dependsOn = null,
 }) => {
   const {
     register,
@@ -41,6 +42,8 @@ const FieldSet = ({
     formState: { errors, isSubmitting },
     getValues,
   } = methods;
+
+  const dependsValue = dependsOn ? watch(dependsOn) : null;
 
   const validationRules = required ? { required: `${title} is required` } : {};
   const name = fieldName || toCamelCase(title);
@@ -150,18 +153,23 @@ const FieldSet = ({
       {type === 'select' && (
         <select
           {...register(name, validationRules)}
-          disabled={disabled}
-          style={{ fontSize: fontSize }}
-          onClick={() => {
-            console.log(name);
-          }}>
+          disabled={
+            disabled || (dependsOn && dependsValue.toString() === 'false')
+          }
+          style={{ fontSize }}>
           <option value="">-- Select an option --</option>
+          {dependsOn && (
+            <option value={dependsValue}>{Boolean(dependsValue)}</option>
+          )}
           {options.map((option, index) => {
-            const value = option.value || option.text || option;
-            const label = option.text || option;
+            const isObject = typeof option === 'object' && option !== null;
+            const value = isObject && 'value' in option ? option.value : option;
+            const label =
+              isObject && 'text' in option ? option.text : String(option);
+
             return (
               <option
-                key={value + index}
+                key={String(value) + index}
                 value={value}>
                 {label}
               </option>

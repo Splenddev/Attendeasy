@@ -15,7 +15,6 @@ const DynamicForm = ({ title = '', selectOptions = [], id = '', methods }) => {
   const {
     formState: { errors },
     watch,
-    // getValues,
   } = methods;
 
   const enableCheckInOut = watch('settings.enableCheckInOut');
@@ -54,36 +53,41 @@ const DynamicForm = ({ title = '', selectOptions = [], id = '', methods }) => {
           })}
         </div>
         <div className="contents">
-          {selectOptions.map((item) => (
-            <FieldSet
-              key={item.title}
-              title={item.title}
-              options={item.options}
-              type={item.type}
-              input={item.input}
-              choices={item.choices}
-              choiceMode={item.choiceMode}
-              required={item.required}
-              fieldName={item.name}
-              disabled={
-                (item.dependsOn && !watch(item.dependsOn)) ||
-                (item.name === 'settings.allowLateCheckOut' &&
-                  enableCheckInOut === 'No (check-in only)') ||
-                (item.name === 'settings.allowEarlyCheckOut' &&
-                  enableCheckInOut === 'No (check-in only)')
-                  ? true
-                  : item.disabled
-              }
-              readOnly={
-                !!item.readOnly || (item.dependsOn && !watch(item.dependsOn))
-              }
-              catenate={item.catenate}
-              mapToValue={item.mapToValue}
-              enabled={enableCheckInOut}
-              error={errors?.[item.name]}
-              methods={methods}
-            />
-          ))}
+          {selectOptions
+            .filter((item) => {
+              if (!item.dependsOn) return true;
+              const dependsValue = watch(item.dependsOn);
+              return dependsValue.toString() !== 'false'; // hides field if false
+            })
+            .map((item) => {
+              const dependsValue = item.dependsOn
+                ? watch(item.dependsOn)
+                : true;
+              return (
+                <FieldSet
+                  key={item.title}
+                  title={item.title}
+                  options={item.options}
+                  type={item.type}
+                  input={item.input}
+                  choices={item.choices}
+                  choiceMode={item.choiceMode}
+                  required={item.required}
+                  fieldName={item.name}
+                  disabled={
+                    item.dependsOn && !dependsValue ? true : item.disabled
+                  }
+                  readOnly={
+                    !!item.readOnly || (item.dependsOn && !dependsValue)
+                  }
+                  catenate={item.catenate}
+                  mapToValue={item.mapToValue}
+                  dependsOn={item.dependsOn}
+                  error={errors?.[item.name]}
+                  methods={methods}
+                />
+              );
+            })}
         </div>
       </section>
     </>
