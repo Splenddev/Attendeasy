@@ -181,23 +181,30 @@ const Register = () => {
     }
   };
 
-  const renderStep = () => {
+  const renderStep = (methods) => {
     switch (step) {
       case 0:
-        return <RoleForm onNext={handleNext} />;
+        return (
+          <RoleForm
+            onNext={handleNext}
+            methods={methods}
+          />
+        );
       case 1:
-        return <PersonalForm />;
+        return <PersonalForm methods={methods} />;
       case 2:
         return (
           <ProfileSetup
             onNext={handleNext}
             onBack={handleBack}
+            methods={methods}
           />
         );
       case 3:
         return (
           <ReviewStep
             onBack={handleBack}
+            methods={methods}
             isSubmitted={isSubmitted}
           />
         );
@@ -214,6 +221,7 @@ const Register = () => {
             timeLeft={timeLeft}
             formatTimeLeft={formatTimeDiff}
             setOtpVerified={setOtpVerified}
+            methods={methods}
             otpVerified={otpVerified}
           />
         );
@@ -251,7 +259,7 @@ const Register = () => {
               animate="animate"
               exit="exit"
               transition={{ duration: 0.4, delay: 0.2 }}>
-              {renderStep()}
+              {renderStep(methods)}
             </motion.div>
           </AnimatePresence>
         </form>

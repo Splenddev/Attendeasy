@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useFormContext } from 'react-hook-form';
 import '../styles/ProfileSetup.css';
 import FieldSet from '../../../../components/FieldSet/FieldSet';
 import { MdCheckCircle, MdCheckCircleOutline } from 'react-icons/md';
@@ -16,7 +15,7 @@ const departments = {
 };
 const levels = ['100L', '200L', '300L', '400L', '500L'];
 
-const ProfileSetup = ({ onNext, onBack }) => {
+const ProfileSetup = ({ onNext, onBack, methods }) => {
   const {
     watch,
     setValue,
@@ -24,7 +23,7 @@ const ProfileSetup = ({ onNext, onBack }) => {
     register,
     getValues,
     formState: { errors },
-  } = useFormContext();
+  } = methods;
 
   const selectedFaculty = watch('faculty');
   const selectedRole = watch('role');
@@ -122,9 +121,11 @@ const ProfileSetup = ({ onNext, onBack }) => {
         title={'faculty'}
         type={'select'}
         required={true}
+        methods={methods}
       />
 
       <FieldSet
+        methods={methods}
         options={departments[selectedFaculty]}
         title={'department'}
         type={'select'}
@@ -133,6 +134,7 @@ const ProfileSetup = ({ onNext, onBack }) => {
       />
 
       <FieldSet
+        methods={methods}
         options={levels}
         title={'level'}
         type={'select'}
