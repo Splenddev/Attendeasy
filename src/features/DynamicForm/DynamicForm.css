@@ -7,12 +7,27 @@
   font-size: 14px;
   margin-bottom: 24px;
   box-shadow: 0 2px 4px rgba(255, 0, 0, 0.1);
-  position: fixed;
+  /* position: fixed; */
+  z-index: 1;
+  /* top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); */
 }
 
 .form-errors-summary p {
   margin: 0 0 8px 0;
   font-weight: bold;
+  position: relative;
+  /* background: #000; */
+}
+.form-errors-summary .close-error-button {
+  position: absolute;
+  right: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: #900;
 }
 
 .form-errors-summary ul {

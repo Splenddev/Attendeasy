@@ -16,20 +16,27 @@ import Spinner from '../../../components/Loader/Spinner/Spinner';
 import PopupBox from '../../../components/Modals/PopupBox/PopupBox';
 import CourseAdder from '../../Auth/Register/CourseAdder/CourseAdder';
 import ManagerCourse from '../ManageCourse/ManageCourse';
-import { FiPlus, FiRefreshCw } from 'react-icons/fi';
+import { FiLoader, FiPlus, FiRefreshCw } from 'react-icons/fi';
+import { useErrorModal } from '../../../hooks/useErrorModal';
 
 const CreateSchedule = () => {
   const { setNavTitle, user } = useAuth();
   useEffect(() => setNavTitle('Create Schedules'), [setNavTitle]);
 
   const [openPopup, setOpenPopup] = useState(false);
+  const { open: openError } = useErrorModal();
 
   const { courses, refetch, loading } = useCourses('fetch');
 
   const { methods } = useScheduleForm();
   const { handleSubmit, setValue, reset, watch } = methods;
 
-  const { handleCreateSchedule } = useCreateSchedule();
+  const {
+    handleCreateSchedule,
+    isLoading,
+    error,
+    reset: revertFormStates,
+  } = useCreateSchedule();
 
   const classLocation = watch('classLocation');
   const [courseSelected, setCourseSelected] = useState(false);
@@ -39,6 +46,7 @@ const CreateSchedule = () => {
       data,
       groupId: user.group,
       onSuccess: () => {
+        revertFormStates();
         reset(); // clear form
         setCourseSelected(false);
       },
@@ -60,6 +68,12 @@ const CreateSchedule = () => {
 
     setCourseSelected(true);
   };
+
+  useEffect(() => {
+    if (error) {
+      openError(error);
+    }
+  }, [error]);
 
   return (
     <>
@@ -150,15 +164,17 @@ const CreateSchedule = () => {
                     key={section.id}
                     title={section.title}
                     selectOptions={section.selectOptions}
+                    methods={methods}
                   />
                 ))}
               </div>
             </div>
 
             {button.multiple({
-              icon: MdAddchart,
-              element: 'Add Schedule',
+              icon: isLoading ? FiLoader : MdAddchart,
+              element: isLoading ? '' : 'Add Schedule',
               type: 'submit',
+              loader: isLoading,
             })}
           </form>
         </div>
