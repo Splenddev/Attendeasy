@@ -211,6 +211,7 @@ const ReopenSessionForm = ({ onSubmit, groupId, load }) => {
       <motion.button
         whileTap={{ scale: 0.95 }}
         type="submit"
+        disabled={load}
         className={styles.submitBtn}>
         <FaCheckCircle className={styles.iconBtn} /> Reopen Session
       </motion.button>
