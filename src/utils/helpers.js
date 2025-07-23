@@ -105,7 +105,7 @@ export const toCamelCase = (str) => {
     .replace(/\s+/g, '');
   return formattedName;
 };
-export const parseTimeToday = (timeString) => {
+export const parseTimeToday = (timeString = '') => {
   const [hours, minutes, seconds] = timeString.split('T')[1].split(':');
   const date = new Date();
   date.setHours(Number(hours), Number(minutes), Number(seconds ?? 0), 0);
@@ -278,4 +278,34 @@ export function catenateCredentialsSecure(
   }
 
   return result.length > maxLength ? result.slice(0, maxLength) : result;
+}
+
+export function parseUserAgent(userAgent) {
+  let os = 'Unknown OS';
+  let browser = 'Unknown Browser';
+
+  if (/Windows NT 10.0/.test(userAgent)) os = 'Windows 10';
+  else if (/Windows NT 6.1/.test(userAgent)) os = 'Windows 7';
+  else if (/Mac OS X/.test(userAgent)) os = 'macOS';
+  else if (/Android/.test(userAgent)) os = 'Android';
+  else if (/iPhone/.test(userAgent)) os = 'iOS';
+
+  if (/Chrome\/([\d.]+)/.test(userAgent)) {
+    const version = userAgent.match(/Chrome\/([\d.]+)/)[1].split('.')[0];
+    browser = `Chrome ${version}`;
+  } else if (/Firefox\/([\d.]+)/.test(userAgent)) {
+    const version = userAgent.match(/Firefox\/([\d.]+)/)[1].split('.')[0];
+    browser = `Firefox ${version}`;
+  } else if (
+    /Safari\/([\d.]+)/.test(userAgent) &&
+    /Version\/([\d.]+)/.test(userAgent)
+  ) {
+    const version = userAgent.match(/Version\/([\d.]+)/)[1].split('.')[0];
+    browser = `Safari ${version}`;
+  } else if (/Edg\/([\d.]+)/.test(userAgent)) {
+    const version = userAgent.match(/Edg\/([\d.]+)/)[1].split('.')[0];
+    browser = `Edge ${version}`;
+  }
+
+  return { os, browser };
 }

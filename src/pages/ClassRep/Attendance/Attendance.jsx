@@ -8,15 +8,16 @@ import { RiGraduationCapFill } from 'react-icons/ri';
 import {
   LuBookOpen,
   LuCalendarCheck2,
+  LuClipboardCheck,
   LuDownload,
   LuListTodo,
   LuMailOpen,
 } from 'react-icons/lu';
-import { FaList, FaPlus, FaSearch } from 'react-icons/fa';
+import { FaList, FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { DateFilter } from '../../../components';
 import button from '../../../components/Button/Button';
-import { routesNavigate, timeFormatter } from '../../../utils/helpers';
+import { timeFormatter } from '../../../utils/helpers';
 import SessionInfo from './components/SessionInfo/SessionInfo';
 import Students from './components/Students/Students';
 import {
@@ -32,6 +33,8 @@ import { useSuccessModal } from '../../../hooks/useSuccessModal';
 import AttStatus from './components/AttStatus/AttStatus';
 import useAttendanceSocket from '../../../hooks/useAttendanceSocket';
 import { toast } from 'react-toastify';
+import PopupBox from '../../../components/Modals/PopupBox/PopupBox';
+import { ReopenSessionForm } from '../../../components/Forms';
 
 const Attendance = () => {
   const { user } = useAuth();
@@ -49,6 +52,7 @@ const Attendance = () => {
   const { finalize, finalizing } = useFinalizeAttendance();
   const { reopen, opening } = useReopenAttendance();
   const { open: openSuccess } = useSuccessModal();
+  const [openPopup, setOpenPopup] = useState(null);
 
   useEffect(() => {
     if (groupId) fetch(groupId);
@@ -75,6 +79,7 @@ const Attendance = () => {
       // Optionally update charts, stats, or local state here
     },
     onDeleted: (data) => {
+      console.log(data);
       toast.info(`🗑️ Attendance session deleted`);
       fetch(groupId); // re-fetch list after deletion
     },
@@ -84,9 +89,10 @@ const Attendance = () => {
     },
   });
 
-  const handleReopen = async (id) => {
-    const res = await reopen(id);
+  const handleReopen = async (id, data) => {
+    const res = await reopen(id, data);
     if (res?.success) {
+      setOpenPopup(null);
       openSuccess({
         title: 'Attendance Reopened',
         message: res.message,
@@ -201,182 +207,196 @@ const Attendance = () => {
   }
 
   return (
-    <div className="c-attendance">
-      <div className="c-attendance-date">
-        <DateFilter
-          setFilteredAttendance={setFilteredAttendance}
-          attendanceList={attendanceList}
-        />
-      </div>
-
-      <div className="c-attendance-create">
-        {button.multiple({
-          icon: FaPlus,
-          name: 'create-attendance',
-          element: 'Create New Attendance',
-          func: () => routesNavigate('/class-rep/attendance/create'),
-        })}
-      </div>
-
-      <div className="c-attendance-filter">
-        <div className="search_name">
-          <input
-            placeholder="Search a student name here"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+    <>
+      <div className="c-attendance">
+        <div className="c-attendance-date">
+          <DateFilter
+            setFilteredAttendance={setFilteredAttendance}
+            attendanceList={attendanceList}
           />
-          <div className="search-icon-wrap">
-            <FaSearch />
+        </div>
+
+        <div className="c-attendance-create">
+          {button.multiple({
+            icon: LuClipboardCheck,
+            name: 'create-attendance-btn',
+            element: 'New Attendance',
+            func: () => navigate('/class-rep/attendance/create'),
+          })}
+        </div>
+
+        <div className="c-attendance-filter">
+          <div className="search_name">
+            <input
+              placeholder="Search a student name here"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <div className="search-icon-wrap">
+              <FaSearch />
+            </div>
+          </div>
+
+          <div className="filters">
+            <div className="filter-wrap">
+              <div>
+                <RiGraduationCapFill />
+                Course
+              </div>
+              <hr />
+              <select
+                value={course}
+                onChange={(e) => setCourse(e.target.value)}>
+                <option value="">All</option>
+                {allCourses.map((c) => (
+                  <option key={c}>{c}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="filter-wrap">
+              <div>
+                <LuListTodo />
+                Marked
+              </div>
+              <hr />
+              <select
+                value={marked}
+                onChange={(e) => setMarked(e.target.value)}>
+                <option value="">All</option>
+                <option value="L">Late / Early Leave</option>
+                <option value="A">Absent / Excused</option>
+                <option value="P">Present</option>
+              </select>
+            </div>
+
+            <div className="c-attendance-view">
+              <span
+                className={view === 'list' ? 'active' : ''}
+                onClick={() => setView('list')}>
+                <FaList />
+              </span>
+              <span
+                className={view === 'grid' ? 'active' : ''}
+                onClick={() => setView('grid')}>
+                <MdGridView />
+              </span>
+            </div>
           </div>
         </div>
 
-        <div className="filters">
-          <div className="filter-wrap">
-            <div>
-              <RiGraduationCapFill />
-              Course
-            </div>
-            <hr />
-            <select
-              value={course}
-              onChange={(e) => setCourse(e.target.value)}>
-              <option value="">All</option>
-              {allCourses.map((c) => (
-                <option key={c}>{c}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="filter-wrap">
-            <div>
-              <LuListTodo />
-              Marked
-            </div>
-            <hr />
-            <select
-              value={marked}
-              onChange={(e) => setMarked(e.target.value)}>
-              <option value="">All</option>
-              <option value="L">Late / Early Leave</option>
-              <option value="A">Absent / Excused</option>
-              <option value="P">Present</option>
-            </select>
-          </div>
-
-          <div className="c-attendance-view">
-            <span
-              className={view === 'list' ? 'active' : ''}
-              onClick={() => setView('list')}>
-              <FaList />
-            </span>
-            <span
-              className={view === 'grid' ? 'active' : ''}
-              onClick={() => setView('grid')}>
-              <MdGridView />
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {attendanceList.length > 0 && (
-        <p className="c-attendance-length">
-          Filtered <span>{sortedAttendance.length}</span> of{' '}
-          <span>{attendanceList.length}</span> attendance
-        </p>
-      )}
-
-      {sortedAttendance.length === 0 ? (
-        <div className="empty-attendance-state">
-          <img
-            src="/illustrations/create.svg"
-            alt="No attendance sessions"
-          />
-          <h4>No attendance sessions yet</h4>
-          <p>
-            You haven’t created any attendance records for this selected date
-            yet.
+        {attendanceList.length > 0 && (
+          <p className="c-attendance-length">
+            Filtered <span>{sortedAttendance.length}</span> of{' '}
+            <span>{attendanceList.length}</span> attendance
           </p>
-          <button onClick={() => navigate('create')}>Create</button>
-        </div>
-      ) : (
-        sortedAttendance.map((session) => (
-          <AnimatePresence key={session.attendanceId}>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              className="c-attendance-session">
-              <div className="c-attendance-info">
-                <SessionInfo session={session} />
-                <section className="action">
-                  <button className="time">
-                    <LuMailOpen /> <span>Submit to lecturer</span>
-                  </button>
-                  <button className="time">
-                    <LuDownload />
-                  </button>
-                  {session.status !== 'closed' &&
-                    timeFormatter(session.classTime.end) <
-                      timeFormatter(null) &&
-                    button.multiple({
-                      icon: LuCalendarCheck2,
-                      element: finalizing ? (
-                        <Spinner size="20px" />
-                      ) : (
-                        'Finalize'
-                      ),
-                      func: () => handleFinalize(session._id),
-                    })}
-                  {session.status === 'closed' &&
-                    button.multiple({
-                      icon: opening ? FiLoader : LuBookOpen,
-                      element: opening ? '' : 'Reopen Session',
-                      loader: opening,
-                      func: () => handleReopen(session._id),
-                    })}
-                  {button.multiple({
-                    icon: FiTrash,
-                    element: deleting ? <Spinner size="20px" /> : 'Trash',
-                    func: () => handleDelete(session._id),
-                  })}
-                </section>
-                <AttStatus status={session.status} />
-              </div>
+        )}
 
-              <div className={`c-attendance-lists ${view}`}>
-                {view === 'list' &&
-                  (session.studentRecords || []).length > 0 && (
-                    <div className="c-attendance-lists-properties">
-                      <p>Name</p>
-                      <p>Status</p>
-                      <p>Time In</p>
-                      <p>Time Out</p>
+        {sortedAttendance.length === 0 ? (
+          <div className="empty-attendance-state">
+            <img
+              src="/illustrations/create.svg"
+              alt="No attendance sessions"
+            />
+            <h4>No attendance sessions yet</h4>
+            <p>
+              You haven’t created any attendance records for this selected date
+              yet.
+            </p>
+            <button onClick={() => navigate('create')}>Create</button>
+          </div>
+        ) : (
+          sortedAttendance.map((session) => (
+            <AnimatePresence key={session.attendanceId}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                className="c-attendance-session">
+                <div className="c-attendance-info">
+                  <SessionInfo session={session} />
+                  <section className="action">
+                    <button className="time">
+                      <LuMailOpen /> <span>Submit to lecturer</span>
+                    </button>
+                    <button className="time">
+                      <LuDownload />
+                    </button>
+                    {session.status !== 'closed' &&
+                      button.multiple({
+                        icon: LuCalendarCheck2,
+                        element: finalizing ? (
+                          <Spinner size="20px" />
+                        ) : (
+                          'Finalize'
+                        ),
+                        func: () => handleFinalize(session._id),
+                      })}
+                    {session.status === 'closed' &&
+                      button.multiple({
+                        icon: opening ? FiLoader : LuBookOpen,
+                        element: opening ? '' : 'Reopen Session',
+                        loader: opening,
+                        func: () => setOpenPopup(session._id),
+                      })}
+                    {button.multiple({
+                      icon: FiTrash,
+                      element: deleting ? <Spinner size="20px" /> : 'Trash',
+                      func: () => handleDelete(session._id),
+                    })}
+                  </section>
+                  <AttStatus status={session.status} />
+                </div>
+
+                <div className={`c-attendance-lists ${view}`}>
+                  {view === 'list' &&
+                    (session.studentRecords || []).length > 0 && (
+                      <div className="c-attendance-lists-properties">
+                        <p>Name</p>
+                        <p>Status</p>
+                        <p>Time In</p>
+                        <p>Time Out</p>
+                      </div>
+                    )}
+
+                  {groupStudents(session.studentRecords || []).length === 0 ? (
+                    <div className="empty-attendance-state">
+                      <img
+                        src="/illustrations/empty.svg"
+                        alt="No student records"
+                      />
+                      <h4>No students recorded yet</h4>
+                      <p>This attendance session has no student records yet.</p>
                     </div>
+                  ) : (
+                    groupStudents(session.studentRecords).map((group) => (
+                      <Students
+                        key={group.id}
+                        group={group}
+                        view={view}
+                        att={session}
+                      />
+                    ))
                   )}
-
-                {groupStudents(session.studentRecords || []).length === 0 ? (
-                  <div className="empty-attendance-state">
-                    <img
-                      src="/illustrations/empty.svg"
-                      alt="No student records"
-                    />
-                    <h4>No students recorded yet</h4>
-                    <p>This attendance session has no student records yet.</p>
-                  </div>
-                ) : (
-                  groupStudents(session.studentRecords).map((group) => (
-                    <Students
-                      key={group.id}
-                      group={group}
-                      view={view}
-                    />
-                  ))
-                )}
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        ))
-      )}
-    </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          ))
+        )}
+      </div>
+      <PopupBox
+        onClose={() => setOpenPopup(null)}
+        isOpen={openPopup}>
+        <ReopenSessionForm
+          onSubmit={(data) => {
+            console.log(data);
+            console.log(openPopup);
+            handleReopen(openPopup, data);
+          }}
+          groupId={user.group}
+          load={opening}
+        />
+      </PopupBox>
+    </>
   );
 };
 

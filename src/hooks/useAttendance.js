@@ -80,10 +80,10 @@ export const useReopenAttendance = () => {
   const [opening, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const reopen = useCallback(async (attendanceId) => {
+  const reopen = useCallback(async (attendanceId, payload) => {
     try {
       setLoading(true);
-      const res = await reopenSession(attendanceId);
+      const res = await reopenSession(attendanceId, payload);
       return res;
     } catch (err) {
       setError(err.message);

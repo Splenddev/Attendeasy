@@ -6,6 +6,7 @@ import { parseTime2, parseTimeToday2 } from '../../../utils/helpers';
 import ClassStatus from '../../ClassRep/ClassRepDashboard/ClassStatus';
 import button from '../../../components/Button/Button';
 import { useCountdown } from '../../../hooks/useCountdown';
+import { useErrorModal } from '../../../hooks/useErrorModal';
 
 const getDeadlineTime = (att, mode = 'checkIn') => {
   if (!att?.classTime || !att?.entry) return null;
@@ -23,23 +24,70 @@ const getDeadlineTime = (att, mode = 'checkIn') => {
   return null;
 };
 
+const getAttendanceBlockReason = ({
+  hasCheckedIn,
+  hasCheckedOut,
+  status,
+  now,
+  entryStart, // 'HH:mm'
+  entryEnd, // 'HH:mm'
+  allowEarly,
+  reopened = false,
+}) => {
+  const minutesEarly = Math.round(
+    (entryStart.getTime() - now.getTime()) / 60000
+  );
+  const minutesLate = Math.round((now.getTime() - entryEnd.getTime()) / 60000);
+
+  if (status === 'ended') return 'This attendance session has already ended.';
+  if (hasCheckedOut) return 'You have already checked out.';
+
+  if (!hasCheckedIn && status === 'not-started' && !allowEarly)
+    return `Attendance hasn’t started yet. You can begin by ${entryStart}.`;
+
+  if (!allowEarly && now < entryStart)
+    return `You’re ${minutesEarly} minute${
+      minutesEarly === 1 ? '' : 's'
+    } early. Check-in starts at ${entryStart}.`;
+
+  if (!allowEarly && now > entryEnd && !reopened)
+    return `You’re ${minutesLate} minute${
+      minutesLate === 1 ? '' : 's'
+    } late. Entries closed at ${entryEnd}.`;
+
+  if (!hasCheckedIn && status !== 'in-progress' && !reopened)
+    return 'Check-in is not active right now.';
+
+  if (hasCheckedIn && !hasCheckedOut && now > entryEnd && !reopened)
+    return `You didn’t check out in time. The session ended at ${entryEnd}, ${minutesLate} minute${
+      minutesLate === 1 ? '' : 's'
+    } ago.`;
+
+  return null;
+};
+
 const AttendanceCard = ({ att, setIsModal, student }) => {
   const start = parseTimeToday2(att.classTime?.start);
   const end = parseTimeToday2(att.classTime?.end);
   const now = new Date();
 
-  const status =
-    now < start ? 'not-started' : now < end ? 'in-progress' : 'ended';
+  const status = att.reopened
+    ? 'in-progress'
+    : now < start
+    ? 'not-started'
+    : now < end
+    ? 'in-progress'
+    : 'ended';
+
   const entryStart = parseTime2(att.classTime?.start, att.entry?.start);
   const entryEnd = parseTime2(entryStart, att.entry?.end);
 
   const deadline = getDeadlineTime(
     att,
-    !student.checkIn.time ? 'checkIn' : 'checkOut'
-  ); // type is 'checkin' or 'checkout'
+    !student?.checkIn.time ? 'checkIn' : 'checkOut'
+  );
 
-  // const tooLateToCheckIn = now > getDeadlineTime(att, 'checkin');
-  // const tooEarlyToCheckOut = now < getDeadlineTime(att, 'checkout');
+  const { open } = useErrorModal();
 
   const { minutes, seconds, timeLeft } = useCountdown(deadline);
 
@@ -107,29 +155,56 @@ const AttendanceCard = ({ att, setIsModal, student }) => {
           <></>
         )}
       </div>
-      {!student ? (
-        <></>
-      ) : student.checkIn.time && student.checkOut.time ? (
+      {!student ? null : student.checkIn.time && student.checkOut.time ? (
         <p>Marked</p>
       ) : (
-        button.normal({
-          element: !student.checkIn.time ? 'Check In' : 'Check Out',
-          disabled:
-            status === 'ended' ||
-            (status === 'not-started' && !att.allowEarlyCheckInOut),
-          func: () =>
-            setIsModal({
-              visible: true,
-              maxRange: att.location?.radiusMeters,
-              attendanceId: att._id,
-              mode: !student.checkIn.time ? 'checkIn' : 'checkOut',
-              location: {
-                lat: att.location?.latitude,
-                lng: att.location?.longitude,
-              },
-            }),
-          //disabled: status !== 'in-progress'
-        })
+        (() => {
+          const hasCheckedIn = !!student.checkIn.time;
+          const hasCheckedOut = !!student.checkOut.time;
+
+          const reason = getAttendanceBlockReason({
+            hasCheckedIn,
+            hasCheckedOut,
+            status,
+            now,
+            entryStart: parseTimeToday2(entryStart),
+            entryEnd: parseTimeToday2(entryEnd),
+            reopened: att.reopened,
+            allowEarly: att.settings?.allowEarlyCheckInOut,
+          });
+
+          const isBlocked = Boolean(reason);
+
+          const handleClick = () => {
+            console.log('entry end', new Date(entryEnd));
+            console.log('now', now);
+            if (isBlocked) {
+              open({
+                title: 'Cannot Proceed',
+                message: reason,
+                code: 'PROCESS_INVALID',
+                initiator: hasCheckedIn ? 'Check Out' : 'Check In',
+              });
+            } else {
+              setIsModal({
+                visible: true,
+                maxRange: att.location?.radiusMeters,
+                attendanceId: att._id,
+                mode: hasCheckedIn ? 'checkOut' : 'checkIn',
+                location: {
+                  lat: att.location?.latitude,
+                  lng: att.location?.longitude,
+                },
+              });
+            }
+          };
+
+          return button.normal({
+            element: hasCheckedIn ? 'Check Out' : 'Check In',
+            disabled: false,
+            func: handleClick,
+          });
+        })()
       )}
     </div>
   );

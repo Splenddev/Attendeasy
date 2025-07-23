@@ -111,10 +111,8 @@
     border: none;
     background: var(--main-color);
     color: #fff;
-    display: grid;
     gap: 10px;
-    grid-template-columns: 10px 1fr;
-    width: 200px;
+    /* width: 200px; */
     align-items: center;
   }
 }

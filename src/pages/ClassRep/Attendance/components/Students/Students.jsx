@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
-import { timeFormatter } from '../../../../../utils/helpers';
+import { parseUserAgent, timeFormatter } from '../../../../../utils/helpers';
 import {
   FaCrown,
   FaUserGraduate,
-  FaCertificate,
   FaExclamationTriangle,
   FaMapMarkerAlt,
   FaTimesCircle,
   FaTimes,
   FaCheckCircle,
+  FaGlobe,
+  FaClock,
+  FaDesktop,
 } from 'react-icons/fa';
 import { FiMoreVertical } from 'react-icons/fi';
 import { MdFlag } from 'react-icons/md';
 import './Students.css';
 import useDisableScroll from '../../../../../hooks/useDisableScroll';
+import './DeviceInfoCard.css';
+import { format } from 'date-fns';
 
 const finalStatusLetter = (status) =>
   status === 'on_time' || status === 'present'
@@ -50,6 +54,7 @@ const MoreInfoModal = ({ isOpen, closed, data }) => {
     warningsIssued,
     checkInStatus,
     checkOutStatus,
+    deviceInfo,
   } = data;
 
   const needsCheckout = !checkOut?.time;
@@ -190,6 +195,10 @@ const MoreInfoModal = ({ isOpen, closed, data }) => {
           <li>
             <strong>Warnings Issued:</strong> {warningsIssued ?? 0}
           </li>
+          <li>
+            <strong>Device Info:</strong>
+            <DeviceInfoCard deviceInfo={deviceInfo} />
+          </li>
 
           {flagged?.isFlagged && (
             <div className="flagged-box">
@@ -230,7 +239,47 @@ const MoreInfoModal = ({ isOpen, closed, data }) => {
   );
 };
 
-const Students = ({ group, view }) => {
+const DeviceInfoCard = ({ deviceInfo }) => {
+  if (!deviceInfo) return null;
+
+  const { userAgent, markedAt } = deviceInfo;
+  const ip = deviceInfo.ip === '::1' ? 'This Device' : deviceInfo.ip;
+  const { os, browser } = parseUserAgent(userAgent);
+
+  return (
+    <div className="device-card">
+      <div className="device-row">
+        <FaGlobe className="icon" />
+        <div>
+          <div className="label">IP Address</div>
+          <div className="value">{ip || 'Unavailable'}</div>
+        </div>
+      </div>
+
+      <div className="device-row">
+        <FaDesktop className="icon" />
+        <div>
+          <div className="label">Device</div>
+          <div className="value">
+            {os} – {browser}
+          </div>
+        </div>
+      </div>
+
+      <div className="device-row">
+        <FaClock className="icon" />
+        <div>
+          <div className="label">Marked At</div>
+          <div className="value">
+            {markedAt ? format(new Date(markedAt), 'PPpp') : 'Not recorded'}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Students = ({ group, view, att }) => {
   const [selectedStudent, setSelectedStudent] = useState(null);
 
   const openModal = (student) => {
@@ -271,32 +320,67 @@ const Students = ({ group, view }) => {
               </div>
 
               <div className={`marks ${view}`}>
-                {[
-                  'on_time',
-                  'absent',
-                  'late',
-                  'left_early',
-                  'excused',
-                  'pending',
-                  'partial',
-                  'present',
-                ].map((type) => (
-                  <div
-                    key={type}
-                    className={`mark ${
-                      st.finalStatus === type
-                        ? type === 'on_time' || type === 'present'
-                          ? 'present'
-                          : type === 'left_early'
-                          ? 'left_early'
-                          : type === 'absent'
-                          ? 'absent'
-                          : 'late'
-                        : ''
-                    } ${view}`}>
-                    {finalStatusLetter(type)}
-                  </div>
-                ))}
+                {view === 'grid'
+                  ? (att.settings.markingConfig.type === 'strict'
+                      ? ['present', 'absent', 'partial']
+                      : [
+                          'on_time',
+                          'absent',
+                          'late',
+                          'left_early',
+                          'excused',
+                          'pending',
+                          'partial',
+                          'present',
+                        ]
+                    ).map((type) => {
+                      const isActive = st.finalStatus === type;
+                      const statusClass = {
+                        on_time: 'present',
+                        present: 'present',
+                        late: 'late',
+                        absent: 'absent',
+                        left_early: 'left_early',
+                        excused: 'excused',
+                        partial: 'partial',
+                        pending: 'pending',
+                      }[type];
+
+                      return (
+                        <div
+                          key={type}
+                          className={`mark ${view} ${
+                            isActive ? statusClass : ''
+                          }`}>
+                          {finalStatusLetter(type)}
+                        </div>
+                      );
+                    })
+                  : (() => {
+                      const allowedStrict = ['present', 'absent', 'partial'];
+                      const isStrict =
+                        att.settings.markingConfig.type === 'strict';
+
+                      if (isStrict && !allowedStrict.includes(st.finalStatus))
+                        return null;
+
+                      const statusClass = {
+                        on_time: 'present',
+                        present: 'present',
+                        late: 'late',
+                        absent: 'absent',
+                        left_early: 'left_early',
+                        excused: 'excused',
+                        partial: 'partial',
+                        pending: 'pending',
+                      }[st.finalStatus];
+
+                      return (
+                        <div className={`mark ${view} ${statusClass}`}>
+                          {finalStatusLetter(st.finalStatus)}
+                        </div>
+                      );
+                    })()}
               </div>
 
               <p>
@@ -311,7 +395,10 @@ const Students = ({ group, view }) => {
               <p
                 className="aic"
                 style={{ cursor: 'pointer' }}
-                onClick={() => openModal(st)}>
+                onClick={() => {
+                  console.log(st);
+                  openModal(st);
+                }}>
                 <FiMoreVertical />
                 {st.flagged?.isFlagged && (
                   <span className="dot">

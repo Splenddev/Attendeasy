@@ -47,7 +47,8 @@ const MembersTab = ({ group = {} }) => {
     name: m.name,
     avatar: m.avatar,
     role: getRole(m._id),
-    absenceRate: Math.floor(Math.random() * 20), // Placeholder, replace later
+    absenceRate: Math.floor(Math.random() * 20),
+    matricNumber: m.matricNumber,
   }));
 
   const filteredMembers = displayMembers.filter((m) =>
@@ -104,6 +105,7 @@ const MembersTab = ({ group = {} }) => {
                 <span className="member-name">{member.name}</span>
                 {roleIcons[member.role]}
               </div>
+              <span className="absence-rate">{member.matricNumber || ''}</span>
               <div
                 className={`absence-rate ${
                   member.absenceRate >= 10

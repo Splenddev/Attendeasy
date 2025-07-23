@@ -1,0 +1,255 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow: hidden;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  font-size: 1.6rem;
+  font-weight: 600;
+  gap: 0.5rem;
+  color: #222;
+}
+
+.icon {
+  color: #25aff3;
+  font-size: 1.4rem;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1rem;
+  color: #333;
+}
+
+.matricSection {
+  background-color: #f9f9f9;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.sectionLabel {
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.8rem;
+}
+
+.addBtn {
+  background: none;
+  border: none;
+  color: #25aff3;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.matricRow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+}
+
+.matricRow input {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.removeBtn {
+  background: #ff4d4f;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.submitBtn {
+  background-color: #25aff3;
+  color: #fff;
+  border: none;
+  padding: 0.8rem 1.2rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.submitBtn:hover {
+  background-color: #1b98d4;
+}
+
+.iconBtn {
+  font-size: 1.2rem;
+}
+
+.resultBox {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);
+}
+.resultBox .title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #1a202c;
+}
+
+.resultBox .section {
+  margin-bottom: 1.25rem;
+}
+
+.resultBox .subTitle {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #2d3748;
+}
+
+.resultBox .list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.validItem,
+.resultBox .invalidItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0;
+  font-size: 0.95rem;
+}
+
+.resultBox .iconValid {
+  color: #38a169;
+}
+
+.resultBox .iconInvalid {
+  color: #e53e3e;
+}
+
+.resultBox .empty {
+  font-style: italic;
+  color: #718096;
+}
+
+.resultBox .note {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  color: #e53e3e;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  background-color: #fff5f5;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #feb2b2;
+}
+
+.resultsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.card {
+  flex: 1;
+  min-width: 250px;
+  border: 1px solid #e2e8f0;
+  border-left: 5px solid #25af73;
+  border-radius: 12px;
+  background-color: #f9fafb;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+}
+
+.card:last-child {
+  border-left-color: #ef4444;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.iconValid {
+  color: #25af73;
+  font-size: 1.2rem;
+}
+
+.iconInvalid {
+  color: #ef4444;
+  font-size: 1.2rem;
+}
+
+.matricList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.matricList li {
+  background-color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+  border: 1px solid #e5e7eb;
+}
+
+.durationField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-top: 1.5rem;
+}
+
+.durationField input {
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  width: 150px;
+}
+
+.durationField label {
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: #64748b;
+}

@@ -36,6 +36,7 @@
   /* border-bottom: 1px solid #a7a7a7; */
 }
 .c-attendance-student.grid {
+  position: relative;
   background: #fff;
   display: flex;
   align-items: center;
@@ -110,52 +111,110 @@
     justify-content: center;
   }
 }
-.c-attendance-student .mark {
+
+/* Base layout */
+.marks {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* Grid view: all status markers */
+.marks.grid {
+  justify-content: center;
+}
+
+/* List view: just one */
+.mark.list {
+  display: flex;
+  /* justify-content: ; */
+}
+
+/* Optional: add label next to the mark */
+.marks.list .mark::after {
+  content: attr(data-label);
+  font-size: 15px;
+  color: #444;
+  font-weight: 500;
+  vertical-align: middle;
+}
+
+.mark {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background-color: #f2f2f2;
+  color: #999;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
-  &.list {
-    display: none;
-  }
-  &.grid {
-    height: 33px;
-    width: 33px;
-    background: #ededed;
-    border-radius: 50%;
-  }
-  &.grid.present {
-    background: #22a876;
-    color: #fff;
-  }
-  &.grid.absent {
-    background: #e3340f;
-    color: #fff;
-  }
-  &.grid.late {
-    background: #fbc948;
-    color: #fff;
-  }
-  &.grid.left_early {
-    background: #fbc948;
-    color: #fff;
-  }
-  &.list.present {
-    display: block;
-    color: var(--green);
-  }
-  &.list.absent {
-    display: block;
-    color: var(--red);
-  }
-  &.list.late {
-    color: #fbc948;
-    display: block;
-  }
-  &.list.left_early {
-    color: #fbc948;
-    display: block;
-  }
+  transition: 0.2s ease;
+  border: 1px solid #ddd;
+  font-size: 16px;
 }
+
+/* Highlighted statuses */
+.mark.present {
+  background-color: #d1f8e2;
+  color: #1e8e3e;
+  border-color: #1e8e3e;
+}
+
+.mark.absent {
+  background-color: #fce4e4;
+  color: #d93025;
+  border-color: #d93025;
+}
+
+.mark.late {
+  background-color: #fff3cd;
+  color: #b08700;
+  border-color: #b08700;
+}
+
+.mark.left_early {
+  background-color: #e0e4ff;
+  color: #304ffe;
+  border-color: #304ffe;
+}
+
+.mark.excused {
+  background-color: #e0f7fa;
+  color: #007c91;
+  border-color: #007c91;
+}
+
+.mark.partial {
+  background-color: #f1f8e9;
+  color: #689f38;
+  border-color: #689f38;
+}
+
+.mark.pending {
+  background-color: #f5f5f5;
+  color: #757575;
+  border-color: #aaa;
+}
+
+/* Optional view-specific styling */
+.marks.compact .mark {
+  width: 30px;
+  height: 30px;
+  font-size: 14px;
+  border-radius: 6px;
+}
+
+.c-attendance-student .aic {
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+.c-attendance-student.grid .aic {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
 @media (max-width: 600px) {
   .c-attendance-student.list {
     grid-template-columns: 1fr 0.5fr 0.5fr 0.5fr 0.5fr;

@@ -17,8 +17,8 @@ import useDisableScroll from '../../../hooks/useDisableScroll';
 import { useErrorModal } from '../../../hooks/useErrorModal';
 import { FiLoader } from 'react-icons/fi';
 
-// const classLocation = { lat: 6.599345, lng: 3.368875 };
-// const classLocation = { lat: 6.577118, lng: 3.352079 }; // Replace with dynamic value if needed
+// const classLocation = { lat: 6.669956, lng: 3.310279 };
+// const classLocation = { lat: 6.4488, lng: 3.39111 }; // Replace with dynamic value if needed
 
 const classIcon = L.icon({
   iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
