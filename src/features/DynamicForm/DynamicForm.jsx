@@ -11,14 +11,6 @@ const DynamicForm = ({ title = '', selectOptions = [], id = '', methods }) => {
     watch,
   } = methods;
 
-  const formatKey = (key) => {
-    return key
-      .split('.')
-      .map((k) => k.replace(/([A-Z])/g, ' $1'))
-      .join(' > ')
-      .replace(/\b\w/g, (c) => c.toUpperCase()); // capitalize
-  };
-
   const enableCheckInOut = watch('settings.enableCheckInOut');
 
   console.log(enableCheckInOut);
