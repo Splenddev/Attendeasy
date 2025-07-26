@@ -18,7 +18,8 @@ import { useErrorModal } from '../../../hooks/useErrorModal';
 import { FiLoader } from 'react-icons/fi';
 
 // const classLocation = { lat: 6.669956, lng: 3.310279 };
-// const classLocation = { lat: 6.4488, lng: 3.39111 }; // Replace with dynamic value if needed
+// const classLocation = { lat: 6.4488, lng: 3.39111 };
+// const classLocation = { lat: 6.4488, lng: 3.39111 };
 
 const classIcon = L.icon({
   iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
@@ -69,6 +70,7 @@ function GoToMyLocationButton({ onLocationFound }) {
     </button>
   );
 }
+// const maxDistance = 10000;
 
 const MarkEntry = ({
   onClose,

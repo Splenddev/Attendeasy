@@ -4,6 +4,22 @@ import './DynamicForm.css';
 import button from '../../components/Button/Button';
 import { useInfoModal } from '../../context/infoModalContext';
 import { useEffect, useState } from 'react';
+import { formatKey } from '../../utils/helpers';
+
+const flattenErrors = (obj, parentKey = '') => {
+  let entries = [];
+
+  for (const [key, value] of Object.entries(obj)) {
+    const fullKey = parentKey ? `${parentKey}.${key}` : key;
+    if (value?.message) {
+      entries.push([fullKey, value]);
+    } else if (typeof value === 'object' && value !== null) {
+      entries = entries.concat(flattenErrors(value, fullKey));
+    }
+  }
+
+  return entries;
+};
 
 const DynamicForm = ({ title = '', selectOptions = [], id = '', methods }) => {
   const {
@@ -11,21 +27,18 @@ const DynamicForm = ({ title = '', selectOptions = [], id = '', methods }) => {
     watch,
   } = methods;
 
-  const enableCheckInOut = watch('settings.enableCheckInOut');
-
-  console.log(enableCheckInOut);
-
   const { openModal } = useInfoModal();
 
   const [showErrors, setShowErrors] = useState(true);
 
-  const hasError = Object.keys(errors).length > 0;
+  const flatErrors = flattenErrors(errors);
+  const hasError = flatErrors.length > 0;
 
   useEffect(() => {
-    if (hasError && isSubmitting && errors) {
+    if (hasError && isSubmitting) {
       setShowErrors(true);
     }
-  }, [isSubmitting]);
+  }, [isSubmitting, hasError]);
 
   return (
     <>
@@ -41,28 +54,35 @@ const DynamicForm = ({ title = '', selectOptions = [], id = '', methods }) => {
             </button>
           </p>
 
-          <ul>
-            {Object.entries(errors).map(([key, error]) => (
-              <li
-                key={key}
-                onClick={() => {
-                  const el = document.querySelector(
-                    `[name="${CSS.escape(key)}"]`
-                  );
-
-                  if (el)
-                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }}>
-                <strong>
-                  {formatKey(key)}
-                  {error.message ? ':' : ''}
-                </strong>{' '}
-                {error.message}
-              </li>
-            ))}
-          </ul>
+          {flatErrors.length > 0 && (
+            <ul>
+              {flatErrors.map(([key, error]) => (
+                <li
+                  key={key}
+                  onClick={() => {
+                    const el = document.querySelector(
+                      `[name="${CSS.escape(key)}"]`
+                    );
+                    if (el) {
+                      el.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center',
+                      });
+                      el.focus?.();
+                    }
+                  }}>
+                  <strong>
+                    {formatKey(key)}
+                    {error.message ? ':' : ''}
+                  </strong>{' '}
+                  {error.message}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
+
       <section className="dynamic-form">
         <div
           className="title cap"
@@ -75,17 +95,19 @@ const DynamicForm = ({ title = '', selectOptions = [], id = '', methods }) => {
             },
           })}
         </div>
+
         <div className="contents">
           {selectOptions
             .filter((item) => {
               if (!item.dependsOn) return true;
               const dependsValue = watch(item.dependsOn);
-              return dependsValue.toString() !== 'false'; // hides field if false
+              return dependsValue.toString() !== 'false';
             })
             .map((item) => {
               const dependsValue = item.dependsOn
                 ? watch(item.dependsOn)
                 : true;
+
               return (
                 <FieldSet
                   key={item.title}

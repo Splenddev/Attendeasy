@@ -1,15 +1,8 @@
 import React from 'react';
 import './ErrorSummary.css';
+import { formatKey } from '../../utils/helpers';
 
 const ErrorSummary = ({ setShowErrors, errors, isOpen }) => {
-  const formatKey = (key) => {
-    return key
-      .split('.')
-      .map((k) => k.replace(/([A-Z])/g, ' $1'))
-      .join(' > ')
-      .replace(/\b\w/g, (c) => c.toUpperCase());
-  };
-
   if (!isOpen) return;
 
   return (

@@ -213,6 +213,26 @@ button {
   width: 100%;
 }
 
+.blink {
+  border: 2px solid #25aff3;
+  animation: borderPulse 1s ease-in-out 4;
+  border-radius: 6px;
+}
+
+@keyframes borderPulse {
+  0%,
+  100% {
+    border-color: #25aff3;
+    box-shadow: 0 0 0 0 rgba(37, 175, 243, 0.5);
+    opacity: 1;
+  }
+  50% {
+    border-color: #ffe4e1;
+    box-shadow: 0 0 8px 3px rgba(255, 228, 225, 0.6);
+    opacity: 0.7;
+  }
+}
+
 @keyframes spin {
   100% {
     transform: rotate(360deg);

@@ -106,6 +106,7 @@ const Attendance = () => {
   const handleFinalize = async (id) => {
     const res = await finalize(id);
     if (res?.success) {
+      fetch(groupId);
       openSuccess({
         title: 'Attendance Finalized',
         message: res.message,

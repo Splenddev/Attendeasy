@@ -1,28 +1,16 @@
 import { FaClock, FaFlagCheckered } from 'react-icons/fa';
 import { MdLocationPin } from 'react-icons/md';
 import { GiTeacher } from 'react-icons/gi';
-import { LuHourglass } from 'react-icons/lu';
-import { parseTime2, parseTimeToday2 } from '../../../utils/helpers';
+import {
+  getAttendanceTimes,
+  parseTime2,
+  parseTimeToday2,
+} from '../../../utils/helpers';
 import ClassStatus from '../../ClassRep/ClassRepDashboard/ClassStatus';
 import button from '../../../components/Button/Button';
 import { useCountdown } from '../../../hooks/useCountdown';
 import { useErrorModal } from '../../../hooks/useErrorModal';
-
-const getDeadlineTime = (att, mode = 'checkIn') => {
-  if (!att?.classTime || !att?.entry) return null;
-
-  const offset = 10; // minutes – we'll later move this to backend config
-
-  if (mode === 'checkIn') {
-    return parseTimeToday2(parseTime2(att.classTime.start, `${offset}M`));
-  }
-
-  if (mode === 'checkOut') {
-    return parseTimeToday2(parseTime2(att.classTime.end, `-${offset}M`));
-  }
-
-  return null;
-};
+import CountdownBox from '../../../components/CountdownBox/CountdownBox';
 
 const getAttendanceBlockReason = ({
   hasCheckedIn,
@@ -82,14 +70,15 @@ const AttendanceCard = ({ att, setIsModal, student }) => {
   const entryStart = parseTime2(att.classTime?.start, att.entry?.start);
   const entryEnd = parseTime2(entryStart, att.entry?.end);
 
-  const deadline = getDeadlineTime(
-    att,
-    !student?.checkIn.time ? 'checkIn' : 'checkOut'
-  );
+  const { checkInOpens, checkInCloses, checkOutOpens, checkOutCloses } =
+    getAttendanceTimes(att);
+
+  const checkInStartCountdown = useCountdown(checkInOpens);
+  const checkInCloseCountdown = useCountdown(checkInCloses);
+  const checkOutOpenCountdown = useCountdown(checkOutOpens);
+  const checkOutCloseCountdown = useCountdown(checkOutCloses);
 
   const { open } = useErrorModal();
-
-  const { minutes, seconds, timeLeft } = useCountdown(deadline);
 
   return (
     <div className="today-attendance-card">
@@ -138,21 +127,33 @@ const AttendanceCard = ({ att, setIsModal, student }) => {
             <h3>{entryEnd}</h3>
           </div>
         </div>
-        {timeLeft > 0 ? (
-          <div className={`countdown-timer `}>
-            <span className="icon">
-              <LuHourglass />
-            </span>
-            <span>
-              Time left until session{' '}
-              {student.checkIn.time ? 'closes' : 'opens'}:{' '}
-              <span className="highlight">
-                {minutes}m {seconds}s
-              </span>
-            </span>
-          </div>
-        ) : (
-          <></>
+
+        {checkInStartCountdown.timeLeft > 0 && (
+          <CountdownBox
+            label="Check-In Opens In"
+            countdown={checkInStartCountdown}
+          />
+        )}
+
+        {checkInCloseCountdown.timeLeft > 0 && (
+          <CountdownBox
+            label="Check-In Closes In"
+            countdown={checkInCloseCountdown}
+          />
+        )}
+
+        {checkOutOpenCountdown.timeLeft > 0 && (
+          <CountdownBox
+            label="Check-Out Opens In"
+            countdown={checkOutOpenCountdown}
+          />
+        )}
+
+        {checkOutCloseCountdown.timeLeft > 0 && (
+          <CountdownBox
+            label="Check-Out Closes In"
+            countdown={checkOutCloseCountdown}
+          />
         )}
       </div>
       {!student ? null : student.checkIn.time && student.checkOut.time ? (

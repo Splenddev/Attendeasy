@@ -280,6 +280,29 @@ export function catenateCredentialsSecure(
   return result.length > maxLength ? result.slice(0, maxLength) : result;
 }
 
+export const formatKey = (key) => {
+  return key
+    .split('.')
+    .map((k) => k.replace(/([A-Z])/g, ' $1'))
+    .join(' > ')
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+};
+
+export const getAttendanceTimes = (att, offset = 10) => {
+  if (!att?.classTime || !att?.entry) return null;
+
+  return {
+    checkInOpens: parseTimeToday2(att.entry.start), // when check-in opens
+    checkInCloses: parseTimeToday2(
+      parseTime2(att.classTime.start, `${offset}M`)
+    ), // when check-in ends (late after this)
+    checkOutOpens: parseTimeToday2(
+      parseTime2(att.classTime.end, `-${offset}M`)
+    ), // when check-out opens
+    checkOutCloses: parseTimeToday2(att.classTime.end), // when check-out ends
+  };
+};
+
 export function parseUserAgent(userAgent) {
   let os = 'Unknown OS';
   let browser = 'Unknown Browser';

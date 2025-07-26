@@ -4,7 +4,7 @@ import {
   FaClock,
   FaRegCalendarCheck,
 } from 'react-icons/fa';
-import { dateFormatter } from '../../../../../utils/helpers';
+import { dateFormatter, parseTime2 } from '../../../../../utils/helpers';
 import { MdLocationPin } from 'react-icons/md';
 import { LuCloudCog, LuZap, LuZapOff } from 'react-icons/lu';
 
@@ -15,6 +15,8 @@ const SessionInfo = ({
     classTime: { start: '', end: '' },
   },
 }) => {
+  const entryStart = parseTime2(session.classTime?.start, session.entry?.start);
+  const entryEnd = parseTime2(entryStart, session.entry?.end);
   return (
     <div className="class-info">
       {[
@@ -54,6 +56,13 @@ const SessionInfo = ({
             session.classTime?.start && session.classTime?.end
               ? `Time: ${session.classTime.start} – ${session.classTime.end}`
               : 'Time: —',
+        },
+        {
+          icon: FaClock,
+          text:
+            session.entry?.start && session.entry?.end
+              ? `Entry Window: ${entryStart} – ${entryEnd}`
+              : 'Entry Window: —',
         },
       ].map(({ icon, text }, i) => {
         const Icon = icon;

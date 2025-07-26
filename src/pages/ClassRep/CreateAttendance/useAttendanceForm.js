@@ -35,13 +35,15 @@ const useAttendanceForm = (groupId, scheduleId) => {
         mode: 'no_code', // 'no_code' | 'code'
       },
 
+      autoEnd: true,
+
       settings: {
         markOnce: true, // Prevent double marking
         allowLateJoiners: true, // Whether students who joined after creation can mark
         lateThreshold: 10, // Minutes after classStart to count as late
         pleaWindow: 3, // Days allowed to submit plea
         proofRequirement: 'none', // 'none' | 'selfie' | 'document'
-        enableCheckInOut: false, // Enable both check-in and check-out
+        enableCheckInOut: true, // Enable both check-in and check-out
         allowEarlyCheckIn: false, // Allow check-in/out before window
         allowLateCheckIn: true, // Allow check-in/out after window
         allowEarlyCheckOut: false, // Separate for check-out

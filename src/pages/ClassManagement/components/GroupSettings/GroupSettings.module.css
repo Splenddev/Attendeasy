@@ -217,8 +217,7 @@
 
 .settingItem {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
   background-color: #ffffff;
   padding: 1.2rem 1.5rem;
   border-radius: 0.75rem;
@@ -229,24 +228,32 @@
 .settingItem:hover {
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
 }
+.settingItem:focus {
+  box-shadow: 0 2px 12px rgba(95, 3, 3, 0.05);
+}
 
 .text {
-  max-width: 75%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
 }
 
 .title {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr;
   align-items: center;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: #111827;
   gap: 0.6rem;
+  svg {
+    font-size: 14px;
+  }
 }
 
 .description {
   font-size: 0.875rem;
-  color: #6b7280;
-  margin-top: 0.25rem;
+  color: var(--gray-400);
   line-height: 1.4;
 }
 

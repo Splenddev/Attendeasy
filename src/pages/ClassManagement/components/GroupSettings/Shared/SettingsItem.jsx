@@ -8,20 +8,23 @@ const SettingItem = ({
   checked,
   onChange,
   disabled,
+  id,
 }) => (
-  <div className={styles.settingItem}>
+  <div
+    className={styles.settingItem}
+    id={id || ''}>
     <div className={styles.text}>
       <h3 className={styles.title}>
         {icon}
         <span>{title}</span>
       </h3>
-      <p className={styles.description}>{description}</p>
+      <ToggleSwitch
+        checked={checked}
+        onChange={onChange}
+        disabled={disabled}
+      />
     </div>
-    <ToggleSwitch
-      checked={checked}
-      onChange={onChange}
-      disabled={disabled}
-    />
+    <p className={styles.description}>{description}</p>
   </div>
 );
 export default SettingItem;

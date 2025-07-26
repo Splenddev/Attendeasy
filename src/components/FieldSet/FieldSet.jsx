@@ -45,7 +45,16 @@ const FieldSet = ({
 
   const dependsValue = dependsOn ? watch(dependsOn) : null;
 
-  const validationRules = required ? { required: `${title} is required` } : {};
+  const validationRules =
+    type === 'toggle' && required
+      ? {
+          validate: (val) =>
+            typeof val === 'boolean' ? true : `${title} is required`,
+        }
+      : required
+      ? { required: `${title} is required` }
+      : {};
+
   const name = fieldName || toCamelCase(title);
 
   const defaultRadius = 100;
@@ -152,15 +161,19 @@ const FieldSet = ({
       {/* Dropdown */}
       {type === 'select' && (
         <select
-          {...register(name, validationRules)}
+          {...register(name, {
+            ...validationRules,
+            setValueAs: (val) => {
+              if (val === 'true') return true;
+              if (val === 'false') return false;
+              return val;
+            },
+          })}
           disabled={
-            disabled || (dependsOn && dependsValue.toString() === 'false')
+            disabled || (dependsOn && dependsValue?.toString() === 'false')
           }
           style={{ fontSize }}>
           <option value="">-- Select an option --</option>
-          {dependsOn && (
-            <option value={dependsValue}>{Boolean(dependsValue)}</option>
-          )}
           {options.map((option, index) => {
             const isObject = typeof option === 'object' && option !== null;
             const value = isObject && 'value' in option ? option.value : option;
@@ -170,7 +183,7 @@ const FieldSet = ({
             return (
               <option
                 key={String(value) + index}
-                value={value}>
+                value={String(value)}>
                 {label}
               </option>
             );
@@ -224,6 +237,26 @@ const FieldSet = ({
               </div>
             );
           })}
+        </div>
+      )}
+
+      {/* Toggle Switch */}
+      {type === 'toggle' && (
+        <div className="toggle-wrapper">
+          <label className="toggle-label">
+            <input
+              type="checkbox"
+              {...register(name, validationRules)}
+              disabled={disabled}
+              className="toggle-input"
+            />
+            <span className="toggle-slider" />
+            <span className="toggle-text">
+              {watch(name)
+                ? input?.toggleTrueText || 'On'
+                : input?.toggleFalseText || 'Off'}
+            </span>
+          </label>
         </div>
       )}
 

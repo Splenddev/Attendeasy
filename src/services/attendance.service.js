@@ -26,7 +26,10 @@ export const getAttendanceById = async (attendanceId) => {
 };
 
 // Mark attendance (student)
-export const markAttendance = async ({ attendanceId, payload }) => {
+export const markAttendance = async ({ attendanceId, data }) => {
+  const time = new Date().getTime();
+  console.log(time);
+  const payload = { ...data, time };
   const res = await api.post(
     `${ATTENDANCE_API_BASE}mark/${attendanceId}`,
     payload

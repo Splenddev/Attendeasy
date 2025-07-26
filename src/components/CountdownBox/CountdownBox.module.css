@@ -1,0 +1,21 @@
+.timer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  background-color: #f2f8ff;
+  color: #1f3a60;
+  border: 1px solid #d0e3ff;
+}
+
+.icon {
+  font-size: 1.2rem;
+  color: #1c64f2;
+}
+
+.highlight {
+  font-weight: 600;
+  color: #ff5e5e;
+}

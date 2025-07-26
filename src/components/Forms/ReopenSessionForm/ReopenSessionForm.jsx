@@ -1,27 +1,97 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaUsers, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import {
+  FaUsers,
+  FaUserCheck,
+  FaUserEdit,
+  FaSignInAlt,
+  FaSignOutAlt,
+  FaRedo, // Reopen / Retry
+  FaClock, // Time-related
+  FaCommentDots,
+  FaCheckCircle,
+  FaTimesCircle,
+  FaExclamationTriangle,
+  FaMapMarkerAlt,
+  FaEnvelopeOpenText,
+} from 'react-icons/fa';
+import { FiLoader } from 'react-icons/fi';
+
 import styles from './ReopenSessionForm.module.css';
 import { NormalButton } from '../../Button/ButtonsList';
 import { useMatricValidator } from '../../../hooks/useMatricValidator';
+import SettingItem from '../../../pages/ClassManagement/components/GroupSettings/Shared/SettingsItem';
+import RadioGroup from '../../../pages/ClassManagement/components/GroupSettings/Shared/RadioGroup';
 
 const OPTIONS = [
   { label: 'All Students', value: 'all' },
   { label: 'Students with Approved Pleas', value: 'approved_pleas' },
-  { label: 'Forgot to Check Out', value: 'forgot_checkout' },
-  { label: 'Not Checked In or Out', value: 'not_marked' },
-  { label: 'Late Check-In Only', value: 'late_checkin' },
   { label: 'Marked but Outside Range', value: 'outside_range' },
   { label: 'Custom Student Matric Numbers', value: 'custom' },
 ];
 
 const ReopenSessionForm = ({ onSubmit, groupId, load }) => {
   const { validate, loading, result } = useMatricValidator();
+
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [matricNumbers, setMatricNumbers] = useState(['']);
   const [durationMinutes, setDurationMinutes] = useState(15);
 
+  const [reopenFeatures, setReopenFeatures] = useState({
+    requireGeo: false,
+    allowFreshCheckIn: true,
+    allowCheckOutForCheckedIn: false,
+    allowEditByRep: true,
+    enableFinalStatusControl: true,
+    notifyScope: 'affected_admin',
+    finalStatusRules: {
+      absentHandling: 'late',
+      partialHandling: 'present',
+    },
+  });
+
+  const isFeatureDisabled = (key) => {
+    const s = reopenFeatures;
+
+    if (!s.allowCheckOutForCheckedIn) {
+      if (key === 'finalStatusRules.partialHandling') return true;
+    }
+
+    // if (s.includes('approved_pleas')) {
+    //   if (key === 'requireReason') return false;
+    // }
+
+    // if (s.includes('outside_range')) {
+    //   if (key === 'requireGeo') return false;
+    // }
+
+    return false;
+  };
+
+  const handleFeatureToggle = (key) => {
+    setReopenFeatures((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
   const isDisabled = selectedOptions.includes('all');
+
+  const handleRuleChange = (ruleKey, option) => {
+    if (ruleKey === 'notifyScope') {
+      setReopenFeatures((prev) => ({
+        ...prev,
+        notifyScope: option,
+      }));
+    } else
+      setReopenFeatures((prev) => ({
+        ...prev,
+        finalStatusRules: {
+          ...prev.finalStatusRules,
+          [ruleKey]: option,
+        },
+      }));
+  };
 
   const handleChange = (value) => {
     if (value === 'all') {
@@ -66,9 +136,17 @@ const ReopenSessionForm = ({ onSubmit, groupId, load }) => {
     onSubmit({
       allowedOptions: selectedOptions,
       customMatricNumbers: cleanedMatricNumbers,
-      duration: formattedDuration, // changed from durationMinutes
+      duration: formattedDuration,
+      reopenFeatures,
     });
   };
+
+  const InfoBox = ({ text, children }) => (
+    <div className={styles.infoBox}>
+      <FaExclamationTriangle className={styles.infoIcon} />
+      {children ? <div>{children}</div> : <span>{text}</span>}
+    </div>
+  );
 
   return (
     <motion.form
@@ -134,60 +212,72 @@ const ReopenSessionForm = ({ onSubmit, groupId, load }) => {
               )}
             </div>
           ))}
+
           <NormalButton
             element={'validate inputs'}
             disabled={loading}
             func={async () => {
-              await validate({
-                groupId,
-                matricNumbers: cleanedMatricNumbers,
-              });
+              await validate({ groupId, matricNumbers: cleanedMatricNumbers });
             }}
           />
+
           {result && (
             <motion.div
               className={styles.resultBox}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}>
-              <h3 className={styles.title}>Validation Results</h3>
+              <div className={styles.resultsHeader}>
+                <h4 className={styles.resultTitle}>Validation Results</h4>
+                {!result?.isValid && (
+                  <span className={styles.badNote}>
+                    <FaTimesCircle className={styles.iconInvalid} />
+                    Some matric numbers are invalid
+                  </span>
+                )}
+              </div>
 
-              <div className={styles.resultsContainer}>
+              <div
+                className={`${styles.resultsContainer} ${
+                  result?.valid.length && result?.invalid.length
+                    ? styles.dual
+                    : ''
+                }`}>
                 {result?.valid.length > 0 && (
-                  <div className={styles.card}>
+                  <div className={styles.cardCompact}>
                     <div className={styles.header}>
                       <FaCheckCircle className={styles.iconValid} />
-                      <h4>Valid ({result.valid.length})</h4>
+                      <h5>Valid ({result.valid.length})</h5>
                     </div>
-                    <ul className={styles.matricList}>
+                    <ul className={styles.matricChipList}>
                       {result.valid.map((matric) => (
-                        <li key={matric}>{matric}</li>
+                        <li
+                          key={matric}
+                          className={styles.validChip}>
+                          {matric}
+                        </li>
                       ))}
                     </ul>
                   </div>
                 )}
-
                 {result?.invalid.length > 0 && (
-                  <div className={styles.card}>
+                  <div className={styles.cardCompact}>
                     <div className={styles.header}>
                       <FaTimesCircle className={styles.iconInvalid} />
-                      <h4>Invalid ({result.invalid.length})</h4>
+                      <h5>Invalid ({result.invalid.length})</h5>
                     </div>
-                    <ul className={styles.matricList}>
+                    <ul className={styles.matricChipList}>
                       {result.invalid.map((matric) => (
-                        <li key={matric}>{matric}</li>
+                        <li
+                          key={matric}
+                          className={styles.invalidChip}>
+                          {matric}
+                        </li>
                       ))}
                     </ul>
                   </div>
                 )}
               </div>
-
-              {!result?.isValid && (
-                <div className={styles.note}>
-                  <FaTimesCircle className={styles.iconInvalid} />
-                  Some matric numbers are invalid. Please fix and resubmit.
-                </div>
-              )}
             </motion.div>
           )}
         </motion.div>
@@ -208,12 +298,167 @@ const ReopenSessionForm = ({ onSubmit, groupId, load }) => {
         <span className={styles.hint}>Max: 120 mins</span>
       </div>
 
+      {/* Feature Toggles */}
+      <div className={styles.settingsSection}>
+        <h2 className={styles.sectionTitle}>Reopened Session Features</h2>
+
+        <SettingItem
+          icon={<FaMapMarkerAlt />}
+          title="Require Location (Geo)"
+          description="Ensure students are within allowed location to mark attendance during reopen."
+          checked={reopenFeatures.requireGeo}
+          onChange={() => handleFeatureToggle('requireGeo')}
+        />
+        <InfoBox text="Students must be within range (e.g., classroom or campus) to mark during reopened sessions." />
+
+        <SettingItem
+          icon={<FaSignInAlt />}
+          title={
+            isFeatureDisabled('allowFreshCheckIn')
+              ? 'Disabled due to "Forgot Checkout" mode'
+              : 'Allow Fresh Check-In'
+          }
+          disabled={isFeatureDisabled('allowFreshCheckIn')}
+          description="Enable students who missed check-in to mark attendance (check in and check out) now."
+          checked={reopenFeatures.allowFreshCheckIn}
+          onChange={() => handleFeatureToggle('allowFreshCheckIn')}
+        />
+        <InfoBox text="Students who check in during a reopened session will be marked as Present or Late, depending on the time of entry. Check-out will be required too." />
+
+        <SettingItem
+          icon={<FaSignOutAlt />}
+          id={'finalStatusRules.partialHandling'}
+          title="Allow Check-Out for Checked-In Students"
+          description="Enable students to mark their check-out if they forgot earlier."
+          checked={reopenFeatures.allowCheckOutForCheckedIn}
+          onChange={() => handleFeatureToggle('allowCheckOutForCheckedIn')}
+        />
+        <InfoBox text="Students who already check in before session closed can check out, but there final status will be marked as late." />
+
+        <SettingItem
+          icon={<FaUserEdit />}
+          title="Allow Manual Edits by Rep"
+          description="Permit class rep (assistant reps) to manually mark or fix records."
+          checked={reopenFeatures.allowEditByRep}
+          onChange={() => handleFeatureToggle('allowEditByRep')}
+        />
+        <InfoBox text="You’ll be able to mark entries directly in the dashboard." />
+
+        <SettingItem
+          icon={<FaUserCheck />}
+          title="Final Status Control"
+          description="Customize how student status is finalized during reopen."
+          checked={reopenFeatures.enableFinalStatusControl}
+          onChange={() => handleFeatureToggle('enableFinalStatusControl')}
+        />
+        <InfoBox>
+          <p>
+            <strong>Reopened Attendance Rules:</strong>
+          </p>
+          <ul>
+            <li>
+              ✅ <strong>Only actively marking students</strong> will have their{' '}
+              finalStatus updated.
+            </li>
+            <li>
+              ❌ Students who do nothing during reopen are marked{' '}
+              <code>absent</code>, even if they previously checked in.
+            </li>
+            <li>
+              ⚙️ Final status behavior is controlled by absent marked as{' '}
+              <span> {reopenFeatures.finalStatusRules.absentHandling}</span> and
+              partial marked as{' '}
+              <span>{reopenFeatures.finalStatusRules.partialHandling}</span>.
+            </li>
+          </ul>
+        </InfoBox>
+        {reopenFeatures.enableFinalStatusControl && (
+          <div className={styles.finalStatusRules}>
+            <label>Absent Students should be marked as:</label>
+            <select
+              value={
+                reopenFeatures.finalStatusRules.absentHandling || 'allow_all'
+              }
+              onChange={(e) =>
+                handleRuleChange('absentHandling', e.target.value)
+              }>
+              <option value="allow_all">Present, Late, or Stay Absent</option>
+              <option value="late_only">Late</option>
+              <option value="still_absent">Absent</option>
+            </select>
+
+            <label>Student with Check-In (No Checkout) :</label>
+            <select
+              value={reopenFeatures.finalStatusRules.partialHandling}
+              onChange={(e) =>
+                handleRuleChange('partialHandling', e.target.value)
+              }
+              disabled={isFeatureDisabled('finalStatusRules.partialHandling')}>
+              <option value="present">Mark Fully Present</option>
+              <option value="partial">Mark as Partial</option>
+              <option value="require_checkout">
+                Require Checkout (with geo tracking)
+              </option>
+            </select>
+            {isFeatureDisabled('finalStatusRules.partialHandling') ? (
+              <InfoBox>
+                <strong>Disabled because </strong>
+                <u
+                  className={styles.underline}
+                  onClick={() => {
+                    const el = document.getElementById(
+                      'finalStatusRules.partialHandling'
+                    );
+                    if (el) {
+                      el.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start',
+                      });
+                      el.classList.add('blink');
+                      setTimeout(() => el.classList.remove('blink'), 3200);
+                    }
+                  }}>
+                  allowCheckOutForCheckedIn
+                </u>{' '}
+                is deactivated
+              </InfoBox>
+            ) : (
+              ''
+            )}
+          </div>
+        )}
+
+        <SettingItem
+          icon={<FaEnvelopeOpenText />}
+          title="Notification Scope"
+          description="Choose who receives notifications when marking happens."
+          checked={!!reopenFeatures.notifyScope}
+          onChange={() => handleFeatureToggle('notifyScope')}
+        />
+        {reopenFeatures.notifyScope && (
+          <RadioGroup
+            name="notifyScope"
+            value={reopenFeatures.notifyScope}
+            onChange={(val) => handleRuleChange('notifyScope', val)}
+            options={[
+              {
+                value: 'affected_admin',
+                label: 'Only affected students and admins/reps',
+              },
+              { value: 'everyone', label: 'Everyone' },
+              { value: 'admins', label: 'Only Class Reps/Admins' },
+            ]}
+          />
+        )}
+      </div>
+
       <motion.button
         whileTap={{ scale: 0.95 }}
         type="submit"
         disabled={load}
         className={styles.submitBtn}>
-        <FaCheckCircle className={styles.iconBtn} /> Reopen Session
+        <FaCheckCircle className={styles.iconBtn} />{' '}
+        {load ? <FiLoader className="spin" /> : 'Reopen Session'}
       </motion.button>
     </motion.form>
   );
