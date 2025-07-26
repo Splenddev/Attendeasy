@@ -54,7 +54,7 @@ export const markGeoEntry = async (
     {
       method: 'geo',
       mode,
-      time: new Date().getTime(),
+      time: new Date().toISOString(),
       location: {
         latitude: userLocation.lat,
         longitude: userLocation.lng,
