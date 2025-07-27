@@ -26,10 +26,7 @@ export const getAttendanceById = async (attendanceId) => {
 };
 
 // Mark attendance (student)
-export const markAttendance = async ({ attendanceId, data }) => {
-  const time = new Date().getTime();
-  console.log(time);
-  const payload = { ...data, time };
+export const markAttendance = async ({ attendanceId, payload }) => {
   const res = await api.post(
     `${ATTENDANCE_API_BASE}mark/${attendanceId}`,
     payload
@@ -57,7 +54,7 @@ export const markGeoEntry = async (
     {
       method: 'geo',
       mode,
-      time: new Date(),
+      time: new Date().toISOString(),
       location: {
         latitude: userLocation.lat,
         longitude: userLocation.lng,
