@@ -169,11 +169,38 @@
   background: var(--main-color);
 }
 
-.empty {
-  padding: 2rem;
+.empty_wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
   text-align: center;
-  font-size: 14px;
-  color: #777;
+  background: #f9fbfc;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.illustration {
+  max-width: 240px;
+  margin-bottom: 1.5rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+.empty {
+  font-size: 0.8rem;
+  color: #444;
+  margin-bottom: 1rem;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
 }
 
 .more {

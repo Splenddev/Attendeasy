@@ -81,23 +81,41 @@ const GroupManagementPage = () => {
 
   if (!group)
     return (
-      <div className="group-not-found">
-        <img
-          src="https://undraw.co/api/illustrations/b45c5ed4-0f79-421a-8c2f-cb6ed06e5d72"
-          alt="Group Not Found"
-          className="group-not-found-image"
-        />
-        <h2>Oops! Group not found</h2>
-        <p>
-          We couldn’t load the group data. It may not exist or something went
-          wrong while fetching it.
-        </p>
-        <button
-          onClick={fetchGroup}
-          className="refresh-btn">
-          <FiRefreshCw style={{ marginRight: '8px' }} />
-          Retry
-        </button>
+      <div className="group-not-found center">
+        <div className="group-not-found-card">
+          <img
+            src="/illustrations/group-not-found.jpg"
+            alt="Group Not Found"
+            className="group-not-found-image"
+          />
+
+          <h2 className="group-not-found-title">
+            We couldn’t retrieve your group
+          </h2>
+
+          <p className="group-not-found-description">
+            Something went wrong while trying to load this group’s information.
+            Possible reasons include:
+          </p>
+
+          <ul className="group-not-found-list">
+            <li>Temporary network issues or server downtime</li>
+            <li>The group no longer exists or was removed</li>
+            <li>Connectivity issues on your device</li>
+          </ul>
+
+          <p className="group-not-found-footer">
+            Please check your internet connection and try again. If the issue
+            persists, contact your class representative.
+          </p>
+
+          <button
+            onClick={fetchGroup}
+            className="refresh-btn">
+            <FiRefreshCw style={{ marginRight: '8px' }} />
+            Retry
+          </button>
+        </div>
       </div>
     );
 

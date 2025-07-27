@@ -31,11 +31,13 @@ const NotificationsPanel = ({ onClose, user, openState }) => {
     markNotificationAsRead,
     removeNotification,
     removeAllNotifications,
+    error,
   } = useNotification();
 
   const hasUnread = notifications.some((n) => n.unread);
 
   const { fetch, markOne, markAll, deleteOne, deleteAll } = loading;
+  const { fetch: fetchError } = error;
 
   const [openNoteId, setOpenNoteId] = useState(null);
 
@@ -109,12 +111,29 @@ const NotificationsPanel = ({ onClose, user, openState }) => {
           <p className={styles.empty}>Loading notifications...</p>
         ) : notifications.length === 0 ? (
           <div className={styles.empty_wrap}>
-            <p className={styles.empty}>No notifications found.</p>
-            {button.multiple({
-              icon: FiRefreshCcw,
-              element: 'Retry',
-              func: () => fetchNotifications(),
-            })}
+            <img
+              src={
+                fetchError
+                  ? 'https://illustrations.popsy.co/gray/error-message.svg'
+                  : 'https://illustrations.popsy.co/gray/empty-folder.svg'
+              }
+              alt="Empty State"
+              className={styles.illustration}
+              onError={(e) => (e.target.style.display = 'none')}
+            />
+
+            <p className={styles.empty}>
+              {fetchError
+                ? 'We couldn’t load your notifications.'
+                : 'You have no notifications at the moment.'}
+            </p>
+
+            {fetchError &&
+              button.multiple({
+                icon: FiRefreshCcw,
+                element: 'Retry',
+                func: fetchNotifications,
+              })}
           </div>
         ) : (
           <AnimatePresence>

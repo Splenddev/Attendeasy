@@ -5,50 +5,80 @@
 }
 
 .group-not-found {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 2rem;
+  background-color: #f9fafb;
+  min-height: 100vh;
+}
+
+.group-not-found-card {
+  background: #fff;
+  max-width: 640px;
+  padding: 2.5rem 2rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
   text-align: center;
-  padding: 60px 24px;
-  max-width: 500px;
-  margin: 60px auto;
-  background: #ffffff;
-  border-radius: 14px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-  animation: fadeIn 0.4s ease-in-out;
+  transition: all 0.3s ease;
 }
 
 .group-not-found-image {
-  max-width: 220px;
-  margin-bottom: 24px;
+  max-width: 260px;
+  margin: 0 auto 0;
 }
 
-.group-not-found h2 {
-  font-size: 22px;
-  color: #222;
-  margin-bottom: 12px;
+.group-not-found-title {
+  font-size: 1.75rem;
+  color: #1e293b;
+  margin-bottom: 1rem;
+  font-weight: 600;
 }
 
-.group-not-found p {
-  font-size: 15px;
-  color: #666;
-  margin-bottom: 28px;
+.group-not-found-description {
+  font-size: 0.98rem;
+  color: #4b5563;
+  margin-bottom: 1rem;
+}
+
+.group-not-found-list {
+  text-align: left;
+  margin: 0 auto 1.5rem;
+  padding-left: 1.2rem;
+  color: #374151;
+  font-size: 0.95rem;
   line-height: 1.6;
 }
 
+.group-not-found-list li {
+  list-style: disc;
+  margin-bottom: 0.5rem;
+}
+
+.group-not-found-footer {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+}
+
 .refresh-btn {
-  background-color: #25aff3;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  font-size: 15px;
-  font-weight: 500;
-  border-radius: 8px;
-  cursor: pointer;
   display: inline-flex;
   align-items: center;
-  transition: background-color 0.2s ease;
+  gap: 0.5rem;
+  background-color: #25aff3;
+  color: #fff;
+  padding: 0.65rem 1.4rem;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(37, 175, 243, 0.3);
+  transition: background 0.3s ease;
 }
 
 .refresh-btn:hover {
-  background-color: #1994d6;
+  background-color: #1998da;
 }
 
 @keyframes fadeIn {

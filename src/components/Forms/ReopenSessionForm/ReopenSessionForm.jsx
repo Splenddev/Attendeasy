@@ -26,7 +26,6 @@ import RadioGroup from '../../../pages/ClassManagement/components/GroupSettings/
 const OPTIONS = [
   { label: 'All Students', value: 'all' },
   { label: 'Students with Approved Pleas', value: 'approved_pleas' },
-  { label: 'Marked but Outside Range', value: 'outside_range' },
   { label: 'Custom Student Matric Numbers', value: 'custom' },
 ];
 
@@ -39,34 +38,11 @@ const ReopenSessionForm = ({ onSubmit, groupId, load }) => {
 
   const [reopenFeatures, setReopenFeatures] = useState({
     requireGeo: false,
-    allowFreshCheckIn: true,
     allowCheckOutForCheckedIn: false,
-    allowEditByRep: true,
+    allowEditByRep: false,
     enableFinalStatusControl: true,
     notifyScope: 'affected_admin',
-    finalStatusRules: {
-      absentHandling: 'late',
-      partialHandling: 'present',
-    },
   });
-
-  const isFeatureDisabled = (key) => {
-    const s = reopenFeatures;
-
-    if (!s.allowCheckOutForCheckedIn) {
-      if (key === 'finalStatusRules.partialHandling') return true;
-    }
-
-    // if (s.includes('approved_pleas')) {
-    //   if (key === 'requireReason') return false;
-    // }
-
-    // if (s.includes('outside_range')) {
-    //   if (key === 'requireGeo') return false;
-    // }
-
-    return false;
-  };
 
   const handleFeatureToggle = (key) => {
     setReopenFeatures((prev) => ({
@@ -312,20 +288,6 @@ const ReopenSessionForm = ({ onSubmit, groupId, load }) => {
         <InfoBox text="Students must be within range (e.g., classroom or campus) to mark during reopened sessions." />
 
         <SettingItem
-          icon={<FaSignInAlt />}
-          title={
-            isFeatureDisabled('allowFreshCheckIn')
-              ? 'Disabled due to "Forgot Checkout" mode'
-              : 'Allow Fresh Check-In'
-          }
-          disabled={isFeatureDisabled('allowFreshCheckIn')}
-          description="Enable students who missed check-in to mark attendance (check in and check out) now."
-          checked={reopenFeatures.allowFreshCheckIn}
-          onChange={() => handleFeatureToggle('allowFreshCheckIn')}
-        />
-        <InfoBox text="Students who check in during a reopened session will be marked as Present or Late, depending on the time of entry. Check-out will be required too." />
-
-        <SettingItem
           icon={<FaSignOutAlt />}
           id={'finalStatusRules.partialHandling'}
           title="Allow Check-Out for Checked-In Students"
@@ -343,90 +305,6 @@ const ReopenSessionForm = ({ onSubmit, groupId, load }) => {
           onChange={() => handleFeatureToggle('allowEditByRep')}
         />
         <InfoBox text="You’ll be able to mark entries directly in the dashboard." />
-
-        <SettingItem
-          icon={<FaUserCheck />}
-          title="Final Status Control"
-          description="Customize how student status is finalized during reopen."
-          checked={reopenFeatures.enableFinalStatusControl}
-          onChange={() => handleFeatureToggle('enableFinalStatusControl')}
-        />
-        <InfoBox>
-          <p>
-            <strong>Reopened Attendance Rules:</strong>
-          </p>
-          <ul>
-            <li>
-              ✅ <strong>Only actively marking students</strong> will have their{' '}
-              finalStatus updated.
-            </li>
-            <li>
-              ❌ Students who do nothing during reopen are marked{' '}
-              <code>absent</code>, even if they previously checked in.
-            </li>
-            <li>
-              ⚙️ Final status behavior is controlled by absent marked as{' '}
-              <span> {reopenFeatures.finalStatusRules.absentHandling}</span> and
-              partial marked as{' '}
-              <span>{reopenFeatures.finalStatusRules.partialHandling}</span>.
-            </li>
-          </ul>
-        </InfoBox>
-        {reopenFeatures.enableFinalStatusControl && (
-          <div className={styles.finalStatusRules}>
-            <label>Absent Students should be marked as:</label>
-            <select
-              value={
-                reopenFeatures.finalStatusRules.absentHandling || 'allow_all'
-              }
-              onChange={(e) =>
-                handleRuleChange('absentHandling', e.target.value)
-              }>
-              <option value="allow_all">Present, Late, or Stay Absent</option>
-              <option value="late_only">Late</option>
-              <option value="still_absent">Absent</option>
-            </select>
-
-            <label>Student with Check-In (No Checkout) :</label>
-            <select
-              value={reopenFeatures.finalStatusRules.partialHandling}
-              onChange={(e) =>
-                handleRuleChange('partialHandling', e.target.value)
-              }
-              disabled={isFeatureDisabled('finalStatusRules.partialHandling')}>
-              <option value="present">Mark Fully Present</option>
-              <option value="partial">Mark as Partial</option>
-              <option value="require_checkout">
-                Require Checkout (with geo tracking)
-              </option>
-            </select>
-            {isFeatureDisabled('finalStatusRules.partialHandling') ? (
-              <InfoBox>
-                <strong>Disabled because </strong>
-                <u
-                  className={styles.underline}
-                  onClick={() => {
-                    const el = document.getElementById(
-                      'finalStatusRules.partialHandling'
-                    );
-                    if (el) {
-                      el.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start',
-                      });
-                      el.classList.add('blink');
-                      setTimeout(() => el.classList.remove('blink'), 3200);
-                    }
-                  }}>
-                  allowCheckOutForCheckedIn
-                </u>{' '}
-                is deactivated
-              </InfoBox>
-            ) : (
-              ''
-            )}
-          </div>
-        )}
 
         <SettingItem
           icon={<FaEnvelopeOpenText />}

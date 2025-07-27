@@ -20,6 +20,13 @@ export const NotificationProvider = ({ children }) => {
     deleteOne: false,
     deleteAll: false,
   });
+  const [error, setError] = useState({
+    fetch: null,
+    markOne: null,
+    markAll: null,
+    deleteOne: null,
+    deleteAll: null,
+  });
 
   // ✅ Fetch user notifications
   const fetchNotifications = async ({ silent = false } = {}) => {
@@ -29,9 +36,11 @@ export const NotificationProvider = ({ children }) => {
     try {
       const res = await getMyNotifications();
       setNotifications(res.data || []);
+      setError((l) => ({ ...l, fetch: null }));
     } catch (err) {
       console.error('🔴 Failed to load notifications:', err);
       if (!silent) toast.error('Could not load notifications.');
+      setError((l) => ({ ...l, fetch: err }));
     } finally {
       if (!silent) setLoading((l) => ({ ...l, fetch: false }));
     }
@@ -140,6 +149,7 @@ export const NotificationProvider = ({ children }) => {
         markNotificationAsRead,
         removeNotification,
         removeAllNotifications,
+        error,
       }}>
       {children}
     </NotificationContext.Provider>
