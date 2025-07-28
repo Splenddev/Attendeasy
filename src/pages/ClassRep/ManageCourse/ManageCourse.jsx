@@ -1,7 +1,6 @@
 // ManageCourse.jsx
 import React, { useState } from 'react';
 import styles from './ManageCourse.module.css';
-// import styles from '../../Auth/Register/CourseAdder/CourseAdder.module.css';
 import { FaPlus, FaTrashAlt, FaEdit, FaSave, FaTimes } from 'react-icons/fa';
 import stringSimilarity from 'string-similarity';
 import { toast } from 'react-toastify';

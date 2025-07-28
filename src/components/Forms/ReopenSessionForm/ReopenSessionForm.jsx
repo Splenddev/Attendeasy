@@ -2,13 +2,8 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   FaUsers,
-  FaUserCheck,
   FaUserEdit,
-  FaSignInAlt,
   FaSignOutAlt,
-  FaRedo, // Reopen / Retry
-  FaClock, // Time-related
-  FaCommentDots,
   FaCheckCircle,
   FaTimesCircle,
   FaExclamationTriangle,

@@ -1,6 +1,7 @@
 .page {
   background: #fff;
-  padding: 1rem;
+  padding: 1rem 1.4rem;
+  border-radius: 1rem;
 }
 
 .emptyState {
@@ -10,7 +11,7 @@
 }
 
 .illustration {
-  max-width: 250px;
+  max-width: 200px;
   margin-bottom: 1rem;
 }
 

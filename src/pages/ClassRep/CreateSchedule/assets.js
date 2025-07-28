@@ -154,7 +154,7 @@ export const createScheduleFormDataAssets = [
         name: 'repeatPattern',
         type: 'select',
         options: ['weekly', 'bi-weekly', 'monthly'],
-        required: false,
+        required: true,
       },
       {
         title: 'Reminder Before Class',
@@ -169,7 +169,7 @@ export const createScheduleFormDataAssets = [
         required: false,
       },
       {
-        title: 'Allow Attendance Marking',
+        title: 'Allow Attendance Auto Creation',
         name: 'allowAttendanceMarking',
         type: 'select',
         options: ['Yes', 'No'],
@@ -221,65 +221,6 @@ export const createScheduleFormDataAssets = [
   },
 ];
 
-export const others = {
-  id: 6,
-  title: 'Attendance Settings',
-  selectOptions: [
-    {
-      title: 'Attendance Type',
-      type: 'select',
-      options: ['Strict ( P / A only )', 'Detailed ( P / A / L )'],
-      required: true,
-    },
-    {
-      title: 'Attendance Mode',
-      type: 'select',
-      options: ['No Code', 'Code'],
-      required: true,
-    },
-    {
-      title: 'Entry Start Time',
-      type: 'select',
-      options: [
-        { text: '10 min after class start', value: '0H10M' },
-        { text: '30 min after class start', value: '0H30M' },
-        { text: '1 hr after class start', value: '1H0M' },
-        { text: '1 hr 30 min after class start', value: '1H30M' },
-        { text: 'Manual' },
-      ],
-      required: true,
-    },
-    {
-      title: 'Entry End Time',
-      type: 'select',
-      options: [
-        { text: '10 min after entry start', value: '0H10M' },
-        { text: '30 min after entry start', value: '0H30M' },
-        { text: '1 hr after entry start', value: '1H0M' },
-        { text: '1 hr 30 min after entry start', value: '1H30M' },
-        { text: 'Manual' },
-      ],
-      required: true,
-    },
-    {
-      title: 'Excusable Options',
-      type: 'choice',
-      choices: [
-        'C - Conference / Official Duty',
-        'E - Excused',
-        'F - Family Emergency',
-        'M - Medical',
-        'O - Others (Speciify)',
-        'P - Personal Reasons',
-        'R - Religious Observance',
-        'S - Suspension',
-        'T - Travel',
-      ],
-      choiceMode: 'multiple',
-      required: false,
-    },
-  ],
-};
 export const userCourses = [
   {
     courseCode: 'BCH301',

@@ -81,15 +81,17 @@
 
 /* Choices */
 .choices {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   font-size: 14px;
   gap: 5px;
   padding: 5px 0;
 }
 
 .choice label {
+  width: 100%;
   display: flex;
+  min-width: 100px;
   align-items: center;
   gap: 10px;
   padding: 10px;

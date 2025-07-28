@@ -4,7 +4,6 @@ import {
   MdError,
   MdOutlineCheckCircleOutline,
 } from 'react-icons/md';
-import { useFormContext } from 'react-hook-form';
 import {
   catenateCredentialsSecure,
   onChoiceChange,
@@ -23,7 +22,7 @@ const FieldSet = ({
   type,
   input = { type: '', placeholder: '' },
   choices = [],
-  choiceMode = 'multiple',
+  choiceMode,
   required = false,
   disabled = false,
   fontSize = '14px',
@@ -31,7 +30,6 @@ const FieldSet = ({
   readOnly = false,
   catenate = false,
   mapToValue = null,
-  enabled = false,
   methods = {},
   dependsOn = null,
 }) => {
@@ -225,8 +223,8 @@ const FieldSet = ({
                     onChoiceChange(
                       choice,
                       checkedChoices,
-                      choiceMode,
                       name,
+                      choiceMode,
                       setValue,
                       getValues,
                       mapToValue

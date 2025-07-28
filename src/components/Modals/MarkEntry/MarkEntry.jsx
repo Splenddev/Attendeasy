@@ -70,12 +70,12 @@ function GoToMyLocationButton({ onLocationFound }) {
     </button>
   );
 }
-// const maxDistance = 10000;
+const maxDistance = 100000;
 
 const MarkEntry = ({
   onClose,
   visible,
-  maxDistance = 10,
+  // maxDistance = 10,
   attendanceId,
   mode,
   classLocation = { lat: 0, lng: 0 },

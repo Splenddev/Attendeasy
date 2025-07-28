@@ -25,7 +25,8 @@ const ConfirmModal = ({
           </button>
           <button
             className={styles.confirm}
-            onClick={onConfirm}>
+            onClick={onConfirm}
+            disabled={loader}>
             {loader ? (
               <Spinner
                 size="1.2rem"

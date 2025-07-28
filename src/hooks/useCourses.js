@@ -25,9 +25,10 @@ const useCourses = (autoFetch = true) => {
 
   const addCourse = async (course) => {
     try {
-      const { course: newCourse } = await createCourse(course);
-      setCourses((prev) => [...prev, newCourse]);
+      const res = await createCourse(course);
+      setCourses((prev) => [...prev, res.course]);
       toast.success('Course added.');
+      return res;
     } catch (error) {
       toast.error(error.message || 'Failed to add course.');
     }
