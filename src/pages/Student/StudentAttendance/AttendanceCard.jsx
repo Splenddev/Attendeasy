@@ -138,7 +138,7 @@ const AttendanceCard = ({ att, setIsModal, student }) => {
           </div>
         </div>
 
-        {student.checkIn.time && student.checkOut.time ? (
+        {!student ? null : student.checkIn.time && student.checkOut.time ? (
           <></>
         ) : (
           <div className="attendance-card-countdown">
