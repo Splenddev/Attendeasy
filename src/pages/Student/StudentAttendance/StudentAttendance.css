@@ -363,8 +363,6 @@
   }
 
   .entry p {
-    display: flex;
-    align-items: center;
     font-weight: 600;
     color: var(--gray-600);
     margin-bottom: 0.25rem;
