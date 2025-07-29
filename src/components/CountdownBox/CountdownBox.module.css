@@ -15,6 +15,11 @@
   color: #1c64f2;
 }
 
+.label {
+  display: flex;
+  flex-direction: column;
+}
+
 .highlight {
   font-weight: 600;
   color: #ff5e5e;

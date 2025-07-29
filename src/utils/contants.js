@@ -285,6 +285,26 @@ export const formDataAssets = [
         required: true,
       },
       {
+        name: 'settings.checkInClose',
+        title: 'When check-in closes',
+        type: 'select',
+        options: [
+          { text: '10 minutes after start', value: '0H10M' },
+          { text: '20 minutes after start', value: '0H20M' },
+          { text: '30 minutes after start', value: '0H30M' },
+        ],
+      },
+      {
+        name: 'settings.lateThreshold',
+        title: 'Students are recorded late after',
+        type: 'select',
+        options: [
+          { text: '10 minutes from class start', value: 10 },
+          { text: '20 minutes from class start', value: 20 },
+          { text: '30 minutes from class start', value: 30 },
+        ],
+      },
+      {
         name: 'settings.allowLateJoiners',
         title: 'Allow Late Joiners to Mark',
         type: 'toggle',

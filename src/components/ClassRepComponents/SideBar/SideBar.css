@@ -51,12 +51,13 @@
 }
 .c-sidebar-header {
   display: flex;
-  /* align-items: center; */
   justify-content: center;
   padding-top: 10px;
 }
 .c-sidebar-header p {
-  font-size: 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: var(--font-cinzel);
 }
 .c-sidebar-header img {
   width: 35px;

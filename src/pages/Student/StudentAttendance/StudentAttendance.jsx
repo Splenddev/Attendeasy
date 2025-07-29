@@ -29,6 +29,8 @@ const StudentAttendance = () => {
     location: { lat: 0, lng: 0 },
   });
 
+  const [statusPreference, setStatusPreference] = useState('all');
+
   const groupId = user.group;
   const userIdRef = useRef(user._id);
 
@@ -88,15 +90,19 @@ const StudentAttendance = () => {
     return data.filter((att) => {
       if (!att.classDate) return false;
 
-      const attDate = new Date(att.classDate);
-      attDate.setHours(0, 0, 0, 0);
+      const attDate = new Date(att.classDate).toDateString();
+      const todayDate = today.toDateString();
 
-      const isToday = attDate.getTime() === today.getTime();
-      const isRelevantStatus = ['active', 'upcoming'].includes(att.status);
+      const isToday = attDate === todayDate;
+      if (!isToday) return false;
 
-      return isToday && isRelevantStatus;
+      if (statusPreference === 'all') {
+        return true;
+      }
+
+      return att.status === statusPreference;
     });
-  }, [data, today]);
+  }, [data, today, statusPreference]);
 
   const summary = {
     onTime: 80,
@@ -112,6 +118,8 @@ const StudentAttendance = () => {
         user={user}
         date={dateFormatter(null)}
         data={summary}
+        att={data}
+        fetching={loading}
       />
 
       {smartTip && <p className="smart-tip">{smartTip}</p>}
@@ -121,6 +129,9 @@ const StudentAttendance = () => {
         markEntryModal={markEntryModal}
         setMarkEntryModal={setMarkEntryModal}
         user={user}
+        loading={loading}
+        preference={statusPreference}
+        setPreference={setStatusPreference}
       />
 
       <AttendanceCharts summary={summary} />

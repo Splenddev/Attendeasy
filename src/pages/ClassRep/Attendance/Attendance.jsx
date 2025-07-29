@@ -17,7 +17,6 @@ import { FaList, FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { DateFilter } from '../../../components';
 import button from '../../../components/Button/Button';
-import { timeFormatter } from '../../../utils/helpers';
 import SessionInfo from './components/SessionInfo/SessionInfo';
 import Students from './components/Students/Students';
 import {
@@ -35,6 +34,7 @@ import useAttendanceSocket from '../../../hooks/useAttendanceSocket';
 import { toast } from 'react-toastify';
 import PopupBox from '../../../components/Modals/PopupBox/PopupBox';
 import { ReopenSessionForm } from '../../../components/Forms';
+import { ConfirmModal } from '../../../components/Modals';
 
 const Attendance = () => {
   const { user } = useAuth();
@@ -53,6 +53,8 @@ const Attendance = () => {
   const { reopen, opening } = useReopenAttendance();
   const { open: openSuccess } = useSuccessModal();
   const [openPopup, setOpenPopup] = useState(null);
+  const [isFinalizeOpen, setIsFinalizeOpen] = useState(null);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(null);
 
   useEffect(() => {
     if (groupId) fetch(groupId);
@@ -107,6 +109,7 @@ const Attendance = () => {
     const res = await finalize(id);
     if (res?.success) {
       fetch(groupId);
+      setIsFinalizeOpen(null);
       openSuccess({
         title: 'Attendance Finalized',
         message: res.message,
@@ -124,7 +127,10 @@ const Attendance = () => {
 
   const handleDelete = async (id) => {
     const res = await deleteAttendance(id);
-    if (res?.success) fetch(groupId);
+    if (res?.success) {
+      fetch(groupId);
+      setIsDeleteOpen(null);
+    }
   };
 
   const [filteredAttendance, setFilteredAttendance] = useState(attendanceList);
@@ -139,7 +145,7 @@ const Attendance = () => {
   );
 
   const mapLetterToStatus = {
-    P: ['on_time'],
+    P: ['on_time', 'present'],
     L: ['late', 'left_early'],
     A: ['absent', 'excused'],
     X: ['partial'],
@@ -330,7 +336,7 @@ const Attendance = () => {
                         ) : (
                           'Finalize'
                         ),
-                        func: () => handleFinalize(session._id),
+                        func: () => setIsFinalizeOpen(session._id),
                       })}
                     {session.status === 'closed' &&
                       button.multiple({
@@ -342,7 +348,7 @@ const Attendance = () => {
                     {button.multiple({
                       icon: FiTrash,
                       element: deleting ? <Spinner size="20px" /> : 'Trash',
-                      func: () => handleDelete(session._id),
+                      func: () => setIsDeleteOpen(session._id),
                     })}
                   </section>
                   <AttStatus status={session.status} />
@@ -397,6 +403,22 @@ const Attendance = () => {
           load={opening}
         />
       </PopupBox>
+      <ConfirmModal
+        isOpen={isFinalizeOpen}
+        onClose={() => setIsFinalizeOpen(null)}
+        onConfirm={() => handleFinalize(isFinalizeOpen)}
+        message="Are you sure you want to finalize this attendance? No more edits will be allowed."
+        actionText="Finalize"
+        loader={finalizing}
+      />
+      <ConfirmModal
+        isOpen={isDeleteOpen}
+        onClose={() => setIsDeleteOpen(false)}
+        onConfirm={() => handleDelete(isDeleteOpen)}
+        message="This will permanently delete this attendance record. Do you wish to continue?"
+        actionText="Delete"
+        loader={deleting}
+      />
     </>
   );
 };

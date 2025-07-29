@@ -7,6 +7,7 @@ import {
 import { MdLocationPin } from 'react-icons/md';
 import { dateFormatter, timeFormatter } from '../../../utils/helpers';
 import button from '../../../components/Button/Button';
+import { formatDistanceToNow } from 'date-fns';
 
 const HistoryCard = ({
   date,
@@ -19,8 +20,15 @@ const HistoryCard = ({
   attStatus,
   courseCode,
   courseTitle,
+  checkInStatus,
+  checkOutStatus,
 }) => {
-  const style = status === 'on-time' ? 'main-color' : status;
+  const style =
+    status === 'on-time' || status === 'present'
+      ? 'main-color'
+      : status === 'partial'
+      ? 'others'
+      : status;
 
   return (
     <div
@@ -48,7 +56,8 @@ const HistoryCard = ({
             background: `var(--${style}-light)`,
             color: `var(--${style})`,
           }}>
-          <FaCircle className={status} /> {status.split('-').join(' ')}
+          <FaCircle className={status} />{' '}
+          {status === 'present' ? 'on time' : status.split('-').join(' ')}
         </div>
       </div>
       <hr />
@@ -57,13 +66,57 @@ const HistoryCard = ({
           <p>
             <FaSignInAlt /> Check In
           </p>
-          <h3>{checkIn?.time ? timeFormatter(checkIn?.time) : '-'}</h3>
+          {checkIn?.time ? (
+            <>
+              <h3>{timeFormatter(checkIn.time)}</h3>
+              <div className="meta">
+                <small className="status">
+                  {checkInStatus} •{' '}
+                  {formatDistanceToNow(new Date(checkIn.time), {
+                    addSuffix: true,
+                  })}
+                </small>
+                {checkIn?.method && (
+                  <small className="method">Via: {checkIn.method}</small>
+                )}
+                {checkIn?.distanceFromClassMeters != null && (
+                  <small className="distance">
+                    {Math.round(checkIn.distanceFromClassMeters)}m away
+                  </small>
+                )}
+              </div>
+            </>
+          ) : (
+            <h3 className="missed">-</h3>
+          )}
         </div>
         <div className="entry">
           <p>
-            <FaSignOutAlt /> Check Out
+            <FaSignInAlt /> Check In
           </p>
-          <h3>{checkOut?.time ? timeFormatter(checkOut?.time) : '-'}</h3>
+          {checkOut?.time ? (
+            <>
+              <h3>{timeFormatter(checkOut.time)}</h3>
+              <div className="meta">
+                <small className="status">
+                  {checkOutStatus} •{' '}
+                  {formatDistanceToNow(new Date(checkOut.time), {
+                    addSuffix: true,
+                  })}
+                </small>
+                {checkOut?.method && (
+                  <small className="method">Via: {checkOut.method}</small>
+                )}
+                {checkOut?.distanceFromClassMeters != null && (
+                  <small className="distance">
+                    {Math.round(checkOut.distanceFromClassMeters)}m away
+                  </small>
+                )}
+              </div>
+            </>
+          ) : (
+            <h3 className="missed">-</h3>
+          )}
         </div>
       </div>
       <div className="bottom">
@@ -73,11 +126,12 @@ const HistoryCard = ({
           {location || 'Not specified'}
         </p>
       </div>
-      {button.multiple({
-        icon: FaStickyNote,
-        element: 'Submit plea',
-        name: 'submit-plea',
-      })}
+      {status === 'absent' &&
+        button.multiple({
+          icon: FaStickyNote,
+          element: 'Submit plea',
+          name: 'submit-plea',
+        })}
     </div>
   );
 };

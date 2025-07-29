@@ -228,10 +228,61 @@ export const timeDiffLabel = (mode, timeHHmm) => {
   const mins = Math.max(0, Math.round(diff / 60000));
   return `${mins}min`;
 };
-export const formatTimeLeft = (seconds) => {
-  const m = String(Math.floor(seconds / 60)).padStart(2, '0');
-  const s = String(seconds % 60).padStart(2, '0');
-  return `${m}:${s}`;
+export const formatTimeLeft = (input, format = 'mm:ss') => {
+  let totalSeconds = 0;
+  if (typeof input === 'number') {
+    totalSeconds = input;
+  } else if (
+    typeof input === 'object' &&
+    (input.seconds !== undefined || input.minutes !== undefined)
+  ) {
+    const { minutes = 0, seconds = 0 } = input;
+    totalSeconds = minutes * 60 + seconds;
+  } else {
+    throw new Error('Invalid input. Must be number or { minutes, seconds }');
+  }
+
+  if (totalSeconds < 0) totalSeconds = 0;
+
+  const h = Math.floor(totalSeconds / 3600);
+  const m = Math.floor((totalSeconds % 3600) / 60);
+  const s = totalSeconds % 60;
+
+  switch (format) {
+    case 'hh:mm:ss':
+      return `${String(h).padStart(2, '0')}:${String(m).padStart(
+        2,
+        '0'
+      )}:${String(s).padStart(2, '0')}`;
+
+    case 'mm:ss': {
+      const totalMinutes = Math.floor(totalSeconds / 60);
+      return `${String(totalMinutes).padStart(2, '0')}:${String(s).padStart(
+        2,
+        '0'
+      )}`;
+    }
+
+    case 'human':
+      return [
+        h > 0 ? `${h}h` : '',
+        m > 0 ? `${m}m` : '',
+        s > 0 || (h === 0 && m === 0) ? `${s}s` : '',
+      ]
+        .filter(Boolean)
+        .join(' ');
+
+    case 'seconds':
+      return `${totalSeconds} seconds`;
+
+    case 'auto':
+      if (totalSeconds >= 3600) return formatTimeLeft(totalSeconds, 'hh:mm:ss');
+      if (totalSeconds >= 60) return formatTimeLeft(totalSeconds, 'mm:ss');
+      return formatTimeLeft(totalSeconds, '00:ss');
+
+    default:
+      return formatTimeLeft(totalSeconds, 'mm:ss');
+  }
 };
 
 export const formatTimeDiff = (target) => {
@@ -288,18 +339,19 @@ export const formatKey = (key) => {
     .replace(/\b\w/g, (c) => c.toUpperCase());
 };
 
-export const getAttendanceTimes = (att, offset = 10) => {
+export const getAttendanceTimes = ({ att, offsets, entry }) => {
   if (!att?.classTime || !att?.entry) return null;
 
+  const { checkInCloseTime, others } = offsets;
+  const { start, end } = entry;
+
   return {
-    checkInOpens: parseTimeToday2(att.entry.start), // when check-in opens
-    checkInCloses: parseTimeToday2(
-      parseTime2(att.classTime.start, `${offset}M`)
-    ), // when check-in ends (late after this)
+    checkInOpens: parseTimeToday2(start), // when check-in opens
+    checkInCloses: parseTimeToday2(parseTime2(start, checkInCloseTime)), // when check-in ends (late after this)
     checkOutOpens: parseTimeToday2(
-      parseTime2(att.classTime.end, `-${offset}M`)
+      parseTime2(att.classTime.end, `-${offsets}M`)
     ), // when check-out opens
-    checkOutCloses: parseTimeToday2(att.classTime.end), // when check-out ends
+    checkOutCloses: parseTimeToday2(end), // when check-out ends
   };
 };
 

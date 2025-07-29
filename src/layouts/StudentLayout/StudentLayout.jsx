@@ -4,7 +4,6 @@ import Navbar from '../../components/ClassRepComponents/Navbar/Navbar';
 import SideBar from '../../components/ClassRepComponents/SideBar/SideBar';
 import { s_Sidebar } from '../../assets/assets';
 import { useMain } from '../../context/MainContext';
-import ScrollToTop from '../../components/ScrollToTop';
 import { useAuth } from '../../context/AuthContext';
 import { MdAddCard, MdAddComment, MdAddTask } from 'react-icons/md';
 import Footer from '../../components/Footer/Footer';
@@ -17,7 +16,6 @@ const StudentLayout = () => {
       className={`c-layout ${isMobile && !isSideBarMenu ? 'is-mobile' : ''} ${
         isMobile ? 'mobile' : ''
       }`}>
-      <ScrollToTop />
       <Navbar
         dropdownAssets={[
           {

@@ -12,6 +12,7 @@ import useUserSocketListener from './hooks/useUserSocketListener ';
 import SuccessModal from './components/Modals/SuccessModal/SuccessModal';
 import 'nprogress/nprogress.css';
 import NavigationProgress from './components/NavigationProgress';
+import ScrollToTop from './components/ScrollToTop';
 
 const App = () => {
   const { setShowLogoutModal, showLogoutModal, logout, authBtnsLoading, user } =
@@ -32,6 +33,7 @@ const App = () => {
   return (
     <>
       <NavigationProgress />
+      <ScrollToTop />
       <ToastContainer position="top-center" />
 
       <ConfirmModal

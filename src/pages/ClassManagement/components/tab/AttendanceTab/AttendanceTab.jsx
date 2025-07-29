@@ -100,6 +100,8 @@ const AttendanceTab = ({ isClassRep, data, error, loading, retry }) => {
                   <th>Date</th>
                   <th>Topic</th>
                   <th>Marked</th>
+                  {/* <th>Present</th> */}
+                  <th>Marked</th>
                   <th>Late</th>
                   <th>Absent</th>
                 </tr>
@@ -110,6 +112,7 @@ const AttendanceTab = ({ isClassRep, data, error, loading, retry }) => {
                     <td>{session.date}</td>
                     <td>{session.topic}</td>
                     <td>{session.marked}</td>
+                    {/* <td>{session.present || 0}</td> */}
                     <td>{session.late}</td>
                     <td>{session.absent}</td>
                   </tr>

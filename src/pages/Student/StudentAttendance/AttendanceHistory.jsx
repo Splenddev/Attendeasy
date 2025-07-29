@@ -29,7 +29,16 @@ const AttendanceHistory = ({ history = [], loading = true, user = {} }) => {
               .filter((h) =>
                 h.studentRecords.some((r) => r.studentId === user._id)
               )
-              .sort((a, b) => b.classDate.localeCompare(a.classDate))
+              .sort((a, b) => {
+                const aDateTime = new Date(
+                  `${a.classDate}T${a.classTime?.start ?? '00:00'}`
+                );
+                const bDateTime = new Date(
+                  `${b.classDate}T${b.classTime?.start ?? '00:00'}`
+                );
+
+                return bDateTime.getTime() - aDateTime.getTime(); // descending
+              })
               .map((item, i) => {
                 const student = item.studentRecords.find(
                   (r) => r.studentId === user._id
@@ -52,6 +61,8 @@ const AttendanceHistory = ({ history = [], loading = true, user = {} }) => {
                     checkIn={checkIn}
                     checkOut={checkOut}
                     code={code}
+                    checkInStatus={item.checkInStatus}
+                    checkOutStatus={item.checkOutStatus}
                     location={item.location?.latitude}
                     attStatus={item.status}
                     courseCode={item.courseCode}

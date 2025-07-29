@@ -1,13 +1,22 @@
+import TodayAttendanceCard from '../../../components/Skeletons/TodayAttendanceCard/TodayAttendanceCard';
 import AttendanceCard from './AttendanceCard';
 
-const TodayAttendance = ({ data, markEntryModal, setMarkEntryModal, user }) => {
+const TodayAttendance = ({
+  data,
+  markEntryModal,
+  setMarkEntryModal,
+  user,
+  loading,
+}) => {
   return (
     <section className="s-attendance-today">
       <header className="heading">
         Today's <hr />
       </header>
       <div className="today-attendance-cards">
-        {data.length <= 0 ? (
+        {loading ? (
+          <TodayAttendanceCard />
+        ) : data.length <= 0 ? (
           <p className="no-class">No attendance today</p>
         ) : (
           data.map((att, i) => {

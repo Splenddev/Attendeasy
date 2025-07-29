@@ -22,9 +22,7 @@ const Navbar = ({ dropdownAssets = [] }) => {
 
   return (
     <nav className="navbar">
-      <div className="navbar-title">
-        <p>{navTitle}</p>
-      </div>
+      <p className="navbar-title">{navTitle}</p>
       <div className="navbar-side">
         <div
           className="alert"

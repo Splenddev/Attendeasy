@@ -10,13 +10,14 @@
   box-shadow: 0 1px 5px #9c9c9c;
   background: #fff;
   z-index: 2;
+  font-family: var(--font-cinzel);
 }
 .navbar-title {
   display: flex;
   align-items: center;
   justify-content: center;
   flex: 1;
-  font-weight: 600;
+  font-weight: bold;
 }
 .navbar-side {
   display: flex;

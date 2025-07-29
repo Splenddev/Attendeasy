@@ -75,6 +75,7 @@ a {
   /* 🖋 Typography */
   --font-outfit: 'Outfit', sans-serif;
   --font-sen: 'Sen', sans-serif;
+  --font-cinzel: 'Cinzel', sans-serif;
 
   /* 🏷️ Tags and Labels */
   --tag-color-blue: var(--main-color);

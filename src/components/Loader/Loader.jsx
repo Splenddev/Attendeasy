@@ -1,60 +1,59 @@
-// Loader.jsx
 import React from 'react';
 import { motion } from 'framer-motion';
-import { PuffLoader } from 'react-spinners';
+import styles from './Loader.module.css';
 
-const backdropVariants = {
+const letters = 'Vigilo'.split('');
+
+const containerVariants = {
   initial: { opacity: 0 },
-  animate: { opacity: 1 },
-  exit: { opacity: 0 },
-};
-
-const loaderVariants = {
-  initial: { scale: 0.8, opacity: 0 },
   animate: {
-    scale: 1,
     opacity: 1,
-    transition: { duration: 0.5, ease: 'easeInOut' },
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.3,
+    },
   },
-  exit: { scale: 0.8, opacity: 0 },
 };
 
-const Loader = ({ loading = true, message = 'Loading...' }) => {
-  if (!loading) return null;
+const letterVariants = {
+  initial: { y: 30, opacity: 0 },
+  animate: {
+    y: 0,
+    opacity: 1,
+    transition: { type: 'spring', stiffness: 500, damping: 30 },
+  },
+};
 
+const Loader = () => {
   return (
     <motion.div
-      className="page-loader-backdrop"
-      variants={backdropVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        backgroundColor: 'rgba(0, 0, 0, 0.75)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 9999,
-      }}>
+      className={styles.backdrop}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}>
       <motion.div
-        className="loader-content"
-        variants={loaderVariants}
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          color: 'white',
-        }}>
-        <PuffLoader
-          color="#36D7B7"
-          size={80}
-        />
-        <p style={{ marginTop: '1rem', fontSize: '1.2rem' }}>{message}</p>
+        className={styles.loader}
+        variants={containerVariants}
+        initial="initial"
+        animate="animate">
+        <motion.h1 className={styles.logo}>
+          {letters.map((char, index) => (
+            <motion.span
+              key={index}
+              variants={letterVariants}
+              className={styles.letter}
+              style={{ '--i': index }}>
+              {char}
+            </motion.span>
+          ))}
+        </motion.h1>
+        <motion.p
+          className={styles.subtitle}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.6 }}>
+          Preparing your experience...
+        </motion.p>
       </motion.div>
     </motion.div>
   );
