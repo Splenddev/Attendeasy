@@ -10,6 +10,7 @@
   height: max-content;
   max-height: 100%;
   padding-bottom: 1rem;
+  font-family: var(--font-sen);
 }
 
 .notification_header {

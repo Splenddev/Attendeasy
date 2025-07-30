@@ -6,7 +6,7 @@ import {
 } from 'react-icons/fa';
 import { dateFormatter, parseTime2 } from '../../../../../utils/helpers';
 import { MdLocationPin } from 'react-icons/md';
-import { LuCloudCog, LuZap, LuZapOff } from 'react-icons/lu';
+import { LuCloudCog, LuInspectionPanel, LuZap, LuZapOff } from 'react-icons/lu';
 
 const SessionInfo = ({
   session = {
@@ -49,6 +49,13 @@ const SessionInfo = ({
         {
           icon: session.autoEnd ? LuZap : LuZapOff,
           text: `Auto End: ${session.autoEnd ? 'Yes' : 'No'}`,
+        },
+        {
+          icon:
+            session.settings?.markingConfig.type === 'strict'
+              ? LuZap
+              : LuInspectionPanel,
+          text: `Mode: ${session.settings.markingConfig.type}`,
         },
         {
           icon: FaClock,

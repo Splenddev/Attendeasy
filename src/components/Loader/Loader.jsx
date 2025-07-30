@@ -1,61 +1,83 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
 import styles from './Loader.module.css';
 
-const letters = 'Vigilo'.split('');
+const Loader = ({ minDelay = 3000 }) => {
+  const lettersRef = useRef([]);
+  const subtitleRef = useRef();
+  const progressBarRef = useRef();
+  const [show, setShow] = useState(true);
 
-const containerVariants = {
-  initial: { opacity: 0 },
-  animate: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.3,
-    },
-  },
-};
+  useEffect(() => {
+    // Animate letters
+    const tl = gsap.timeline();
 
-const letterVariants = {
-  initial: { y: 30, opacity: 0 },
-  animate: {
-    y: 0,
-    opacity: 1,
-    transition: { type: 'spring', stiffness: 500, damping: 30 },
-  },
-};
+    tl.set(lettersRef.current, {
+      opacity: 0,
+      y: 100,
+      rotationX: 90,
+      scale: 0.5,
+      transformOrigin: 'center bottom',
+    })
+      .to(lettersRef.current, {
+        opacity: 1,
+        y: 0,
+        rotationX: 0,
+        scale: 1,
+        duration: 0.8,
+        ease: 'back.out(2)',
+        stagger: 0.1,
+      })
+      .fromTo(
+        subtitleRef.current,
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' },
+        '-=0.6'
+      )
+      .fromTo(
+        progressBarRef.current,
+        { x: '-100%' },
+        { x: '0%', duration: 2.5, ease: 'power2.inOut' },
+        '-=0.4'
+      );
 
-const Loader = () => {
+    return () => tl.kill();
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShow(false), minDelay);
+    return () => clearTimeout(timer);
+  }, [minDelay]);
+
+  if (!show) return null;
+
   return (
-    <motion.div
-      className={styles.backdrop}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}>
-      <motion.div
-        className={styles.loader}
-        variants={containerVariants}
-        initial="initial"
-        animate="animate">
-        <motion.h1 className={styles.logo}>
-          {letters.map((char, index) => (
-            <motion.span
+    <div className={styles.loaderWrapper}>
+      <div className={styles.loaderContainer}>
+        <div className={styles.vigiloText}>
+          {['V', 'I', 'G', 'I', 'L', 'O'].map((char, index) => (
+            <span
               key={index}
-              variants={letterVariants}
               className={styles.letter}
-              style={{ '--i': index }}>
+              ref={(el) => (lettersRef.current[index] = el)}>
               {char}
-            </motion.span>
+            </span>
           ))}
-        </motion.h1>
-        <motion.p
-          className={styles.subtitle}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 0.6 }}>
-          Preparing your experience...
-        </motion.p>
-      </motion.div>
-    </motion.div>
+        </div>
+
+        <div
+          ref={subtitleRef}
+          className={styles.subtitle}>
+          Attendance Management System
+        </div>
+
+        <div className={styles.progressContainer}>
+          <div
+            ref={progressBarRef}
+            className={styles.progressBar}></div>
+        </div>
+      </div>
+    </div>
   );
 };
 

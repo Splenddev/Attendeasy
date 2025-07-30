@@ -17,6 +17,7 @@
     "date-fns": "^4.1.0",
     "firebase": "^11.6.1",
     "framer-motion": "^12.9.4",
+    "gsap": "^3.13.0",
     "leaflet": "^1.9.4",
     "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",

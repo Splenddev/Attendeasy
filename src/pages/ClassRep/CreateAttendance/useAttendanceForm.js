@@ -30,14 +30,13 @@ const useAttendanceForm = (groupId, scheduleId) => {
         radiusMeters: 100,
       },
 
-      markingConfig: {
-        type: 'strict', // 'strict' | 'flexible'
-        mode: 'no_code', // 'no_code' | 'code'
-      },
-
       autoEnd: true,
 
       settings: {
+        markingConfig: {
+          type: 'strict', // 'strict' | 'flexible'
+          mode: 'no_code', // 'no_code' | 'code'
+        },
         markOnce: true, // Prevent double marking
         allowLateJoiners: true, // Whether students who joined after creation can mark
         lateThreshold: 10, // Minutes after classStart to count as late

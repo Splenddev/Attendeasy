@@ -198,7 +198,7 @@ export const formDataAssets = [
         required: true,
       },
       {
-        name: 'markingConfig.type',
+        name: 'settings.markingConfig.type',
         title: 'Detail Level',
         type: 'select',
         options: [
@@ -208,7 +208,7 @@ export const formDataAssets = [
         required: true,
       },
       {
-        name: 'markingConfig.mode',
+        name: 'settings.markingConfig.mode',
         title: 'Marking Mode',
         type: 'select',
         options: [

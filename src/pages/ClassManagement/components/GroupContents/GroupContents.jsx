@@ -37,7 +37,6 @@ const GroupContents = ({
     { key: 'members', label: 'Members', show: isClassRep },
     { key: 'join-requests', label: 'Join Requests', show: isClassRep },
     { key: 'announcements', label: 'Announcements' },
-    { key: 'schedule', label: 'Schedule' },
     { key: 'attendance', label: 'Attendance' },
     { key: 'materials', label: 'Materials' },
     { key: 'settings', label: 'Settings' },

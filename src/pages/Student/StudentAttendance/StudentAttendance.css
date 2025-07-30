@@ -9,6 +9,37 @@
   flex-direction: column;
   gap: 5px;
 }
+
+.s-attendance-today-filter {
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  justify-content: end;
+}
+
+.s-attendance-today-filter li {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #555;
+  text-transform: capitalize;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.s-attendance-today-filter li:hover {
+  background-color: #f0f0f0;
+}
+
+.s-attendance-today-filter li.active {
+  background-color: #111;
+  color: #fff;
+  border-color: #111;
+}
+
 .s-attendance-info {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -71,6 +102,9 @@
   display: flex;
   align-items: center;
   gap: 6px;
+  b {
+    color: var(--gray-800);
+  }
 }
 
 .marking-overview li span {

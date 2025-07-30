@@ -52,7 +52,7 @@ export const router = createBrowserRouter([
         path: 'class-rep/',
         element: (
           <ProtectedRoutes allowedRoles={[ROLES.CLASS_REP]}>
-            <Suspense fallback={<Loader />}>
+            <Suspense fallback={<Loader minDelay={5000} />}>
               <ClassRepLayout />
             </Suspense>
           </ProtectedRoutes>
@@ -94,7 +94,7 @@ export const router = createBrowserRouter([
           {
             path: 'attendance',
             element: (
-              <Suspense fallback={<Loader />}>
+              <Suspense fallback={<Loader minDelay={5000} />}>
                 <Attendance />
               </Suspense>
             ),
@@ -102,7 +102,7 @@ export const router = createBrowserRouter([
           {
             path: 'attendance/create',
             element: (
-              <Suspense fallback={<Loader />}>
+              <Suspense fallback={<Loader minDelay={6000} />}>
                 <CreateAttendance />
               </Suspense>
             ),

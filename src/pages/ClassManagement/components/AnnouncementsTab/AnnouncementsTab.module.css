@@ -1,0 +1,119 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.5rem;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to bottom, #f9fafb, #e0f2ff);
+  text-align: center;
+  border-radius: 20px;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #0f172a;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #334155;
+  max-width: 600px;
+  margin-bottom: 2rem;
+}
+
+.timer {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+  font-family: 'Courier New', monospace;
+}
+
+.time-box {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  min-width: 70px;
+}
+
+.time-value {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #0ea5e9;
+}
+
+.time-label {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.notify-form {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.input {
+  padding: 0.75rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 1rem;
+  outline: none;
+  width: 250px;
+  max-width: 100%;
+}
+
+.button {
+  background-color: #0ea5e9;
+  color: white;
+  padding: 0.75rem 1.25rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.button:hover {
+  background-color: #0284c7;
+}
+
+.benefits {
+  max-width: 700px;
+  text-align: left;
+  margin-top: 2rem;
+  color: #475569;
+}
+
+.benefits h4 {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+  color: #1e293b;
+}
+
+.benefits ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+}
+
+.benefits li {
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 600px) {
+  .title {
+    font-size: 2rem;
+  }
+
+  .time-box {
+    min-width: 60px;
+  }
+
+  .time-value {
+    font-size: 1.5rem;
+  }
+}

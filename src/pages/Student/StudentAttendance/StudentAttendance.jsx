@@ -117,7 +117,8 @@ const StudentAttendance = () => {
       <AttendanceInfo
         user={user}
         date={dateFormatter(null)}
-        data={summary}
+        studentId={user._id}
+        groupId={user.group}
         att={data}
         fetching={loading}
       />

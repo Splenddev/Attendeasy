@@ -87,6 +87,7 @@
 .dropdown-menus {
   overflow: hidden;
   z-index: 1;
+  font-family: var(--font-outfit);
 }
 .dropdown-notifications {
   overflow-y: auto;

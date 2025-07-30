@@ -1,131 +1,92 @@
-import { useState } from 'react';
-import {
-  FiCalendar,
-  FiBook,
-  FiVideo,
-  FiInfo,
-  FiTrash2,
-  FiPlusCircle,
-  FiPenTool,
-  FiEye,
-} from 'react-icons/fi';
-import { format } from 'date-fns';
-import './AnnouncementsTab.css';
+import React, { useEffect, useState, useRef } from 'react';
+import styles from './AnnouncementsTab.module.css';
+import gsap from 'gsap';
 
-const typeIcons = {
-  class: <FiCalendar />,
-  assignment: <FiBook />,
-  media: <FiVideo />,
-  general: <FiInfo />,
-};
-
-const typeLabels = {
-  class: 'Class',
-  assignment: 'Assignment',
-  media: 'Media',
-  general: 'General',
+const getTimeRemaining = () => {
+  const targetDate = new Date('2025-08-20T00:00:00');
+  const now = new Date();
+  const diff = targetDate - now;
+  const total = Math.max(0, diff);
+  const seconds = Math.floor((total / 1000) % 60);
+  const minutes = Math.floor((total / 1000 / 60) % 60);
+  const hours = Math.floor((total / 1000 / 60 / 60) % 24);
+  const days = Math.floor(total / (1000 * 60 * 60 * 24));
+  return { days, hours, minutes, seconds };
 };
 
 const AnnouncementsTab = () => {
-  const [announcements, setAnnouncements] = useState([
-    {
-      id: 1,
-      title: 'Midterm Review Class',
-      body: 'There will be a special review session this Friday covering all topics from weeks 1–6. Attendance is highly recommended.',
-      postedAt: '2025-06-10T14:30:00Z',
-      type: 'class',
-    },
-    {
-      id: 2,
-      title: 'Assignment 2 Deadline',
-      body: 'Submit your second assignment on Linked Lists by Sunday night. Late submissions will incur penalties.',
-      postedAt: '2025-06-11T10:00:00Z',
-      type: 'assignment',
-    },
-    {
-      id: 3,
-      title: 'Media Upload Notice',
-      body: 'Lecture recording for Week 5 has been uploaded. Access it from the materials section.',
-      postedAt: '2025-06-09T16:45:00Z',
-      type: 'media',
-    },
-    {
-      id: 4,
-      title: 'No Class Next Monday',
-      body: 'Due to a public holiday, there will be no class next Monday. Use the time to revise.',
-      postedAt: '2025-06-08T12:00:00Z',
-      type: 'general',
-    },
-  ]);
+  const [timeLeft, setTimeLeft] = useState(getTimeRemaining());
+  const [email, setEmail] = useState('');
+  const wrapperRef = useRef(null);
 
-  const handleDelete = (id) => {
-    setAnnouncements((prev) => prev.filter((a) => a.id !== id));
-  };
+  useEffect(() => {
+    gsap.fromTo(
+      wrapperRef.current,
+      { opacity: 0, y: 30, scale: 0.95 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power3.out' }
+    );
 
-  const types = ['general', 'media', 'assignment', 'class'];
+    const interval = setInterval(() => {
+      setTimeLeft(getTimeRemaining());
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
-  const handleAdd = () => {
-    // Replace with form/modal logic
-    const newAnnouncement = {
-      id: Date.now(),
-      title: 'New Example Announcement',
-      body: 'This is an example announcement body.',
-      postedAt: new Date().toISOString(),
-      type: types[Math.floor(Math.random() * types.length)],
-    };
-    setAnnouncements((prev) => [newAnnouncement, ...prev]);
+  const handleNotify = () => {
+    if (!email.includes('@')) {
+      alert('Please enter a valid email.');
+      return;
+    }
+    alert(`You'll be notified at: ${email}`);
+    setEmail('');
   };
 
   return (
-    <div className="announcements-tab">
-      <div className="announcements-header">
-        <h2>Announcements</h2>
+    <div
+      className={styles.wrapper}
+      ref={wrapperRef}>
+      <h1 className={styles.title}>Announcements Coming Soon</h1>
+      <p className={styles.subtitle}>
+        We’re cooking up a powerful announcements system for updates,
+        assignments, and class info. Stay tuned!
+      </p>
+
+      <div className={styles.timer}>
+        {['days', 'hours', 'minutes', 'seconds'].map((unit) => (
+          <div
+            key={unit}
+            className={styles['time-box']}>
+            <div className={styles['time-value']}>{timeLeft[unit]}</div>
+            <div className={styles['time-label']}>{unit}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className={styles['notify-form']}>
+        <input
+          type="email"
+          className={styles.input}
+          placeholder="Enter your email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
         <button
-          onClick={handleAdd}
-          className="add-btn">
-          <FiPlusCircle /> Add
+          onClick={handleNotify}
+          className={styles.button}>
+          Notify Me
         </button>
       </div>
 
-      {Object.entries(
-        announcements.reduce((acc, ann) => {
-          acc[ann.type] = [...(acc[ann.type] || []), ann];
-          return acc;
-        }, {})
-      ).map(([type, items]) => (
-        <div
-          key={type}
-          className="announcement-category">
-          <h3 className="category-title">
-            {typeIcons[type]} {typeLabels[type]} Announcements
-          </h3>
-          {items.map((announcement) => (
-            <div
-              key={announcement.id}
-              className="announcement-card">
-              <div className="card-header">
-                <h4>{announcement.title}</h4>
-                <span className="timestamp">
-                  {format(new Date(announcement.postedAt), 'PPP p')}
-                </span>
-              </div>
-              <p>{announcement.body}</p>
-              <div className="card-actions">
-                <button onClick={() => alert(announcement.body)}>
-                  <FiEye />
-                  View
-                </button>
-                <button onClick={() => handleDelete(announcement.id)}>
-                  <FiTrash2 /> Delete
-                </button>
-                <button>
-                  <FiPenTool /> Edit
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      ))}
+      <div className={styles.benefits}>
+        <h4>What you'll get when it's live:</h4>
+        <ul>
+          <li>Centralized announcement hub for all class updates</li>
+          <li>Instant notifications for new assignments and events</li>
+          <li>Smart filters for type, urgency, and timeline</li>
+          <li>Fully responsive and mobile-optimized UI</li>
+          <li>Seamless integration with attendance and scheduling</li>
+        </ul>
+      </div>
     </div>
   );
 };

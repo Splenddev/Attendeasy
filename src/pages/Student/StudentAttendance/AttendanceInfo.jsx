@@ -3,19 +3,23 @@ import { MdCalendarToday, MdMessage, MdPhoneInTalk } from 'react-icons/md';
 import { FaCircle } from 'react-icons/fa';
 import button from '../../../components/Button/Button';
 import api from '../../../services/api';
+import { LuMailPlus } from 'react-icons/lu';
 
-const AttendanceInfo = ({
-  att = [],
-  date,
-  data = { onTime: '-%', late: '-%', absent: '-%' },
-  fetching,
-}) => {
+const AttendanceInfo = ({ att = [], date, groupId, studentId, fetching }) => {
   const [rep, setRep] = useState(null);
   const [stats, setStats] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState({ rep: true, summary: true });
+
+  const [summary, setSummary] = useState({
+    onTime: '-%',
+    late: '-%',
+    absent: '-%',
+    other: '-%',
+  });
 
   const repId = att?.[0]?.createdBy;
-  // Fetch rep info
+
+  // Fetch Class Rep Info
   useEffect(() => {
     if (!repId) return;
     const fetchRep = async () => {
@@ -26,16 +30,33 @@ const AttendanceInfo = ({
       } catch (err) {
         console.error('Failed to fetch class rep info', err);
       } finally {
-        setLoading(false);
+        setLoading((prev) => ({ ...prev, rep: false }));
       }
     };
-
-    if (repId) {
-      fetchRep();
-    } else {
-      setLoading(false);
-    }
+    fetchRep();
   }, [repId]);
+
+  // Fetch Student Attendance Summary
+  useEffect(() => {
+    const fetchSummary = async () => {
+      if (!studentId || !groupId) return;
+      try {
+        const res = await api.get(`attendance/students/${studentId}/summary`);
+        const stat = res.data?.statusSummary || {};
+        setSummary({
+          onTime: stat.onTime || '0%',
+          late: stat.late || '0%',
+          absent: stat.absent || '0%',
+          other: stat.other || '0%',
+        });
+      } catch (err) {
+        console.error('Failed to fetch attendance summary:', err);
+      } finally {
+        setLoading((prev) => ({ ...prev, summary: false }));
+      }
+    };
+    fetchSummary();
+  }, [studentId, groupId]);
 
   return (
     <section className="s-attendance-heading">
@@ -52,15 +73,19 @@ const AttendanceInfo = ({
           <ul className="marking-overview">
             <li>
               <FaCircle className="on-time" /> <b className="cap">on time</b>{' '}
-              <span>{data.onTime}%</span>
+              <span>{summary.onTime}</span>
             </li>
             <li>
               <FaCircle className="late" /> <b className="cap">late</b>{' '}
-              <span>{data.late}%</span>
+              <span>{summary.late}</span>
             </li>
             <li>
               <FaCircle className="absent" /> <b className="cap">absent</b>{' '}
-              <span>{data.absent}%</span>
+              <span>{summary.absent}</span>
+            </li>
+            <li>
+              <FaCircle className="others" /> <b className="cap">others</b>{' '}
+              <span>{summary.other}</span>
             </li>
           </ul>
         </div>
@@ -69,12 +94,12 @@ const AttendanceInfo = ({
         <div className="s-attendance-info-right">
           <div className="s-attendance-info-class-rep">
             <div className="profile">
-              {loading || fetching
+              {loading.rep || fetching
                 ? '...'
                 : rep?.name?.[0]?.toUpperCase() || 'S'}
             </div>
             <div className="cred">
-              {loading || fetching ? (
+              {loading.rep || fetching ? (
                 <div
                   className="skeleton skeleton-text"
                   style={{ width: '150px', height: '20px' }}
@@ -82,7 +107,7 @@ const AttendanceInfo = ({
               ) : (
                 <h3 className="cap">{rep?.name}</h3>
               )}
-              {loading || fetching ? (
+              {loading.rep || fetching ? (
                 <div
                   className="skeleton skeleton-text"
                   style={{ width: '100px', height: '16px' }}
@@ -90,7 +115,7 @@ const AttendanceInfo = ({
               ) : (
                 <p className="cap">{rep?.role || 'class-rep'}</p>
               )}
-              {loading || fetching ? (
+              {loading.rep || fetching ? (
                 <div
                   className="skeleton skeleton-text"
                   style={{ width: '120px', height: '14px' }}
@@ -100,7 +125,7 @@ const AttendanceInfo = ({
               )}
               <div className="btn">
                 {button.icon({ icon: MdPhoneInTalk, label: 'reps contact' })}
-                {button.icon({ icon: MdMessage, label: 'message rep' })}
+                {button.icon({ icon: LuMailPlus, label: 'message rep' })}
               </div>
             </div>
           </div>
@@ -115,14 +140,14 @@ const AttendanceInfo = ({
                 key={card.title}
                 className="card">
                 <p className="cap">{card.title}</p>
-                {loading || fetching ? (
+                {loading.rep || fetching ? (
                   <div
                     className="skeleton skeleton-text"
                     style={{ width: '120px', height: '14px' }}
                   />
                 ) : (
                   <h2>{card?.value || 0}</h2>
-                )}{' '}
+                )}
               </div>
             ))}
           </div>

@@ -313,7 +313,7 @@ const Students = ({ group, view, att }) => {
                     .map((n) => n?.[0]?.toUpperCase() || '')
                     .join('') || '??'}
                   <span className="role-icon">
-                    {st.role === 'rep' ? <FaCrown /> : <FaUserGraduate />}
+                    {st.role === 'class-rep' ? <FaCrown /> : <FaUserGraduate />}
                   </span>
                 </div>
                 <p className="name">{st.name}</p>
@@ -357,9 +357,10 @@ const Students = ({ group, view, att }) => {
                       );
                     })
                   : (() => {
-                      const allowedStrict = ['present', 'absent', 'partial'];
                       const isStrict =
                         att.settings.markingConfig.type === 'strict';
+
+                      const allowedStrict = ['present', 'absent', 'partial'];
 
                       if (isStrict && !allowedStrict.includes(st.finalStatus))
                         return null;
