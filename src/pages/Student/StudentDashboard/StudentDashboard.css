@@ -135,14 +135,13 @@
 .today-session .ongoing-session {
   scroll-snap-align: center;
   margin: 0 auto;
-  flex: 0 0 auto;
-  max-width: 350px;
-  width: 1fr;
+  width: 100%;
   min-width: 280px;
   background: white;
   border-radius: 12px;
   padding: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.164);
+  overflow-y: auto;
 }
 .today-schedule .top {
   display: flex;

@@ -19,6 +19,7 @@ import useAttendanceSocket from '../../../hooks/useAttendanceSocket';
 import { toast } from 'react-toastify';
 import { scheduleJson } from '../../ClassRep/ClassSchedule/assets';
 import { useSearchParams } from 'react-router-dom';
+import SmartTipSlider from '../StudentDashboard/components/SmartTipSlider/SmartTipSlider';
 
 const StudentAttendance = () => {
   const [searchParams] = useSearchParams();
@@ -139,8 +140,6 @@ const StudentAttendance = () => {
     absent: 10,
   };
 
-  const smartTips = useMemo(() => generateSmartTip(data, user), [data, user]);
-
   return (
     <div className="s-attendance">
       <AttendanceInfo
@@ -152,9 +151,12 @@ const StudentAttendance = () => {
         fetching={loading}
       />
 
-      {smartTips && smartTips.map((tip, i) => <p key={i}>{tip}</p>)}
+      <SmartTipSlider
+        data={data}
+        user={user}
+        loading={loading}
+      />
 
-      <p></p>
       <TodayAttendance
         data={filtered}
         markEntryModal={markEntryModal}

@@ -161,8 +161,8 @@ export const truncateText = (text = '', length = 20) => {
   return text.length > length ? text.slice(0, length).trim() + '...' : text;
 };
 
-export const generateSmartTip = (data, user) => {
-  if (!data || !user?._id) return [];
+export const generateSmartTip = (data = [], user, loading) => {
+  if (!data || !user?._id || loading) return [];
 
   const tips = [];
 
@@ -215,9 +215,7 @@ export const generateSmartTip = (data, user) => {
 
   if (totalSessions >= 5 && presentOrOnTimeCount / totalSessions < 0.5) {
     tips.push(
-      `Your overall attendance rate(${
-        (presentOrOnTimeCount / totalSessions) * 100
-      }) is below 50%. Try to attend more classes.`
+      `Your overall attendance rate is below 50%. Try to attend more classes.`
     );
   }
 

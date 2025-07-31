@@ -9,6 +9,17 @@
   color: #222;
   overflow-y: auto;
   height: calc(100vh - 80px);
+  max-height: calc(85vh - 80px);
+  z-index: 5;
+}
+
+.mark-entry-modal::-webkit-scrollbar {
+  width: 6px;
+  right: 3px;
+}
+.mark-entry-modal::-webkit-scrollbar-thumb {
+  background: var(--main-color);
+  border-radius: 10px;
 }
 
 .modal-header {
