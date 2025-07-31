@@ -26,9 +26,9 @@ const HistoryCard = ({
   const style =
     status === 'on-time' || status === 'present'
       ? 'main-color'
-      : status === 'partial'
-      ? 'others'
-      : status;
+      : ['late', 'absent'].includes(status)
+      ? status
+      : 'others';
 
   return (
     <div
@@ -57,7 +57,7 @@ const HistoryCard = ({
             color: `var(--${style})`,
           }}>
           <FaCircle className={status} />{' '}
-          {status === 'present' ? 'on time' : status.split('-').join(' ')}
+          {status === 'present' ? 'on time' : status.split('_').join(' ')}
         </div>
       </div>
       <hr />
@@ -92,7 +92,7 @@ const HistoryCard = ({
         </div>
         <div className="entry">
           <p>
-            <FaSignInAlt /> Check In
+            <FaSignOutAlt /> Check Out
           </p>
           {checkOut?.time ? (
             <>
@@ -126,12 +126,14 @@ const HistoryCard = ({
           {location || 'Not specified'}
         </p>
       </div>
-      {status === 'absent' &&
-        button.multiple({
-          icon: FaStickyNote,
-          element: 'Submit plea',
-          name: 'submit-plea',
-        })}
+      <div className="cta">
+        {status === 'absent' &&
+          button.multiple({
+            icon: FaStickyNote,
+            element: 'Submit plea',
+            name: 'submit-plea',
+          })}
+      </div>
     </div>
   );
 };

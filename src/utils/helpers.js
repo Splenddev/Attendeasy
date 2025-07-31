@@ -160,28 +160,149 @@ export const truncateText = (text = '', length = 20) => {
   if (typeof text !== 'string') return '';
   return text.length > length ? text.slice(0, length).trim() + '...' : text;
 };
-export const generateSmartTip = (data) => {
-  const lastThree = data.slice(-3);
-  const allOnTime = lastThree.every((h) => h.status === 'on time');
-  if (!data) return;
-  if (allOnTime) return "🔥 You're on time 3 times in a row!";
 
-  const missedDays = data
-    .filter((h) => h.status === 'absent')
-    .map((h) => h.day);
-  const mostMissed =
-    missedDays.length > 0
-      ? missedDays.sort(
-          (a, b) =>
-            missedDays.filter((v) => v === a).length -
-            missedDays.filter((v) => v === b).length
-        )[0]
-      : null;
+export const generateSmartTip = (data, user) => {
+  if (!data || !user?._id) return [];
 
-  if (mostMissed)
-    return `⚠️ You often miss classes on ${mostMissed}s. Be cautious.`;
-  return null;
+  const tips = [];
+
+  const studentData = data.map((att) => ({
+    ...att,
+    myRecord: att.studentRecords.find((s) => s.studentId === user._id),
+  }));
+
+  const totalSessions = studentData.length;
+  const lastThree = studentData.slice(-3);
+
+  const allOnTime = lastThree.every((entry) => {
+    const status = entry?.myRecord?.finalStatus;
+    return status === 'present' || status === 'on_time';
+  });
+
+  const presentOrOnTimeCount = studentData.filter(
+    (entry) =>
+      entry?.myRecord?.finalStatus === 'present' ||
+      entry?.myRecord?.finalStatus === 'on_time'
+  ).length;
+
+  const lateCount = studentData.filter(
+    (entry) => entry?.myRecord?.finalStatus === 'late'
+  ).length;
+
+  const absentCount = studentData.filter(
+    (entry) => entry?.myRecord?.finalStatus === 'absent'
+  ).length;
+
+  const missedDays = studentData
+    .filter((entry) => entry?.myRecord?.finalStatus === 'absent')
+    .map((entry) => entry.day);
+
+  console.log(studentData);
+  // --- BASELINE TIPS ---
+  if (allOnTime) {
+    tips.push('You arrived on time in your last 3 classes.');
+  }
+
+  if (presentOrOnTimeCount === totalSessions && totalSessions >= 3) {
+    tips.push('You have a perfect attendance record so far.');
+  }
+
+  if (lateCount >= 3) {
+    tips.push(
+      `You have been late ${lateCount} times. Consider improving your punctuality.`
+    );
+  }
+
+  if (totalSessions >= 5 && presentOrOnTimeCount / totalSessions < 0.5) {
+    tips.push(
+      `Your overall attendance rate(${
+        (presentOrOnTimeCount / totalSessions) * 100
+      }) is below 50%. Try to attend more classes.`
+    );
+  }
+
+  if (absentCount >= 3) {
+    tips.push('You have missed several classes. Ensure you don’t fall behind.');
+  }
+
+  // --- PATTERN-BASED TIPS ---
+  if (missedDays.length > 0) {
+    const frequencyMap = missedDays.reduce((acc, day) => {
+      acc[day] = (acc[day] || 0) + 1;
+      return acc;
+    }, {});
+    const [mostMissedDay, freq] = Object.entries(frequencyMap).sort(
+      (a, b) => b[1] - a[1]
+    )[0];
+
+    if (freq >= 2) {
+      tips.push(
+        `You tend to miss classes on ${mostMissedDay}s. Plan better on those days.`
+      );
+    }
+  }
+
+  // --- ADDITIONAL SMART TIPS ---
+
+  // Tip: Consistency drop
+  const firstHalf = studentData.slice(0, Math.floor(totalSessions / 2));
+  const secondHalf = studentData.slice(Math.floor(totalSessions / 2));
+
+  const firstHalfPresent = firstHalf.filter(
+    (e) =>
+      e?.myRecord?.finalStatus === 'present' ||
+      e?.myRecord?.finalStatus === 'on_time'
+  ).length;
+
+  const secondHalfPresent = secondHalf.filter(
+    (e) =>
+      e?.myRecord?.finalStatus === 'present' ||
+      e?.myRecord?.finalStatus === 'on_time'
+  ).length;
+
+  if (
+    firstHalf.length >= 3 &&
+    secondHalf.length >= 3 &&
+    secondHalfPresent < firstHalfPresent
+  ) {
+    tips.push(
+      'Your attendance has declined recently. Try to get back on track.'
+    );
+  }
+
+  // Tip: Improving pattern
+  if (
+    firstHalf.length >= 3 &&
+    secondHalf.length >= 3 &&
+    secondHalfPresent > firstHalfPresent
+  ) {
+    tips.push('Your attendance has improved recently. Keep it up.');
+  }
+
+  // Tip: Always late, never absent
+  if (lateCount >= 3 && absentCount === 0) {
+    tips.push('You always attend, but often late. Try to arrive earlier.');
+  }
+
+  // Tip: Attended but never on time
+  const onTimeCount = studentData.filter(
+    (entry) => entry?.myRecord?.finalStatus === 'on_time'
+  ).length;
+
+  if (presentOrOnTimeCount > 0 && onTimeCount === 0) {
+    tips.push(
+      'You attend regularly but never on time. Try to work on punctuality.'
+    );
+  }
+
+  return tips;
 };
+
+export function parseDuration(duration = '0H10M') {
+  const hours = parseInt(duration.match(/(\d+)H/)?.[1] || '0', 10);
+  const minutes = parseInt(duration.match(/(\d+)M/)?.[1] || '0', 10);
+  return hours * 60 + minutes;
+}
 
 export const getTodaySchedule = (schedule) => {
   const daysOfWeek = [

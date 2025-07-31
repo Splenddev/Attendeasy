@@ -18,8 +18,16 @@ import { useFetchGroupAttendances } from '../../../hooks/useAttendance';
 import useAttendanceSocket from '../../../hooks/useAttendanceSocket';
 import { toast } from 'react-toastify';
 import { scheduleJson } from '../../ClassRep/ClassSchedule/assets';
+import { useSearchParams } from 'react-router-dom';
 
 const StudentAttendance = () => {
+  const [searchParams] = useSearchParams();
+
+  const id = searchParams.get('id');
+  const status = searchParams.get('status');
+  const lat = searchParams.get('lat');
+  const lng = searchParams.get('lng');
+
   const { setNavTitle, user } = useAuth();
   const [markEntryModal, setMarkEntryModal] = useState({
     visible: false,
@@ -79,6 +87,27 @@ const StudentAttendance = () => {
   useEffect(() => {
     fetch();
   }, [fetch]);
+  useEffect(() => {
+    if (!id || !status) return;
+
+    if (loading) return;
+
+    const refernceData = data.find((att) => att._id === id) || [];
+
+    console.log(refernceData);
+
+    if (!refernceData || refernceData.status === 'closed') return;
+    setMarkEntryModal({
+      visible: true,
+      maxRange: refernceData.location?.radiusMeters,
+      attendanceId: refernceData._id,
+      mode: status === 'not_checked_out' ? 'checkOut' : 'checkIn',
+      location: {
+        lat,
+        lng,
+      },
+    });
+  }, [id, loading, status]);
 
   const today = useMemo(() => {
     const t = new Date();
@@ -110,7 +139,7 @@ const StudentAttendance = () => {
     absent: 10,
   };
 
-  const smartTip = useMemo(() => generateSmartTip(data), [data]);
+  const smartTips = useMemo(() => generateSmartTip(data, user), [data, user]);
 
   return (
     <div className="s-attendance">
@@ -123,8 +152,9 @@ const StudentAttendance = () => {
         fetching={loading}
       />
 
-      {smartTip && <p className="smart-tip">{smartTip}</p>}
+      {smartTips && smartTips.map((tip, i) => <p key={i}>{tip}</p>)}
 
+      <p></p>
       <TodayAttendance
         data={filtered}
         markEntryModal={markEntryModal}

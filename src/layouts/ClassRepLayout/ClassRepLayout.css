@@ -1,5 +1,8 @@
 .c-layout {
   background: var(--bg-body);
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
 }
 .c-layout .main {
   margin-top: 50px;

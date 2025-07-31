@@ -80,12 +80,14 @@ const AttendanceCard = ({ att, setIsModal, student }) => {
   };
   const entry = { start: entryStart, end: entryEnd };
 
-  const { checkInOpens, checkInCloses, checkOutOpens, checkOutCloses } =
-    getAttendanceTimes({ att, offsets, entry });
+  const { checkInOpens, checkInCloses, checkOutCloses } = getAttendanceTimes({
+    att,
+    offsets,
+    entry,
+  });
 
   const checkInStartCountdown = useCountdown(checkInOpens);
   const checkInCloseCountdown = useCountdown(checkInCloses);
-  const checkOutOpenCountdown = useCountdown(checkOutOpens);
   const checkOutCloseCountdown = useCountdown(checkOutCloses);
 
   const { open } = useErrorModal();
@@ -165,12 +167,7 @@ const AttendanceCard = ({ att, setIsModal, student }) => {
                 )
               }
             />
-            {checkOutOpenCountdown.timeLeft > 0 && (
-              <CountdownBox
-                label="Check-Out Opens In"
-                countdown={checkOutOpenCountdown}
-              />
-            )}
+
             {checkOutCloseCountdown.timeLeft > 0 && (
               <CountdownBox
                 label="Check-Out Closes In"
@@ -204,8 +201,6 @@ const AttendanceCard = ({ att, setIsModal, student }) => {
             const isBlocked = Boolean(reason);
 
             const handleClick = () => {
-              console.log('entry end', new Date(entryEnd));
-              console.log('now', now);
               if (isBlocked) {
                 open({
                   title: 'Cannot Proceed',

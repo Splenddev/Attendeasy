@@ -50,6 +50,8 @@ const AttendanceHistory = ({ history = [], loading = true, user = {} }) => {
                   checkIn,
                   checkOut,
                   code = 'None',
+                  checkInStatus,
+                  checkOutStatus,
                 } = student;
 
                 return (
@@ -61,8 +63,8 @@ const AttendanceHistory = ({ history = [], loading = true, user = {} }) => {
                     checkIn={checkIn}
                     checkOut={checkOut}
                     code={code}
-                    checkInStatus={item.checkInStatus}
-                    checkOutStatus={item.checkOutStatus}
+                    checkInStatus={checkInStatus}
+                    checkOutStatus={checkOutStatus}
                     location={item.location?.latitude}
                     attStatus={item.status}
                     courseCode={item.courseCode}

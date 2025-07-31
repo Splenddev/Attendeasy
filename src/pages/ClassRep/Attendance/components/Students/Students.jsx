@@ -19,18 +19,21 @@ import useDisableScroll from '../../../../../hooks/useDisableScroll';
 import './DeviceInfoCard.css';
 import { format } from 'date-fns';
 
-const finalStatusLetter = (status) =>
-  status === 'on_time' || status === 'present'
-    ? 'P'
-    : status === 'late'
-    ? 'L'
-    : status === 'left_early'
-    ? 'E'
-    : status === 'excused'
-    ? 'X'
-    : status === 'partial'
-    ? 'R'
-    : 'A';
+const statusToLetterMap = {
+  excused: 'X',
+  on_time: 'P',
+  present: 'P',
+  late: 'L',
+  late_left_early: 'R',
+  left_early: 'E',
+  not_checkout: 'N',
+  not_checkin: 'M',
+  partial: 'R',
+  absent: 'A',
+};
+const finalStatusLetter = (status) => {
+  return statusToLetterMap[status] || 'A';
+};
 
 const MoreInfoModal = ({ isOpen, closed, data }) => {
   useDisableScroll(isOpen);

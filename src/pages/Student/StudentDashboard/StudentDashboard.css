@@ -99,14 +99,50 @@
 }
 .s-dashboard-body .left {
   border-radius: 20px;
-  padding: 15px;
   background: #fff;
-  /* max-width: 100%; */
 }
+
+.s-dashboard-body .left.analytics {
+  padding: 15px;
+}
+
 .today-schedule {
-  flex: 1;
   display: flex;
   flex-direction: column;
+  flex: 1;
+  /* padding-bottom: 10px; */
+  overflow: hidden;
+}
+.today-session {
+  flex: 1;
+  display: flex;
+  width: 100%;
+  overflow-x: auto;
+  padding: 1rem;
+  gap: 20px;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+}
+.today-session::-webkit-scrollbar {
+  height: 6px;
+}
+.today-session::-webkit-scrollbar-thumb {
+  background: var(--main-color);
+  border-radius: 10px;
+}
+
+/* Each session should snap into place */
+.today-session .ongoing-session {
+  scroll-snap-align: center;
+  margin: 0 auto;
+  flex: 0 0 auto;
+  max-width: 350px;
+  width: 1fr;
+  min-width: 280px;
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.164);
 }
 .today-schedule .top {
   display: flex;

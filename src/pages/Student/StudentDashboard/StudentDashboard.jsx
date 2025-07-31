@@ -2,6 +2,8 @@ import { MdAddchart, MdChat, MdSend, MdTimelapse } from 'react-icons/md';
 import { useAuth } from '../../../context/AuthContext';
 import {
   dateFormatter,
+  parseDuration,
+  parseTime2,
   timeFormatter,
   truncateText,
 } from '../../../utils/helpers';
@@ -15,12 +17,43 @@ import ProgressBar from './ProgressBar/ProgressBar';
 import { LuBookCheck } from 'react-icons/lu';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useFetchGroupAttendances } from '../../../hooks/useAttendance';
+import Spinner from '../../../components/Loader/Spinner/Spinner';
+import OngoingSession from './components/OngoingSession/OngoingSession';
+
+function checkIfDeadlinePassed(classStartUTC, graceDuration = '0H10M') {
+  const now = new Date();
+  const deadline = new Date(classStartUTC);
+  const deltaMinutes = parseDuration(graceDuration);
+  deadline.setMinutes(deadline.getMinutes() + deltaMinutes);
+  return now > deadline;
+}
 
 const StudentDashboard = () => {
   const { user } = useAuth();
   const [now, setNow] = useState(new Date());
   const navigate = useNavigate();
   const [message, setMessage] = useState('');
+  const {
+    data = [],
+    fetch,
+    loading: isFetchingRecords,
+  } = useFetchGroupAttendances();
+
+  useEffect(() => {
+    fetch(user.group);
+  }, []);
+
+  const upcoming = data.find((att) => att.status === 'upcoming') || [];
+  const ongoing = data.filter((att) => att.status === 'active') || [];
+  const session =
+    ongoing
+      .map((att) => ({
+        ...att,
+        myRecord: att.studentRecords.find((st) => st.studentId === user._id),
+      }))
+      .filter((att) => att.myRecord) || [];
+
   const overview = [
     {
       figure: '101',
@@ -46,10 +79,36 @@ const StudentDashboard = () => {
     <div className="s-dashboard">
       <header className="s-dashboard-header">
         <section>
-          <p className="cap">Good Morning, {user.name}</p>
-          <span>
-            You have <b>2</b> upcoming schedules and <b>1</b> attendance
-          </span>
+          <h3
+            className="cap"
+            onClick={() => console.log(session)}>
+            Good Morning, {user.name}
+          </h3>
+          {isFetchingRecords ? (
+            <Spinner
+              size="15px"
+              borderWidth="1px"
+            />
+          ) : (
+            <span>
+              You have{' '}
+              {upcoming.length > 0 ? (
+                <>
+                  <b>{upcoming.length}</b> upcoming and
+                </>
+              ) : (
+                ''
+              )}{' '}
+              {ongoing.length > 0 ? (
+                <>
+                  <b>{ongoing.length}</b> ongoing attendance
+                </>
+              ) : (
+                ''
+              )}
+            </span>
+          )}
+          <br />
         </section>
         <section className="curr-date">
           <div>
@@ -64,28 +123,39 @@ const StudentDashboard = () => {
       <hr />
       <div className="s-dashboard-body">
         <div className="s-dashboard-body-first">
-          <section className="today-schedule left">
-            <div className="top">
-              <h3>Today</h3>
-              <span>Absent</span>
+          <section className="today-schedule left attendance">
+            <div className="today-session ">
+              {session.length === 0 ? (
+                <>Nothing</>
+              ) : (
+                session.map((s) => {
+                  const deadlinePassed = checkIfDeadlinePassed(
+                    s.classTime.utcStart,
+                    s.settings.checkInCloseTime
+                  );
+
+                  const entryStart = parseTime2(
+                    s.classTime?.start,
+                    s.entry?.start
+                  );
+                  const entryEnd = parseTime2(entryStart, s.entry?.end);
+
+                  const offsets = {
+                    checkInCloseTime: s.settings.checkInCloseTime,
+                    others: '0H10M',
+                  };
+                  const entry = { start: entryStart, end: entryEnd };
+
+                  return (
+                    <OngoingSession
+                      session={s}
+                      deadlinePassed={deadlinePassed}
+                      timeData={{ offsets, entry }}
+                    />
+                  );
+                })
+              )}
             </div>
-            <hr />
-            <div className="mid">
-              <div className="mid-left">
-                <MdAddchart />
-                <h3>BCH305</h3>
-                <p>You have not marked yourself as present today.</p>
-                <p className="time-left">
-                  Time left : <span>56m 44s</span>
-                </p>
-              </div>
-              <ProgressBar
-                text
-                percent={18}
-                styled
-              />
-            </div>
-            {button.normal({ element: 'mark presence', name: 'cap' })}
           </section>
           <section className="right">
             <div className="info-field">
@@ -119,7 +189,7 @@ const StudentDashboard = () => {
           </section>
         </div>
         <div className="s-dashboard-body-second">
-          <section className="today-schedule left">
+          <section className="today-schedule left analytics">
             <div className="top">
               <h3>My Attendance</h3>
               {button.normal({

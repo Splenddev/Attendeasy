@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import { getUser } from '../../../../services/auth.service';
 
 const GroupSidebar = ({ group, refresh, user, updateUser, setSelectedTab }) => {
+  const rep = group.members?.find((m) => m.role === 'class-rep');
   const handleLeave = async () => {
     try {
       const result = await leaveGroupService();
@@ -71,7 +72,7 @@ const GroupSidebar = ({ group, refresh, user, updateUser, setSelectedTab }) => {
             </div>
             <div className={styles.classRep}>
               <img
-                src={group.creator?.avatar || '/main_class-rep_avatar.png'}
+                src={rep?.avatar || '/main_class-rep_avatar.png'}
                 alt="Class Rep"
               />
               <p>Owner: {group.creator?.name || 'Class Representative'}</p>
