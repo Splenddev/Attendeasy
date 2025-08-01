@@ -2,34 +2,101 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>You're Offline - Vigilo</title>
+    <title>Offline - Vigilo</title>
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1" />
+    <meta
+      name="theme-color"
+      content="#25aff3" />
+    <link
+      rel="icon"
+      href="/vigilo_logo.jpeg"
+      type="image/jpeg" />
     <style>
-      body {
+      :root {
+        --primary: #25aff3;
+        --text: #333;
+        --bg: #f4f6f8;
+        --card-bg: #ffffff;
+        --shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      }
+
+      * {
+        box-sizing: border-box;
         margin: 0;
+        padding: 0;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: var(--bg);
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        color: var(--text);
         padding: 2rem;
-        font-family: system-ui, sans-serif;
-        background-color: #f4f6f8;
-        color: #333;
         text-align: center;
       }
 
+      .container {
+        background: var(--card-bg);
+        padding: 2.5rem 2rem;
+        border-radius: 1rem;
+        box-shadow: var(--shadow);
+        max-width: 400px;
+        width: 100%;
+      }
+
       h1 {
-        color: #25aff3;
+        color: var(--primary);
         font-size: 2rem;
+        margin-bottom: 1rem;
       }
 
       p {
-        font-size: 1.1rem;
-        margin-bottom: 0.5rem;
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+        line-height: 1.5;
+      }
+
+      .emoji {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+
+      .reload-btn {
+        margin-top: 1.5rem;
+        padding: 0.75rem 1.25rem;
+        font-size: 1rem;
+        color: white;
+        background-color: var(--primary);
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .reload-btn:hover {
+        background-color: #199dd6;
       }
     </style>
   </head>
   <body>
-    <h1>📴 You're Offline</h1>
-    <p>It looks like you lost internet connection.</p>
-    <p>Please reconnect and try reloading the page.</p>
+    <div class="container">
+      <div class="emoji">📴</div>
+      <h1>You're Offline</h1>
+      <p>It seems you've lost internet connection.</p>
+      <p>
+        Reconnect and try reloading the page to continue using
+        <strong>Vigilo</strong>.
+      </p>
+      <button
+        class="reload-btn"
+        onclick="location.reload()">
+        Reload Page
+      </button>
+    </div>
   </body>
 </html>
