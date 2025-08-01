@@ -64,7 +64,6 @@
     font-size: 1rem;
   }
   &.refreshBtn {
-    background: var(--btn-bg);
     box-shadow: var(--btn-shadow-sm);
     &:hover {
       box-shadow: var(--btn-shadow-sm-hover);

@@ -106,6 +106,11 @@
   padding: 15px;
 }
 
+.s-dashboard-body .left.attendance {
+  border-radius: 6px;
+  padding: 10px;
+}
+
 .today-schedule {
   display: flex;
   flex-direction: column;
@@ -118,7 +123,7 @@
   display: flex;
   width: 100%;
   overflow-x: auto;
-  padding: 1rem;
+  padding: 0.5rem;
   gap: 20px;
   -webkit-overflow-scrolling: touch;
   scroll-snap-type: x mandatory;
@@ -142,6 +147,8 @@
   padding: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.164);
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 .today-schedule .top {
   display: flex;
@@ -164,17 +171,26 @@
   gap: 10px;
   margin-bottom: 20px;
 }
+
+.ongoing-session .head {
+  display: flex;
+  justify-content: space-between;
+  svg {
+    font-size: 1.7rem;
+    color: var(--main-color);
+  }
+}
+
 .mid .mid-left {
   display: flex;
   flex-direction: column;
   gap: 10px;
   justify-content: space-between;
-  & svg {
-    font-size: 2rem;
-    color: var(--main-color);
-  }
   & h3 {
     margin: 6px 0;
+  }
+  p {
+    font-size: 15px;
   }
 }
 .mid-left .stat {
@@ -218,10 +234,10 @@
   /* width: 100%; */
   flex: 1;
 }
-p.time-left {
+.ongoing-session .time-left {
+  display: flex;
+  gap: 5px;
   padding: 10px;
-  border-left: 3px solid var(--red);
-  margin-top: 10px;
   & span {
     color: var(--red);
     font-weight: 600;

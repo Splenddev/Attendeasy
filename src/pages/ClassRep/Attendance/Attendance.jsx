@@ -27,7 +27,7 @@ import {
 } from '../../../hooks/useAttendance';
 import { useAuth } from '../../../context/AuthContext';
 import Spinner from '../../../components/Loader/Spinner/Spinner';
-import { FiLoader, FiTrash } from 'react-icons/fi';
+import { FiLoader, FiRefreshCcw, FiTrash } from 'react-icons/fi';
 import { useSuccessModal } from '../../../hooks/useSuccessModal';
 import AttStatus from './components/AttStatus/AttStatus';
 import useAttendanceSocket from '../../../hooks/useAttendanceSocket';
@@ -291,6 +291,13 @@ const Attendance = () => {
             </div>
           </div>
         </div>
+
+        {button.multiple({
+          icon: FiRefreshCcw,
+          element: 'Refresh',
+          func: () => fetch(groupId),
+          name: 'default_button',
+        })}
 
         {attendanceList.length > 0 && (
           <p className="c-attendance-length">

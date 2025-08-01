@@ -2,7 +2,6 @@ import { FaIdCard, FaKey } from 'react-icons/fa';
 import './Login.css';
 import { AuthFieldSet } from '../../../components';
 import { useState } from 'react';
-import { MdCheckCircle, MdCheckCircleOutline } from 'react-icons/md';
 import button from '../../../components/Button/Button';
 import { useNavigate } from 'react-router-dom';
 import { ROLES } from '../../../utils/roles';
@@ -111,7 +110,7 @@ const Login = () => {
             ))}
           </section>
 
-          {error && <p className="error-msg">{error}</p>}
+          {error && <p className="error-message">{error}</p>}
 
           {button.normal({
             element: authBtnsLoading.login ? (

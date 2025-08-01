@@ -1,16 +1,11 @@
-import {
-  FaClipboardList,
-  FaRegListAlt,
-  FaTachometerAlt,
-  FaUsers,
-} from 'react-icons/fa';
-import { MdDashboard, MdEventNote, MdGroup } from 'react-icons/md';
+import { FaFolder, FaFolderOpen, FaRegListAlt, FaUsers } from 'react-icons/fa';
+import { MdDashboard, MdEventNote, MdFolderSpecial } from 'react-icons/md';
 import logo from '/vigilo_logo.jpeg';
 import profile from './profile.jpg';
-const roleUrl = '/class-rep';
-const roleUrl2 = '/student';
+import { LuFolder } from 'react-icons/lu';
 
 export const assets = { logo, profile };
+const loc = window.location.pathname;
 export const c_Sidebar = [
   {
     label: 'Dashboard',
@@ -31,6 +26,11 @@ export const c_Sidebar = [
     label: 'Class Group',
     link: `group-management`,
     icon: FaUsers,
+  },
+  {
+    label: 'Resources',
+    icon: loc.includes('resources') ? FaFolderOpen : FaFolder,
+    link: 'resources',
   },
 ];
 export const s_Sidebar = [
@@ -53,6 +53,11 @@ export const s_Sidebar = [
     label: 'Class Group',
     icon: FaUsers,
     link: `group-management`,
+  },
+  {
+    label: 'Resources',
+    icon: loc.includes('resources') ? FaFolderOpen : FaFolder,
+    link: 'resources',
   },
   // {
   //   label: 'Class Group',
@@ -351,177 +356,5 @@ export const attendance = [
         role: 'student',
       },
     ],
-  },
-];
-export const notifications = [
-  {
-    type: 'approval',
-    image: '/avatars/student_anna.jpg',
-    dateAdded: '2025-05-29',
-    timeAdded: '09:10',
-    isNew: true,
-    actionApprove: 'approveAbsentPleas',
-    actionDeny: 'denyAbsentPleas',
-    userMedia: '/proofs/anna_medical_note.jpg',
-    message:
-      'Anna requested to be marked present for today’s class. Reason: medical condition.',
-  },
-  {
-    type: 'media',
-    image: '/icons/document.png',
-    dateAdded: '2025-05-28',
-    timeAdded: '16:45',
-    isNew: true,
-    actionApprove: null,
-    actionDeny: null,
-    userMedia: '/materials/group_assignment_guidelines.pdf',
-    message: 'You shared a new file: Group Assignment Guidelines.',
-  },
-  {
-    type: 'announcement',
-    image: '/icons/info.png',
-    dateAdded: '2025-05-28',
-    timeAdded: '13:30',
-    isNew: true,
-    actionApprove: null,
-    actionDeny: null,
-    userMedia: '',
-    message:
-      'Schedule update: "History 102" now starts at 10:30 AM every Wednesday.',
-  },
-  {
-    type: 'approval',
-    image: '/avatars/student_musa.jpg',
-    dateAdded: '2025-05-27',
-    timeAdded: '15:20',
-    isNew: true,
-    actionApprove: 'approveMedia',
-    actionDeny: 'denyMedia',
-    userMedia: '/uploads/class_video_musa.mp4',
-    message: 'Musa submitted a group project video for review.',
-  },
-  {
-    type: 'class-reminder',
-    image: '/icons/calendar.png',
-    dateAdded: '2025-05-27',
-    timeAdded: '07:45',
-    isNew: false,
-    actionApprove: null,
-    actionDeny: null,
-    userMedia: '',
-    message: 'Reminder: "Intro to Philosophy" starts at 8:00 AM today.',
-  },
-  {
-    type: 'approval',
-    image: '/avatars/student_lola.jpg',
-    dateAdded: '2025-05-26',
-    timeAdded: '11:00',
-    isNew: true,
-    actionApprove: 'approveAbsentPleas',
-    actionDeny: 'denyAbsentPleas',
-    userMedia: '/proofs/lola_network_issue_screenshot.png',
-    message:
-      'Lola marked herself present late. Reason: poor internet. Review proof before approval.',
-  },
-  {
-    type: 'announcement',
-    image: '/icons/warning.png',
-    dateAdded: '2025-05-26',
-    timeAdded: '14:15',
-    isNew: false,
-    actionApprove: null,
-    actionDeny: null,
-    userMedia: '',
-    message: 'Power outage reported in Lecture Hall C. Classes may be moved.',
-  },
-  {
-    type: 'assignment-deadline',
-    image: '/icons/assignment.png',
-    dateAdded: '2025-05-25',
-    timeAdded: '08:00',
-    isNew: true,
-    actionApprove: null,
-    actionDeny: null,
-    userMedia: '',
-    message: 'Reminder: Group assignment on Ethics is due by 11:59 PM tonight.',
-  },
-  {
-    type: 'approval',
-    image: '/icons/image.png',
-    dateAdded: '2025-05-25',
-    timeAdded: '18:45',
-    isNew: true,
-    actionApprove: 'approveMedia',
-    actionDeny: 'denyMedia',
-    userMedia: '/uploads/project_poster.jpg',
-    message: 'A student uploaded a poster image for the class showcase.',
-  },
-  {
-    type: 'class-reminder',
-    image: '/icons/calendar.png',
-    dateAdded: '2025-05-25',
-    timeAdded: '06:30',
-    isNew: false,
-    actionApprove: null,
-    actionDeny: null,
-    userMedia: '',
-    message: 'Reminder: "Environmental Science" class starts at 7:30 AM.',
-  },
-  {
-    type: 'announcement',
-    image: '/icons/info.png',
-    dateAdded: '2025-05-24',
-    timeAdded: '10:20',
-    isNew: true,
-    actionApprove: null,
-    actionDeny: null,
-    userMedia: '',
-    message:
-      'Mid-semester exams start next week. Class reps must collect seat numbers.',
-  },
-  {
-    type: 'approval',
-    image: '/avatars/student_emeka.jpg',
-    dateAdded: '2025-05-24',
-    timeAdded: '09:50',
-    isNew: true,
-    actionApprove: 'approveAbsentPleas',
-    actionDeny: 'denyAbsentPleas',
-    userMedia: '/proofs/emeka_event_pass.pdf',
-    message:
-      'Emeka claims he was at an official event during class time. Please review his uploaded pass.',
-  },
-  {
-    type: 'media',
-    image: '/icons/pdf-icon.png',
-    dateAdded: '2025-05-23',
-    timeAdded: '17:00',
-    isNew: false,
-    actionApprove: null,
-    actionDeny: null,
-    userMedia: '/materials/reading_list.pdf',
-    message: 'Class reading list for next week has been uploaded.',
-  },
-  {
-    type: 'class-reminder',
-    image: '/icons/calendar.png',
-    dateAdded: '2025-05-23',
-    timeAdded: '06:00',
-    isNew: false,
-    actionApprove: null,
-    actionDeny: null,
-    userMedia: '',
-    message: 'Reminder: "Data Structures" class begins at 7:00 AM.',
-  },
-  {
-    type: 'approval',
-    image: '/avatars/student_ife.jpg',
-    dateAdded: '2025-05-22',
-    timeAdded: '12:50',
-    isNew: true,
-    actionApprove: 'approveJoinRequest',
-    actionDeny: 'denyJoinRequest',
-    userMedia: '',
-    message: 'Ife requested to join the class group. Approve or deny access.',
   },
 ];

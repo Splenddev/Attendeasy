@@ -29,6 +29,7 @@ const getStatusMessage = (checkin, finalStatus, deadlinePassed = false) => {
       return 'You left class early.';
     case 'late_left_early':
     case 'partial':
+    case 'not_checkout':
       return 'You attended partially. Your status may affect your record.';
     case 'excused':
       return '📄 You were excused from this session.';
@@ -43,16 +44,21 @@ const getStatusMessage = (checkin, finalStatus, deadlinePassed = false) => {
 
 const OngoingSession = ({ session, timeData }) => {
   const { offsets, entry } = timeData;
-  const { checkInCloses } = getAttendanceTimes({
+  const { checkInCloses, checkOutCloses } = getAttendanceTimes({
     att: session,
     offsets,
     entry,
   });
   const navigate = useNavigate();
-  const countdown = useCountdown(checkInCloses.getTime());
-  const timer = formatTimeLeft(countdown, 'human');
+  const countdown1 = useCountdown(checkInCloses.getTime());
+  const timer1 = formatTimeLeft(countdown1, 'human');
+  const countdown2 = useCountdown(checkOutCloses.getTime());
+  const timer2 = formatTimeLeft(countdown2, 'human');
 
-  const deadlinePassed = checkIfDeadlinePassed(countdown.timeLeft);
+  const isCheckedIn = session.myRecord.checkIn.time;
+  const isCheckedOut = session.myRecord.checkOut.time;
+
+  const deadlinePassed = checkIfDeadlinePassed(countdown1.timeLeft);
 
   return (
     <div
@@ -63,9 +69,26 @@ const OngoingSession = ({ session, timeData }) => {
         <span>{session.myRecord.finalStatus || '-'}</span>
       </div>
       <hr />
+      <div className="head">
+        <MdAddchart />
+        {(countdown1.timeLeft > 0 || countdown2.timeLeft > 0) && (
+          <div className="time-left">
+            Time left:
+            <span>
+              {' '}
+              {!isCheckedIn
+                ? timer1 === '0s'
+                  ? ''
+                  : timer1
+                : timer2 === '0s'
+                ? ''
+                : timer2}
+            </span>
+          </div>
+        )}
+      </div>
       <div className="mid">
         <div className="mid-left">
-          <MdAddchart />
           <h3>{session.courseCode}</h3>
           <p>
             {getStatusMessage(
@@ -74,12 +97,6 @@ const OngoingSession = ({ session, timeData }) => {
               deadlinePassed
             )}
           </p>
-
-          {countdown.timeLeft > 0 && (
-            <p className="time-left">
-              Time left : <span> {timer === '0s' ? '' : timer}</span>
-            </p>
-          )}
         </div>
         <ProgressBar
           text
@@ -87,6 +104,7 @@ const OngoingSession = ({ session, timeData }) => {
           styled
         />
       </div>
+
       {button.normal({
         element: 'mark presence',
         name: 'cap',

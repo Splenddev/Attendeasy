@@ -115,7 +115,9 @@
     /* width: 200px; */
   }
 }
-
+.c-attendance .default_button {
+  place-self: end;
+}
 .c-attendance-filter {
   gap: 10px;
   display: flex;

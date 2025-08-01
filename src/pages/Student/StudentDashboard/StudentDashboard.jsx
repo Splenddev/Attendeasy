@@ -14,12 +14,13 @@ import { AiFillFilePdf } from 'react-icons/ai';
 import { FiDownload } from 'react-icons/fi';
 import { HiDocumentText } from 'react-icons/hi';
 import ProgressBar from './ProgressBar/ProgressBar';
-import { LuBookCheck } from 'react-icons/lu';
+import { LuBookCheck, LuClock } from 'react-icons/lu';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFetchGroupAttendances } from '../../../hooks/useAttendance';
 import Spinner from '../../../components/Loader/Spinner/Spinner';
 import OngoingSession from './components/OngoingSession/OngoingSession';
+import EmptyState from '../../../components/EmptyState/EmptyState';
 
 function checkIfDeadlinePassed(classStartUTC, graceDuration = '0H10M') {
   const now = new Date();
@@ -126,7 +127,22 @@ const StudentDashboard = () => {
           <section className="today-schedule left attendance">
             <div className="today-session ">
               {session.length === 0 ? (
-                <>Nothing</>
+                <EmptyState
+                  title="No Ongoing Sessions"
+                  subtitle="There are no active classes right now. Please check back later or contact your class rep for details."
+                  icon={LuClock}
+                  action={
+                    <button
+                      onClick={() => window.location.reload()}
+                      style={{
+                        color: '#2563eb',
+                        textDecoration: 'underline',
+                        fontSize: '0.9rem',
+                      }}>
+                      Refresh
+                    </button>
+                  }
+                />
               ) : (
                 session.map((s) => {
                   const deadlinePassed = checkIfDeadlinePassed(

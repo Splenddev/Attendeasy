@@ -1,21 +1,24 @@
-.mark-entry-modal {
-  max-width: 520px;
+.mark-entry-modal-wrapper {
+  padding: 10px;
+  /* max-height: calc(85vh - 80px); */
+  max-width: 620px;
   width: 90vw;
-  background: #fff;
   border-radius: 14px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  padding: 24px 32px;
+  background: #fff;
   margin: 80px auto;
+  z-index: 5;
+}
+.mark-entry-modal {
+  padding: 1rem;
+  height: calc(85vh - 80px);
+  padding-top: 0;
   color: #222;
   overflow-y: auto;
-  height: calc(100vh - 80px);
-  max-height: calc(85vh - 80px);
-  z-index: 5;
 }
 
 .mark-entry-modal::-webkit-scrollbar {
   width: 6px;
-  right: 3px;
 }
 .mark-entry-modal::-webkit-scrollbar-thumb {
   background: var(--main-color);
@@ -27,6 +30,11 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
+  position: sticky;
+  top: 0;
+  padding: 10px;
+  border-bottom: 1.5px solid #e0e0e0;
+  background: #ffffff;
 }
 
 .modal-header h2 {
@@ -45,12 +53,6 @@
 
 .close-button:hover {
   color: #000;
-}
-
-hr {
-  border: none;
-  border-top: 1.5px solid #e0e0e0;
-  margin-bottom: 20px;
 }
 
 .modal-section p {

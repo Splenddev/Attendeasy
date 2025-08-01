@@ -6,6 +6,7 @@ import {
   Attendance,
   ClassRepDashboard,
   ClassSchedule,
+  GroupResources,
   Home,
   NotFound,
   StudentAttendance,
@@ -119,6 +120,14 @@ export const router = createBrowserRouter([
               </Suspense>
             ),
           },
+          {
+            path: 'resources',
+            element: (
+              <Suspense fallback={<Loader minDelay={6000} />}>
+                <GroupResources />
+              </Suspense>
+            ),
+          },
         ],
       },
       {
@@ -177,6 +186,14 @@ export const router = createBrowserRouter([
             element: (
               <Suspense fallback={<Loader />}>
                 <GroupManagementPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'resources',
+            element: (
+              <Suspense fallback={<Loader minDelay={6000} />}>
+                <GroupResources />
               </Suspense>
             ),
           },

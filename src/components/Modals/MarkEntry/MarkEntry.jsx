@@ -234,107 +234,102 @@ const MarkEntry = ({
   };
 
   return (
-    <div className="mark-entry-modal">
-      <div className="modal-header">
-        <h2>Mark Entry</h2>
-        <button
-          onClick={() =>
-            onClose((p) => ({
-              ...p,
-              visible: false,
-            }))
-          }
-          className="close-button"
-          title="Close modal">
-          <MdClose />
-        </button>
-      </div>
-
-      <hr />
-
-      <div className="modal-section">
-        <p>
-          <strong>Class Location:</strong> {classAddress || 'Loading...'}
-        </p>
-        {userLocation && (
+    <div className="mark-entry-modal-wrapper">
+      <div className="mark-entry-modal">
+        <div className="modal-header">
+          <h2>Mark Entry</h2>
+          <button
+            onClick={() =>
+              onClose((p) => ({
+                ...p,
+                visible: false,
+              }))
+            }
+            className="close-button"
+            title="Close modal">
+            <MdClose />
+          </button>
+        </div>
+        <div className="modal-section">
           <p>
-            <strong>Your Location:</strong>{' '}
-            {loadingAddress ? 'Loading...' : userAddress || 'Unknown'}
+            <strong>Class Location:</strong> {classAddress || 'Loading...'}
           </p>
-        )}
-        <p>
-          <strong>Distance:</strong>{' '}
-          {distance != null ? `${distance} m` : 'Not measured'}
-        </p>
-        <p>
-          <strong>Allowed Range:</strong> {maxDistance} meters
-        </p>
-      </div>
-
-      <div
-        className="map-container"
-        style={{ position: 'relative' }}>
-        <MapContainer
-          center={userLocation || classLocation}
-          zoom={15}
-          scrollWheelZoom={false}
-          style={{ height: '300px', width: '100%', borderRadius: '8px' }}>
-          <TileLayer
-            attribution="&copy; OpenStreetMap contributors"
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          <Marker
-            position={classLocation}
-            icon={classIcon}>
-            <Popup>Class Location</Popup>
-          </Marker>
           {userLocation && (
-            <>
-              <Marker
-                position={userLocation}
-                icon={userIcon}>
-                <Popup>Your Location</Popup>
-              </Marker>
-              <Circle
-                center={userLocation}
-                radius={maxDistance}
-                pathOptions={{
-                  color: status === 'within' ? 'green' : 'red',
-                  fillColor:
-                    status === 'within'
-                      ? 'rgba(0,255,0,0.2)'
-                      : 'rgba(255,0,0,0.2)',
-                }}
-              />
-              <Polyline
-                positions={[userLocation, classLocation]}
-                pathOptions={{ color: 'blue', weight: 3, opacity: 0.6 }}
-              />
-            </>
+            <p>
+              <strong>Your Location:</strong>{' '}
+              {loadingAddress ? 'Loading...' : userAddress || 'Unknown'}
+            </p>
           )}
-          <GoToMyLocationButton onLocationFound={setUserLocation} />
-        </MapContainer>
-      </div>
-
-      <div className={`info-box ${status}`}>{getStatusMessage()}</div>
-
-      <button
-        className="check-button"
-        onClick={() =>
-          setStatus((prev) => (prev === 'checking' ? 'idle' : 'checking'))
-        }>
-        {status === 'checking' ? 'Stop Tracking' : 'Check Location'}
-      </button>
-
-      {status === 'within' && (
+          <p>
+            <strong>Distance:</strong>{' '}
+            {distance != null ? `${distance} m` : 'Not measured'}
+          </p>
+          <p>
+            <strong>Allowed Range:</strong> {maxDistance} meters
+          </p>
+        </div>
+        <div
+          className="map-container"
+          style={{ position: 'relative' }}>
+          <MapContainer
+            center={userLocation || classLocation}
+            zoom={15}
+            scrollWheelZoom={false}
+            style={{ height: '300px', width: '100%', borderRadius: '8px' }}>
+            <TileLayer
+              attribution="&copy; OpenStreetMap contributors"
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <Marker
+              position={classLocation}
+              icon={classIcon}>
+              <Popup>Class Location</Popup>
+            </Marker>
+            {userLocation && (
+              <>
+                <Marker
+                  position={userLocation}
+                  icon={userIcon}>
+                  <Popup>Your Location</Popup>
+                </Marker>
+                <Circle
+                  center={userLocation}
+                  radius={maxDistance}
+                  pathOptions={{
+                    color: status === 'within' ? 'green' : 'red',
+                    fillColor:
+                      status === 'within'
+                        ? 'rgba(0,255,0,0.2)'
+                        : 'rgba(255,0,0,0.2)',
+                  }}
+                />
+                <Polyline
+                  positions={[userLocation, classLocation]}
+                  pathOptions={{ color: 'blue', weight: 3, opacity: 0.6 }}
+                />
+              </>
+            )}
+            <GoToMyLocationButton onLocationFound={setUserLocation} />
+          </MapContainer>
+        </div>
+        <div className={`info-box ${status}`}>{getStatusMessage()}</div>
         <button
-          className="submit-button"
-          onClick={submitCheckIn}
-          style={{ marginTop: '10px' }}>
-          {loading && <FiLoader className="spin" />}
-          Submit {mode}
+          className="check-button"
+          onClick={() =>
+            setStatus((prev) => (prev === 'checking' ? 'idle' : 'checking'))
+          }>
+          {status === 'checking' ? 'Stop Tracking' : 'Check Location'}
         </button>
-      )}
+        {status === 'within' && (
+          <button
+            className="submit-button"
+            onClick={submitCheckIn}
+            style={{ marginTop: '10px' }}>
+            {loading && <FiLoader className="spin" />}
+            Submit {mode}
+          </button>
+        )}
+      </div>
     </div>
   );
 };

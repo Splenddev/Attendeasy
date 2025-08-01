@@ -1,0 +1,9 @@
+.default_button {
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 20px;
+  border: none;
+  background: var(--main-color);
+  color: #fff;
+  gap: 10px;
+}

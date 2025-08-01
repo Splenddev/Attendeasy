@@ -1,6 +1,7 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import 'leaflet/dist/leaflet.css';
 import 'react-toastify/dist/ReactToastify.css';
+import './styles/default.css';
 
 import DevRoleSwitcher from './components/DevRoleSwitcher';
 import { ToastContainer } from 'react-toastify';

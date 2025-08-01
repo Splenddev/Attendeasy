@@ -10,7 +10,6 @@ import {
   rejectJoinRequestService,
 } from '../../../../services/group.service';
 import { toast } from 'react-toastify';
-import GroupCloudTab from '../tab/GroupCloudTab/GroupCloudTab';
 import AttendanceTab from '../tab/AttendanceTab/AttendanceTab';
 import { useFetchGroupTabAttendances } from '../../../../hooks/useAttendance';
 import Spinner from '../../../../components/Loader/Spinner/Spinner';
@@ -93,8 +92,6 @@ const GroupContents = ({
             isClassRep={isClassRep}
           />
         );
-      case 'materials':
-        return <GroupCloudTab user={user} />;
       default:
         return <div>Tab not found.</div>;
     }
