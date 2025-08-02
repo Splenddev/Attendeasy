@@ -169,6 +169,14 @@ html.dark {
 body {
   font-family: var(--font-sen), sans-serif;
 }
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-cinzel);
+}
+
 button,
 input,
 select,

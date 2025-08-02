@@ -7,6 +7,7 @@ const GroupResources = () => {
         <h1>group resources</h1>
         <button>Add resource</button>
       </header>
+      <section className={styles.resourceCategory}></section>
     </div>
   );
 };

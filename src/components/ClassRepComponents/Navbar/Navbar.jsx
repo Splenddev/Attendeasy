@@ -22,7 +22,7 @@ const Navbar = ({ dropdownAssets = [] }) => {
 
   return (
     <nav className="navbar">
-      <p className="navbar-title">{navTitle}</p>
+      <h3 className="navbar-title">{navTitle}</h3>
       <div className="navbar-side">
         <div
           className="alert"
@@ -66,8 +66,8 @@ const Navbar = ({ dropdownAssets = [] }) => {
             }))
           }>
           <div className="details">
-            <p className="name">{user.name || 'name'}</p>
-            <p className="role">{user.role || 'role'}</p>
+            <h4 className="name">{user.name || 'name'}</h4>
+            <span className="role">{user.role || 'role'}</span>
           </div>
           <img
             src={user.profilePicture || `/main_${user.role}_avatar.png`}
