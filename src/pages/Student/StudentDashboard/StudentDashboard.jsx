@@ -2,6 +2,7 @@ import { MdAddchart, MdChat, MdSend, MdTimelapse } from 'react-icons/md';
 import { useAuth } from '../../../context/AuthContext';
 import {
   dateFormatter,
+  getGreeting,
   parseDuration,
   parseTime2,
   timeFormatter,
@@ -11,7 +12,7 @@ import './StudentDashboard.css';
 import button from '../../../components/Button/Button';
 import { FaCircle, FaFileAlt, FaHistory } from 'react-icons/fa';
 import { AiFillFilePdf } from 'react-icons/ai';
-import { FiDownload } from 'react-icons/fi';
+import { FiDownload, FiRefreshCcw } from 'react-icons/fi';
 import { HiDocumentText } from 'react-icons/hi';
 import ProgressBar from './ProgressBar/ProgressBar';
 import { LuBookCheck, LuClock } from 'react-icons/lu';
@@ -45,7 +46,7 @@ const StudentDashboard = () => {
     fetch(user.group);
   }, []);
 
-  const upcoming = data.find((att) => att.status === 'upcoming') || [];
+  const upcoming = data.filter((att) => att.status === 'upcoming') || [];
   const ongoing = data.filter((att) => att.status === 'active') || [];
   const session =
     ongoing
@@ -83,7 +84,7 @@ const StudentDashboard = () => {
           <h3
             className="cap"
             onClick={() => console.log(session)}>
-            Good Morning, {user.name}
+            {getGreeting()}, {user.name}
           </h3>
           {isFetchingRecords ? (
             <Spinner
@@ -92,23 +93,30 @@ const StudentDashboard = () => {
             />
           ) : (
             <span>
-              You have{' '}
-              {upcoming.length > 0 ? (
-                <>
-                  <b>{upcoming.length}</b> upcoming and
-                </>
+              {upcoming.length === 0 && ongoing.length === 0 ? (
+                'You have no upcoming or ongoing attendance.'
               ) : (
-                ''
-              )}{' '}
-              {ongoing.length > 0 ? (
                 <>
-                  <b>{ongoing.length}</b> ongoing attendance
+                  You have{' '}
+                  {upcoming.length > 0 && (
+                    <>
+                      <b>{upcoming.length}</b> upcoming
+                      {upcoming.length > 1 ? ' sessions' : ' session'}
+                    </>
+                  )}
+                  {upcoming.length > 0 && ongoing.length > 0 && ' and '}
+                  {ongoing.length > 0 && (
+                    <>
+                      <b>{ongoing.length}</b> ongoing
+                      {ongoing.length > 1 ? ' sessions' : ' session'}
+                    </>
+                  )}
+                  .
                 </>
-              ) : (
-                ''
               )}
             </span>
           )}
+
           <br />
         </section>
         <section className="curr-date">
@@ -133,12 +141,11 @@ const StudentDashboard = () => {
                   icon={LuClock}
                   action={
                     <button
-                      onClick={() => window.location.reload()}
-                      style={{
-                        color: '#2563eb',
-                        textDecoration: 'underline',
-                        fontSize: '0.9rem',
-                      }}>
+                      onClick={() => fetch(user.group)}
+                      className="default_button mixed">
+                      <FiRefreshCcw
+                        className={isFetchingRecords ? 'spin' : ''}
+                      />
                       Refresh
                     </button>
                   }

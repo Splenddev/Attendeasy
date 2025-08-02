@@ -1,4 +1,4 @@
-import { FaFolder, FaFolderOpen, FaRegListAlt, FaUsers } from 'react-icons/fa';
+import { FaFolder, FaRegListAlt, FaUsers } from 'react-icons/fa';
 import { MdDashboard, MdEventNote, MdFolderSpecial } from 'react-icons/md';
 import logo from '/vigilo_logo.jpeg';
 import profile from './profile.jpg';
@@ -27,11 +27,7 @@ export const c_Sidebar = [
     link: `group-management`,
     icon: FaUsers,
   },
-  {
-    label: 'Resources',
-    icon: loc.includes('resources') ? FaFolderOpen : FaFolder,
-    link: 'resources',
-  },
+  { label: 'Resources', icon: FaFolder, link: 'resources' },
 ];
 export const s_Sidebar = [
   {
@@ -54,11 +50,7 @@ export const s_Sidebar = [
     icon: FaUsers,
     link: `group-management`,
   },
-  {
-    label: 'Resources',
-    icon: loc.includes('resources') ? FaFolderOpen : FaFolder,
-    link: 'resources',
-  },
+  { label: 'Resources', icon: FaFolder, link: 'resources' },
   // {
   //   label: 'Class Group',
   //   icon: MdGroup,

@@ -161,6 +161,22 @@ export const truncateText = (text = '', length = 20) => {
   return text.length > length ? text.slice(0, length).trim() + '...' : text;
 };
 
+export const getGreeting = () => {
+  const hour = new Date().getHours();
+
+  if (hour < 12) return 'Good Morning';
+  if (hour < 18) return 'Good Afternoon';
+  return 'Good Evening';
+};
+
+export const getStatusStyle = (status) => {
+  if (status === 'on_time' || status === 'on-time' || status === 'present')
+    return 'main-color';
+  else if (['late', 'absent'].includes(status)) {
+    return status;
+  } else return 'others';
+};
+
 export const generateSmartTip = (data = [], user, loading) => {
   if (!data || !user?._id || loading) return [];
 

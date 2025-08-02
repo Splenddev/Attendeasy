@@ -99,7 +99,7 @@ export const useReopenAttendance = () => {
 
 export const useFetchGroupAttendances = (groupId, autoFetch = false) => {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const fetch = useCallback(

@@ -313,22 +313,24 @@ const MarkEntry = ({
           </MapContainer>
         </div>
         <div className={`info-box ${status}`}>{getStatusMessage()}</div>
-        <button
-          className="check-button"
-          onClick={() =>
-            setStatus((prev) => (prev === 'checking' ? 'idle' : 'checking'))
-          }>
-          {status === 'checking' ? 'Stop Tracking' : 'Check Location'}
-        </button>
-        {status === 'within' && (
+        <div className="mark-entry-cta">
           <button
-            className="submit-button"
-            onClick={submitCheckIn}
-            style={{ marginTop: '10px' }}>
-            {loading && <FiLoader className="spin" />}
-            Submit {mode}
+            className="check-button"
+            onClick={() =>
+              setStatus((prev) => (prev === 'checking' ? 'idle' : 'checking'))
+            }>
+            {status === 'checking' ? 'Stop Tracking' : 'Check Location'}
           </button>
-        )}
+          {status === 'within' && (
+            <button
+              className="submit-button"
+              onClick={submitCheckIn}
+              style={{ marginTop: '10px' }}>
+              {loading && <FiLoader className="spin" />}
+              Submit {mode}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

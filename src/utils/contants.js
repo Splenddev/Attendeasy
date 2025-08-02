@@ -279,38 +279,43 @@ export const formDataAssets = [
     selectOptions: [
       {
         name: 'settings.markOnce',
-        title: 'Allow Only One Marking Per Student',
+        title: 'Mark Only Once Per Student',
         type: 'toggle',
         orientation: 'horizontal',
         required: true,
       },
+
+      // CHECK-IN CONTROL
       {
         name: 'settings.checkInClose',
-        title: 'When check-in closes',
+        title: 'Auto-Close Check-In After',
         type: 'select',
+        dependsOn: 'settings.enableCheckInOut',
         options: [
-          { text: '10 minutes after start', value: '0H10M' },
-          { text: '20 minutes after start', value: '0H20M' },
-          { text: '30 minutes after start', value: '0H30M' },
+          { text: '10 minutes', value: '0H10M' },
+          { text: '20 minutes', value: '0H20M' },
+          { text: '30 minutes', value: '0H30M' },
         ],
       },
       {
         name: 'settings.lateThreshold',
-        title: 'Students are recorded late after',
+        title: 'Mark Late After',
         type: 'select',
         options: [
-          { text: '10 minutes from class start', value: 10 },
-          { text: '20 minutes from class start', value: 20 },
-          { text: '30 minutes from class start', value: 30 },
+          { text: '10 mins', value: 10 },
+          { text: '20 mins', value: 20 },
+          { text: '30 mins', value: 30 },
         ],
       },
       {
         name: 'settings.allowLateJoiners',
-        title: 'Allow Late Joiners to Mark',
+        title: 'Allow Late Joiners',
         type: 'toggle',
         orientation: 'horizontal',
         required: true,
       },
+
+      // ENABLE CHECK-IN / OUT
       {
         name: 'settings.enableCheckInOut',
         title: 'Enable Check-Out Feature',
@@ -318,11 +323,14 @@ export const formDataAssets = [
         orientation: 'horizontal',
         required: true,
       },
+
+      // CHECK-IN SUB OPTIONS (dependent)
       {
         name: 'settings.allowEarlyCheckIn',
         title: 'Allow Early Check-In',
         type: 'toggle',
         orientation: 'horizontal',
+        dependsOn: 'settings.enableCheckInOut',
         required: true,
       },
       {
@@ -330,43 +338,30 @@ export const formDataAssets = [
         title: 'Allow Late Check-In',
         type: 'toggle',
         orientation: 'horizontal',
+        dependsOn: 'settings.enableCheckInOut',
         required: true,
       },
+
       {
         name: 'settings.allowEarlyCheckOut',
         title: 'Allow Early Check-Out',
-        dependsOn: 'settings.enableCheckInOut',
-        dependsOnKey: 'enabled',
         type: 'toggle',
         orientation: 'horizontal',
+        dependsOn: 'settings.enableCheckInOut',
         required: true,
       },
       {
         name: 'settings.allowLateCheckOut',
         title: 'Allow Late Check-Out',
-        dependsOnKey: 'enabled',
+        type: 'toggle',
+        orientation: 'horizontal',
         dependsOn: 'settings.enableCheckInOut',
-        type: 'toggle',
-        orientation: 'horizontal',
         required: true,
       },
-      {
-        name: 'settings.repeatable',
-        title: 'Recurring Session?',
-        type: 'toggle',
-        orientation: 'horizontal',
-        required: true,
-      },
-      {
-        name: 'settings.notifyOnStart',
-        title: 'Notify Students on Start',
-        type: 'toggle',
-        orientation: 'horizontal',
-        required: true,
-      },
+
       {
         name: 'settings.minimumPresenceDuration',
-        title: 'Minimum Presence Duration (mins)',
+        title: 'Minimum Time to Be Present (mins)',
         type: 'input',
         input: {
           type: 'number',
@@ -374,6 +369,23 @@ export const formDataAssets = [
           max: 180,
           placeholder: 'e.g. 45',
         },
+        dependsOn: 'settings.enableCheckInOut',
+        required: true,
+      },
+
+      // OTHER SETTINGS
+      {
+        name: 'settings.repeatable',
+        title: 'Recurring Session',
+        type: 'toggle',
+        orientation: 'horizontal',
+        required: true,
+      },
+      {
+        name: 'settings.notifyOnStart',
+        title: 'Notify Students at Start',
+        type: 'toggle',
+        orientation: 'horizontal',
         required: true,
       },
       {

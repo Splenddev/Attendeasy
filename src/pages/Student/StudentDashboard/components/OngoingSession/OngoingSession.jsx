@@ -3,6 +3,7 @@ import { useCountdown } from '../../../../../hooks/useCountdown';
 import {
   formatTimeLeft,
   getAttendanceTimes,
+  getStatusStyle,
 } from '../../../../../utils/helpers';
 import { MdAddchart } from 'react-icons/md';
 import ProgressBar from '../../ProgressBar/ProgressBar';
@@ -55,10 +56,23 @@ const OngoingSession = ({ session, timeData }) => {
   const countdown2 = useCountdown(checkOutCloses.getTime());
   const timer2 = formatTimeLeft(countdown2, 'human');
 
+  const { enableCheckInOut } = session.settings || {};
+
+  const all = session.studentRecords.length;
+  const unmarked = session.studentRecords.filter(
+    (st) => st.finalStatus === 'absent'
+  ).length;
+  const marked = ((all - unmarked) / all) * 100;
+
   const isCheckedIn = session.myRecord.checkIn.time;
   const isCheckedOut = session.myRecord.checkOut.time;
+  const isFullyMarked = enableCheckInOut
+    ? isCheckedIn && isCheckedOut
+    : isCheckedIn;
 
   const deadlinePassed = checkIfDeadlinePassed(countdown1.timeLeft);
+
+  const style = getStatusStyle(session.myRecord.finalStatus);
 
   return (
     <div
@@ -66,7 +80,14 @@ const OngoingSession = ({ session, timeData }) => {
       className="ongoing-session">
       <div className="top">
         <h3>Today</h3>
-        <span>{session.myRecord.finalStatus || '-'}</span>
+        <span
+          className={style}
+          style={{
+            background: `var(--${style}-light)`,
+            border: `1px solid var(--${style})`,
+          }}>
+          {session.myRecord.finalStatus || '-'}
+        </span>
       </div>
       <hr />
       <div className="head">
@@ -100,25 +121,28 @@ const OngoingSession = ({ session, timeData }) => {
         </div>
         <ProgressBar
           text
-          percent={18}
+          percent={parseInt(marked, 10)}
           styled
         />
       </div>
 
-      {button.normal({
-        element: 'mark presence',
-        name: 'cap',
-        func: () =>
-          navigate(
-            `/student/attendance?id=${session._id}&status=${
-              session.myRecord.checkIn.time
-                ? 'not_checked_out'
-                : 'not_checked_in'
-            }&lat=${session.location.latitude}&lng=${
-              session.location.longitude
-            }`
-          ),
-      })}
+      {!isFullyMarked &&
+        button.normal({
+          element: 'mark presence',
+          name: 'cap',
+          func: () =>
+            navigate(
+              `/student/attendance?id=${session._id}&status=${
+                enableCheckInOut
+                  ? isCheckedIn
+                    ? 'not_checked_out'
+                    : 'not_checked_in'
+                  : 'not_checked_in'
+              }&lat=${session.location.latitude}&lng=${
+                session.location.longitude
+              }`
+            ),
+        })}
     </div>
   );
 };

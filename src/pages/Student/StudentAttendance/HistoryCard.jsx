@@ -5,7 +5,11 @@ import {
   FaStickyNote,
 } from 'react-icons/fa';
 import { MdLocationPin } from 'react-icons/md';
-import { dateFormatter, timeFormatter } from '../../../utils/helpers';
+import {
+  dateFormatter,
+  getStatusStyle,
+  timeFormatter,
+} from '../../../utils/helpers';
 import button from '../../../components/Button/Button';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -23,12 +27,7 @@ const HistoryCard = ({
   checkInStatus,
   checkOutStatus,
 }) => {
-  const style =
-    status === 'on-time' || status === 'present'
-      ? 'main-color'
-      : ['late', 'absent'].includes(status)
-      ? status
-      : 'others';
+  const style = getStatusStyle(status);
 
   return (
     <div
@@ -56,7 +55,7 @@ const HistoryCard = ({
             background: `var(--${style}-light)`,
             color: `var(--${style})`,
           }}>
-          <FaCircle className={status} />{' '}
+          <FaCircle className={style} />{' '}
           {status === 'present' ? 'on time' : status.split('_').join(' ')}
         </div>
       </div>

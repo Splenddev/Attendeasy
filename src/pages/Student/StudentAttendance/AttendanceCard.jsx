@@ -146,31 +146,44 @@ const AttendanceCard = ({ att, setIsModal, student }) => {
           <div className="attendance-card-countdown">
             {checkInStartCountdown.timeLeft > 0 && (
               <CountdownBox
-                label="Check-In Opens In"
+                label={`${
+                  att.settings.enableCheckInOut ? 'Check-In' : 'Entry'
+                } Opens In`}
                 countdown={checkInStartCountdown}
               />
             )}
-            <CountdownBox
-              label={
-                checkInCloseCountdown.timeLeft > 0
-                  ? 'Check-In Closes In'
-                  : 'Check in Closed'
-              }
-              countdown={
-                checkInCloseCountdown.timeLeft > 0
-                  ? checkInCloseCountdown
-                  : { minutes: 0, seconds: 0 }
-              }
-              icon={
-                checkInCloseCountdown.timeLeft > 0 ? null : (
-                  <FaExclamationTriangle color="var(--red)" />
-                )
-              }
-            />
+            {!student || !att.settings.enableCheckInOut
+              ? null
+              : !student.checkIn.time && (
+                  <CountdownBox
+                    label={
+                      checkInCloseCountdown.timeLeft > 0
+                        ? 'Check-in closes soon'
+                        : 'Check-in closed — marked absent'
+                    }
+                    sublabel={
+                      checkInCloseCountdown.timeLeft <= 0
+                        ? 'Submit a plea from Attendance History.'
+                        : null
+                    }
+                    countdown={
+                      checkInCloseCountdown.timeLeft > 0
+                        ? checkInCloseCountdown
+                        : { minutes: 0, seconds: 0 }
+                    }
+                    icon={
+                      checkInCloseCountdown.timeLeft > 0 ? null : (
+                        <FaExclamationTriangle color="var(--red)" />
+                      )
+                    }
+                  />
+                )}
 
             {checkOutCloseCountdown.timeLeft > 0 && (
               <CountdownBox
-                label="Check-Out Closes In"
+                label={`${
+                  att.settings.enableCheckInOut ? 'Check-Out' : 'Entry'
+                } Closes In`}
                 countdown={checkOutCloseCountdown}
               />
             )}
@@ -178,58 +191,78 @@ const AttendanceCard = ({ att, setIsModal, student }) => {
         )}
       </div>
       <div className="entry-btns">
-        {!student ? null : student.checkIn.time && student.checkOut.time ? (
-          <p className="marked-message">
-            ✅ You’re all set! Attendance marked 🎉
-          </p>
-        ) : (
-          (() => {
-            const hasCheckedIn = !!student.checkIn.time;
-            const hasCheckedOut = !!student.checkOut.time;
+        {!student
+          ? null
+          : (() => {
+              const { enableCheckInOut, allowEarlyCheckInOut } =
+                att.settings || {};
+              const hasCheckedIn = !!student.checkIn.time;
+              const hasCheckedOut = !!student.checkOut.time;
 
-            const reason = getAttendanceBlockReason({
-              hasCheckedIn,
-              hasCheckedOut,
-              status,
-              now,
-              entryStart: parseTimeToday2(entryStart),
-              entryEnd: parseTimeToday2(entryEnd),
-              reopened: att.reopened,
-              allowEarly: att.settings?.allowEarlyCheckInOut,
-            });
+              const isFullyMarked = enableCheckInOut
+                ? hasCheckedIn && hasCheckedOut
+                : hasCheckedIn;
 
-            const isBlocked = Boolean(reason);
-
-            const handleClick = () => {
-              if (isBlocked) {
-                open({
-                  title: 'Cannot Proceed',
-                  message: reason,
-                  code: 'PROCESS_INVALID',
-                  initiator: hasCheckedIn ? 'Check Out' : 'Check In',
-                });
-              } else {
-                setIsModal({
-                  visible: true,
-                  maxRange: att.location?.radiusMeters,
-                  attendanceId: att._id,
-                  mode: hasCheckedIn ? 'checkOut' : 'checkIn',
-                  location: {
-                    lat: att.location?.latitude,
-                    lng: att.location?.longitude,
-                  },
-                });
+              if (isFullyMarked) {
+                return (
+                  <p className="marked-message">
+                    ✅ You’re all set! Attendance marked 🎉
+                  </p>
+                );
               }
-            };
 
-            return button.normal({
-              element: hasCheckedIn ? 'Check Out' : 'Check In',
-              disabled: status === 'not-started' || status === 'ended',
-              func: handleClick,
-              name: 'entry-btn',
-            });
-          })()
-        )}
+              const reason = getAttendanceBlockReason({
+                hasCheckedIn,
+                hasCheckedOut,
+                status,
+                now,
+                entryStart: parseTimeToday2(entryStart),
+                entryEnd: parseTimeToday2(entryEnd),
+                reopened: att.reopened,
+                allowEarly: allowEarlyCheckInOut,
+              });
+
+              const isBlocked = Boolean(reason);
+
+              const handleClick = () => {
+                if (isBlocked) {
+                  open({
+                    title: 'Cannot Proceed',
+                    message: reason,
+                    code: 'PROCESS_INVALID',
+                    initiator: enableCheckInOut
+                      ? hasCheckedIn
+                        ? 'Check Out'
+                        : 'Check In'
+                      : 'Entry',
+                  });
+                } else {
+                  setIsModal({
+                    visible: true,
+                    maxRange: att.location?.radiusMeters,
+                    attendanceId: att._id,
+                    mode: hasCheckedIn ? 'checkOut' : 'checkIn',
+                    location: {
+                      lat: att.location?.latitude,
+                      lng: att.location?.longitude,
+                    },
+                  });
+                }
+              };
+
+              const buttonLabel = enableCheckInOut
+                ? hasCheckedIn
+                  ? 'Check Out'
+                  : 'Check In'
+                : 'Mark Entry';
+
+              return button.normal({
+                element: buttonLabel,
+                disabled: status === 'not-started' || status === 'ended',
+                func: handleClick,
+                name: 'entry-btn',
+              });
+            })()}
       </div>
     </div>
   );

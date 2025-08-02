@@ -1,10 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
-import {
-  dateFormatter,
-  getTodaySchedule,
-  generateSmartTip,
-} from '../../../utils/helpers';
+import { dateFormatter, getTodaySchedule } from '../../../utils/helpers';
 import './StudentAttendance.css';
 
 import AttendanceInfo from './AttendanceInfo';
@@ -89,15 +85,22 @@ const StudentAttendance = () => {
     fetch();
   }, [fetch]);
   useEffect(() => {
-    if (!id || !status) return;
-
-    if (loading) return;
+    if (!id || !status || loading || !data) return;
 
     const refernceData = data.find((att) => att._id === id) || [];
+    const refStudent = refernceData.studentRecords.find(
+      (s) => s.studentId === user._id
+    );
+
+    if (
+      !refernceData ||
+      refernceData.status === 'closed' ||
+      refStudent.checkOutStatus !== 'missed'
+    )
+      return;
 
     console.log(refernceData);
 
-    if (!refernceData || refernceData.status === 'closed') return;
     setMarkEntryModal({
       visible: true,
       maxRange: refernceData.location?.radiusMeters,
