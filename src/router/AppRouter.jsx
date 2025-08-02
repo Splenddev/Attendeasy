@@ -23,6 +23,7 @@ import MarkAttendance from '../pages/Student/MarkAttendance/MarkAttendance';
 import InitialRedirect from '../components/InitialRedirect/InitialRedirect';
 import GroupManagementPage from '../pages/ClassManagement/GroupManagementPage';
 import UserProfilePage from '../pages/UserProfilePage/UserProfilePage';
+import ErrorFallback from '../pages/ErrorFallback/ErrorFallback';
 
 export const router = createBrowserRouter([
   {
@@ -32,6 +33,7 @@ export const router = createBrowserRouter([
         <App />
       </Suspense>
     ),
+    errorElement: <ErrorFallback />,
     children: [
       {
         index: true,

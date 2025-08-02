@@ -181,66 +181,76 @@ export const generateSmartTip = (data = [], user, loading) => {
   if (!data || !user?._id || loading) return [];
 
   const tips = [];
-
   const studentData = data.map((att) => ({
     ...att,
     myRecord: att.studentRecords.find((s) => s.studentId === user._id),
   }));
 
-  const totalSessions = studentData.length;
-  const lastThree = studentData.slice(-3);
+  const validRecords = studentData.filter((entry) => !!entry.myRecord);
 
+  const totalSessions = validRecords.length;
+
+  // ⛔ Not enough data? Bail early
+  if (totalSessions < 3) {
+    return [
+      'Keep showing up! More tips will appear as you attend more classes.',
+    ];
+  }
+
+  // Metrics
+  const presentOrOnTimeCount = validRecords.filter(
+    (entry) =>
+      entry.myRecord.finalStatus === 'present' ||
+      entry.myRecord.finalStatus === 'on_time'
+  ).length;
+
+  const onTimeCount = validRecords.filter(
+    (entry) => entry.myRecord.finalStatus === 'on_time'
+  ).length;
+
+  const lateCount = validRecords.filter(
+    (entry) => entry.myRecord.finalStatus === 'late'
+  ).length;
+
+  const absentCount = validRecords.filter(
+    (entry) => entry.myRecord.finalStatus === 'absent'
+  ).length;
+
+  const lastThree = validRecords.slice(-3);
   const allOnTime = lastThree.every((entry) => {
     const status = entry?.myRecord?.finalStatus;
     return status === 'present' || status === 'on_time';
   });
 
-  const presentOrOnTimeCount = studentData.filter(
-    (entry) =>
-      entry?.myRecord?.finalStatus === 'present' ||
-      entry?.myRecord?.finalStatus === 'on_time'
-  ).length;
-
-  const lateCount = studentData.filter(
-    (entry) => entry?.myRecord?.finalStatus === 'late'
-  ).length;
-
-  const absentCount = studentData.filter(
-    (entry) => entry?.myRecord?.finalStatus === 'absent'
-  ).length;
-
-  const missedDays = studentData
+  const missedDays = validRecords
     .filter((entry) => entry?.myRecord?.finalStatus === 'absent')
-    .map((entry) => entry.day);
+    .map((entry) => entry.classTime.day);
 
-  console.log(studentData);
-  // --- BASELINE TIPS ---
+  // --- BASELINE ---
   if (allOnTime) {
-    tips.push('You arrived on time in your last 3 classes.');
+    tips.push('Great job! You were on time for your last 3 sessions.');
   }
 
-  if (presentOrOnTimeCount === totalSessions && totalSessions >= 3) {
-    tips.push('You have a perfect attendance record so far.');
+  if (presentOrOnTimeCount === totalSessions && totalSessions >= 5) {
+    tips.push('You have a perfect attendance record so far. Keep it up!');
   }
 
   if (lateCount >= 3) {
-    tips.push(
-      `You have been late ${lateCount} times. Consider improving your punctuality.`
-    );
+    tips.push(`You've been late ${lateCount} times. Aim to arrive earlier.`);
   }
 
   if (totalSessions >= 5 && presentOrOnTimeCount / totalSessions < 0.5) {
     tips.push(
-      `Your overall attendance rate is below 50%. Try to attend more classes.`
+      `Less than half of your classes were attended on time. Let’s improve that!`
     );
   }
 
   if (absentCount >= 3) {
-    tips.push('You have missed several classes. Ensure you don’t fall behind.');
+    tips.push('You’ve missed a few classes recently. Try not to fall behind.');
   }
 
-  // --- PATTERN-BASED TIPS ---
-  if (missedDays.length > 0) {
+  // --- SMART PATTERNS ---
+  if (missedDays.length > 1) {
     const frequencyMap = missedDays.reduce((acc, day) => {
       acc[day] = (acc[day] || 0) + 1;
       return acc;
@@ -249,64 +259,44 @@ export const generateSmartTip = (data = [], user, loading) => {
       (a, b) => b[1] - a[1]
     )[0];
 
-    if (freq >= 2) {
+    if (freq >= 2 && freq / missedDays.length >= 0.5) {
       tips.push(
-        `You tend to miss classes on ${mostMissedDay}s. Plan better on those days.`
+        `You often miss classes on ${mostMissedDay}s. Try to plan better for those days.`
       );
     }
   }
 
-  // --- ADDITIONAL SMART TIPS ---
+  // --- TRENDS ---
+  const firstHalf = validRecords.slice(0, Math.floor(totalSessions / 2));
+  const secondHalf = validRecords.slice(Math.floor(totalSessions / 2));
 
-  // Tip: Consistency drop
-  const firstHalf = studentData.slice(0, Math.floor(totalSessions / 2));
-  const secondHalf = studentData.slice(Math.floor(totalSessions / 2));
+  const countGood = (arr) =>
+    arr.filter(
+      (e) =>
+        e?.myRecord?.finalStatus === 'present' ||
+        e?.myRecord?.finalStatus === 'on_time'
+    ).length;
 
-  const firstHalfPresent = firstHalf.filter(
-    (e) =>
-      e?.myRecord?.finalStatus === 'present' ||
-      e?.myRecord?.finalStatus === 'on_time'
-  ).length;
+  const firstHalfPresent = countGood(firstHalf);
+  const secondHalfPresent = countGood(secondHalf);
 
-  const secondHalfPresent = secondHalf.filter(
-    (e) =>
-      e?.myRecord?.finalStatus === 'present' ||
-      e?.myRecord?.finalStatus === 'on_time'
-  ).length;
-
-  if (
-    firstHalf.length >= 3 &&
-    secondHalf.length >= 3 &&
-    secondHalfPresent < firstHalfPresent
-  ) {
-    tips.push(
-      'Your attendance has declined recently. Try to get back on track.'
-    );
+  if (firstHalf.length >= 3 && secondHalf.length >= 3) {
+    if (secondHalfPresent < firstHalfPresent) {
+      tips.push('Your attendance has declined recently. Try to refocus.');
+    } else if (secondHalfPresent > firstHalfPresent) {
+      tips.push('Nice! Your attendance is improving. Keep it up!');
+    }
   }
 
-  // Tip: Improving pattern
-  if (
-    firstHalf.length >= 3 &&
-    secondHalf.length >= 3 &&
-    secondHalfPresent > firstHalfPresent
-  ) {
-    tips.push('Your attendance has improved recently. Keep it up.');
-  }
-
-  // Tip: Always late, never absent
+  // --- Behavioral Edge Cases ---
   if (lateCount >= 3 && absentCount === 0) {
-    tips.push('You always attend, but often late. Try to arrive earlier.');
+    tips.push(
+      'You’re always present, but often late. Aim for better punctuality.'
+    );
   }
 
-  // Tip: Attended but never on time
-  const onTimeCount = studentData.filter(
-    (entry) => entry?.myRecord?.finalStatus === 'on_time'
-  ).length;
-
-  if (presentOrOnTimeCount > 0 && onTimeCount === 0) {
-    tips.push(
-      'You attend regularly but never on time. Try to work on punctuality.'
-    );
+  if (tips.length === 0) {
+    tips.push('Keep attending — smart tips will show up as patterns emerge!');
   }
 
   return tips;
