@@ -123,7 +123,7 @@ export const router = createBrowserRouter([
             ),
           },
           {
-            path: 'resources',
+            path: 'group-library',
             element: (
               <Suspense fallback={<Loader minDelay={6000} />}>
                 <GroupResources />
@@ -192,7 +192,7 @@ export const router = createBrowserRouter([
             ),
           },
           {
-            path: 'resources',
+            path: 'group-library',
             element: (
               <Suspense fallback={<Loader minDelay={6000} />}>
                 <GroupResources />

@@ -44,31 +44,16 @@ const DateTimeSelector = ({ name }) => {
     }
   };
 
-  const toUtcTimeString = (localTime) => {
-    const [hours, minutes] = localTime.split(':').map(Number);
-    const now = new Date();
-    now.setHours(hours);
-    now.setMinutes(minutes);
-    now.setSeconds(0);
-    now.setMilliseconds(0);
-    const utcHours = now.getUTCHours().toString().padStart(2, '0');
-    const utcMinutes = now.getUTCMinutes().toString().padStart(2, '0');
-    return `${utcHours}:${utcMinutes}`;
-  };
-
-  // Update timing for a selected day
   const updateTime = (day, field, value) => {
     const index = selectedDays.findIndex((entry) => entry.day === day);
     if (index === -1) return;
-
-    const utcValue = toUtcTimeString(value);
 
     const updated = [...selectedDays];
     updated[index] = {
       ...updated[index],
       timing: {
         ...updated[index].timing,
-        [field]: utcValue,
+        [field]: value,
       },
     };
     setValue(name, updated, { shouldValidate: true, shouldDirty: true });

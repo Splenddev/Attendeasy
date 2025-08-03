@@ -146,28 +146,15 @@ const CreateSchedule = () => {
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="create-schedule">
-            <div className="create-schedule-sections">
-              <div className="create-schedule-section">
-                {createScheduleFormDataAssets.slice(0, 3).map((section) => (
-                  <DynamicForm
-                    key={section.id}
-                    title={section.title}
-                    selectOptions={section.selectOptions}
-                    methods={methods}
-                  />
-                ))}
-              </div>
-
-              <div className="create-schedule-section">
-                {createScheduleFormDataAssets.slice(3).map((section) => (
-                  <DynamicForm
-                    key={section.id}
-                    title={section.title}
-                    selectOptions={section.selectOptions}
-                    methods={methods}
-                  />
-                ))}
-              </div>
+            <div className="create-schedule-section">
+              {createScheduleFormDataAssets.map((section) => (
+                <DynamicForm
+                  key={section.id}
+                  title={section.title}
+                  selectOptions={section.selectOptions}
+                  methods={methods}
+                />
+              ))}
             </div>
 
             {button.multiple({

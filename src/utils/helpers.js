@@ -156,6 +156,25 @@ export const parseTime2 = (refTime = '', value = '') => {
 
   return `${String(hour).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
 };
+
+export const truncateFileName = (fileName = '', length = 20) => {
+  if (typeof fileName !== 'string') return '';
+
+  const dotIndex = fileName.lastIndexOf('.');
+  if (dotIndex === -1 || dotIndex === 0) {
+    // No extension or hidden file (e.g., `.env`)
+    return truncateText(fileName, length);
+  }
+
+  const name = fileName.slice(0, dotIndex);
+  const ext = fileName.slice(dotIndex);
+
+  const truncatedName =
+    name.length > length ? name.slice(0, length).trim() + '...' : name;
+
+  return `${truncatedName}${ext}`;
+};
+
 export const truncateText = (text = '', length = 20) => {
   if (typeof text !== 'string') return '';
   return text.length > length ? text.slice(0, length).trim() + '...' : text;

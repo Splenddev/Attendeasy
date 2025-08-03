@@ -33,7 +33,9 @@ const getTodaySchedule = () => {
 
 const ClassRepDashboard = () => {
   const { setNavTitle, user } = useAuth();
-  useEffect(() => setNavTitle('Dashboard'), [setNavTitle]);
+  useEffect(() => {
+    setNavTitle('Dashboard');
+  }, [setNavTitle]);
 
   const navigate = useNavigate();
 

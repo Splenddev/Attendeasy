@@ -177,6 +177,13 @@ h4 {
   font-family: var(--font-cinzel);
 }
 
+hr {
+  border: none;
+  height: 1px;
+  background-color: var(--blue-light);
+  margin: 5px 0;
+}
+
 button,
 input,
 select,
@@ -224,9 +231,68 @@ button {
 }
 
 .blink {
-  border: 2px solid #25aff3;
-  animation: borderPulse 1s ease-in-out 4;
-  border-radius: 6px;
+  animation: borderPulse 1.2s ease-in-out 2;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #25aff3;
+}
+
+.shake {
+  animation: shake 0.3s ease-in-out;
+}
+
+.wiggle {
+  animation: wiggle 0.4s ease-in-out;
+}
+
+.shake.blink {
+  animation: shake 0.3s 0.4s ease-in-out, borderPulse 1.2s ease-in-out 2;
+}
+
+.wiggle.blink {
+  animation: wiggle 0.4s ease-in-out, borderPulse 1.2s ease-in-out 2;
+}
+
+.shake.wiggle {
+  animation: shake 0.3s ease-in-out, wiggle 0.4s ease-in-out;
+}
+
+.shake.blink.wiggle {
+  animation: shake 0.3s ease-in-out, borderPulse 1.2s ease-in-out 2,
+    wiggle 0.4s ease-in-out;
+}
+
+@keyframes wiggle {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(1deg);
+  }
+  50% {
+    transform: rotate(-1deg);
+  }
+  75% {
+    transform: rotate(1deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-6px);
+  }
+  40%,
+  80% {
+    transform: translateX(6px);
+  }
 }
 
 @keyframes borderPulse {
@@ -237,9 +303,9 @@ button {
     opacity: 1;
   }
   50% {
-    border-color: #ffe4e1;
-    box-shadow: 0 0 8px 3px rgba(255, 228, 225, 0.6);
-    opacity: 0.7;
+    border-color: #25aff3;
+    box-shadow: 0 0 10px 4px rgba(37, 175, 243, 0.4);
+    opacity: 0.8;
   }
 }
 

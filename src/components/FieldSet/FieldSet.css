@@ -32,6 +32,7 @@
   height: 100%;
   width: 1px;
   background: var(--outline);
+  margin: 0;
 }
 
 .option-select input {

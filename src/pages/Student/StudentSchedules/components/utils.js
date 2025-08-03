@@ -173,6 +173,7 @@ export const getFileIconClass = (ext) => {
     case 'png':
     case 'gif':
     case 'bmp':
+    case 'image':
       return { icon: FaFileImage, color: '#f39c12' };
     case 'zip':
     case 'rar':

@@ -5,6 +5,7 @@ import button from '../../components/Button/Button';
 import { useInfoModal } from '../../context/infoModalContext';
 import { useEffect, useState } from 'react';
 import { formatKey } from '../../utils/helpers';
+import useScrollIntoView from '../../hooks/useScrollIntoView';
 
 const flattenErrors = (obj, parentKey = '') => {
   let entries = [];
@@ -40,6 +41,8 @@ const DynamicForm = ({ title = '', selectOptions = [], id = '', methods }) => {
     }
   }, [isSubmitting, hasError]);
 
+  const scrollTo = useScrollIntoView();
+
   return (
     <>
       {hasError && showErrors && (
@@ -60,16 +63,7 @@ const DynamicForm = ({ title = '', selectOptions = [], id = '', methods }) => {
                 <li
                   key={key}
                   onClick={() => {
-                    const el = document.querySelector(
-                      `[name="${CSS.escape(key)}"]`
-                    );
-                    if (el) {
-                      el.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'center',
-                      });
-                      el.focus?.();
-                    }
+                    scrollTo(key, 'shake blink');
                   }}>
                   <strong>
                     {formatKey(key)}
@@ -108,6 +102,8 @@ const DynamicForm = ({ title = '', selectOptions = [], id = '', methods }) => {
                 ? watch(item.dependsOn)
                 : true;
 
+              const { description, title, icon: Icon } = item.toggle || {};
+
               return (
                 <FieldSet
                   key={item.title}
@@ -130,6 +126,9 @@ const DynamicForm = ({ title = '', selectOptions = [], id = '', methods }) => {
                   dependsOn={item.dependsOn}
                   error={errors?.[item.name]}
                   methods={methods}
+                  description={description || ''}
+                  icon={<Icon /> || ''}
+                  toggleTitle={title || ''}
                 />
               );
             })}

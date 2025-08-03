@@ -1,5 +1,5 @@
 .schedulePage {
-  padding: 1.2rem;
+  padding: 1rem;
   background-color: #f8fafc;
   color: #1e293b;
 }
@@ -12,8 +12,8 @@
 
 .scheduleGrid {
   display: grid;
-  gap: 1.2rem;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 400px));
+  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
 }
 
 .overviewPanel {

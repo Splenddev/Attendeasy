@@ -1,3 +1,5 @@
+import { FaVideo } from 'react-icons/fa';
+
 export const createScheduleFormDataAssets = [
   {
     id: 1,
@@ -8,6 +10,7 @@ export const createScheduleFormDataAssets = [
         name: 'courseCode',
         type: 'input',
         required: true,
+        readOnly: true,
         input: {
           type: 'text',
           placeholder: 'e.g. BCH301',
@@ -18,6 +21,7 @@ export const createScheduleFormDataAssets = [
         name: 'courseTitle',
         type: 'input',
         required: true,
+        readOnly: true,
         input: {
           type: 'text',
           placeholder: 'e.g. Analytical Chemistry',
@@ -29,6 +33,7 @@ export const createScheduleFormDataAssets = [
         type: 'select',
         options: ['1', '2', '3', '4', '5'],
         required: true,
+        readOnly: true,
       },
     ],
   },
@@ -99,30 +104,27 @@ export const createScheduleFormDataAssets = [
         required: true,
       },
       {
-        title: 'Class Type',
+        title: 'Is virtual Class',
         name: 'classType',
-        type: 'select',
-        options: ['Physical', 'Virtual'],
+        type: 'toggle-d',
+        toggle: {
+          icon: FaVideo,
+          title: 'Is this a Virtual Class?',
+          description:
+            'Mark this class as virtual if it won’t be held in a physical location.',
+        },
+        disabled: true,
         required: true,
       },
       {
         title: 'Meeting Link (if Virtual)',
         name: 'virtualLink',
         type: 'input',
+        dependsOn: 'classType',
         required: false,
         input: {
           type: 'text',
           placeholder: 'e.g. https://meet.com/session123',
-        },
-      },
-      {
-        title: 'Max Student Capacity',
-        name: 'maxStudents',
-        type: 'input',
-        required: false,
-        input: {
-          type: 'number',
-          placeholder: 'e.g. 30',
         },
       },
       {
@@ -169,20 +171,6 @@ export const createScheduleFormDataAssets = [
         required: false,
       },
       {
-        title: 'Allow Attendance Auto Creation',
-        name: 'allowAttendanceMarking',
-        type: 'select',
-        options: ['Yes', 'No'],
-        required: false,
-      },
-      {
-        title: 'Auto-End Class After Duration',
-        name: 'autoEnd',
-        type: 'select',
-        options: ['Yes', 'No'],
-        required: false,
-      },
-      {
         title: 'Schedule Active',
         name: 'isActive',
         type: 'select',
@@ -213,8 +201,8 @@ export const createScheduleFormDataAssets = [
       {
         title: 'Allow Student Media Uploads',
         name: 'allowMediaUploads',
-        type: 'choice',
-        choices: ['Yes', 'No'],
+        type: 'toggle',
+        orientation: 'vertical',
         required: false,
       },
     ],

@@ -2,7 +2,7 @@
 .modalBackdrop {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.55);
+  background-color: rgba(0, 0, 0, 0.685);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,9 +11,9 @@
 }
 
 .modalBox {
-  background: white;
+  background: rgb(32, 27, 27);
   width: 95%;
-  max-width: 600px;
+  max-width: 900px;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
@@ -27,15 +27,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #25aff3;
+  background: var(--main-color);
   color: white;
   padding: 1rem;
-  font-size: 1.1rem;
-}
-
-.closeIcon {
-  font-size: 1.5rem;
-  cursor: pointer;
+  font-size: 1rem;
 }
 
 .mapWrapper {
@@ -62,7 +57,7 @@
 .geoBtn {
   padding: 0.55rem;
   border-radius: 50%;
-  background: #25aff3;
+  background: var(--main-color);
   color: white;
   border: none;
   cursor: pointer;
@@ -98,7 +93,7 @@
 .chip {
   padding: 0.4rem 0.8rem;
   background: #e7f6fd;
-  border: 1px solid #25aff3;
+  border: 1px solid var(--main-color);
   border-radius: 20px;
   font-size: 13px;
   cursor: pointer;
@@ -116,7 +111,7 @@
 
 .confirmBtn {
   padding: 0.7rem 1.2rem;
-  background-color: #25aff3;
+  background-color: var(--main-color);
   border: none;
   color: white;
   border-radius: 8px;
@@ -135,26 +130,174 @@
   margin-top: 10px;
 }
 
+.cta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 10px;
+}
+
 .triggerBtn {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.1rem 1rem;
+  gap: 0.5rem;
+  background-color: #25aff3;
+  color: #fff;
+  border: none;
   border-radius: 8px;
-  border: 1px solid #25aff3;
-  background: #f0faff;
-  color: #25aff3;
-  cursor: pointer;
-  margin: 0.5rem 0;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
   font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.triggerBtn:hover {
+  background-color: #199edc;
+}
+
+.triggerBtn:active {
+  transform: scale(0.98);
+}
+
+.triggerBtn svg {
+  font-size: 1.1rem;
+}
+
+@media screen and (max-width: 480px) {
+  .triggerBtn {
+    width: 100%;
+    justify-content: center;
+    font-size: 0.9rem;
+  }
+}
+
+.modalBox {
+  background: #ffffff;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 650px;
+  overflow-y: auto;
+  animation: fadeIn 0.2s ease-in-out;
+  position: relative;
+}
+
+.closeIcon {
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: #444;
+  transition: transform 0.2s ease;
+}
+
+.closeIcon:hover {
+  transform: scale(1.2);
+  color: #000;
+}
+
+.linkForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 1rem;
+}
+
+.instructions {
+  font-size: 0.95rem;
+  color: #333;
+  background: #f1f7ff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  line-height: 1.5;
+}
+
+.info {
+  font-size: 0.88rem;
+  color: #555;
+  background: #fffbe6;
+  padding: 8px 12px;
+  border-left: 4px solid #ffcb05;
+  border-radius: 6px;
+}
+
+.info code {
+  display: block;
+  margin-top: 4px;
+  background: #eee;
+  padding: 6px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-family: monospace;
+  overflow-x: auto;
+}
+
+.searchInput {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease;
+}
+
+.searchInput:focus {
+  border-color: var(--main-color);
+  outline: none;
+}
+
+.errorText {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: -6px;
+}
+
+.previewBox {
+  margin-top: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.previewCoords {
+  font-size: 0.88rem;
+  margin-top: 6px;
+  padding: 4px;
+  text-align: center;
+  color: #333;
+}
+
+.actionRow {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.confirmBtn {
+  background-color: var(--main-color);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.confirmBtn:hover:not(:disabled) {
+  background-color: #1d96d6;
+}
+
+.confirmBtn:disabled {
+  background-color: #aacde4;
+  cursor: not-allowed;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 

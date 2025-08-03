@@ -33,7 +33,6 @@ const OverviewPanel = ({
   totalCourses,
   mediaCount,
   totalLecturers,
-  creatorId,
   countdown,
 }) => (
   <div className={styles.overviewPanel}>
@@ -47,9 +46,6 @@ const OverviewPanel = ({
       </div>
       <div>
         <FaChalkboardTeacher /> <strong>{totalLecturers}</strong> Lecturers
-      </div>
-      <div>
-        <FaCalendarAlt /> Created by: <code>{creatorId}</code>
       </div>
     </div>
     {countdown && (
@@ -103,6 +99,11 @@ const ClassSchedule = () => {
   const [showModal, setShowModal] = useState(true);
   const [countdown, setCountdown] = useState(null);
   const [dayStatuses, setDayStatuses] = useState({});
+
+  const [expandedCards, setExpandedCards] = useState({});
+
+  const toggleCardExpansion = (id) =>
+    setExpandedCards((prev) => ({ ...prev, [id]: !prev[id] }));
 
   useEffect(() => {
     setNavTitle('Class Schedules');
@@ -285,6 +286,8 @@ const ClassSchedule = () => {
                 user={user}
                 isToday={selectedDay === weekday}
                 refresh={() => refetch()}
+                isExpanded={!!expandedCards[schedule._id]}
+                onToggle={() => toggleCardExpansion(schedule._id)}
               />
             ))
           ) : (

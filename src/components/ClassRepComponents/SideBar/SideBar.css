@@ -30,6 +30,7 @@
 }
 .close {
   position: absolute;
+  top: 5px;
   left: 100%;
   background: var(--main-color);
   box-shadow: 3px 0 5px #a9a9a9;

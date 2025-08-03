@@ -17,6 +17,8 @@ const ErrorFallback = () => {
     ? error.data?.message || 'Something went wrong while loading this page.'
     : error?.message || 'An unknown error occurred. Please try again later.';
 
+  console.error(error);
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.card}>

@@ -4,6 +4,7 @@ import {
   FaChalkboardTeacher,
   FaClock,
   FaMapMarkerAlt,
+  FaStickyNote,
   FaSyncAlt,
 } from 'react-icons/fa';
 import {
@@ -12,19 +13,13 @@ import {
   FiImage,
   FiMusic,
   FiDownload,
-  FiTrash,
-  FiEdit2,
+  FiChevronUp,
+  FiChevronDown,
+  FiUploadCloud,
 } from 'react-icons/fi';
-import { HiClock, HiDocumentAdd } from 'react-icons/hi';
-import {
-  MdDoneAll,
-  MdAutoDelete,
-  MdMailOutline,
-  MdOndemandVideo,
-  MdFlag,
-} from 'react-icons/md';
+import { HiClock } from 'react-icons/hi';
+import { MdDoneAll, MdAutoDelete, MdOndemandVideo } from 'react-icons/md';
 import { RiPulseFill } from 'react-icons/ri';
-import { NavLink } from 'react-router-dom';
 import styles from './ScheduleCard.module.css';
 import {
   formatTimeDiff,
@@ -34,6 +29,16 @@ import {
 import FileUploadModal from '../../../../../components/Modals/FileUploadModal/FileUploadModal';
 import { useScheduleMedia } from '../../../../../hooks/useScheduleMedia';
 import { ConfirmModal } from '../../../../../components/Modals';
+import button from '../../../../../components/Button/Button';
+import { getFileIconClass } from '../../../../Student/StudentSchedules/components/utils';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  LuBookCheck,
+  LuBookOpen,
+  LuCalendarClock,
+  LuTrash,
+} from 'react-icons/lu';
+import { useNavigate } from 'react-router-dom';
 
 const TODAY = new Date().toLocaleDateString(undefined, { weekday: 'long' });
 
@@ -46,17 +51,19 @@ const slotStatus = (startT, endT) => {
   return 'upcoming';
 };
 
-const fileTypeIcons = {
-  doc: <FiFileText />,
-  video: <FiVideo />,
-  image: <FiImage />,
-  audio: <FiMusic />,
-};
-
-const ScheduleCard = ({ user, schedule = {}, isToday = false, refresh }) => {
+const ScheduleCard = ({
+  user,
+  schedule = {},
+  isToday = false,
+  refresh,
+  isExpanded,
+  onToggle,
+}) => {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
+
+  const navigate = useNavigate();
 
   const { handleDelete, deleting } = useScheduleMedia({
     scheduleId: schedule._id,
@@ -94,18 +101,19 @@ const ScheduleCard = ({ user, schedule = {}, isToday = false, refresh }) => {
       title={`${schedule.courseTitle} (${schedule.courseCode})`}>
       {/* Header */}
       <header className={styles.header}>
-        <div className={styles.title}>
-          <h2>
+        <div className={styles.topRow}>
+          <h2 className={styles.courseTitle}>
             {schedule.courseTitle} ({schedule.courseCode})
             <span className={styles.creditUnit}>
               {schedule.creditUnit} Unit
             </span>
           </h2>
-          <div className={styles.action}>
+          {/* <button className={styles.editBtn}>
             <FiEdit2 />
-          </div>
+          </button> */}
         </div>
-        <div className={styles.headerBadges}>
+
+        <div className={styles.badges}>
           {metaChip(
             schedule.classType,
             schedule.classType === 'Physical' ? (
@@ -116,8 +124,8 @@ const ScheduleCard = ({ user, schedule = {}, isToday = false, refresh }) => {
           )}
           {metaChip(schedule.repeat || schedule.repeatPattern, <FaSyncAlt />)}
           {schedule.isActive
-            ? metaChip('ACTIVE', <RiPulseFill />)
-            : metaChip('INACTIVE', <MdAutoDelete />)}
+            ? metaChip('Active', <RiPulseFill />)
+            : metaChip('Inactive', <MdAutoDelete />)}
         </div>
       </header>
 
@@ -155,123 +163,110 @@ const ScheduleCard = ({ user, schedule = {}, isToday = false, refresh }) => {
 
       {/* Info */}
       <section className={styles.info}>
-        <p>
-          <FaChalkboardTeacher /> <strong>{schedule.lecturerName}</strong>{' '}
-          <a
-            href={`mailto:${schedule.lecturerEmail}`}
-            title="Email lecturer">
-            <MdMailOutline />
-          </a>
-        </p>
-        <p>
-          <FaMapMarkerAlt /> {schedule.classroomVenue}
-        </p>
-        <p>
-          <FaBookOpen /> {schedule.level} – {schedule.department},{' '}
-          {schedule.faculty}
-        </p>
+        <div className={styles.infoRow}>
+          <FaChalkboardTeacher className={styles.icon} />
+          <span className={styles.label}>{schedule.lecturerName}</span>
+        </div>
+        <div className={styles.infoRow}>
+          <FaMapMarkerAlt className={styles.icon} />
+          <span className={styles.label}>{schedule.classroomVenue}</span>
+        </div>
+        <div className={styles.infoRow}>
+          <LuBookCheck className={styles.icon} />
+          <span className={styles.label}>
+            {schedule.level} – {schedule.department}, {schedule.faculty}
+          </span>
+        </div>
       </section>
 
-      {/* Timings */}
-      <h4 className={styles.timingsHeader}>Timings</h4>
       <div className={styles.timings}>
-        {(schedule.classDaysTimes || []).map(({ day, timing }) => (
-          <div
-            key={day + timing.startTime}
-            className={styles.timeSlot}>
-            <FaClock className={styles.clockIcon} />
-            <strong>{day}</strong>
-            <span>
-              {timing.startTime} – {timing.endTime}
-            </span>
-          </div>
-        ))}
+        <b className={styles.title}>
+          <LuCalendarClock /> Class Days & Times
+        </b>
+        <div className={styles.timingList}>
+          {schedule.classDaysTimes.map((slot, idx) => (
+            <div
+              key={idx}
+              className={styles.timeSlot}>
+              {' '}
+              <div className={styles.left}>
+                <p className={styles.day}>
+                  {slot.day[0].toUpperCase() + slot.day.slice(1)}
+                </p>
+              </div>
+              <div className={styles.right}>
+                <p className={styles.time}>
+                  {slot.timing.startTime} – {slot.timing.endTime}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Media Section */}
-      <section className={styles.mediaSection}>
-        <h4>
-          Attached Materials{' '}
-          <div className={styles.action}>
-            {schedule.mediaNeedsApproval && (
-              <span
-                className={styles.approvalFlag}
-                title="Needs approval">
-                <MdFlag size={18} />
-              </span>
-            )}
-            <span className="center">
-              <HiDocumentAdd
-                size={18}
-                title="Upload Media"
-                className={styles.clickableIcon}
-                onClick={() => setShowUploadModal(true)}
-              />
-              Add
-            </span>
-          </div>
-        </h4>
+      {button.multiple({
+        icon: isExpanded ? FiChevronUp : FiChevronDown,
+        element: isExpanded ? 'Collapse Materials' : 'Show Materials',
+        name: styles.showBtn,
+        func: () => onToggle(),
+      })}
 
-        {schedule.media.length === 0 ? (
-          <p className={styles.noMedia}>No media yet</p>
-        ) : (
-          <ul className={styles.mediaList}>
-            {schedule.media.slice(0, 4).map((m) => (
-              <li
-                key={m.id}
-                className={`${styles.mediaItem} ${
-                  m.approved ? styles.approved : styles.pending
-                }`}>
-                <span>{fileTypeIcons[m.fileType]}</span>
-                <div>
-                  <span
-                    className={styles.title}
-                    title={m.name}>
-                    {m.name}
-                  </span>
-                  <small>
-                    {m.dateAdded} | {m.timeAdded}
-                  </small>
-                </div>
-                <div className={styles.actions}>
-                  <a
-                    href={m.src}
-                    download
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    <FiDownload />
-                  </a>
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            className={styles.cardExpand}
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}>
+            {schedule.media.length === 0 ? (
+              <div className={styles.emptyBox}>
+                <FiUploadCloud className={styles.icon} />
+                <div className={styles.textGroup}>
+                  <h4 className={styles.title}>No Class Media Available</h4>
                   <button
-                    className={styles.deleteBtn}
-                    onClick={() => {
-                      setSelectedMedia(m);
-                      setConfirmOpen(true);
-                    }}>
-                    <FiTrash />
+                    className={styles.uploadButton}
+                    onClick={() => navigate(`/${user.role}/group-library`)}>
+                    Upload Class Material
                   </button>
                 </div>
-              </li>
-            ))}
-          </ul>
+              </div>
+            ) : (
+              <div className={styles.expandedContent}>
+                <p>
+                  <strong>Materials:</strong>
+                </p>
+                {schedule.media?.slice(0, 2).map((file) => {
+                  const { icon, color } = getFileIconClass(file.fileType);
+                  const Icon = icon;
+                  return (
+                    <div
+                      key={file.id}
+                      className={styles.mediaRow}>
+                      <span className={styles.file}>
+                        <Icon color={color} />
+                        <div className={styles.top}>
+                          <p>{file.name}</p>
+                          <span>41kb</span>
+                        </div>
+                      </span>
+                      <div className={styles.actions}>
+                        <LuTrash
+                          onClick={() => {
+                            setConfirmOpen(true);
+                            setSelectedMedia(file);
+                          }}
+                        />
+                        <FiDownload />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </motion.div>
         )}
-
-        <NavLink to={`/${user.role}/group-management`}>See all</NavLink>
-      </section>
-
-      {/* Footer */}
-      <footer className={styles.footer}>
-        {metaChip(
-          `Attendance: ${
-            schedule.allowAttendanceMarking ? 'Enabled' : 'Disabled'
-          }`,
-          <FaClock />
-        )}
-        {metaChip(`${schedule.notificationLeadTime} min notice`, <HiClock />)}
-        {metaChip(
-          `Auto-end: ${schedule.autoEnd ? 'ON' : 'OFF'}`,
-          <MdAutoDelete />
-        )}
-      </footer>
+      </AnimatePresence>
 
       {/* Upload Modal */}
       <FileUploadModal
