@@ -1,10 +1,8 @@
-import { routesNavigate } from '../../../../utils/helpers';
 import { MdGroups } from 'react-icons/md';
 
-const GroupPreview = ({ data, bannerUrl, role, disabled, isMobile }) => {
+const GroupPreview = ({ data, bannerUrl,  disabled, isMobile }) => {
   const {
     groupName = 'Unnamed Group',
-    course = 'Course not specified',
     description = 'No description provided.',
     department = 'Unknown Department',
     faculty = 'Unknown Faculty',
@@ -31,7 +29,6 @@ const GroupPreview = ({ data, bannerUrl, role, disabled, isMobile }) => {
 
       <div className="group-preview-body">
         <h3 className="group-name">{groupName || 'Unnamed Group'}</h3>
-        <p className="group-course">{course}</p>
         <p className="group-description">{description}</p>
 
         <div className="group-preview-meta">

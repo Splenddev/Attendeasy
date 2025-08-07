@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
+  MdAdd,
   MdCheckCircle,
+  MdClose,
   MdGroupAdd,
   MdOutlineCheckCircleOutline,
   MdUploadFile,
@@ -16,10 +18,16 @@ import Spinner from '../../../../components/Loader/Spinner/Spinner';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { getUser } from '../../../../services/auth.service';
+import TagsSelect from '../../../../components/TagsSelect/TagsSelect';
+import TextArea from '../../../../components/TextArea/TextArea';
+import button from '../../../../components/Button/Button';
+import { useNavigate } from 'react-router-dom';
 axios.defaults.withCredentials = true;
 
 const GroupReg = ({ fetchGroup }) => {
   const { user, updateUser } = useAuth();
+
+  const navigate = useNavigate();
 
   const [step, setStep] = useState(1); // Step 1 = form, Step 2 = preview
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -35,10 +43,8 @@ const GroupReg = ({ fetchGroup }) => {
 
   const [formData, setFormData] = useState({
     groupName: '',
-    course: '',
     description: `A group created for ${user.level} level students in the Department of ${user.department}, Faculty of ${user.faculty}. Here, members can manage attendance, receive announcements, and share academic materials.`,
     classRules: '',
-    assistantReps: [],
     attendancePolicy: {
       minPercentage: 75,
       allowPlea: true,
@@ -46,22 +52,27 @@ const GroupReg = ({ fetchGroup }) => {
     visibility: 'public',
     academicYear: '',
     groupLink: '',
-    tags: [], // 👈 add this line
+    tags: [],
+    breaks: [],
   });
-
-  const [classSchedule, setClassSchedule] = useState([]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const TAG_OPTIONS = [
     'official',
-    'final year',
-    'freshers',
-    'staylite',
-    'tutorial class',
-    'post graduate',
-    'under graduate',
     'unofficial',
+    'freshers',
+    'final year',
+    'staylite',
+    // 'tutorial group',
+    // 'study group',
+    'departmental',
+    // 'faculty-based',
+    'postgraduate',
+    'undergraduate',
+    // 'course-specific',
+    'level-specific',
+    'general',
   ];
 
   useEffect(() => {
@@ -89,46 +100,6 @@ const GroupReg = ({ fetchGroup }) => {
         [name]: value,
       }));
     }
-  };
-
-  const handleScheduleChange = (index, field, value) => {
-    setClassSchedule((prev) =>
-      prev.map((entry, i) => {
-        if (i !== index) return entry;
-
-        if (field === 'day') {
-          return { ...entry, day: value };
-        }
-
-        // For timing fields (startTime or endTime)
-        return {
-          ...entry,
-          timing: {
-            ...entry.timing,
-            [field]: value,
-          },
-        };
-      })
-    );
-  };
-
-  const toggleTag = (tag) => {
-    setFormData((prev) => {
-      const tags = prev.tags.includes(tag)
-        ? prev.tags.filter((t) => t !== tag)
-        : prev.tags.length < 3
-        ? [...prev.tags, tag]
-        : prev.tags;
-
-      return { ...prev, tags };
-    });
-  };
-
-  const addSchedule = () => {
-    setClassSchedule((prev) => [
-      ...prev,
-      { day: '', timing: { startTime: '', endTime: '' } },
-    ]);
   };
 
   const handleBannerUpload = (e) => {
@@ -161,26 +132,43 @@ const GroupReg = ({ fetchGroup }) => {
     }
   };
 
+  const [showAllBreaks, setShowAllBreaks] = useState(false);
+
+  const toggleShowAll = () => setShowAllBreaks((prev) => !prev);
+
+  // Optional error object
+  const isDateRangeInvalid = (from, to) => {
+    return new Date(from) > new Date(to);
+  };
+
+  const handleBreakChange = (index, field, value) => {
+    const updated = [...formData.breaks];
+    updated[index][field] = value;
+    setFormData({ ...formData, breaks: updated });
+  };
+
+  const addBreak = () => {
+    setFormData((prev) => ({
+      ...prev,
+      breaks: [...prev.breaks, { title: '', from: '', to: '' }],
+    }));
+  };
+
+  const removeBreak = (index) => {
+    const updated = [...formData.breaks];
+    updated.splice(index, 1);
+    setFormData({ ...formData, breaks: updated });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // ✅ Convert assistant reps string (if needed)
-    const cleanedAssistantReps =
-      typeof formData.assistantReps === 'string'
-        ? formData.assistantReps
-            .split(',')
-            .map((v) => v.trim())
-            .filter(Boolean)
-        : formData.assistantReps;
-
     const fullPayload = {
       ...formData,
-      assistantReps: cleanedAssistantReps,
       department: user.department,
       faculty: user.faculty,
       level: user.level.includes('L') ? user.level : user.level + 'L',
-      schedule: classSchedule,
     };
 
     // Debug
@@ -192,16 +180,13 @@ const GroupReg = ({ fetchGroup }) => {
     for (const key in fullPayload) {
       const value = fullPayload[key];
 
-      if (
-        ['schedule', 'attendancePolicy', 'tags', 'assistantReps'].includes(key)
-      ) {
+      if (['schedule', 'attendancePolicy', 'tags', 'breaks'].includes(key)) {
         formDataToSend.append(key, JSON.stringify(value)); // Send as JSON string
       } else {
         formDataToSend.append(key, value ?? '');
       }
     }
 
-    // ✅ Send cropped image if available
     if (banner) {
       formDataToSend.append('banner', banner); // already a File
     }
@@ -226,7 +211,7 @@ const GroupReg = ({ fetchGroup }) => {
           );
         }
         toast.success(result.message);
-        fetchGroup();
+        navigate('/class-rep/courses/new');
       }
     } catch (err) {
       console.error('Error creating group:', err.response?.data || err.message);
@@ -242,7 +227,6 @@ const GroupReg = ({ fetchGroup }) => {
     department: user.department,
     faculty: user.faculty,
     level: user.level,
-    schedule: classSchedule,
   };
 
   const showForm = !isMobile || (isMobile && step === 1);
@@ -282,19 +266,6 @@ const GroupReg = ({ fetchGroup }) => {
                 />
               </label>
 
-              <label className="group-reg-label">
-                Course
-                <input
-                  type="text"
-                  name="course"
-                  placeholder="e.g. Organic Chemistry"
-                  value={formData.course}
-                  onChange={handleChange}
-                  required
-                  className="group-reg-input"
-                />
-              </label>
-
               <label className="group-reg-label group-reg-upload-label">
                 Banner Image
                 <div className="custom-file-upload">
@@ -310,35 +281,23 @@ const GroupReg = ({ fetchGroup }) => {
               </label>
 
               <label className="group-reg-label">
-                Description (optional)
-                <textarea
-                  name="description"
-                  placeholder="Write a short description..."
+                <b className="grp-desc">Description (optional)</b>
+                <TextArea
                   value={formData.description}
-                  className="group-reg-input group-reg-textarea"
+                  placeholder="Provide a brief description of this group."
+                  name="description"
                   onChange={handleChange}
-                />
-              </label>
-
-              <label className="group-reg-label">
-                Assistant Reps (matric numbers, comma-separated)
-                <input
-                  name="assistantReps"
-                  placeholder="e.g. 20/1234, 20/5678"
-                  value={formData.assistantReps}
-                  onChange={handleChange}
-                  className="group-reg-input"
                 />
               </label>
 
               <label className="group-reg-label">
                 Class Rules
-                <textarea
-                  name="classRules"
-                  placeholder="Specify group behavior expectations..."
+                <TextArea
                   value={formData.classRules}
+                  name="classRules"
                   onChange={handleChange}
-                  className="group-reg-input group-reg-textarea"
+                  placeholder="Specify group behavior expectations..."
+                  maxLength={200}
                 />
               </label>
 
@@ -374,50 +333,86 @@ const GroupReg = ({ fetchGroup }) => {
               </fieldset>
 
               <fieldset className="group-reg-label">
-                <legend>Class Schedules</legend>
-                {classSchedule.map((entry, i) => (
-                  <div
-                    key={i}
-                    className="schedule-row">
-                    <select
-                      value={entry.day}
-                      onChange={(e) =>
-                        handleScheduleChange(i, 'day', e.target.value)
-                      }
-                      required>
-                      <option value="">Day</option>
-                      <option>Monday</option>
-                      <option>Tuesday</option>
-                      <option>Wednesday</option>
-                      <option>Thursday</option>
-                      <option>Friday</option>
-                    </select>
-                    <div>
-                      <input
-                        type="time"
-                        value={entry.timing.startTime}
-                        onChange={(e) =>
-                          handleScheduleChange(i, 'startTime', e.target.value)
-                        }
-                        required
-                      />
-                      <input
-                        type="time"
-                        value={entry.timing.endTime}
-                        onChange={(e) =>
-                          handleScheduleChange(i, 'endTime', e.target.value)
-                        }
-                        required
-                      />
-                    </div>
-                  </div>
-                ))}
-                <button
-                  className="add-schedule-btn"
-                  type="button"
-                  onClick={addSchedule}>
-                  + Add
-                </button>
+                <legend>Break Periods</legend>
+
+                <AnimatePresence>
+                  {(showAllBreaks
+                    ? formData.breaks
+                    : formData.breaks.slice(0, 3)
+                  ).map((breakItem, i) => {
+                    const dateError =
+                      breakItem.from &&
+                      breakItem.to &&
+                      isDateRangeInvalid(breakItem.from, breakItem.to);
+
+                    return (
+                      <motion.div
+                        key={i}
+                        className="schedule-row"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.3 }}>
+                        <div className="break-item">
+                          <input
+                            type="text"
+                            placeholder="Break Title e.g Mid Semester break"
+                            value={breakItem.title}
+                            onChange={(e) =>
+                              handleBreakChange(i, 'title', e.target.value)
+                            }
+                            required
+                          />
+                          <input
+                            type="date"
+                            value={breakItem.from}
+                            className={dateError ? 'error' : ''}
+                            onChange={(e) =>
+                              handleBreakChange(i, 'from', e.target.value)
+                            }
+                            required
+                          />
+                          <input
+                            type="date"
+                            value={breakItem.to}
+                            className={dateError ? 'error' : ''}
+                            onChange={(e) =>
+                              handleBreakChange(i, 'to', e.target.value)
+                            }
+                            required
+                          />
+                          {dateError && (
+                            <p className="error-msg">
+                              "From" date cannot be after "To" date
+                            </p>
+                          )}
+                        </div>
+                        {button.multiple({
+                          icon: MdClose,
+                          func: () => removeBreak(i),
+                          element: 'Remove',
+                          name: 'remove-btn',
+                        })}
+                      </motion.div>
+                    );
+                  })}
+                </AnimatePresence>
+
+                {formData.breaks.length > 3 &&
+                  button.normal({
+                    func: () => toggleShowAll(),
+                    element: showAllBreaks
+                      ? 'Collapse'
+                      : `Show All (${formData.breaks.length})`,
+                    name: 'toggle-show-all',
+                  })}
+
+                {button.multiple({
+                  icon: MdAdd,
+                  func: () => addBreak(),
+                  element: 'Add Break',
+                  name: 'add-schedule-btn',
+                })}
               </fieldset>
 
               <label className="group-reg-label">
@@ -448,27 +443,12 @@ const GroupReg = ({ fetchGroup }) => {
                 </select>
               </label>
 
-              <div className="group-reg-label">
-                <label>Group Tags (select up to 3)</label>
-                <div className="tag-selector-wrapper">
-                  <div className="tag-options">
-                    {TAG_OPTIONS.map((tag) => (
-                      <button
-                        type="button"
-                        key={tag}
-                        className={`tag-button ${
-                          formData.tags.includes(tag) ? 'selected' : ''
-                        }`}
-                        onClick={() => toggleTag(tag)}>
-                        {tag}
-                      </button>
-                    ))}
-                  </div>
-                  <p className="tag-counter">
-                    Selected {formData.tags.length}/3
-                  </p>
-                </div>
-              </div>
+              <TagsSelect
+                TAG_OPTIONS={TAG_OPTIONS}
+                selectedTags={formData.tags}
+                setForm={setFormData}
+                max={5}
+              />
 
               <label className="group-reg-label">
                 WhatsApp / Telegram Link (optional)
@@ -482,19 +462,19 @@ const GroupReg = ({ fetchGroup }) => {
                 />
               </label>
 
-              <button
-                type="submit"
-                className="group-reg-button"
-                disabled={isSubmitting}>
-                {isSubmitting ? (
-                  <Spinner /> // Add this CSS below
+              {button.normal({
+                element: isSubmitting ? (
+                  <Spinner />
                 ) : (
                   <>
                     <MdGroupAdd size={16} />{' '}
                     {isMobile ? 'Next' : 'Create Group'}
                   </>
-                )}
-              </button>
+                ),
+                disabled: isSubmitting,
+                name: 'group-reg-button',
+                type: 'submit',
+              })}
             </motion.form>
           )}
 

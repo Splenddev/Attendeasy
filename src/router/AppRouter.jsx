@@ -24,6 +24,8 @@ import InitialRedirect from '../components/InitialRedirect/InitialRedirect';
 import GroupManagementPage from '../pages/ClassManagement/GroupManagementPage';
 import UserProfilePage from '../pages/UserProfilePage/UserProfilePage';
 import ErrorFallback from '../pages/ErrorFallback/ErrorFallback';
+import Courses from '../pages/Courses/Courses';
+import NewCourse from '../pages/Courses/components/NewCourse/NewCourse';
 
 export const router = createBrowserRouter([
   {
@@ -130,6 +132,22 @@ export const router = createBrowserRouter([
               </Suspense>
             ),
           },
+          {
+            path: 'courses',
+            element: (
+              <Suspense fallback={<Loader minDelay={6000} />}>
+                <Courses />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'courses/new',
+            element: (
+              <Suspense fallback={<Loader minDelay={6000} />}>
+                <NewCourse />
+              </Suspense>
+            ),
+          },
         ],
       },
       {
@@ -196,6 +214,22 @@ export const router = createBrowserRouter([
             element: (
               <Suspense fallback={<Loader minDelay={6000} />}>
                 <GroupResources />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'courses',
+            element: (
+              <Suspense fallback={<Loader minDelay={6000} />}>
+                <Courses />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'courses/new',
+            element: (
+              <Suspense fallback={<Loader minDelay={6000} />}>
+                <NewCourse />
               </Suspense>
             ),
           },

@@ -1,0 +1,14 @@
+.record-stat {
+  display: grid;
+  grid-template-columns: auto 1fr 1fr;
+  align-items: center;
+  gap: 10px;
+}
+
+.record-stat svg {
+  font-size: 8px;
+}
+
+.record-stat .progress-container {
+  margin-left: auto;
+}

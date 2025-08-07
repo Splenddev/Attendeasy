@@ -1,10 +1,10 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import '../styles/ProfileSetup.css';
 import FieldSet from '../../../../components/FieldSet/FieldSet';
 import { MdCheckCircle, MdCheckCircleOutline } from 'react-icons/md';
 import BtnGroup from '../BtnGroup';
 import { AnimatePresence, motion } from 'framer-motion';
-import CourseAdder from '../CourseAdder/CourseAdder';
 
 const faculties = ['Sciences', 'Arts', 'Engineering', 'Social Sciences'];
 const departments = {
@@ -153,29 +153,6 @@ const ProfileSetup = ({ onNext, onBack, methods }) => {
           </motion.p>
         )}
       </AnimatePresence>
-
-      {/* Only for class reps */}
-      {selectedRole === 'class-rep' && (
-        <>
-          <h3 style={{ marginTop: '20px' }}>Your Courses</h3>
-          <p className="hint">You must add at least 3 courses to proceed.</p>
-
-          <CourseAdder />
-
-          <AnimatePresence>
-            {error?.includes('Class Rep') && (
-              <motion.p
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="error-text"
-                style={{ marginTop: '15px' }}>
-                {error}
-              </motion.p>
-            )}
-          </AnimatePresence>
-        </>
-      )}
 
       <hr />
 

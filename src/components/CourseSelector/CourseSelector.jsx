@@ -32,13 +32,15 @@ const CourseSelector = ({ courses, onSelect, onAdd }) => {
 
             <div className={styles.courseInfo}>
               <MdPerson size={18} />
-              <span>{course.lecturer.name}</span>
+              <span>{course.instructor.name}</span>
             </div>
 
-            <div className={styles.courseInfo}>
-              <MdMail size={18} />
-              <span>{course.lecturer.email}</span>
-            </div>
+            {course.instructor.email && (
+              <div className={styles.courseInfo}>
+                <MdMail size={18} />
+                <span>{course.instructor.email}</span>
+              </div>
+            )}
 
             <div className={styles.courseInfo}>
               <MdSchool size={18} />

@@ -9,7 +9,11 @@ export const getCourses = async () => {
 
 // Create a new course
 export const createCourse = async (data) => {
-  const res = await api.post(`${COURSE_BASE_URL}add`, data);
+  const res = await api.post(`${COURSE_BASE_URL}add`, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return res.data;
 };
 

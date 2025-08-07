@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './GroupManagementPage.css';
-import {
-  FaLock,
-  FaUserGraduate,
-  FaBullhorn,
-  FaCalendarAlt,
-} from 'react-icons/fa';
 import { FiRefreshCw } from 'react-icons/fi';
-import MembersTab from './components/tab/Overview/MembersTab/MembersTab';
 import { useAuth } from '../../context/AuthContext';
 import GroupSidebar from './components/GroupSidebar/GroupSidebar';
 import GroupContents from './components/GroupContents/GroupContents';

@@ -58,9 +58,9 @@ const CreateSchedule = () => {
     Object.entries({
       courseCode: course.courseCode,
       courseTitle: course.courseTitle,
-      lecturerName: course.lecturer.name,
+      lecturerName: course.instructor.name,
       creditUnit: course.unit,
-      lecturerEmail: course.lecturer.email,
+      lecturerEmail: course.instructor.email,
       faculty: user.faculty,
       department: user.department,
       level: user.level,

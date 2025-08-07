@@ -15,6 +15,10 @@ import 'nprogress/nprogress.css';
 import NavigationProgress from './components/NavigationProgress';
 import ScrollToTop from './components/ScrollToTop';
 
+import useCourses from './hooks/useCourses'; // Import your hook
+import AddCoursePrompt from './components/JoinGroupPrompt/AddCoursePrompt';
+// import AddCoursePrompt from './components/AddCoursePrompt'; // You’ll create this modal
+
 const App = () => {
   const { setShowLogoutModal, showLogoutModal, logout, authBtnsLoading, user } =
     useAuth();
@@ -27,9 +31,23 @@ const App = () => {
   const isOnGroupPage = location.pathname.startsWith(
     `/${role}/group-management`
   );
+  const isOnCoursesPage = location.pathname.startsWith(`/${role}/courses`);
 
   const shouldShowJoinGroupPrompt =
     user?.isLoggedIn && !user?.group && !isOnGroupPage;
+
+  const { courses, loading: courseLoading } = useCourses(
+    user?.role === 'class-rep'
+  );
+
+  const shouldPromptAddCourse =
+    user?.isLoggedIn &&
+    user?.role === 'class-rep' &&
+    user?.group &&
+    !isOnGroupPage &&
+    !isOnCoursesPage &&
+    !courseLoading &&
+    courses.length === 0;
 
   return (
     <>
@@ -45,10 +63,17 @@ const App = () => {
         actionText="Logout"
         message="You’re about to log out of your account."
       />
+
       <SuccessModal />
       <ErrorModal />
 
-      {shouldShowJoinGroupPrompt ? <JoinGroupPrompt role={role} /> : <Outlet />}
+      {shouldShowJoinGroupPrompt ? (
+        <JoinGroupPrompt role={role} />
+      ) : shouldPromptAddCourse ? (
+        <AddCoursePrompt />
+      ) : (
+        <Outlet />
+      )}
 
       <DevRoleSwitcher />
     </>

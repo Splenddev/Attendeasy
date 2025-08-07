@@ -121,8 +121,9 @@ const OngoingSession = ({ session, timeData }) => {
         </div>
         <ProgressBar
           text
-          percent={parseInt(marked, 10)}
-          styled
+          value={parseInt(marked, 10)}
+          styled={true}
+          showStatus={true}
         />
       </div>
 

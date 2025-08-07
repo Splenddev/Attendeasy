@@ -3,44 +3,6 @@
   padding: 1rem;
 }
 
-.tag-selector-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.tag-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.tag-button {
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  border-radius: 20px;
-  background: #f5f5f5;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.tag-button:hover {
-  background: #e0f3fc;
-}
-
-.tag-button.selected {
-  background-color: #25aff3;
-  color: white;
-  border-color: #25aff3;
-}
-
-.tag-counter {
-  font-size: 0.85rem;
-  color: #555;
-}
-
 .group-reg-container {
   display: flex;
   gap: 1rem;
@@ -114,10 +76,8 @@
   outline: none;
 }
 
-.group-reg-textarea {
-  height: 80px;
-  resize: none;
-  font-size: 14px;
+.grp-desc {
+  margin-bottom: 0.5rem;
 }
 
 .group-reg-upload-label {
@@ -187,6 +147,69 @@ fieldset.group-reg-label label {
   color: #444;
 }
 
+.break-item {
+  display: flex;
+  gap: 0.75rem;
+  flex-direction: column;
+}
+
+.break-item input {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--main-color-light);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  /* flex: 1 1 150px; */
+  /* min-width: 120px; */
+}
+
+.toggle-show-all {
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: var(--gray-600);
+  background: none;
+  border: none;
+}
+
+.remove-btn {
+  padding: 0.4rem 0.75rem;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.remove-btn:hover {
+  color: white;
+  background-color: #e60000;
+}
+
+.add-schedule-btn {
+  padding: 0.5rem 1rem;
+  background-color: #25aff3;
+  color: white;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 1rem;
+}
+
+.add-schedule-btn:hover {
+  background-color: #1a97d4;
+}
+
+.remove-btn {
+  background: transparent;
+  color: #f44336;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border: none;
+}
+
 .group-preview-meta dl {
   display: flex;
   flex-wrap: wrap;
@@ -217,16 +240,9 @@ fieldset.group-reg-label input[type='number'] {
 }
 
 .schedule-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
-  margin-bottom: 1rem;
-  align-items: center;
-  div {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
 }
 
 .schedule-row select,

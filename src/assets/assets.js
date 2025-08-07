@@ -2,6 +2,7 @@ import { FaFolder, FaRegListAlt, FaUsers } from 'react-icons/fa';
 import { MdDashboard, MdEventNote } from 'react-icons/md';
 import logo from '/vigilo_logo.jpeg';
 import profile from './profile.jpg';
+import { LuBookOpenText } from 'react-icons/lu';
 
 export const assets = { logo, profile };
 
@@ -12,14 +13,19 @@ export const c_Sidebar = [
     link: `dashboard`,
   },
   {
-    label: 'Attendance',
-    icon: FaRegListAlt,
-    link: `attendance`,
+    label: 'My Courses',
+    icon: LuBookOpenText,
+    link: `courses`,
   },
   {
     label: 'Class Schedules',
     icon: MdEventNote,
     link: `schedules`,
+  },
+  {
+    label: 'Attendance',
+    icon: FaRegListAlt,
+    link: `attendance`,
   },
   {
     label: 'Class Group',
@@ -35,14 +41,19 @@ export const s_Sidebar = [
     link: `dashboard`,
   },
   {
-    label: 'My Attendance',
-    icon: FaRegListAlt,
-    link: `attendance`,
+    label: 'My Courses',
+    icon: LuBookOpenText,
+    link: `courses`,
   },
   {
     label: 'Class Schedules',
     icon: MdEventNote,
     link: `schedules`,
+  },
+  {
+    label: 'My Attendance',
+    icon: FaRegListAlt,
+    link: `attendance`,
   },
   {
     label: 'Class Group',
