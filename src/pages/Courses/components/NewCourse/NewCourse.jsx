@@ -14,11 +14,15 @@ import { useLocation } from 'react-router-dom';
 import { useErrorModal } from '../../../../hooks/useErrorModal';
 import { useSuccessModal } from '../../../../hooks/useSuccessModal';
 import Spinner from '../../../../components/Loader/Spinner/Spinner';
+import { getUser } from '../../../../services/auth.service';
 
 const NewCourse = () => {
-  const { user } = useAuth();
+  const { user, updateUser, setNavTitle } = useAuth();
+
+  useEffect(() => setNavTitle('Add New Course'), [setNavTitle]);
+
   const location = useLocation();
-  const { addCourse, loading } = useCourses(
+  const { addCourse, loading, courses } = useCourses(
     !location.pathname.split('/').includes('new')
   );
   const { open: openError } = useErrorModal();
@@ -171,6 +175,22 @@ const NewCourse = () => {
         setInstructorImage([]);
         setImages([]);
         openSuccess(res.course);
+
+        if (!courses || courses.length === 0) {
+          try {
+            const res = await getUser();
+            if (res.success) {
+              updateUser(res.user);
+            }
+          } catch (fetchErr) {
+            console.error(
+              'Failed to refresh user after group creation:',
+              fetchErr
+            );
+          }
+          toast.success(result.message);
+          navigate('/class-rep/courses/new');
+        }
       }
     } catch (err) {
       console.log(err);
@@ -282,10 +302,12 @@ const NewCourse = () => {
                 className={styles.input}
                 placeholder="Dr. John Doe"
               />
+              {errors.instructor?.name && (
+                <span className={styles.error}>
+                  {errors.instructor.name.message}
+                </span>
+              )}
             </label>
-            {errors.instructor?.name && (
-              <p className={styles.error}>{errors.instructor.name.message}</p>
-            )}
 
             <label className={styles.label}>
               <b>Email</b>
@@ -300,10 +322,12 @@ const NewCourse = () => {
                 className={styles.input}
                 placeholder="john.doe@university.edu"
               />
+              {errors.instructor?.email && (
+                <span className={styles.error}>
+                  {errors.instructor.email.message}
+                </span>
+              )}
             </label>
-            {errors.instructor?.email && (
-              <p className={styles.error}>{errors.instructor.email.message}</p>
-            )}
           </div>
 
           <div className={styles.instructorImage}>
@@ -346,9 +370,18 @@ const NewCourse = () => {
             <input
               type="number"
               placeholder="e.g., 12"
-              {...register('durationWeeks', { required: true, min: 1 })}
+              {...register('durationWeeks', {
+                required: 'This field is required',
+                min: { value: 5, message: 'Must be at least 5 week' },
+              })}
               className={styles.input}
             />
+
+            {errors.durationWeeks && (
+              <span className={styles.error}>
+                {errors.durationWeeks.message}
+              </span>
+            )}
           </label>
 
           <label className={styles.label}>
@@ -362,9 +395,20 @@ const NewCourse = () => {
             <input
               type="number"
               placeholder="e.g., 3"
-              {...register('classesPerWeek', { required: true, min: 1 })}
+              {...register('classesPerWeek', {
+                required: 'This field is required',
+                min: {
+                  value: 1,
+                  message: 'Must be at least 1 session per week',
+                },
+              })}
               className={styles.input}
             />
+            {errors.classesPerWeek && (
+              <span className={styles.error}>
+                {errors.classesPerWeek.message || 'This field is required'}
+              </span>
+            )}
           </label>
         </section>
 
@@ -375,7 +419,7 @@ const NewCourse = () => {
             control={control}
             rules={{
               validate: (val) =>
-                val.length > 0 || 'At least one tag is required',
+                val.length > 3 || 'At least three tag is required',
             }}
             render={({ field }) => (
               <TagsSelect

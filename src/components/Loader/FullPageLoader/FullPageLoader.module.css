@@ -1,0 +1,66 @@
+.loaderWrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  left: 0;
+  align-items: center;
+  transition: background 0.4s ease;
+}
+
+.loaderWrapper.light {
+  background-color: rgba(255, 255, 255, 0.993);
+  color: #222;
+}
+
+.loaderWrapper.dark {
+  background-color: rgba(20, 20, 20, 0.95);
+  color: #fff;
+}
+
+.loaderCard {
+  text-align: center;
+  padding: 2rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.logo {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: var(--vigilo-primary, #25aff3);
+}
+
+.logoIcon {
+  width: 48px;
+  height: 48px;
+}
+
+.message {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.subMessage {
+  font-size: 0.95rem;
+  color: #888;
+  margin-bottom: 1.5rem;
+}
+
+.spinnerWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner {
+  font-size: 1.8rem;
+  color: var(--vigilo-primary, #25aff3);
+}

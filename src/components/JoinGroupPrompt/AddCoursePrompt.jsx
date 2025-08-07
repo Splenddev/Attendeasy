@@ -7,7 +7,7 @@ const AddCoursePrompt = () => {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    navigate('/class-rep/courses');
+    navigate('/class-rep/courses/new');
   };
 
   return (

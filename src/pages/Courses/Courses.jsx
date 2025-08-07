@@ -1,15 +1,12 @@
 /* eslint-disable no-unused-vars */
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LuSearch,
   LuClock,
   LuBookOpen,
-  LuUsers,
-  LuStar,
   LuPlay,
   LuAward,
-  LuCalendar,
   LuTrendingUp,
   LuPlus,
 } from 'react-icons/lu';
@@ -17,189 +14,55 @@ import styles from './Courses.module.css';
 import { MdCheckCircle } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import button from '../../components/Button/Button';
+import useCourses from '../../hooks/useCourses';
+import { FiRefreshCcw } from 'react-icons/fi';
+import FullPageLoader from '../../components/Loader/FullPageLoader/FullPageLoader';
+import { useAuth } from '../../context/AuthContext';
 
 // Sample course data
-const coursesData = [
-  {
-    id: 1,
-    title: 'Advanced React Development',
-    instructor: 'Sarah Johnson',
-    thumbnail:
-      'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400&h=200&fit=crop',
-    progress: 75,
-    category: 'Development',
-    level: 'Advanced',
-    duration: '12 hours',
-    rating: 4.8,
-    students: 2847,
-    lessons: 24,
-    completedLessons: 18,
-    lastAccessed: '2 days ago',
-    isCompleted: false,
-    tags: ['React', 'JavaScript', 'Frontend'],
-    description:
-      'Master advanced React concepts including hooks, context, performance optimization, and modern patterns.',
-  },
-  {
-    id: 2,
-    title: 'UI/UX Design Fundamentals',
-    instructor: 'Michael Chen',
-    thumbnail:
-      'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&h=200&fit=crop',
-    progress: 100,
-    category: 'Design',
-    level: 'Beginner',
-    duration: '8 hours',
-    rating: 4.9,
-    students: 5432,
-    lessons: 16,
-    completedLessons: 16,
-    lastAccessed: '1 week ago',
-    isCompleted: true,
-    tags: ['UI', 'UX', 'Figma'],
-    description:
-      'Learn the fundamentals of user interface and user experience design with hands-on projects.',
-  },
-  {
-    id: 3,
-    title: 'Python for Data Science',
-    instructor: 'Dr. Emily Rodriguez',
-    thumbnail:
-      'https://images.unsplash.com/photo-1526379879527-8559ecfcaec0?w=400&h=200&fit=crop',
-    progress: 45,
-    category: 'Data Science',
-    level: 'Intermediate',
-    duration: '15 hours',
-    rating: 4.7,
-    students: 3921,
-    lessons: 32,
-    completedLessons: 14,
-    lastAccessed: '3 days ago',
-    isCompleted: false,
-    tags: ['Python', 'Data Analysis', 'Pandas'],
-    description:
-      'Comprehensive guide to using Python for data analysis, visualization, and machine learning.',
-  },
-  {
-    id: 4,
-    title: 'Digital Marketing Strategy',
-    instructor: 'James Wilson',
-    thumbnail:
-      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=200&fit=crop',
-    progress: 20,
-    category: 'Marketing',
-    level: 'Beginner',
-    duration: '10 hours',
-    rating: 4.6,
-    students: 1876,
-    lessons: 20,
-    completedLessons: 4,
-    lastAccessed: '5 days ago',
-    isCompleted: false,
-    tags: ['Marketing', 'SEO', 'Social Media'],
-    description:
-      'Build effective digital marketing campaigns and grow your online presence.',
-  },
-  {
-    id: 5,
-    title: 'Machine Learning Essentials',
-    instructor: 'Dr. Alex Kumar',
-    thumbnail:
-      'https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=400&h=200&fit=crop',
-    progress: 90,
-    category: 'Data Science',
-    level: 'Advanced',
-    duration: '20 hours',
-    rating: 4.9,
-    students: 2156,
-    lessons: 40,
-    completedLessons: 36,
-    lastAccessed: '1 day ago',
-    isCompleted: false,
-    tags: ['ML', 'Python', 'TensorFlow'],
-    description:
-      'Deep dive into machine learning algorithms, implementation, and real-world applications.',
-  },
-  {
-    id: 6,
-    title: 'Mobile App Development',
-    instructor: 'Lisa Park',
-    thumbnail:
-      'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&h=200&fit=crop',
-    progress: 60,
-    category: 'Development',
-    level: 'Intermediate',
-    duration: '18 hours',
-    rating: 4.8,
-    students: 4321,
-    lessons: 36,
-    completedLessons: 22,
-    lastAccessed: '4 days ago',
-    isCompleted: false,
-    tags: ['React Native', 'Mobile', 'iOS', 'Android'],
-    description:
-      'Build cross-platform mobile applications using React Native and modern development practices.',
-  },
-];
 
-const categories = [
-  'All',
-  'Development',
-  'Design',
-  'Data Science',
-  'Marketing',
-];
 const levels = ['All', 'Beginner', 'Intermediate', 'Advanced'];
 
 const Courses = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedLevel, setSelectedLevel] = useState('All');
-  const [sortBy, setSortBy] = useState('recent');
 
   const navigate = useNavigate();
 
+  const { setNavTitle } = useAuth();
+
+  useEffect(() => setNavTitle('My Courses'), [setNavTitle]);
+
+  const { courses = [], loading, refetch } = useCourses();
+
   // Filter and sort courses
   const filteredCourses = useMemo(() => {
-    let filtered = coursesData.filter((course) => {
+    const lowerSearch = searchTerm.toLowerCase();
+
+    return courses.filter((course) => {
       const matchesSearch =
-        course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        course.instructor.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        course.tags.some((tag) =>
-          tag.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      const matchesCategory =
-        selectedCategory === 'All' || course.category === selectedCategory;
+        course.courseTitle.toLowerCase().includes(lowerSearch) ||
+        course.instructor?.name?.toLowerCase().includes(lowerSearch) ||
+        course.tags.some((tag) => tag.toLowerCase().includes(lowerSearch));
+
       const matchesLevel =
         selectedLevel === 'All' || course.level === selectedLevel;
 
-      return matchesSearch && matchesCategory && matchesLevel;
+      return matchesSearch && matchesLevel;
     });
-
-    // Sort courses
-    switch (sortBy) {
-      case 'progress':
-        return filtered.sort((a, b) => b.progress - a.progress);
-      case 'rating':
-        return filtered.sort((a, b) => b.rating - a.rating);
-      case 'title':
-        return filtered.sort((a, b) => a.title.localeCompare(b.title));
-      default:
-        return filtered;
-    }
-  }, [searchTerm, selectedCategory, selectedLevel, sortBy]);
+  }, [courses, searchTerm, selectedLevel]);
 
   // Calculate stats
   const stats = useMemo(() => {
-    const totalCourses = coursesData.length;
-    const completedCourses = coursesData.filter(
-      (course) => course.isCompleted
+    const totalCourses = courses.length;
+    const completedCourses = courses.filter(
+      (course) => course.completed
     ).length;
-    const inProgressCourses = coursesData.filter(
-      (course) => !course.isCompleted && course.progress > 0
+    const inProgressCourses = courses.filter(
+      (course) => !course.completed && course.progress > 0
     ).length;
-    const totalHours = coursesData.reduce(
-      (sum, course) => sum + parseInt(course.duration),
+    const totalHours = courses.reduce(
+      (sum, course) => sum + parseInt(course.estimatedHours),
       0
     );
 
@@ -250,6 +113,32 @@ const Courses = () => {
     },
   };
 
+  if (loading) {
+    return (
+      <FullPageLoader
+        show={loading}
+        message="Loading Courses..."
+        subMessage="Fetching the latest course details for you. Hang tight!"
+        theme="dark"
+      />
+    );
+  }
+
+  if (!courses || courses.length === 0) {
+    return (
+      <div>
+        No course found
+        {button.multiple({
+          icon: FiRefreshCcw,
+          func: refetch,
+          disabled: loading,
+          element: 'Retry',
+          name: 'default_button',
+        })}
+      </div>
+    );
+  }
+
   return (
     <div className={styles.wrapper}>
       <motion.div
@@ -257,17 +146,6 @@ const Courses = () => {
         variants={containerVariants}
         initial="hidden"
         animate="visible">
-        {/* Header */}
-        <motion.div
-          variants={itemVariants}
-          className={styles.header}>
-          <h1 className={styles.title}>My Courses</h1>
-          <p className={styles.subtitle}>
-            Continue your learning journey and track your progress
-          </p>
-        </motion.div>
-
-        {/* Stats Cards */}
         <motion.div
           variants={itemVariants}
           className={styles.statsGrid}>
@@ -356,20 +234,6 @@ const Courses = () => {
               />
             </div>
 
-            {/* Category Filter */}
-            <select
-              className={styles.select}
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}>
-              {categories.map((category) => (
-                <option
-                  key={category}
-                  value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
-
             {/* Level Filter */}
             <select
               className={styles.select}
@@ -383,17 +247,6 @@ const Courses = () => {
                 </option>
               ))}
             </select>
-
-            {/* Sort Filter */}
-            <select
-              className={styles.select}
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}>
-              <option value="recent">Recently Accessed</option>
-              <option value="progress">Progress</option>
-              <option value="rating">Rating</option>
-              <option value="title">Title</option>
-            </select>
           </div>
         </motion.div>
 
@@ -402,95 +255,99 @@ const Courses = () => {
           className={styles.courseGrid}
           variants={containerVariants}>
           <AnimatePresence>
-            {filteredCourses.map((course) => (
-              <motion.div
-                key={course.id}
-                variants={cardVariants}
-                initial="hidden"
-                animate="visible"
-                exit="hidden"
-                whileHover="hover"
-                className={`${styles.courseCard} ${styles.groupHover}`}>
-                {/* Thumbnail */}
-                <div
-                  className={`${styles.thumbnailWrapper} ${styles.groupHover}`}>
-                  <img
-                    src={course.thumbnail}
-                    alt={course.title}
-                    className={styles.thumbnailImage}
-                  />
-                  <div className={styles.thumbnailOverlay}>
-                    <motion.div
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
-                      className={styles.playButton}>
-                      <LuPlay className={styles.icon} />
-                    </motion.div>
-                  </div>
-                  {course.isCompleted && (
-                    <div className={styles.completionBadge}>
-                      <LuAward />
-                      Completed
-                    </div>
-                  )}
+            {!filteredCourses ? (
+              <p>Nothing</p>
+            ) : (
+              filteredCourses.map((course) => (
+                <motion.div
+                  key={course.id}
+                  variants={cardVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden"
+                  whileHover="hover"
+                  className={`${styles.courseCard} ${styles.groupHover}`}>
+                  {/* Thumbnail */}
                   <div
-                    className={`${styles.levelBadge} ${
-                      course.level === 'Beginner'
-                        ? styles.levelBeginner
-                        : course.level === 'Intermediate'
-                        ? styles.levelIntermediate
-                        : styles.levelAdvanced
-                    }`}>
-                    {course.level}
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className={styles.courseContent}>
-                  <h3 className={styles.courseTitle}>{course.title}</h3>
-                  <p className={styles.courseDescription}>
-                    {course.description}
-                  </p>
-                  <p className={styles.courseInstructor}>
-                    by {course.instructor}
-                  </p>
-
-                  {/* Progress */}
-                  <div className={styles.progressWrapper}>
-                    <div className={styles.progressTop}>
-                      <span className={styles.progressLabel}>Progress</span>
-                      <span className={styles.progressValue}>
-                        {course.progress}%
-                      </span>
-                    </div>
-                    <div className={styles.progressBarBackground}>
+                    className={`${styles.thumbnailWrapper} ${styles.groupHover}`}>
+                    <img
+                      src={course.thumbnail}
+                      alt={course.courseTitle}
+                      className={styles.thumbnailImage}
+                    />
+                    <div className={styles.thumbnailOverlay}>
                       <motion.div
-                        className={`${styles.progressBarFill} ${
-                          course.progress === 100
-                            ? styles.progressGreen
-                            : styles.progressBlue
-                        }`}
-                        initial={{ width: 0 }}
-                        animate={{ width: `${course.progress}%` }}
-                        transition={{ duration: 1, delay: 0.5 }}
-                      />
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={styles.playButton}>
+                        <LuPlay className={styles.icon} />
+                      </motion.div>
+                    </div>
+                    {course.completed && (
+                      <div className={styles.completionBadge}>
+                        <LuAward />
+                        Completed
+                      </div>
+                    )}
+                    <div
+                      className={`${styles.levelBadge} ${
+                        course.level === 'Beginner'
+                          ? styles.levelBeginner
+                          : course.level === 'Intermediate'
+                          ? styles.levelIntermediate
+                          : styles.levelAdvanced
+                      }`}>
+                      {course.level}
                     </div>
                   </div>
 
-                  {/* Course Stats */}
-                  <div className={styles.courseStats}>
-                    <div className={styles.statsGroup}>
-                      <LuBookOpen className={styles.icon} />
-                      {course.completedLessons}/{course.lessons} lessons
-                    </div>
-                    <div className={styles.statsGroup}>
-                      <LuClock className={styles.icon} />
-                      {course.duration}
-                    </div>
-                  </div>
+                  {/* Content */}
+                  <div className={styles.courseContent}>
+                    <h3 className={styles.courseTitle}>{course.courseTitle}</h3>
+                    <p className={styles.courseDescription}>
+                      {course.description}
+                    </p>
+                    <p className={styles.courseInstructor}>
+                      by {course.instructor.name}
+                    </p>
 
-                  {/* Ratings */}
-                  <div className={styles.courseRatings}>
+                    {/* Progress */}
+                    <div className={styles.progressWrapper}>
+                      <div className={styles.progressTop}>
+                        <span className={styles.progressLabel}>Progress</span>
+                        <span className={styles.progressValue}>
+                          {course.progress}%
+                        </span>
+                      </div>
+                      <div className={styles.progressBarBackground}>
+                        <motion.div
+                          className={`${styles.progressBarFill} ${
+                            course.progress === 100
+                              ? styles.progressGreen
+                              : styles.progressBlue
+                          }`}
+                          initial={{ width: 0 }}
+                          animate={{ width: `${course.progress}%` }}
+                          transition={{ duration: 1, delay: 0.5 }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Course Stats */}
+                    <div className={styles.courseStats}>
+                      <div className={styles.statsGroup}>
+                        <LuBookOpen className={styles.icon} />
+                        {course.completedSchedules}/{course.expectedSchedules}{' '}
+                        lessons
+                      </div>
+                      <div className={styles.statsGroup}>
+                        <LuClock className={styles.icon} />
+                        {course.estimatedHours}
+                      </div>
+                    </div>
+
+                    {/* Ratings */}
+                    {/* <div className={styles.courseRatings}>
                     <div className={styles.statsGroup}>
                       <LuStar className="w-4 h-4 text-yellow-400 fill-current" />
                       {course.rating}
@@ -499,59 +356,61 @@ const Courses = () => {
                       <LuUsers className={styles.icon} />
                       {course.students.toLocaleString()} students
                     </div>
-                  </div>
+                  </div> */}
 
-                  {/* Tags */}
-                  <div className={styles.courseTags}>
-                    {course.tags.slice(0, 3).map((tag, index) => (
-                      <span
-                        key={index}
-                        className={styles.tag}>
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
+                    {/* Tags */}
+                    <div className={styles.courseTags}>
+                      {course.tags.slice(0, 3).map((tag, index) => (
+                        <span
+                          key={index}
+                          className={styles.tag}>
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
 
-                  {/* Last Accessed */}
-                  <div className={styles.lastAccessed}>
+                    {/* Last Accessed */}
+                    {/* <div className={styles.lastAccessed}>
                     <LuCalendar className={styles.icon} />
                     Last accessed {course.lastAccessed}
-                  </div>
+                  </div> */}
 
-                  {/* Button */}
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className={`${styles.actionButton} ${
-                      course.isCompleted
-                        ? styles.buttonGreen
+                    {/* Button */}
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className={`${styles.actionButton} ${
+                        course.completed
+                          ? styles.buttonGreen
+                          : course.progress > 0
+                          ? styles.buttonBlue
+                          : styles.buttonSlate
+                      }`}>
+                      {course.completed
+                        ? 'Review Materials'
                         : course.progress > 0
-                        ? styles.buttonBlue
-                        : styles.buttonSlate
-                    }`}>
-                    {course.isCompleted
-                      ? 'Review Materials'
-                      : course.progress > 0
-                      ? 'Continue Learning'
-                      : 'Start Course'}
-                  </motion.button>
-                </div>
-              </motion.div>
-            ))}
+                        ? 'Continue Learning'
+                        : 'Start Course'}
+                    </motion.button>
+                  </div>
+                </motion.div>
+              ))
+            )}
           </AnimatePresence>
         </motion.div>
 
         {/* Empty State */}
-        {filteredCourses.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className={styles.emptyState}>
-            <LuBookOpen className={styles.icon} />
-            <h3>No courses found</h3>
-            <p>Try adjusting your filters or search terms</p>
-          </motion.div>
-        )}
+        {!filteredCourses ||
+          (filteredCourses.length === 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={styles.emptyState}>
+              <LuBookOpen className={styles.icon} />
+              <h3>No courses found</h3>
+              <p>Try adjusting your filters or search terms</p>
+            </motion.div>
+          ))}
       </motion.div>
     </div>
   );

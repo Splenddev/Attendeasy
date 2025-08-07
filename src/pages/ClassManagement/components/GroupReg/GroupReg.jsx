@@ -25,7 +25,9 @@ import { useNavigate } from 'react-router-dom';
 axios.defaults.withCredentials = true;
 
 const GroupReg = ({ fetchGroup }) => {
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, setNavTitle } = useAuth();
+
+  useEffect(() => setNavTitle('Group Management'), [setNavTitle]);
 
   const navigate = useNavigate();
 

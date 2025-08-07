@@ -2,11 +2,14 @@ import React from 'react';
 import GroupFind from '../../components/GroupFind/GroupFind';
 import GroupReg from '../../components/GroupReg/GroupReg';
 
-const GroupRegFind = ({ user, fetchGroup }) => {
+const GroupRegFind = ({ user, fetchGroup, setNavTitle }) => {
   return (
     <div className="group-reg-find">
       {user.role === 'student' ? (
-        <GroupFind user={user} />
+        <GroupFind
+          user={user}
+          setNavTitle={setNavTitle}
+        />
       ) : (
         <GroupReg fetchGroup={fetchGroup} />
       )}

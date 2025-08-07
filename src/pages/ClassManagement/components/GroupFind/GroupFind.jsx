@@ -12,7 +12,9 @@ import Spinner from '../../../../components/Loader/Spinner/Spinner';
 import button from '../../../../components/Button/Button';
 import { formatName } from '../../../../utils/helpers';
 
-const GroupFind = ({ user = {}, onJoin }) => {
+const GroupFind = ({ user = {}, onJoin, setNavTitle }) => {
+  useEffect(() => setNavTitle('Find Group'), [setNavTitle]);
+
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState({
     faculty: user.faculty || '',

@@ -68,6 +68,7 @@ const GroupManagementPage = () => {
     return (
       <GroupRegFind
         user={user}
+        setNavTitle={setNavTitle}
         fetchGroup={fetchGroup}
       />
     );

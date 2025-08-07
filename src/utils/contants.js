@@ -1,10 +1,3 @@
-export const courseCodeOptions = [
-  { text: 'BCH301' },
-  { text: 'BCH303' },
-  { text: 'BCH305' },
-  { text: 'BCH315' },
-  { text: 'BCH317' },
-];
 export const formDataAssets2 = [
   {
     id: 'optional-enhancements',
@@ -402,45 +395,6 @@ export const formDataAssets = [
   },
 ];
 
-export const list = [
-  {
-    name: 'Splendid Felix',
-    role: 'class-rep',
-  },
-  {
-    name: 'Amad Ali',
-    role: 'student',
-  },
-  {
-    name: 'Ben Kardi',
-    role: 'student',
-  },
-  {
-    name: 'Angel Johnson',
-    role: 'student',
-  },
-  {
-    name: 'Alex Khan',
-    role: 'student',
-  },
-  {
-    name: 'Cardi Johnson',
-    role: 'student',
-  },
-  {
-    name: 'Carly Stones',
-    role: 'student',
-  },
-  {
-    name: 'John Khan',
-    role: 'student',
-  },
-  {
-    name: 'Aohn Khan Mohameed',
-    role: 'student',
-  },
-];
-
 export const variants = {
   shake: {
     shake: {
@@ -457,125 +411,132 @@ export const variants = {
     still: { opacity: 0 },
   },
 };
-export const group = {
-  name: 'CSC 301 - Data Structures',
-  faculty: 'Science',
-  department: 'Computer Science',
-  level: '300',
-  classRepName: 'Jane Doe',
-  description:
-    'This group handles all communications and activities for CSC 301. Ensure you keep up with announcements and attendance.',
-  members: [
-    {
-      id: 1,
-      name: 'Jane Doe',
-      avatar: 'https://i.pravatar.cc/150?img=1',
-      role: 'Class Rep',
-    },
-    {
-      id: 2,
-      name: 'John Smith',
-      avatar: 'https://i.pravatar.cc/150?img=2',
-      role: 'Student',
-    },
-    {
-      id: 3,
-      name: 'Mary Johnson',
-      avatar: 'https://i.pravatar.cc/150?img=3',
-      role: 'Student',
-    },
-    {
-      id: 4,
-      name: 'Mike Brown',
-      avatar: 'https://i.pravatar.cc/150?img=4',
-      role: 'Student',
-    },
-  ],
 
-  // New fields added for OverviewTab compatibility:
-  joinedStudents: [
-    { id: 2, name: 'John Smith' },
-    { id: 3, name: 'Mary Johnson' },
-    { id: 4, name: 'Mike Brown' },
-  ],
-  leftStudents: [{ id: 5, name: 'Chris Walker' }],
-
-  completedClasses: 12,
-  submittedAttendance: 11,
-
-  attendanceRecords: [
-    {
-      date: '2025-06-01',
-      presentStudentIds: [1, 2, 3], // Jane, John, Mary
-    },
-    {
-      date: '2025-06-03',
-      presentStudentIds: [1, 2, 4], // Jane, John, Mike
-    },
-    {
-      date: '2025-06-05',
-      presentStudentIds: [1, 2], // Jane, John
-    },
-    {
-      date: '2025-06-10',
-      presentStudentIds: [1, 3, 4], // Jane, Mary, Mike
-    },
-  ],
-
-  lastAttendanceDate: '2025-06-10T09:00:00Z',
-
-  attendanceTrends: [5, 20, 35, 38, 36, 40], // Total students present over recent classes
-
-  topAbsentees: [
-    { name: 'Mary Johnson', count: 4 },
-    { name: 'Mike Brown', count: 3 },
-  ],
-
-  engagementStats: {
-    announcements: 6,
-    acknowledgements: 75,
+export const coursesData = [
+  {
+    id: 1,
+    courseTitle: 'Advanced React Development',
+    instructor: { name: 'Sarah Johnson' },
+    thumbnail:
+      'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400&h=200&fit=crop',
+    progress: 75,
+    department: 'Development',
+    faculty: 'Development',
+    level: 'Advanced',
+    estimatedHours: '12 hours',
+    // rating: 4.8,
+    // students: 2847,
+    expectedSchedules: 24,
+    completedSchedules: 18,
+    // lastAccessed: '2 days ago',
+    completed: false,
+    tags: ['React', 'JavaScript', 'Frontend'],
+    description:
+      'Master advanced React concepts including hooks, context, performance optimization, and modern patterns.',
   },
-
-  nextClass: {
-    day: 'Wednesday',
-    time: '10:00 AM – 12:00 PM',
-    topic: 'Stacks and Queues',
-    location: 'Lecture Room 5, CS Building',
+  {
+    id: 2,
+    courseTitle: 'UI/UX Design Fundamentals',
+    instructor: { name: 'Michael Chen' },
+    thumbnail:
+      'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&h=200&fit=crop',
+    progress: 100,
+    department: 'Design',
+    faculty: 'Design',
+    level: 'Beginner',
+    estimatedHours: '8 hours',
+    // rating: 4.9,
+    // students: 5432,
+    expectedSchedules: 16,
+    completedSchedules: 16,
+    // lastAccessed: '1 week ago',
+    completed: true,
+    tags: ['UI', 'UX', 'Figma'],
+    description:
+      'Learn the fundamentals of user interface and user experience design with hands-on projects.',
   },
-
-  latestAnnouncement: {
-    title: 'Midterm Review Class',
-    body: 'There will be a special review session this Friday covering all topics from weeks 1–6. Attendance is highly recommended.',
-    postedAt: '2025-06-10T14:30:00Z',
+  {
+    id: 3,
+    courseTitle: 'Python for Data Science',
+    instructor: { name: 'Dr. Emily Rodriguez' },
+    thumbnail:
+      'https://images.unsplash.com/photo-1526379879527-8559ecfcaec0?w=400&h=200&fit=crop',
+    progress: 45,
+    department: 'Data Science',
+    faculty: 'Data Science',
+    level: 'Intermediate',
+    estimatedHours: '15 hours',
+    // rating: 4.7,
+    // students: 3921,
+    expectedSchedules: 32,
+    completedSchedules: 14,
+    // lastAccessed: '3 days ago',
+    completed: false,
+    tags: ['Python', 'Data Analysis', 'Pandas'],
+    description:
+      'Comprehensive guide to using Python for data analysis, visualization, and machine learning.',
   },
-  announcements: [
-    {
-      id: 1,
-      title: 'Midterm Review Class',
-      body: 'There will be a special review session this Friday covering all topics from weeks 1–6. Attendance is highly recommended.',
-      postedAt: '2025-06-10T14:30:00Z',
-      type: 'class', // 📘 Class Info
-    },
-    {
-      id: 2,
-      title: 'Assignment 2 Deadline',
-      body: 'Submit your second assignment on Linked Lists by Sunday night. Late submissions will incur penalties.',
-      postedAt: '2025-06-11T10:00:00Z',
-      type: 'assignment', // 📚 Assignment Reminder
-    },
-    {
-      id: 3,
-      title: 'Media Upload Notice',
-      body: 'Lecture recording for Week 5 has been uploaded. Access it from the materials section.',
-      postedAt: '2025-06-09T16:45:00Z',
-      type: 'media', // 🎥 Media Notice
-    },
-    {
-      id: 4,
-      title: 'No Class Next Monday',
-      body: 'Due to a public holiday, there will be no class next Monday. Use the time to revise.',
-      postedAt: '2025-06-08T12:00:00Z',
-      type: 'general', // 🗓 General Announcement
-    },
-  ],
-};
+  {
+    id: 4,
+    courseTitle: 'Digital Marketing Strategy',
+    instructor: { name: 'James Wilson' },
+    thumbnail:
+      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=200&fit=crop',
+    progress: 20,
+    department: 'Marketing',
+    faculty: 'Marketing',
+    level: 'Beginner',
+    estimatedHours: '10 hours',
+    // rating: 4.6,
+    // students: 1876,
+    expectedSchedules: 20,
+    completedSchedules: 4,
+    // lastAccessed: '5 days ago',
+    completed: false,
+    tags: ['Marketing', 'SEO', 'Social Media'],
+    description:
+      'Build effective digital marketing campaigns and grow your online presence.',
+  },
+  {
+    id: 5,
+    courseTitle: 'Machine Learning Essentials',
+    instructor: { name: 'Dr. Alex Kumar' },
+    thumbnail:
+      'https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=400&h=200&fit=crop',
+    progress: 90,
+    department: 'Data Science',
+    faculty: 'Data Science',
+    level: 'Advanced',
+    estimatedHours: '20 hours',
+    // rating: 4.9,
+    // students: 2156,
+    expectedSchedules: 40,
+    completedSchedules: 36,
+    // lastAccessed: '1 day ago',
+    completed: false,
+    tags: ['ML', 'Python', 'TensorFlow'],
+    description:
+      'Deep dive into machine learning algorithms, implementation, and real-world applications.',
+  },
+  {
+    id: 6,
+    courseTitle: 'Mobile App Development',
+    instructor: { name: 'Lisa Park' },
+    thumbnail:
+      'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&h=200&fit=crop',
+    progress: 60,
+    department: 'Development',
+    faculty: 'Development',
+    level: 'Intermediate',
+    estimatedHours: '18 hours',
+    // rating: 4.8,
+    // students: 4321,
+    expectedSchedules: 36,
+    completedSchedules: 22,
+    // lastAccessed: '4 days ago',
+    completed: false,
+    tags: ['React Native', 'Mobile', 'iOS', 'Android'],
+    description:
+      'Build cross-platform mobile applications using React Native and modern development practices.',
+  },
+];
