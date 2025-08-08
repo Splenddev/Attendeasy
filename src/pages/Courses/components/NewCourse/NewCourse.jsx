@@ -1,5 +1,5 @@
-import { LuUniversity } from 'react-icons/lu';
-import { FaGraduationCap, FaUserGraduate } from 'react-icons/fa';
+import { LuSend, LuUniversity } from 'react-icons/lu';
+import { FaGraduationCap, FaSpinner, FaUserGraduate } from 'react-icons/fa';
 import { Controller, useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 
@@ -10,11 +10,12 @@ import ImageDropzone from '../../../../components/ImageDropzone/ImageDropzone';
 
 import styles from './NewCourse.module.css';
 import useCourses from '../../../../hooks/useCourses';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useErrorModal } from '../../../../hooks/useErrorModal';
 import { useSuccessModal } from '../../../../hooks/useSuccessModal';
 import Spinner from '../../../../components/Loader/Spinner/Spinner';
 import { getUser } from '../../../../services/auth.service';
+import button from '../../../../components/Button/Button';
 
 const NewCourse = () => {
   const { user, updateUser, setNavTitle } = useAuth();
@@ -56,6 +57,8 @@ const NewCourse = () => {
       tags: [],
     },
   });
+
+  const navigate = useNavigate();
 
   const desc = watch('description');
 
@@ -188,8 +191,7 @@ const NewCourse = () => {
               fetchErr
             );
           }
-          toast.success(result.message);
-          navigate('/class-rep/courses/new');
+          navigate('/class-rep/courses');
         }
       }
     } catch (err) {
@@ -449,6 +451,13 @@ const NewCourse = () => {
         </section>
 
         {/* Submit */}
+        {button.multiple({
+          type: 'submit',
+          name: styles.submitButton,
+          loader: loading,
+          element: loading ? 'Submitting' : 'Submit Course',
+          icon: loading ? FaSpinner : LuSend,
+        })}
         <button
           type="submit"
           className={styles.submitButton}>
@@ -456,7 +465,7 @@ const NewCourse = () => {
             <Spinner
               borderWidth="1px"
               borderColor="white"
-              size="40px"
+              size="20px"
             />
           ) : (
             'Submit Course'

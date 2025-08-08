@@ -8,6 +8,7 @@ const useScheduleForm = () => {
       notificationLeadTime: 10,
       isActive: 'Yes',
       classType: false,
+      course: '',
     },
   });
 

@@ -117,6 +117,7 @@
 }
 .c-attendance .default_button {
   place-self: end;
+  margin-bottom: 0.7rem;
 }
 .c-attendance-filter {
   gap: 10px;

@@ -1,20 +1,23 @@
 import { useEffect } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useWatch } from 'react-hook-form';
 import styles from './ScheduleSelector.module.css';
 import useSchedules from '../../../../../hooks/useSchedules';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../../../../../components/Loader/Spinner/Spinner';
 import { catenateCredentialsSecure } from '../../../../../utils/helpers';
 
-const ScheduleSelector = ({ setGroupId, setSchedId }) => {
+const ScheduleSelector = ({ setGroupId, setSchedId, methods }) => {
   const {
     setValue,
     formState: { errors },
-  } = useFormContext();
+  } = methods;
 
   const navigate = useNavigate();
 
   const { schedules, loading, error, retry } = useSchedules();
+
+  console.log(schedules);
+
   const selectedScheduleId = useWatch({ name: 'scheduleId' });
   const selectedClassDay = useWatch({ name: 'classTime.day' });
   const selectedStartTime = useWatch({ name: 'classTime.start' });
@@ -25,10 +28,13 @@ const ScheduleSelector = ({ setGroupId, setSchedId }) => {
 
   useEffect(() => {
     if (selectedSchedule) {
+      const loc = selectedSchedule.classLocation ?? {};
       setValue('lecturer.name', selectedSchedule.lecturerName || '');
       setValue('courseTitle', selectedSchedule.courseTitle || '');
       setValue('courseCode', selectedSchedule.courseCode || '');
       setValue('lecturer.email', selectedSchedule.lecturerEmail || '');
+      setValue('location.latitude', loc.lat || '');
+      setValue('location.longitude', loc.lng || '');
       setValue('groupId', selectedSchedule.groupId || '');
       setGroupId(selectedSchedule.groupId);
     }
@@ -82,6 +88,12 @@ const ScheduleSelector = ({ setGroupId, setSchedId }) => {
                   <h3>{sch.courseTitle}</h3>
                   <p>{sch.courseCode}</p>
                   <p>{sch.classroomVenue}</p>
+                  <p>
+                    <strong>Lat:</strong> {sch.classLocation?.lat || ''}
+                  </p>
+                  <p>
+                    <strong>Lng:</strong> {sch.classLocation || ''}
+                  </p>
                   <p>
                     <strong>Lecturer:</strong> {sch.lecturerName}
                   </p>

@@ -6,10 +6,12 @@ import {
   deleteCourse,
 } from '../services/courses.service.js';
 import { toast } from 'react-toastify';
+import { useErrorModal } from './useErrorModal.js';
 
 const useCourses = (autoFetch = true) => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(autoFetch);
+  const { open } = useErrorModal();
 
   const fetchCourses = async () => {
     try {
@@ -17,7 +19,7 @@ const useCourses = (autoFetch = true) => {
       const data = await getCourses();
       setCourses(data.courses || []);
     } catch (error) {
-      toast.error(error.message || 'Failed to fetch courses.');
+      open(error);
     } finally {
       setLoading(false);
     }
@@ -25,12 +27,15 @@ const useCourses = (autoFetch = true) => {
 
   const addCourse = async (course) => {
     try {
+      setLoading(true);
       const res = await createCourse(course);
       setCourses((prev) => [...prev, res.course]);
       toast.success('Course added.');
       return res;
     } catch (error) {
-      toast.error(error.message || 'Failed to add course.');
+      open(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -49,7 +54,7 @@ const useCourses = (autoFetch = true) => {
       );
       toast.success('Course updated.');
     } catch (error) {
-      toast.error(error.message || 'Failed to update course.');
+      open(error);
     }
   };
 
@@ -63,7 +68,7 @@ const useCourses = (autoFetch = true) => {
       );
       toast.info('Course removed.');
     } catch (error) {
-      toast.error(error.message || 'Failed to remove course.');
+      open(error);
     }
   };
 

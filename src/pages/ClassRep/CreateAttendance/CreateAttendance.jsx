@@ -68,6 +68,7 @@ const CreateAttendance = () => {
               <ScheduleSelector
                 setGroupId={setGroupId}
                 setSchedId={setSchedId}
+                methods={methods}
               />
             </div>
             <div className="create-attendance-section left">

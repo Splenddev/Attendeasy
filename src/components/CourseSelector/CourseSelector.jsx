@@ -7,6 +7,7 @@ import {
   MdMail,
   MdCheckCircle,
 } from 'react-icons/md';
+import { LuRepeat } from 'react-icons/lu';
 
 const CourseSelector = ({ courses, onSelect, onAdd }) => {
   const [selected, setSelected] = useState(null);
@@ -45,6 +46,18 @@ const CourseSelector = ({ courses, onSelect, onAdd }) => {
             <div className={styles.courseInfo}>
               <MdSchool size={18} />
               <span>{course.unit} unit</span>
+            </div>
+            <div className={styles.courseInfo}>
+              <MdSchool size={18} />
+              <span>{course._id}</span>
+            </div>
+
+            <div className={styles.courseInfo}>
+              <LuRepeat size={18} />
+              <span>
+                {course.classesPerWeek} class
+                {course.classesPerWeek > 1 ? 'es' : ''} per week
+              </span>
             </div>
           </div>
         ))}

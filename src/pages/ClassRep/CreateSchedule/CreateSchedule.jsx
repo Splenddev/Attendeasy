@@ -13,18 +13,19 @@ import './CreateSchedule.css';
 import { useCreateSchedule } from '../../../hooks/useCreateSchedule';
 import useCourses from '../../../hooks/useCourses';
 import Spinner from '../../../components/Loader/Spinner/Spinner';
-import PopupBox from '../../../components/Modals/PopupBox/PopupBox';
-import CourseAdder from '../../Auth/Register/CourseAdder/CourseAdder';
-import ManagerCourse from '../ManageCourse/ManageCourse';
 import { FiLoader, FiPlus, FiRefreshCw } from 'react-icons/fi';
 import { useErrorModal } from '../../../hooks/useErrorModal';
+import { useNavigate } from 'react-router-dom';
+import { useSuccessModal } from '../../../hooks/useSuccessModal';
 
 const CreateSchedule = () => {
   const { setNavTitle, user } = useAuth();
   useEffect(() => setNavTitle('Create Schedules'), [setNavTitle]);
 
-  const [openPopup, setOpenPopup] = useState(false);
   const { open: openError } = useErrorModal();
+  const { open: openSuccess } = useSuccessModal();
+
+  const navigate = useNavigate();
 
   const { courses, refetch, loading } = useCourses('fetch');
 
@@ -42,10 +43,16 @@ const CreateSchedule = () => {
   const [courseSelected, setCourseSelected] = useState(false);
 
   const onSubmit = async (data) => {
+    const { classType, ...rest } = data;
+    const normalizedType = classType ? 'Virtual' : 'Physical';
+
+    const payload = { ...rest, classType: normalizedType };
+
     await handleCreateSchedule({
-      data,
+      data: payload,
       groupId: user.group,
       onSuccess: () => {
+        openSuccess({ message: 'Schedule created successfully' });
         revertFormStates();
         reset(); // clear form
         setCourseSelected(false);
@@ -64,6 +71,7 @@ const CreateSchedule = () => {
       faculty: user.faculty,
       department: user.department,
       level: user.level,
+      course: course._id,
     }).forEach(([key, value]) => setValue(key, value));
 
     setCourseSelected(true);
@@ -103,7 +111,7 @@ const CreateSchedule = () => {
               {button.multiple({
                 icon: FiPlus,
                 element: 'Add Course',
-                func: () => setOpenPopup(true),
+                func: () => navigate('/class-rep/courses/new'),
               })}
             </div>
           </div>
@@ -111,7 +119,7 @@ const CreateSchedule = () => {
           <CourseSelector
             courses={courses}
             onSelect={handleCourseSelect}
-            onAdd={() => setOpenPopup(true)}
+            onAdd={() => navigate('/class-rep/courses/new')}
           />
         )}
         <div className="form-container">
@@ -165,11 +173,6 @@ const CreateSchedule = () => {
             })}
           </form>
         </div>
-        <PopupBox
-          isOpen={openPopup}
-          onClose={() => setOpenPopup(false)}>
-          <ManagerCourse />
-        </PopupBox>{' '}
       </FormProvider>
     </>
   );
