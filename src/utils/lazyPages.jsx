@@ -27,6 +27,9 @@ export const StudentAttendance = lazy(() =>
 export const StudentSchedules = lazy(() =>
   import('../pages/Student/StudentSchedules/StudentSchedules')
 );
+export const SchedulesHistory = lazy(() =>
+  import('../pages/ScheduleHistory/ScheduleHistory')
+);
 export const GroupResources = lazy(() =>
   import('../pages/GroupResources/GroupResources')
 );

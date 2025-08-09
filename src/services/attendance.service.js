@@ -77,8 +77,3 @@ export const reopenSession = async (attendanceId, payload) => {
 
   return res.data;
 };
-export const deleteSession = async (attendanceId) => {
-  const res = await api.delete(`${ATTENDANCE_API_BASE}${attendanceId}`);
-
-  return res.data;
-};

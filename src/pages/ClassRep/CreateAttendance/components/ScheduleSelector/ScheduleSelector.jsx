@@ -92,7 +92,7 @@ const ScheduleSelector = ({ setGroupId, setSchedId, methods }) => {
                     <strong>Lat:</strong> {sch.classLocation?.lat || ''}
                   </p>
                   <p>
-                    <strong>Lng:</strong> {sch.classLocation || ''}
+                    <strong>Lng:</strong> {sch.classLocation?.lng || ''}
                   </p>
                   <p>
                     <strong>Lecturer:</strong> {sch.lecturerName}

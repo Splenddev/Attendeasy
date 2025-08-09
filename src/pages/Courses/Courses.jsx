@@ -18,6 +18,8 @@ import useCourses from '../../hooks/useCourses';
 import { FiRefreshCcw } from 'react-icons/fi';
 import FullPageLoader from '../../components/Loader/FullPageLoader/FullPageLoader';
 import { useAuth } from '../../context/AuthContext';
+import { IoTrashBinOutline, IoTrashBinSharp } from 'react-icons/io5';
+import { BiTrashAlt } from 'react-icons/bi';
 
 // Sample course data
 
@@ -69,12 +71,12 @@ const Courses = () => {
       (course) => !course.completed && course.progress > 0
     ).length;
     const totalHours = courses.reduce(
-      (sum, course) => sum + parseInt(course.estimatedHours),
+      (sum, course) => sum + parseInt(course.estimatedHours, 10),
       0
     );
 
     return { totalCourses, completedCourses, inProgressCourses, totalHours };
-  }, []);
+  }, [courses]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -299,9 +301,9 @@ const Courses = () => {
                         )}
                         <div
                           className={`${styles.levelBadge} ${
-                            course.level === 'Beginner'
+                            course.level === '100L'
                               ? styles.levelBeginner
-                              : course.level === 'Intermediate'
+                              : course.level === '200L'
                               ? styles.levelIntermediate
                               : styles.levelAdvanced
                           }`}>
@@ -380,30 +382,24 @@ const Courses = () => {
                             </span>
                           ))}
                         </div>
-
-                        {/* Last Accessed */}
-                        {/* <div className={styles.lastAccessed}>
-                    <LuCalendar className={styles.icon} />
-                    Last accessed {course.lastAccessed}
-                  </div> */}
-
-                        {/* Button */}
-                        <motion.button
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          className={`${styles.actionButton} ${
-                            course.completed
-                              ? styles.buttonGreen
+                        <div className={styles.cta}>
+                          <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            className={`${styles.actionButton} ${
+                              course.completed
+                                ? styles.buttonGreen
+                                : course.progress > 0
+                                ? styles.buttonBlue
+                                : styles.buttonSlate
+                            }`}>
+                            {course.completed
+                              ? 'Review Materials'
                               : course.progress > 0
-                              ? styles.buttonBlue
-                              : styles.buttonSlate
-                          }`}>
-                          {course.completed
-                            ? 'Review Materials'
-                            : course.progress > 0
-                            ? 'Continue Learning'
-                            : 'Start Course'}
-                        </motion.button>
+                              ? 'Continue Learning'
+                              : 'Start Course'}
+                          </motion.button>
+                        </div>
                       </div>
                     </motion.div>
                   ))

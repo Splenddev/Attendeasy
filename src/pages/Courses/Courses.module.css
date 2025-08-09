@@ -268,7 +268,7 @@
 }
 
 .courseContent {
-  padding: 1.5rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
 }
@@ -380,13 +380,29 @@
   margin-bottom: 1rem;
 }
 
-.actionButton {
-  padding: 0.75rem 1rem;
+.cta {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: auto;
+}
+
+.actionButton,
+.deleteButton {
+  padding: 0.55rem 1rem;
   font-weight: 500;
   border-radius: 0.5rem;
   transition: background-color 0.2s ease;
   border: 1px solid transparent;
-  margin-top: auto;
+}
+
+.actionButton {
+  flex: 1;
+}
+
+.deleteButton {
+  background: var(--absent);
+  color: #fff;
+  font-size: 1.1rem;
 }
 
 .buttonGreen {

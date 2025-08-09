@@ -36,9 +36,11 @@ const App = () => {
   const shouldShowJoinGroupPrompt =
     user?.isLoggedIn && !user?.group && !isOnGroupPage;
 
-  const { courses, loading: courseLoading } = useCourses(
-    user?.role === 'class-rep'
-  );
+  const {
+    courses,
+    loading: courseLoading,
+    error,
+  } = useCourses(user?.role === 'class-rep');
 
   const shouldPromptAddCourse =
     user?.isLoggedIn &&
@@ -47,7 +49,9 @@ const App = () => {
     !isOnGroupPage &&
     !isOnCoursesPage &&
     !courseLoading &&
-    courses.length === 0;
+    courses &&
+    courses.length === 0 &&
+    error;
 
   return (
     <>

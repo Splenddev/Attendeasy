@@ -1,0 +1,328 @@
+.wrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.container {
+  padding: 1rem;
+}
+
+.sectionHeader {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.headerContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  font-size: 2rem; /* 32px */
+  font-weight: 700;
+  color: #1e293b; /* Slate-800 */
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.subtitle {
+  font-size: 1rem; /* 16px */
+  color: #64748b; /* Slate-500 */
+  max-width: 500px;
+  line-height: 1.5;
+}
+
+.cardsGrid {
+  gap: 1.3rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.card {
+  background-color: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+}
+
+.cardHeader {
+  padding: 20px;
+  color: white;
+  position: relative;
+}
+
+.cardHeaderTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.cardHeaderDate {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.cardHeaderMonth {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.cardStatus {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.cardWeekday {
+  font-size: 14px;
+  opacity: 0.9;
+  margin-bottom: 4px;
+}
+
+.cardTime {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.cardBody {
+  padding: 20px;
+}
+
+.cardTitleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.cardTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+.quickInfo {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.quickInfoItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.lecturerMessage {
+  background-color: #f8fafc;
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 3px solid #3b82f6;
+}
+
+.lecturerMessage p {
+  margin: 0;
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.detailedInfo {
+  padding-top: 20px;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.infoBox {
+  padding: 12px;
+  background-color: #f1f5f9;
+  border-radius: 8px;
+}
+
+.infoBoxLabel {
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.infoBoxValue {
+  font-size: 14px;
+  color: #1e293b;
+  font-weight: 500;
+}
+
+.monospace {
+  font-family: monospace;
+}
+
+.attendanceSummary {
+  margin-bottom: 20px;
+  padding: 16px;
+  background-color: #eff6ff;
+  border-radius: 8px;
+}
+
+.attendanceSummaryHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.attendanceSummaryHeader span {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.attendanceStats {
+  display: flex;
+  gap: 16px;
+}
+
+.statItem {
+  text-align: center;
+}
+
+.statPresent {
+  font-size: 20px;
+  font-weight: 700;
+  color: #10b981;
+}
+
+.statLate {
+  font-size: 20px;
+  font-weight: 700;
+  color: #f59e0b;
+}
+
+.statAbsent {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ef4444;
+}
+
+.statLabel {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.feedback {
+  margin-bottom: 16px;
+  padding: 16px;
+  background-color: #f0fdf4;
+  border-radius: 8px;
+  border-left: 3px solid #10b981;
+}
+
+.feedbackHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.feedbackHeader span {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.feedback p {
+  margin: 0;
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.notes {
+  padding: 16px;
+  background-color: #fefce8;
+  border-radius: 8px;
+  border-left: 3px solid #f59e0b;
+}
+
+.notesHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.notesHeader span {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.notes p {
+  margin: 0;
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.reschedule {
+  margin-top: 16px;
+  padding: 16px;
+  background-color: #eff6ff;
+  border-radius: 8px;
+  border-left: 3px solid #3b82f6;
+}
+
+.rescheduleHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.rescheduleHeader span {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.reschedule p {
+  margin: 0;
+  font-size: 14px;
+  color: #475569;
+}
+
+@media (min-width: 640px) {
+  .cardsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .cardsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  }
+}

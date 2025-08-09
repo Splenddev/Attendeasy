@@ -10,15 +10,18 @@ import { useErrorModal } from './useErrorModal.js';
 
 const useCourses = (autoFetch = true) => {
   const [courses, setCourses] = useState([]);
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(autoFetch);
   const { open } = useErrorModal();
 
   const fetchCourses = async () => {
     try {
       setLoading(true);
+      setError(null);
       const data = await getCourses();
       setCourses(data.courses || []);
     } catch (error) {
+      setError(error);
       open(error);
     } finally {
       setLoading(false);
@@ -104,6 +107,7 @@ const useCourses = (autoFetch = true) => {
     updateCourse,
     removeCourse,
     refetch: fetchCourses,
+    error,
   };
 };
 

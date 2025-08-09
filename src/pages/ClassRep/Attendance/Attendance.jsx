@@ -20,7 +20,6 @@ import button from '../../../components/Button/Button';
 import SessionInfo from './components/SessionInfo/SessionInfo';
 import Students from './components/Students/Students';
 import {
-  useDeleteAttendance,
   useFetchGroupAttendances,
   useFinalizeAttendance,
   useReopenAttendance,
@@ -48,13 +47,11 @@ const Attendance = () => {
     error,
   } = useFetchGroupAttendances(groupId);
 
-  const { deleteAttendance, loading: deleting } = useDeleteAttendance();
   const { finalize, finalizing } = useFinalizeAttendance();
   const { reopen, opening } = useReopenAttendance();
   const { open: openSuccess } = useSuccessModal();
   const [openPopup, setOpenPopup] = useState(null);
   const [isFinalizeOpen, setIsFinalizeOpen] = useState(null);
-  const [isDeleteOpen, setIsDeleteOpen] = useState(null);
 
   useEffect(() => {
     if (groupId) fetch(groupId);
@@ -79,11 +76,6 @@ const Attendance = () => {
     onSummary: (summary) => {
       console.log('📊 Attendance summary update:', summary);
       // Optionally update charts, stats, or local state here
-    },
-    onDeleted: (data) => {
-      console.log(data);
-      toast.info(`🗑️ Attendance session deleted`);
-      fetch(groupId); // re-fetch list after deletion
     },
     onReopened: (data) => {
       toast.success(`🔄 ${data.courseCode || 'A session'} was reopened`);
@@ -122,14 +114,6 @@ const Attendance = () => {
           'With Plea': res.stats.withPlea,
         },
       });
-    }
-  };
-
-  const handleDelete = async (id) => {
-    const res = await deleteAttendance(id);
-    if (res?.success) {
-      fetch(groupId);
-      setIsDeleteOpen(null);
     }
   };
 
@@ -352,11 +336,6 @@ const Attendance = () => {
                         loader: opening,
                         func: () => setOpenPopup(session._id),
                       })}
-                    {button.multiple({
-                      icon: FiTrash,
-                      element: deleting ? <Spinner size="20px" /> : 'Trash',
-                      func: () => setIsDeleteOpen(session._id),
-                    })}
                   </section>
                   <AttStatus status={session.status} />
                 </div>
@@ -417,14 +396,6 @@ const Attendance = () => {
         message="Are you sure you want to finalize this attendance? No more edits will be allowed."
         actionText="Finalize"
         loader={finalizing}
-      />
-      <ConfirmModal
-        isOpen={isDeleteOpen}
-        onClose={() => setIsDeleteOpen(false)}
-        onConfirm={() => handleDelete(isDeleteOpen)}
-        message="This will permanently delete this attendance record. Do you wish to continue?"
-        actionText="Delete"
-        loader={deleting}
       />
     </>
   );

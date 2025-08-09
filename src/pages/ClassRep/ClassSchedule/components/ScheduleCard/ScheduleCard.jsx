@@ -33,6 +33,7 @@ import button from '../../../../../components/Button/Button';
 import { getFileIconClass } from '../../../../Student/StudentSchedules/components/utils';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
+  LuArrowRight,
   LuBookCheck,
   LuBookOpen,
   LuCalendarClock,
@@ -203,6 +204,13 @@ const ScheduleCard = ({
           ))}
         </div>
       </div>
+
+      {button.multiple({
+        icon: LuArrowRight,
+        element: 'See History',
+        name: styles.scheduleHistory,
+        func: () => navigate(`${schedule._id}/history`),
+      })}
 
       {button.multiple({
         icon: isExpanded ? FiChevronUp : FiChevronDown,

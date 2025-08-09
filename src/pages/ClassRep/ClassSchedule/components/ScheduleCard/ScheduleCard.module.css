@@ -69,7 +69,7 @@
   border-radius: 9999px;
   background-color: #f1f5f9;
   color: #1e293b;
-  font-size: 0.7rem;
+  font-size: clamp(0.5rem, 5vw, 0.75rem);
   font-weight: 500;
   border: 1px solid #cbd5e1;
   white-space: nowrap;
@@ -78,7 +78,7 @@
 }
 .metaChip svg {
   color: var(--main-color);
-  font-size: 10px;
+  font-size: max(1.1vw, 10px);
 }
 
 .info {
@@ -129,6 +129,7 @@
   color: #fff;
   cursor: default;
   place-self: start;
+  margin-top: 0.5rem;
 }
 
 .bannerupcoming {
@@ -345,4 +346,23 @@
 .time {
   font-size: 0.855rem;
   color: #4b5563;
+}
+
+.scheduleHistory {
+  display: flex;
+  flex-direction: row-reverse;
+  padding: 0.55rem 1.4rem;
+  place-self: end;
+  margin-top: 0.45rem;
+  border-radius: 23px;
+  background: var(--main-color-light);
+  color: var(--main-color);
+  border: 1px solid var(--main-color);
+  transition: all ease 0.35s;
+}
+
+.scheduleHistory:hover {
+  scale: 1.04;
+  border: 1px solid var(--accent-color);
+  box-shadow: 0 3px 6px var(--accent-color);
 }

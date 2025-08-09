@@ -2,7 +2,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import {
   createAttendance,
-  deleteSession,
   finalizeSession,
   getGroupAttendances,
   getGroupTabAttendances,
@@ -172,44 +171,4 @@ export const useSubmitPlea = () => {
   }, []);
 
   return { submit, loading, error };
-};
-
-export const useDeleteAttendance = () => {
-  const [loading, setLoading] = useState(false);
-  const { open: openError } = useErrorModal();
-  const { open: openSuccess } = useSuccessModal();
-
-  const deleteAttendance = async (attendanceId) => {
-    setLoading(true);
-    try {
-      const data = await deleteSession(attendanceId);
-      if (data.success) {
-        openSuccess({
-          title: 'Attendance Deleted',
-          message: data.message,
-          details: {
-            AttendanceID: data.data.attendanceId,
-            Date: data.data.classDate,
-          },
-        });
-      } else {
-        openError({
-          initiator: 'Delete Attendance',
-          data,
-        });
-      }
-      return { success: data.success, data: data.data };
-    } catch (err) {
-      openError({
-        initiator: 'Delete Attendance',
-        ...err,
-      });
-      console.log(err.message);
-      return { success: false, error: err };
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return { deleteAttendance, loading };
 };

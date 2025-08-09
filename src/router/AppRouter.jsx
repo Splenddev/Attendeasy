@@ -26,6 +26,7 @@ import UserProfilePage from '../pages/UserProfilePage/UserProfilePage';
 import ErrorFallback from '../pages/ErrorFallback/ErrorFallback';
 import Courses from '../pages/Courses/Courses';
 import NewCourse from '../pages/Courses/components/NewCourse/NewCourse';
+import ScheduleHistory from '../pages/ScheduleHistory/ScheduleHistory';
 
 export const router = createBrowserRouter([
   {
@@ -93,6 +94,14 @@ export const router = createBrowserRouter([
             element: (
               <Suspense fallback={<Loader />}>
                 <ClassSchedule />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'schedules/:id/history',
+            element: (
+              <Suspense fallback={<Loader minDelay={6000} />}>
+                <ScheduleHistory />
               </Suspense>
             ),
           },
@@ -198,6 +207,14 @@ export const router = createBrowserRouter([
             element: (
               <Suspense fallback={<Loader />}>
                 <StudentSchedules />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'schedules/:id/history',
+            element: (
+              <Suspense fallback={<Loader minDelay={6000} />}>
+                <ScheduleHistory />
               </Suspense>
             ),
           },

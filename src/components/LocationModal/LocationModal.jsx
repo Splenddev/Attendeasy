@@ -30,19 +30,19 @@ L.Icon.Default.mergeOptions({
 
 const popularCampuses = [
   {
-    name: 'University of Ilorin (UNILORIN)',
     lat: 8.71648175046602,
     lng: 4.472258314334901,
+    name: 'Kwara State University (KWASU)',
   },
   {
-    name: 'Kwara State University (KWASU)',
-    lat: 8.604,
-    lng: 4.4479,
+    name: 'University of Ilorin (UNILORIN)',
+    lat: 8.4859168,
+    lng: 4.6643047,
   },
   {
     name: 'Offa Polytechnic',
-    lat: 8.1482,
-    lng: 4.7207,
+    lat: 8.1321567,
+    lng: 4.7008239,
   },
 ];
 
@@ -248,7 +248,10 @@ const LocationModal = ({ fieldName }) => {
   const [open, setOpen] = useState(false);
 
   const handleConfirm = (data) => {
-    setValue(fieldName, data, { shouldValidate: true });
+    const lng = data.coordinates[0];
+    const lat = data.coordinates[1];
+    const location = { lat, lng };
+    setValue(fieldName, location, { shouldValidate: true });
     setOpen(false);
     console.log(data);
     console.log(selected);
