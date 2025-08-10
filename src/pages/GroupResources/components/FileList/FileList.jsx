@@ -9,15 +9,9 @@ import {
 } from 'react-icons/fa';
 import styles from './FileList.module.css';
 
-import {
-  LuDownload,
-  LuTrash,
-  LuEye,
-  LuEdit2,
-  LuShare2,
-  LuCopy,
-} from 'react-icons/lu';
+import { LuDownload, LuTrash, LuEye, LuShare2, LuCopy } from 'react-icons/lu';
 import MoreOptions from '../../../../features/MoreOptions/MoreOptions';
+import { FiEdit3 } from 'react-icons/fi';
 
 const fileMoreMenuData = [
   {
@@ -29,7 +23,7 @@ const fileMoreMenuData = [
   {
     id: 'rename',
     label: 'Rename',
-    icon: <LuEdit2 />,
+    icon: <FiEdit3 />,
     for: 'editor', // only editors/admins
   },
   {

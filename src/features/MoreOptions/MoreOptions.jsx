@@ -1,5 +1,7 @@
+import { FiMoreVertical } from 'react-icons/fi';
 import { toggleMoreOptions } from '../../utils/helpers';
 import styles from './MoreOptions.module.css';
+import Dropdown from '../../pages/GroupResources/components/Dropdown/Dropdown';
 
 const MoreOptions = ({
   user,
