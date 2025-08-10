@@ -8,14 +8,12 @@ import {
   FaFileAlt,
 } from 'react-icons/fa';
 import styles from './FileList.module.css';
-import { FiMoreVertical } from 'react-icons/fi';
-import Dropdown from '../Dropdown/Dropdown';
 
 import {
   LuDownload,
   LuTrash,
   LuEye,
-  LuEdit3,
+  LuEdit2,
   LuShare2,
   LuCopy,
 } from 'react-icons/lu';
@@ -31,7 +29,7 @@ const fileMoreMenuData = [
   {
     id: 'rename',
     label: 'Rename',
-    icon: <LuEdit3 />,
+    icon: <LuEdit2 />,
     for: 'editor', // only editors/admins
   },
   {
