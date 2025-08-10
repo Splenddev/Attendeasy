@@ -248,9 +248,9 @@ const LocationModal = ({ fieldName }) => {
   const [open, setOpen] = useState(false);
 
   const handleConfirm = (data) => {
-    const lng = data.coordinates[0];
-    const lat = data.coordinates[1];
-    const location = { lat, lng };
+    const lng = Number(data.coordinates[0].toFixed(6));
+    const lat = Number(data.coordinates[1].toFixed(6));
+    const location = { lat, lng, label: data.label || '' };
     setValue(fieldName, location, { shouldValidate: true });
     setOpen(false);
     console.log(data);

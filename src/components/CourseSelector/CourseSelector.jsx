@@ -11,58 +11,75 @@ import { LuRepeat } from 'react-icons/lu';
 
 const CourseSelector = ({ courses, onSelect, onAdd }) => {
   const [selected, setSelected] = useState(null);
+
   return (
     <div className={styles.courseSelector}>
       <h3>Select a Course</h3>
+
       <div className={styles.courseList}>
         {courses.map((course, i) => (
           <div
             key={i}
-            className={styles.courseCard}
+            className={styles.courseDetail}
             onClick={() => {
               onSelect(course);
               setSelected(course.courseCode);
             }}>
-            {selected === course.courseCode && (
-              <span className={`center ${styles.check}`}>
-                <MdCheckCircle />
-              </span>
-            )}
-            <h4>{course.courseCode}</h4>
-            <div className={styles.courseTitle}>{course.courseTitle}</div>
-
-            <div className={styles.courseInfo}>
-              <MdPerson size={18} />
-              <span>{course.instructor.name}</span>
+            {/* Thumbnail */}
+            <div className={styles.courseThumbnail}>
+              <img
+                src={course.thumbnail}
+                alt={`${course.courseTitle} thumbnail`}
+              />
+              <h4>{course.courseCode}</h4>
             </div>
 
-            {course.instructor.email && (
+            {/* Card Content */}
+            <div className={styles.courseCard}>
+              {/* Selected checkmark */}
+              {selected === course.courseCode && (
+                <span className={`center ${styles.check}`}>
+                  <MdCheckCircle />
+                </span>
+              )}
+
+              {/* Course Title */}
+              <div className={styles.courseTitle}>{course.courseTitle}</div>
+
+              {/* Instructor */}
               <div className={styles.courseInfo}>
-                <MdMail size={18} />
-                <span>{course.instructor.email}</span>
+                <MdPerson size={18} />
+                <span>{course.instructor.name}</span>
               </div>
-            )}
 
-            <div className={styles.courseInfo}>
-              <MdSchool size={18} />
-              <span>{course.unit} unit</span>
-            </div>
-            <div className={styles.courseInfo}>
-              <MdSchool size={18} />
-              <span>{course._id}</span>
-            </div>
+              {course.instructor.email && (
+                <div className={styles.courseInfo}>
+                  <MdMail size={18} />
+                  <span>{course.instructor.email}</span>
+                </div>
+              )}
 
-            <div className={styles.courseInfo}>
-              <LuRepeat size={18} />
-              <span>
-                {course.classesPerWeek} class
-                {course.classesPerWeek > 1 ? 'es' : ''} per week
-              </span>
+              {/* Units */}
+              <div className={styles.courseInfo}>
+                <MdSchool size={18} />
+                <span>{course.unit} unit</span>
+              </div>
+
+              {/* Classes per week */}
+              <div className={styles.courseInfo}>
+                <LuRepeat size={18} />
+                <span>
+                  {course.classesPerWeek} class
+                  {course.classesPerWeek > 1 ? 'es' : ''} per week
+                </span>
+              </div>
             </div>
           </div>
         ))}
+
+        {/* Add course card */}
         <div
-          className={styles.courseCard}
+          className={styles.courseDetail}
           onClick={onAdd}>
           <div className={styles.addCourse}>
             <MdAdd />
