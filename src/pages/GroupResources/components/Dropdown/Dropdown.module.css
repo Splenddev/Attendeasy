@@ -1,0 +1,30 @@
+.dropdown {
+  position: absolute;
+  right: 0;
+  z-index: 2;
+  background: #fff;
+  list-style: none;
+  width: 150px;
+  box-shadow: var(--shadow-md);
+  margin: 0;
+  border: 1px solid #ddd;
+  border-radius: 0.7rem;
+  overflow: hidden;
+  padding: 5px;
+}
+
+.dropdown .item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.95rem;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 0.4rem;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.dropdown .item:hover {
+  background: var(--others-light);
+  transform: translateX(4px);
+}

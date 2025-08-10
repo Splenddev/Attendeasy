@@ -1,0 +1,143 @@
+.groupResources {
+  display: flex;
+  padding: 1rem;
+}
+
+.main {
+  flex: 1;
+}
+
+.main header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  margin-bottom: 0.7rem;
+  p {
+    font-family: var(--font-outfit);
+  }
+}
+
+header .newFolderBtn {
+  padding: 0.675rem 1rem;
+  background: #000;
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 600;
+  svg {
+    font-size: 1.2rem;
+  }
+}
+
+.folderCategory {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.folders {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 0.8rem;
+}
+
+.folder {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.folder .top {
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+
+.top .icon {
+  font-size: 1.5rem;
+}
+
+.more {
+  position: relative;
+}
+
+.folder p {
+  font-size: 1.2rem;
+}
+
+.folder small {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--gray-400);
+}
+
+.folder .bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.6rem;
+}
+
+.locked {
+  color: var(--gray-500);
+}
+
+.contributors {
+  flex: 1;
+  display: flex;
+  place-content: end;
+}
+
+.contributor {
+  height: 35px;
+  width: 35px;
+  background: var(--main-color);
+  color: #fff;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  margin-right: -10px;
+  cursor: pointer;
+  transition: all ease 0.3s;
+  z-index: 0;
+}
+
+.contributor.extra {
+  background: var(--accent-color);
+}
+
+.contributor:hover {
+  background: var(--accent-color);
+  z-index: 1;
+}
+
+.folder .info {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.6rem;
+  padding: 0.6rem;
+  align-items: start;
+  background-color: #fff7e6;
+  border: 1px solid #ffe58f;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #614700;
+  gap: 0.75rem;
+  margin: 0.5rem 0 1rem 0;
+}
+
+.infoIcon {
+  font-size: 1rem;
+  color: #faad14;
+}
+
+.fileDetail {
+  width: 400px;
+}
+
+@media (max-width: 900px) {
+  .groupResources {
+    flex-direction: column;
+  }
+  .fileDetail {
+    width: 100%;
+  }
+}

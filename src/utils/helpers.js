@@ -528,3 +528,7 @@ export function parseUserAgent(userAgent) {
 
   return { os, browser };
 }
+
+export const toggleMoreOptions = (noteId, setState) => {
+  setState((prevId) => (prevId === noteId ? null : noteId));
+};
