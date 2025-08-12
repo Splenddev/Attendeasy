@@ -1,49 +1,18 @@
-// FileList.js
-import { useState } from 'react';
-import {
-  FaThLarge,
-  FaList,
-  FaUser,
-  FaCommentDots,
-  FaFileAlt,
-} from 'react-icons/fa';
+import { useState, useEffect, useRef } from 'react';
+import { FaThLarge, FaList, FaUser, FaCommentDots } from 'react-icons/fa';
 import styles from './FileList.module.css';
-
 import { LuDownload, LuTrash, LuEye, LuShare2, LuCopy } from 'react-icons/lu';
 import MoreOptions from '../../../../features/MoreOptions/MoreOptions';
 import { FiEdit3 } from 'react-icons/fi';
+import { getFileIconClass } from '../../../Student/StudentSchedules/components/utils';
+import useGsap from '../../../../hooks/useGsap';
 
 const fileMoreMenuData = [
-  {
-    id: 'open',
-    label: 'Open',
-    icon: <LuEye />,
-    for: null, // visible to all users
-  },
-  {
-    id: 'rename',
-    label: 'Rename',
-    icon: <FiEdit3 />,
-    for: 'editor', // only editors/admins
-  },
-  {
-    id: 'download',
-    label: 'Download',
-    icon: <LuDownload />,
-    for: null,
-  },
-  {
-    id: 'share',
-    label: 'Share',
-    icon: <LuShare2 />,
-    for: null,
-  },
-  {
-    id: 'duplicate',
-    label: 'Make a Copy',
-    icon: <LuCopy />,
-    for: 'editor',
-  },
+  { id: 'open', label: 'Open', icon: <LuEye /> },
+  { id: 'rename', label: 'Rename', icon: <FiEdit3 />, for: 'editor' },
+  { id: 'download', label: 'Download', icon: <LuDownload /> },
+  { id: 'share', label: 'Share', icon: <LuShare2 /> },
+  { id: 'duplicate', label: 'Make a Copy', icon: <LuCopy />, for: 'editor' },
   {
     id: 'delete',
     label: 'Delete',
@@ -53,9 +22,37 @@ const fileMoreMenuData = [
   },
 ];
 
-const FileList = ({ files, defaultView = 'grid', user }) => {
+const FileList = ({ files = [], defaultView = 'grid', user }) => {
   const [viewMode, setViewMode] = useState(defaultView);
-  var [showDropdown, setShowDropdown] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const fileRefs = useRef([]);
+
+  const filesWithType = files.map((file) => ({
+    ...file,
+    fileType: file.filename.split('.').pop().toLowerCase(),
+  }));
+
+  useGsap(
+    fileRefs.current,
+    { opacity: 0, y: 20, scale: 0.95 },
+    {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.4,
+      ease: 'power2.out',
+    },
+    [filesWithType.length, viewMode], // re-run on list change or mode change
+    {
+      exitVars: {
+        opacity: 0,
+        y: 10,
+        scale: 0.98,
+        duration: 0.2,
+        ease: 'power1.in',
+      },
+    }
+  );
 
   return (
     <div className={styles.container}>
@@ -80,59 +77,50 @@ const FileList = ({ files, defaultView = 'grid', user }) => {
 
       {/* Files */}
       <div className={viewMode === 'grid' ? styles.grid : styles.list}>
-        {files.map((file, index) => (
-          <div
-            key={index}
-            className={styles.fileCard}>
-            <div className={styles.fileHeader}>
-              <FaFileAlt className={styles.fileIcon} />
-              <div>
-                <b>{file.filename}</b>
+        {filesWithType.map((file, index) => {
+          const { icon: Icon, color } = getFileIconClass(file.fileType);
+
+          return (
+            <div
+              key={index}
+              className={styles.fileCard}
+              ref={(el) => (fileRefs.current[index] = el)}>
+              <div className={styles.fileHeader}>
+                <Icon
+                  className={styles.fileIcon}
+                  color={color}
+                />
+                <b className={styles.fileName}>{file.filename}</b>
+              </div>
+
+              {viewMode === 'list' && (
+                <p className={styles.meta}>
+                  {new Date(file.dateUploaded).toLocaleDateString()}
+                </p>
+              )}
+              <div className={styles.gridBottom}>
+                {viewMode === 'grid' && (
+                  <p className={styles.meta}>
+                    {new Date(file.dateUploaded).toLocaleDateString()}
+                  </p>
+                )}
+                <p className={styles.size}>{file.size}</p>
+              </div>
+
+              {viewMode === 'list' && <p>{file.fileOwner}</p>}
+
+              <div className={styles.fileOptions}>
+                <MoreOptions
+                  menuData={fileMoreMenuData}
+                  user={user}
+                  cardId={index}
+                  setShowDropdown={setShowDropdown}
+                  showDropdown={showDropdown}
+                />
               </div>
             </div>
-
-            <p className={styles.meta}>
-              {viewMode === 'grid' && 'Uploaded:'}{' '}
-              {new Date(file.dateUploaded).toLocaleDateString()}
-            </p>
-            <p className={styles.meta}>
-              {viewMode === 'grid' && 'Updated:'}{' '}
-              {new Date(file.lastUpdated).toLocaleDateString()}
-            </p>
-
-            <p className={styles.size}>
-              {viewMode === 'grid' && 'Size:'} {file.size}
-            </p>
-
-            <p>
-              {viewMode === 'grid' && 'Owner:'} {file.fileOwner}
-            </p>
-
-            <MoreOptions
-              menuData={fileMoreMenuData}
-              user={user}
-              cardId={index}
-              setShowDropdown={setShowDropdown}
-              showDropdown={showDropdown}
-            />
-
-            {/* Comments */}
-            {/* {file.comments.length > 0 && (
-              <div className={styles.comments}>
-                <h4>
-                  <FaCommentDots /> Comments
-                </h4>
-                <ul>
-                  {file.comments.map((c, i) => (
-                    <li key={i}>
-                      <FaUser /> <strong>{c.user}</strong>: {c.text}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )} */}
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

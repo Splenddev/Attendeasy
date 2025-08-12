@@ -17,6 +17,7 @@ export const checkboxChange = (key, setState, state) => {
   setState((prev) => ({ ...prev, [key]: !prev[key] }));
   console.log(state);
 };
+
 export const onChoiceChange = (
   choice,
   checkedChoices,
@@ -73,6 +74,7 @@ export const select = (type, setValue, selected, list, getValues) => {
     setValue('students', updated);
   }
 };
+
 export const dateFormatter = (date) => {
   const validateDate = date ? new Date(date) : new Date();
   const formattedDate = validateDate.toLocaleDateString('en-US', {
@@ -82,6 +84,7 @@ export const dateFormatter = (date) => {
   });
   return formattedDate;
 };
+
 export const timeFormatter = (time, lang = 'en-US', seconds) => {
   // const passedTime=;
   const formattedTime = new Date(time).toLocaleTimeString(
@@ -95,6 +98,7 @@ export const timeFormatter = (time, lang = 'en-US', seconds) => {
   );
   return formattedTime;
 };
+
 export const toCamelCase = (str) => {
   const formattedName = str
     .toLowerCase()
@@ -105,18 +109,21 @@ export const toCamelCase = (str) => {
     .replace(/\s+/g, '');
   return formattedName;
 };
+
 export const parseTimeToday = (timeString = '') => {
   const [hours, minutes, seconds] = timeString.split('T')[1].split(':');
   const date = new Date();
   date.setHours(Number(hours), Number(minutes), Number(seconds ?? 0), 0);
   return date;
 };
+
 export const parseTimeToday2 = (timeString) => {
   const [hours, minutes] = timeString.split(':');
   const date = new Date();
   date.setHours(Number(hours), Number(minutes), 0, 0);
   return date;
 };
+
 export const groupByDay = (schedule) => {
   return schedule.reduce((acc, course) => {
     course.classDaysTimes.forEach(({ day, timing }) => {
@@ -139,6 +146,7 @@ export const groupByDay = (schedule) => {
 export const updateTime = () => {
   return new Date().toLocaleTimeString();
 };
+
 export const parseTime2 = (refTime = '', value = '') => {
   let [hour, minutes] = refTime.split(':').map(Number);
   if (isNaN(hour) || isNaN(minutes)) return 'Invalid refTime';
@@ -361,7 +369,6 @@ export const getTodaySchedule = (schedule) => {
     .filter(Boolean); // remove nulls
 };
 
-// utils/helpers.js
 export const timeDiffLabel = (mode, timeHHmm) => {
   const [h, m] = timeHHmm.split(':').map(Number);
   const target = new Date();
@@ -372,6 +379,7 @@ export const timeDiffLabel = (mode, timeHHmm) => {
   const mins = Math.max(0, Math.round(diff / 60000));
   return `${mins}min`;
 };
+
 export const formatTimeLeft = (input, format = 'mm:ss') => {
   let totalSeconds = 0;
   if (typeof input === 'number') {

@@ -124,15 +124,20 @@ const Courses = () => {
 
   if (!courses || (courses.length === 0 && !loading)) {
     return (
-      <div>
-        No course found
-        {button.multiple({
-          icon: FiRefreshCcw,
-          func: refetch,
-          disabled: loading,
-          element: 'Retry',
-          name: 'default_button',
-        })}
+      <div
+        className={styles.noCourse}
+        role="alert"
+        aria-live="polite">
+        <p className={styles.message}>No course found</p>
+        <div className={styles.action}>
+          {button.multiple({
+            icon: FiRefreshCcw,
+            func: refetch,
+            disabled: loading,
+            element: 'Retry',
+            name: 'default_button',
+          })}
+        </div>
       </div>
     );
   }

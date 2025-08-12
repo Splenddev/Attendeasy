@@ -1,7 +1,8 @@
 .dropdown {
   position: absolute;
+  top: 100%;
   right: 0;
-  z-index: 2;
+  z-index: 1;
   background: #fff;
   list-style: none;
   width: 150px;
@@ -11,6 +12,9 @@
   border-radius: 0.7rem;
   overflow: hidden;
   padding: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
 }
 
 .dropdown .item {
@@ -19,12 +23,8 @@
   gap: 0.6rem;
   padding: 0.55rem 0.95rem;
   cursor: pointer;
+  background: transparent;
   font-size: 14px;
   border-radius: 0.4rem;
   transition: background 0.25s ease, transform 0.25s ease;
-}
-
-.dropdown .item:hover {
-  background: var(--others-light);
-  transform: translateX(4px);
 }

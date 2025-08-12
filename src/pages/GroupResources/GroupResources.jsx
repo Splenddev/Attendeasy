@@ -4,6 +4,7 @@ import ImageDropzone from '../../components/ImageDropzone/ImageDropzone';
 import button from '../../components/Button/Button';
 import {
   LuCat,
+  LuFolder,
   LuFolderPlus,
   LuFootprints,
   LuPen,
@@ -13,23 +14,22 @@ import {
   LuTrash2,
 } from 'react-icons/lu';
 import { useAuth } from '../../context/AuthContext';
-import { MdLock, MdLockOpen } from 'react-icons/md';
+import { motion } from 'framer-motion';
+import { FiEdit2, FiFolder, FiLock } from 'react-icons/fi';
 import {
-  FiEdit,
-  FiEdit2,
-  FiLock,
-  FiMoreVertical,
-  FiPenTool,
-  FiPlus,
-  FiUnlock,
-} from 'react-icons/fi';
-import { FaExclamationTriangle, FaLock, FaLockOpen } from 'react-icons/fa';
+  FaExclamationTriangle,
+  FaFolder,
+  FaLock,
+  FaLockOpen,
+  FaRegFolder,
+} from 'react-icons/fa';
 import FileList from './components/FileList/FileList';
 import MoreOptions from '../../features/MoreOptions/MoreOptions';
+import { fadeUp, scaleIn } from '../../utils/animationVariants';
+import { useMain } from '../../context/MainContext';
 
 const test = [
   {
-    icon: LuPen,
     folderName: 'Accounting',
     fileCount: 23,
     folderSize: 93,
@@ -37,7 +37,6 @@ const test = [
     contributors: ['Max', 'Pete', 'Job', 'Nelson'],
   },
   {
-    icon: LuFootprints,
     folderName: 'Criminology',
     fileCount: 46,
     folderSize: 23,
@@ -45,7 +44,6 @@ const test = [
     contributors: ['Jane', 'Max', 'Camie'],
   },
   {
-    icon: LuSmartphone,
     folderName: 'Engineering',
     fileCount: 23,
     folderSize: 93,
@@ -53,7 +51,6 @@ const test = [
     contributors: ['Max', 'Pete', 'Job', 'Nelson'],
   },
   {
-    icon: LuCat,
     folderName: 'Biology',
     fileCount: 106,
     folderSize: 88,
@@ -153,7 +150,7 @@ const recentFiles = [
 const menuData = (isLocked) => [
   {
     id: 'add',
-    label: 'Add',
+    label: 'Add File',
     icon: <LuPlus />,
     for: null,
   },
@@ -180,6 +177,7 @@ const menuData = (isLocked) => [
 
 const GroupResources = () => {
   const { user, setNavTitle } = useAuth();
+  const { isMobile } = useMain();
   var [images, setImages] = useState([]);
 
   var [showDropdown, setShowDropdown] = useState(false);
@@ -191,15 +189,30 @@ const GroupResources = () => {
     <div className={styles.groupResources}>
       <aside className={styles.main}>
         <header>
-          <div className={styles.top}>
-            <h1>group library</h1>
-            <p>Efficiently manage and organize class resources effortlessly</p>
-          </div>
-          {button.multiple({
-            icon: LuFolderPlus,
-            element: 'Add A Folder',
-            name: styles.newFolderBtn,
-          })}
+          <motion.div
+            className={styles.top}
+            initial="hidden"
+            animate="visible"
+            variants={fadeUp}
+            custom={0}>
+            <h1>Group Library</h1>
+            <p>
+              Stay organized and connected — share notes, assignments, and
+              resources so your class never misses a beat.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={fadeUp}
+            custom={1}>
+            {button.multiple({
+              icon: LuFolderPlus,
+              element: 'Add A Folder',
+              name: styles.newFolderBtn,
+            })}
+          </motion.div>
         </header>
 
         <section className={styles.uploadSection}>
@@ -214,10 +227,9 @@ const GroupResources = () => {
             {test.length === 0 || !test ? (
               <p>No folders yet</p>
             ) : (
-              test.map((folder) => {
+              test.map((folder, index) => {
                 const {
                   folderName,
-                  icon: Icon,
                   contributors,
                   fileCount,
                   folderSize,
@@ -229,11 +241,14 @@ const GroupResources = () => {
                 const remaining = all - viewLength;
 
                 return (
-                  <div
+                  <motion.div
+                    key={folder.folderName}
                     className={styles.folder}
-                    key={folderName}>
-                    <div className={styles.top}>
-                      <Icon className={styles.icon} />
+                    initial="hidden"
+                    animate="visible"
+                    variants={scaleIn}
+                    custom={index}>
+                    <div className={styles.folderOptions}>
                       <MoreOptions
                         user={user}
                         menuData={menuData(isLocked)}
@@ -242,6 +257,7 @@ const GroupResources = () => {
                         showDropdown={showDropdown}
                       />
                     </div>
+                    <FaFolder className={styles.folderIcon} />
                     <div className={styles.folderInfo}>
                       <p>{folderName}</p>
                       <small>
@@ -274,14 +290,7 @@ const GroupResources = () => {
                         </div>
                       )}
                     </div>
-                    <div className={styles.info}>
-                      <FaExclamationTriangle className={styles.infoIcon} />
-                      <span>
-                        If you lock this folder, no file can be be uploaded by
-                        anyone except you.
-                      </span>
-                    </div>
-                  </div>
+                  </motion.div>
                 );
               })
             )}
@@ -289,10 +298,9 @@ const GroupResources = () => {
         </section>
 
         <section className={styles.recentFilesCategory}>
-          <h3>Recent Files</h3>
           <FileList
             files={recentFiles}
-            defaultView={'grid'}
+            defaultView={isMobile ? 'grid' : 'list'}
             user={user}
           />
         </section>
@@ -303,3 +311,10 @@ const GroupResources = () => {
 };
 
 export default GroupResources;
+
+//  <div className={styles.info}>
+//    <FaExclamationTriangle className={styles.infoIcon} />
+//    <span>
+//      If you lock this folder, no file can be be uploaded by anyone except you.
+//    </span>
+//  </div>;

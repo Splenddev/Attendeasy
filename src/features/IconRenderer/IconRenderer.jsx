@@ -12,10 +12,9 @@ import {
 
 import styles from './IconRenderer.module.css';
 
-export function renderMediaTypeIcon(type, relatedType = null) {
+export function renderMediaTypeIcon(type, relatedType = null, customName) {
   const baseProps = {
-    size: 16,
-    className: styles.iconShadow,
+    className: `${styles.iconShadow} ${customName}`,
   };
 
   const iconMap = {

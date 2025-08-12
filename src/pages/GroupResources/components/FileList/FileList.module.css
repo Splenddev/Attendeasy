@@ -6,72 +6,80 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 18px;
+  margin-bottom: 1rem;
 }
 
-.header h2 {
-  margin: 0;
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #222;
+.viewToggle {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .viewToggle button {
-  background: none;
-  border: 1px solid #ccc;
-  padding: 6px 12px;
-  margin-left: 6px;
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
   cursor: pointer;
-  font-size: 16px;
-  border-radius: 6px;
-  transition: all 0.25s ease;
+  padding: 0.35rem 0.5rem;
+  border-radius: 8px;
+  color: var(--text-muted, #777);
+  transition: color 0.2s ease, background 0.2s ease, transform 0.15s ease;
 }
 
 .viewToggle button:hover {
-  border-color: #25aff3;
-  color: #25aff3;
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--blue);
+  transform: scale(1.05);
+}
+
+.viewToggle button:active {
+  transform: scale(0.96);
 }
 
 .viewToggle .active {
-  background: #25aff3;
-  color: white;
-  border-color: #25aff3;
+  background: var(--blue-light, rgba(0, 123, 255, 0.1));
+  color: var(--blue);
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
 }
 
 .list {
   display: flex;
   flex-direction: column;
-  gap: 0;
-  /* overflow-x: auto; */
 }
 
 .fileCard {
   font-size: 0.855rem;
   border: 1px solid #e3e3e3;
   border-radius: 10px;
+  cursor: pointer;
   background: white;
   padding: 14px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
-  cursor: pointer;
 }
 
-.list .fileCard {
-  /* overflow: hidden;
-  overflow-x: auto; */
-  display: grid;
-  grid-template-columns: 1fr auto auto auto 0.5fr 20px;
-  border: none;
-  background: transparent;
-  align-items: center;
-  gap: 0.6rem;
-  box-shadow: none;
+.grid .fileCard {
+  position: relative;
+}
+
+.grid .fileHeader {
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 0.4rem;
+}
+
+.grid .fileName {
+  flex: 1;
+  width: 100%;
+}
+
+.grid .fileIcon {
+  font-size: 4.5rem;
 }
 
 .grid .fileCard:hover {
@@ -79,65 +87,56 @@
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.08);
 }
 
+.grid .fileOptions {
+  position: absolute;
+  right: 0.2rem;
+  top: 0.7rem;
+}
+
+.gridBottom {
+  display: flex;
+  justify-content: space-between;
+}
+
+.list .fileCard {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 0.5fr auto;
+  gap: 0.4rem;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  padding: 10px 14px;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+}
+
+.list .fileCard:hover {
+  background: #f9f9f9;
+}
+
 .fileHeader {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 10px;
+  gap: 0.5rem;
+}
+
+.fileName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .fileIcon {
-  font-size: 1rem;
-  color: #25aff3;
-}
-
-.fileHeader b {
-  font-weight: 600;
-  color: #333;
-  margin: 0;
-}
-
-.fileOwner {
-  font-size: 0.85rem;
-  color: #666;
+  color: var(--primary);
+  font-size: 1.4rem;
 }
 
 .meta {
-  font-size: 0.82rem;
-  color: #555;
-  margin-top: 6px;
-  line-height: 1.4;
+  color: #666;
+  font-size: 0.8rem;
 }
 
 .size {
+  color: #444;
   font-weight: 500;
-  margin-top: 4px;
-  color: #444;
-}
-
-.comments {
-  margin-top: 10px;
-  border-top: 1px solid #f0f0f0;
-  padding-top: 8px;
-}
-
-.comments h4 {
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-bottom: 4px;
-  color: #25aff3;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.comments ul {
-  padding-left: 18px;
-  margin: 0;
-}
-
-.comments li {
-  font-size: 0.8rem;
-  margin-bottom: 3px;
-  color: #444;
 }

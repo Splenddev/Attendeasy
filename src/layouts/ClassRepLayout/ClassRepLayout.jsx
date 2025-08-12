@@ -12,11 +12,6 @@ const ClassRepLayout = () => {
   const { isSideBarMenu, setIsSidebarMenu, isMobile } = useMain();
   const dropdownAssets = [
     {
-      name: 'new attendance',
-      icon: FaPlus,
-      path: `/${user.role}/attendance/create`,
-    },
-    {
       name: 'new schedule',
       icon: FaPlus,
       path: `/${user.role}/schedules/create`,
