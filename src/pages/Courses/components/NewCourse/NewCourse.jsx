@@ -458,19 +458,6 @@ const NewCourse = () => {
           element: loading ? 'Submitting' : 'Submit Course',
           icon: loading ? FaSpinner : LuSend,
         })}
-        <button
-          type="submit"
-          className={styles.submitButton}>
-          {loading ? (
-            <Spinner
-              borderWidth="1px"
-              borderColor="white"
-              size="20px"
-            />
-          ) : (
-            'Submit Course'
-          )}
-        </button>
       </form>
     </div>
   );

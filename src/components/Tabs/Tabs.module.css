@@ -1,0 +1,43 @@
+.tabsWrap {
+  display: flex;
+  margin: 0.5rem 0;
+  border-radius: 10px;
+  border: 1px solid var(--gray-400);
+  background: var(--gray-100);
+  overflow-x: auto;
+  padding: 5px;
+  scrollbar-width: none;
+  gap: 0.3rem;
+}
+
+.tabsWrap::-webkit-scrollbar {
+  display: none;
+}
+
+.tabButton {
+  border-radius: 7px;
+  flex-shrink: 0;
+  padding: 0.45rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--gray-600);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tabButton:hover {
+  background: var(--gray-200);
+  color: var(--gray-800);
+}
+
+.active {
+  background: #fff;
+  color: var(--gray-900);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.active:hover {
+  background: var(--gray-50);
+}

@@ -131,7 +131,7 @@ const ScheduleCard = ({
       </header>
 
       {/* Status (if today) */}
-      {cardStatus && isToday && (
+      {cardStatus && isToday && schedule.isActive && (
         <div
           className={`${styles.statusBanner} ${styles[`banner${cardStatus}`]}`}>
           {cardStatus === 'completed' && (

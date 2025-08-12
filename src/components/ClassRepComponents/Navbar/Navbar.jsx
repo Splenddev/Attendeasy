@@ -112,7 +112,7 @@ const Navbar = ({ dropdownAssets = [] }) => {
                   {
                     name: 'contact support',
                     icon: MdContactSupport,
-                    path: `#`,
+                    path: `/testing`,
                   },
                   {
                     name: 'settings',

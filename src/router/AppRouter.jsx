@@ -27,15 +27,12 @@ import ErrorFallback from '../pages/ErrorFallback/ErrorFallback';
 import Courses from '../pages/Courses/Courses';
 import NewCourse from '../pages/Courses/components/NewCourse/NewCourse';
 import ScheduleHistory from '../pages/ScheduleHistory/ScheduleHistory';
+import RootProviders from '../RootProviders';
 
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: (
-      <Suspense fallback={<Loader />}>
-        <App />
-      </Suspense>
-    ),
+    element: <RootProviders />,
     errorElement: <ErrorFallback />,
     children: [
       {

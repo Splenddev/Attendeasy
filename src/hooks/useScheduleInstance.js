@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getScheduleHistory } from '../services/scheduleInstance.service';
+import {
+  getScheduleHistory,
+  getTodayInstancesForReps,
+} from '../services/scheduleInstance.service';
 import { toast } from 'react-toastify';
 
 export function useScheduleInstance(scheduleId) {
@@ -30,5 +33,21 @@ export function useScheduleInstance(scheduleId) {
     fetchInstance();
   }, [fetchInstance]);
 
-  return { data, loading, error, refetch: fetchInstance };
+  const fetchTodaysInstances = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await getTodayInstancesForReps();
+      if (res.success) {
+        setData(res);
+      }
+    } catch (err) {
+      toast.error(err.message || 'error fetching data');
+      setError(err.message || 'Failed to fetch schedule instances');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { data, loading, error, refetch: fetchInstance, fetchTodaysInstances };
 }

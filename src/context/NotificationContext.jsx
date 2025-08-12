@@ -7,11 +7,14 @@ import {
 } from '../services/notification.service';
 import { connectSocket } from '../utils/socket';
 import { toast } from 'react-toastify';
+import { useLocation } from 'react-router-dom';
 
 const NotificationContext = createContext();
 
 export const NotificationProvider = ({ children }) => {
   const { user } = useAuth();
+  const location = useLocation();
+
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState({
     fetch: true,
@@ -28,9 +31,11 @@ export const NotificationProvider = ({ children }) => {
     deleteAll: null,
   });
 
-  // ✅ Fetch user notifications
+  // Fetch user notifications, skipping landing page
   const fetchNotifications = async ({ silent = false } = {}) => {
     if (!user?._id) return;
+    if (location.pathname === '/') return; // Skip fetch on landing page
+
     if (!silent) setLoading((l) => ({ ...l, fetch: true }));
 
     try {
@@ -46,7 +51,14 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
-  // ✅ Real-time listeners
+  // Fetch on user login and route changes (except landing page)
+  useEffect(() => {
+    if (user?._id && location.pathname !== '/') {
+      fetchNotifications();
+    }
+  }, [user?._id, location.pathname]);
+
+  // Real-time socket listeners for notifications
   useEffect(() => {
     if (!user?._id) return;
 
@@ -68,14 +80,11 @@ export const NotificationProvider = ({ children }) => {
     return () => {
       socket.off('notification:new', handleNewNotification);
       socket.off('group-notification', handleGroupNotification);
+      socket.disconnect();
     };
   }, [user?._id]);
 
-  useEffect(() => {
-    if (user?._id) fetchNotifications();
-  }, [user?._id]);
-
-  // ✅ Mark ALL as read
+  // Mark all notifications as read
   const markAllNotificationsAsRead = async () => {
     setLoading((l) => ({ ...l, markAll: true }));
     try {
@@ -95,7 +104,7 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
-  // ✅ Mark ONE as read (optional)
+  // Mark a single notification as read/unread toggle
   const markNotificationAsRead = async (id) => {
     setLoading((l) => ({ ...l, markOne: true }));
     try {
@@ -111,7 +120,7 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
-  // ✅ Delete ONE notification
+  // Delete a single notification
   const removeNotification = async (id) => {
     setLoading((l) => ({ ...l, deleteOne: true }));
     try {
@@ -125,7 +134,7 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
-  // ✅ Delete ALL notifications
+  // Delete all notifications
   const removeAllNotifications = async () => {
     setLoading((l) => ({ ...l, deleteAll: true }));
     try {

@@ -80,6 +80,9 @@
 }
 
 /* Primary action - Save/Add */
+.addBtn {
+  margin-top: 0.5rem;
+}
 .saveBtn,
 .addBtn {
   background-color: var(--main-color);

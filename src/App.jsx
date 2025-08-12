@@ -7,7 +7,7 @@ import DevRoleSwitcher from './components/DevRoleSwitcher';
 import { ToastContainer } from 'react-toastify';
 import { useAuth } from './context/AuthContext';
 import { ConfirmModal } from './components/Modals';
-import JoinGroupPrompt from './components/JoinGroupPrompt/JoinGroupPrompt';
+import JoinGroupPrompt from './components/Prompts/JoinGroupPrompt';
 import ErrorModal from './components/Modals/ErrorModal/ErrorModal';
 import useUserSocketListener from './hooks/useUserSocketListener ';
 import SuccessModal from './components/Modals/SuccessModal/SuccessModal';
@@ -16,7 +16,7 @@ import NavigationProgress from './components/NavigationProgress';
 import ScrollToTop from './components/ScrollToTop';
 
 import useCourses from './hooks/useCourses'; // Import your hook
-import AddCoursePrompt from './components/JoinGroupPrompt/AddCoursePrompt';
+import AddCoursePrompt from './components/Prompts/AddCoursePrompt';
 // import AddCoursePrompt from './components/AddCoursePrompt'; // You’ll create this modal
 
 const App = () => {
