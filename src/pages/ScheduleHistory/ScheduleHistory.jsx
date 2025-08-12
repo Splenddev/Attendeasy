@@ -261,7 +261,7 @@ const ScheduleHistory = () => {
   const { data = [] } = useScheduleInstance(id);
 
   const dummyScheduleInstances =
-    data.length > 0 ? [...data, ...dataIn] : dataIn;
+    data && data.length > 0 ? [...data, ...dataIn] : dataIn;
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
