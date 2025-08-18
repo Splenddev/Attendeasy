@@ -10,7 +10,6 @@ import {
   registerUser,
 } from '../services/auth.service';
 import { toast } from 'react-toastify';
-import { connectSocket } from '../utils/socket';
 import { joinGroupRoom, leaveGroupRoom } from '../utils/socketRooms';
 
 axios.defaults.withCredentials = true;
@@ -33,33 +32,33 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const syncUser = async () => {
-      const storedUser = await getUserFromLocalStorageOrAPI();
+      try {
+        const storedUser = await getUserFromLocalStorageOrAPI();
 
-      // 🔁 If user has no group, try syncing from server anyway
-      if (!storedUser?.group && storedUser?._id) {
-        try {
-          const fresh = await getUser();
-          updateUser(fresh.user);
-          setLoading(false);
-          return;
-        } catch (err) {
-          console.error('❌ Failed to refresh user from API:', err);
+        // 🔁 If user has no group, try syncing from server anyway
+        if (!storedUser?.group && storedUser?._id) {
+          try {
+            const fresh = await getUser();
+            updateUser(fresh.user);
+            return;
+          } catch (err) {
+            console.error('❌ Failed to refresh user from API:', err);
+          }
         }
-      }
 
-      setUser(storedUser);
-      setLoading(false);
+        setUser(storedUser);
+      } catch (err) {
+        console.error('❌ Failed to get user from storage/API:', err);
+      } finally {
+        // ✅ Always clear loading
+        setLoading(false);
+      }
     };
+
     syncUser();
   }, []);
 
-  useEffect(() => {
-    if (user?._id && user.group) {
-      joinGroupRoom(user.group);
-      return () => leaveGroupRoom(user.group);
-    }
-  }, [user?._id, user?.group]);
-
+  // ✅ Only one effect needed
   useEffect(() => {
     if (user?._id && user?.group) {
       joinGroupRoom(user.group);
@@ -78,13 +77,14 @@ export const AuthProvider = ({ children }) => {
       setAuthBtnsLoading((prev) => ({ ...prev, submit: false }));
     }
   };
+
   const login = async (formData = {}) => {
     setAuthBtnsLoading((prev) => ({ ...prev, login: true }));
     try {
       const data = await loginUser(formData);
       return { success: data.success, user: data.user };
     } catch (err) {
-      console.error('login error:', err.message);
+      console.error('Login error:', err.message);
       return { success: false, message: err.message };
     } finally {
       setAuthBtnsLoading((prev) => ({ ...prev, login: false }));
