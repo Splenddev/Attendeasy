@@ -16,7 +16,7 @@ import ScrollToTop from './components/ScrollToTop';
 
 import useCourses from './hooks/useCourses';
 import AddCoursePrompt from './components/Prompts/AddCoursePrompt';
-import ErrorFallback from './pages/ErrorFallback/ErrorFallback';
+import Loader from './components/Loader/Loader';
 
 const App = () => {
   const {
@@ -60,7 +60,7 @@ const App = () => {
     courses.length === 0 &&
     error;
 
-  if (authLoading || courseLoading) return <p>loading in app...</p>;
+  if (authLoading || courseLoading) return <Loader />;
   if (!user)
     return (
       <Navigate
@@ -68,7 +68,6 @@ const App = () => {
         replace
       />
     );
-  if (error) return <ErrorFallback error={error} />;
   return (
     <>
       <NavigationProgress />

@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import Spinner from '../../components/Loader/Spinner/Spinner';
 import { useErrorModal } from '../../hooks/useErrorModal';
 import useGroupSocketListener from '../../hooks/useGroupSocketListener';
+import { LuNetwork } from 'react-icons/lu';
 
 const GroupManagementPage = () => {
   const [group, setGroup] = useState(null);
@@ -71,6 +72,7 @@ const GroupManagementPage = () => {
   if (!navigator.onLine) {
     return (
       <div className="offline-msg center">
+        <LuNetwork />
         <h2>You are offline</h2>
         <p>Please check your internet connection and try again.</p>
       </div>

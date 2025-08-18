@@ -90,3 +90,39 @@
     transform: translateY(0);
   }
 }
+
+.offline-msg {
+  max-width: 400px;
+  margin: 15vh auto;
+  padding: 2rem;
+  flex-direction: column;
+  border-radius: 12px;
+  background: #fff3cd;
+  border: 1px solid #ffeeba;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+.offline-msg h2 {
+  color: #856404;
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.offline-msg p {
+  color: #7a6220;
+  font-size: 1rem;
+  margin: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
