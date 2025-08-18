@@ -19,7 +19,7 @@ const StudentLayout = () => {
       <Navbar
         dropdownAssets={[
           {
-            name: 'send message',
+            name: 'send messages',
             icon: MdAddComment,
             path: `/${user.role}/message/`,
           },

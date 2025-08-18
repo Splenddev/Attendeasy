@@ -87,7 +87,7 @@ const useCourses = (autoFetch = true) => {
         if (!didCancel)
           toast.error(error.message || 'Failed to fetch courses.');
       } finally {
-        if (!didCancel) setLoading(false);
+        setLoading(false);
       }
     };
 

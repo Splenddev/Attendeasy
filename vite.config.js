@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      devOptions: { enabled: false },
       registerType: 'autoUpdate',
       includeAssets: [
         'favicon.svg',
@@ -38,10 +39,8 @@ export default defineConfig({
       workbox: {
         cleanupOutdatedCaches: true,
 
-        // ✅ Make sure React Router can handle deep routes like /class-rep/dashboard
         navigateFallback: '/index.html',
 
-        // ✅ Allowlist client-side routes handled by React Router
         navigateFallbackAllowlist: [
           /^\/$/, // home
           /^\/class-rep/, // e.g. /class-rep/dashboard
@@ -102,4 +101,7 @@ export default defineConfig({
       },
     }),
   ],
+  optimizeDeps: {
+    include: ['gsap', 'react-icons/md'],
+  },
 });

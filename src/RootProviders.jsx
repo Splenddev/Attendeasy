@@ -1,19 +1,15 @@
-import { Suspense } from 'react';
-import Loader from './components/Loader/Loader';
-import { MainProvider } from './context/MainContext.jsx';
-import { AuthProvider } from './context/AuthContext.jsx';
-import { NotificationProvider } from './context/NotificationContext.jsx';
-import { InfoModalProvider } from './context/infoModalContext.jsx';
-import { App } from './utils/lazyPages';
+import { MainProvider } from './context/MainContext';
+import { AuthProvider } from './context/AuthContext';
+import { NotificationProvider } from './context/NotificationContext';
+import { InfoModalProvider } from './context/infoModalContext';
+import App from './App';
 
 const RootProviders = () => (
   <MainProvider>
     <AuthProvider>
       <NotificationProvider>
         <InfoModalProvider>
-          <Suspense fallback={<Loader />}>
-            <App />
-          </Suspense>
+          <App />
         </InfoModalProvider>
       </NotificationProvider>
     </AuthProvider>

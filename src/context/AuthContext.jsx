@@ -40,6 +40,7 @@ export const AuthProvider = ({ children }) => {
         try {
           const fresh = await getUser();
           updateUser(fresh.user);
+          setLoading(false);
           return;
         } catch (err) {
           console.error('❌ Failed to refresh user from API:', err);

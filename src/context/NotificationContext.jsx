@@ -7,13 +7,14 @@ import {
 } from '../services/notification.service';
 import { connectSocket } from '../utils/socket';
 import { toast } from 'react-toastify';
-import { useLocation } from 'react-router-dom';
 
 const NotificationContext = createContext();
 
 export const NotificationProvider = ({ children }) => {
   const { user } = useAuth();
-  const location = useLocation();
+  const location = () => {
+    return window.location;
+  };
 
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState({

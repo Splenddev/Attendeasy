@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import styles from './Loader.module.css';
 
-const Loader = ({ minDelay = 3000 }) => {
+const Loader = () => {
   const lettersRef = useRef([]);
   const subtitleRef = useRef();
   const progressBarRef = useRef();
-  const [show, setShow] = useState(true);
+  // const [show, setShow] = useState(true);
 
   useEffect(() => {
     // Animate letters
@@ -44,12 +44,12 @@ const Loader = ({ minDelay = 3000 }) => {
     return () => tl.kill();
   }, []);
 
-  useEffect(() => {
-    const timer = setTimeout(() => setShow(false), minDelay);
-    return () => clearTimeout(timer);
-  }, [minDelay]);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => setShow(false), minDelay);
+  //   return () => clearTimeout(timer);
+  // }, [minDelay]);
 
-  if (!show) return null;
+  // if (!show) return null;
 
   return (
     <div className={styles.loaderWrapper}>

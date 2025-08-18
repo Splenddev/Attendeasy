@@ -1,27 +1,32 @@
-import { Outlet, useLocation } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import 'leaflet/dist/leaflet.css';
 import 'react-toastify/dist/ReactToastify.css';
 import './styles/default.css';
 
-import DevRoleSwitcher from './components/DevRoleSwitcher';
 import { ToastContainer } from 'react-toastify';
 import { useAuth } from './context/AuthContext';
 import { ConfirmModal } from './components/Modals';
 import JoinGroupPrompt from './components/Prompts/JoinGroupPrompt';
 import ErrorModal from './components/Modals/ErrorModal/ErrorModal';
-import useUserSocketListener from './hooks/useUserSocketListener ';
+import useUserSocketListener from './hooks/useUserSocketListener';
 import SuccessModal from './components/Modals/SuccessModal/SuccessModal';
 import 'nprogress/nprogress.css';
 import NavigationProgress from './components/NavigationProgress';
 import ScrollToTop from './components/ScrollToTop';
 
-import useCourses from './hooks/useCourses'; // Import your hook
+import useCourses from './hooks/useCourses';
 import AddCoursePrompt from './components/Prompts/AddCoursePrompt';
-// import AddCoursePrompt from './components/AddCoursePrompt'; // You’ll create this modal
+import ErrorFallback from './pages/ErrorFallback/ErrorFallback';
 
 const App = () => {
-  const { setShowLogoutModal, showLogoutModal, logout, authBtnsLoading, user } =
-    useAuth();
+  const {
+    setShowLogoutModal,
+    showLogoutModal,
+    logout,
+    authBtnsLoading,
+    user,
+    loading: authLoading,
+  } = useAuth();
 
   useUserSocketListener();
 
@@ -33,8 +38,10 @@ const App = () => {
   );
   const isOnCoursesPage = location.pathname.startsWith(`/${role}/courses`);
 
+  const userLoaded = user !== undefined;
+
   const shouldShowJoinGroupPrompt =
-    user?.isLoggedIn && !user?.group && !isOnGroupPage;
+    userLoaded && user?.isLoggedIn && !user?.group && !isOnGroupPage;
 
   const {
     courses,
@@ -53,12 +60,20 @@ const App = () => {
     courses.length === 0 &&
     error;
 
+  if (authLoading || courseLoading) return <p>loading in app...</p>;
+  if (!user)
+    return (
+      <Navigate
+        to="/auth/login"
+        replace
+      />
+    );
+  if (error) return <ErrorFallback error={error} />;
   return (
     <>
       <NavigationProgress />
       <ScrollToTop />
       <ToastContainer position="top-center" />
-
       <ConfirmModal
         isOpen={showLogoutModal}
         onClose={() => setShowLogoutModal(false)}
@@ -67,10 +82,8 @@ const App = () => {
         actionText="Logout"
         message="You’re about to log out of your account."
       />
-
       <SuccessModal />
       <ErrorModal />
-
       {shouldShowJoinGroupPrompt ? (
         <JoinGroupPrompt role={role} />
       ) : shouldPromptAddCourse ? (
@@ -78,8 +91,6 @@ const App = () => {
       ) : (
         <Outlet />
       )}
-
-      <DevRoleSwitcher />
     </>
   );
 };

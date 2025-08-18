@@ -11,7 +11,7 @@
 
 .find-group-container {
   padding: 1rem;
-  background: #f9fbff;
+  background: #fff;
   border-radius: 16px;
   animation: fadeIn var(--transition-slow);
 }

@@ -6,7 +6,10 @@ export const getUserFromLocalStorageOrAPI = async () => {
   if (stored) return JSON.parse(stored);
   try {
     const data = await getUser();
-    localStorage.setItem('user', JSON.stringify(data.user));
+    localStorage.setItem(
+      'user',
+      JSON.stringify({ ...data.user, isLoggedIn: true })
+    );
     const syncedUser = { ...data.user, isLoggedIn: true };
     return syncedUser;
   } catch (err) {

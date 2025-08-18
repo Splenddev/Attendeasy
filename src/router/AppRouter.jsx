@@ -2,7 +2,6 @@ import { Suspense } from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import Loader from '../components/Loader/Loader';
 import {
-  App,
   Attendance,
   ClassRepDashboard,
   ClassSchedule,
@@ -13,6 +12,7 @@ import {
   StudentDashboard,
   StudentSchedules,
   Unauthorized,
+  GroupManagementPage,
 } from '../utils/lazyPages';
 import ProtectedRoutes from '../components/ProtectedRoutes';
 import { ROLES } from '../utils/roles';
@@ -21,7 +21,6 @@ import { AuthLayout, ClassRepLayout, StudentLayout } from '../layouts';
 import { CreateSchedule, Login, Notifications, Register } from '../pages';
 import MarkAttendance from '../pages/Student/MarkAttendance/MarkAttendance';
 import InitialRedirect from '../components/InitialRedirect/InitialRedirect';
-import GroupManagementPage from '../pages/ClassManagement/GroupManagementPage';
 import UserProfilePage from '../pages/UserProfilePage/UserProfilePage';
 import ErrorFallback from '../pages/ErrorFallback/ErrorFallback';
 import Courses from '../pages/Courses/Courses';
@@ -157,7 +156,7 @@ export const router = createBrowserRouter([
         ],
       },
       {
-        path: 'student',
+        path: 'student/',
         element: (
           <ProtectedRoutes allowedRoles={[ROLES.STUDENT]}>
             <Suspense fallback={<Loader />}>

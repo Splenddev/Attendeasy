@@ -9,7 +9,7 @@ import { fetchGroupService } from '../../services/group.service';
 import { toast } from 'react-toastify';
 import Spinner from '../../components/Loader/Spinner/Spinner';
 import { useErrorModal } from '../../hooks/useErrorModal';
-import useGroupSocketListener from '../../hooks/useGroupSocketListener ';
+import useGroupSocketListener from '../../hooks/useGroupSocketListener';
 
 const GroupManagementPage = () => {
   const [group, setGroup] = useState(null);
@@ -21,6 +21,7 @@ const GroupManagementPage = () => {
 
   useEffect(() => setNavTitle('Group Management'), [setNavTitle]);
 
+  // Fetch group data
   const fetchGroup = async () => {
     if (!user?.group) {
       setLoading(false);
@@ -33,19 +34,21 @@ const GroupManagementPage = () => {
       setGroup(res.data);
     } catch (err) {
       console.error('Failed to fetch group:', err.message);
-      toast.error('Failed to fetch group');
+      toast.error(
+        navigator.onLine ? 'Failed to fetch group' : 'You appear to be offline'
+      );
       open(err);
+      setGroup(null);
     } finally {
       setLoading(false);
     }
   };
 
-  // ✅ Fetch group data on mount
+  // Initial fetch
   useEffect(() => {
     fetchGroup();
   }, []);
 
-  // ✅ Listen for socket updates and refresh group
   useGroupSocketListener((payload) => {
     if (payload.groupId === user?.group) {
       console.log('🔄 Refreshing group data due to socket event:', payload);
@@ -53,7 +56,7 @@ const GroupManagementPage = () => {
     }
   });
 
-  if (loading)
+  if (loading) {
     return (
       <div className="full-page-loader-wrap">
         <Spinner
@@ -63,8 +66,30 @@ const GroupManagementPage = () => {
         />
       </div>
     );
+  }
 
-  if (!user.group)
+  if (!navigator.onLine) {
+    return (
+      <div className="offline-msg center">
+        <h2>You are offline</h2>
+        <p>Please check your internet connection and try again.</p>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="full-page-loader-wrap">
+        <Spinner
+          size="35px"
+          scale="2.5"
+          borderWidth="2px"
+        />
+      </div>
+    );
+  }
+
+  if (!user.group) {
     return (
       <GroupRegFind
         user={user}
@@ -72,8 +97,9 @@ const GroupManagementPage = () => {
         fetchGroup={fetchGroup}
       />
     );
+  }
 
-  if (!group)
+  if (!group) {
     return (
       <div className="group-not-found center">
         <div className="group-not-found-card">
@@ -112,7 +138,9 @@ const GroupManagementPage = () => {
         </div>
       </div>
     );
+  }
 
+  // --- Main render ---
   return (
     <div className="group-page">
       <GroupSidebar

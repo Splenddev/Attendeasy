@@ -1,6 +1,5 @@
 import { lazy } from 'react';
 
-export const App = lazy(() => import('../App'));
 export const Home = lazy(() => import('../pages/Home/Home'));
 export const NotFound = lazy(() => import('../pages/NotFound/NotFound'));
 export const Unauthorized = lazy(() =>
@@ -32,6 +31,9 @@ export const SchedulesHistory = lazy(() =>
 );
 export const GroupResources = lazy(() =>
   import('../pages/GroupResources/GroupResources')
+);
+export const GroupManagementPage = lazy(() =>
+  import('../pages/ClassManagement/GroupManagementPage')
 );
 
 //layouts
