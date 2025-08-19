@@ -60,16 +60,17 @@ export function useScheduleInstance(scheduleId) {
     setLoading(true);
     setError(null);
     try {
-      const data = await updateInstances({
+      const res = await updateInstances({
         id,
         classStatus,
         rescheduledToDate,
         updatedTime,
         lecturerMessage,
       });
-      fetchInstance();
-      fetchTodaysInstances();
-      return data;
+      if (res.success) {
+        // toast.success('success');
+      }
+      return res.data;
     } catch (err) {
       setError(
         err.response?.data?.message || err.message || 'Failed to update status'

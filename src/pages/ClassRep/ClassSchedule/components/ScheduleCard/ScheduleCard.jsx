@@ -40,6 +40,7 @@ import {
   LuTrash,
 } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
+import DayTimeSlot from '../../../../../components/DayTimeSlot/DayTimeSlot';
 
 const TODAY = new Date().toLocaleDateString(undefined, { weekday: 'long' });
 
@@ -180,36 +181,16 @@ const ScheduleCard = ({
         </div>
       </section>
 
-      <div className={styles.timings}>
-        <b className={styles.title}>
-          <LuCalendarClock /> Class Days & Times
-        </b>
-        <div className={styles.timingList}>
-          {schedule.classDaysTimes.map((slot, idx) => (
-            <div
-              key={idx}
-              className={styles.timeSlot}>
-              {' '}
-              <div className={styles.left}>
-                <p className={styles.day}>
-                  {slot.day[0].toUpperCase() + slot.day.slice(1)}
-                </p>
-              </div>
-              <div className={styles.right}>
-                <p className={styles.time}>
-                  {slot.timing.startTime} – {slot.timing.endTime}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <DayTimeSlot daysTimes={schedule.classDaysTimes} />
 
       {button.multiple({
         icon: LuArrowRight,
         element: 'See History',
         name: styles.scheduleHistory,
-        func: () => navigate(`${schedule._id}/history`),
+        func: () =>
+          navigate(`${schedule._id}/history`, {
+            state: { courseName: schedule.courseTitle },
+          }),
       })}
 
       {button.multiple({

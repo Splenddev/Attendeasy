@@ -10,8 +10,10 @@ import Footer from '../../components/Footer/Footer';
 import { useScheduleInstance } from '../../hooks/useScheduleInstance';
 import { useEffect } from 'react';
 import TodaysInstancesPrompt from '../../components/Prompts/TodaysInstancesPrompt/TodaysInstancesPrompt';
+import { useState } from 'react';
 const ClassRepLayout = () => {
   const { user } = useAuth();
+  const [isNotification, setIsNotification] = useState(false);
   const navigate = useNavigate();
   const day = new Date().getDay();
   const { isSideBarMenu, setIsSidebarMenu, isMobile } = useMain();
@@ -23,19 +25,24 @@ const ClassRepLayout = () => {
     },
   ];
 
-  const { fetchTodaysInstances, data } = useScheduleInstance();
+  const { fetchTodaysInstances, data = {} } = useScheduleInstance();
 
   useEffect(() => {
     if (!user._id) return;
     console.log(data);
     fetchTodaysInstances();
+    if (data?.instances?.length > 0) {
+      setIsNotification(true);
+    }
   }, [user._id, day]);
 
   const { promptMessage = '', instances = [] } = data || {};
 
   return (
     <div
-      className={`c-layout ${isMobile && !isSideBarMenu ? 'is-mobile' : ''} ${
+      className={`c-layout ${
+        instances && instances.length > 0 && isNotification ? 'unconfirmed' : ''
+      } ${isMobile && !isSideBarMenu ? 'is-mobile' : ''} ${
         isMobile ? 'mobile' : ''
       }`}>
       <Navbar dropdownAssets={dropdownAssets} />
@@ -49,11 +56,12 @@ const ClassRepLayout = () => {
         <TodaysInstancesPrompt
           instances={instances}
           promptMessage={promptMessage}
-          onConfirm={(id) =>
+          onConfirm={(id, courseName) =>
             navigate(`/class-rep/schedules/${id}/history`, {
-              state: { tab: 'unconfirmed' },
+              state: { tab: 'unconfirmed', courseName },
             })
           }
+          onDismiss={() => setIsNotification(false)}
         />
         <Outlet />
       </main>

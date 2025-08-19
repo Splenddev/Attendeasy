@@ -69,7 +69,11 @@ const buttonVariants = {
   tap: { scale: 0.98 },
 };
 
-export default function UpdateInstanceStatus({ instance, onSuccess }) {
+export default function UpdateInstanceStatus({
+  instance,
+  onSuccess,
+  scheduleId,
+}) {
   const [status, setStatus] = useState(instance.classStatus || 'unconfirmed');
   const [newDate, setNewDate] = useState(
     instance.rescheduledToDate
@@ -85,7 +89,7 @@ export default function UpdateInstanceStatus({ instance, onSuccess }) {
     update: updateStatus,
     loading,
     error: hookError,
-  } = useScheduleInstance(instance._id);
+  } = useScheduleInstance(scheduleId);
 
   const showRescheduleFields = ['rescheduled', 'postponed', 'makeup'].includes(
     status
@@ -145,7 +149,13 @@ export default function UpdateInstanceStatus({ instance, onSuccess }) {
     }
   };
 
-  const isDisabled = loading || !isValidDate || !isValidTime || !isValidMessage;
+  const isDisabled =
+    loading ||
+    !isValidDate ||
+    !isValidTime ||
+    !isValidMessage ||
+    !status ||
+    status === instance.classStatus;
 
   return (
     <motion.div
@@ -154,29 +164,6 @@ export default function UpdateInstanceStatus({ instance, onSuccess }) {
       initial="initial"
       animate="animate"
       exit="exit">
-      <motion.b
-        className={styles.title}
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.1, duration: 0.3 }}>
-        Update Status for {instance.scheduleId?.courseTitle || 'Schedule'}
-      </motion.b>
-
-      <motion.div
-        className={styles.currentInfo}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2, duration: 0.3 }}>
-        <p>
-          <strong>Date:</strong>{' '}
-          {new Date(instance.classDate).toLocaleDateString()}
-        </p>
-        <p>
-          <strong>Current Status:</strong>{' '}
-          {formatStatusLabel(instance.classStatus)}
-        </p>
-      </motion.div>
-
       <motion.div
         className={styles.field}
         initial={{ opacity: 0, y: 10 }}
@@ -195,6 +182,7 @@ export default function UpdateInstanceStatus({ instance, onSuccess }) {
           className={styles.select}
           whileFocus={{ scale: 1.01 }}
           transition={{ duration: 0.2 }}>
+          <option value="">Select status</option>
           {STATUS_OPTIONS.map((opt) => (
             <option
               key={opt}

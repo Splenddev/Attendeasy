@@ -4,6 +4,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import styles from './TodaysInstancesPrompt.module.css';
 import { dateFormatter } from '../../../utils/helpers';
 import { FaClock, FaCheck, FaTimes } from 'react-icons/fa';
+import { useMain } from '../../../context/MainContext';
+import { LuChevronDown, LuChevronUp, LuX } from 'react-icons/lu';
 
 export default function TodaysInstancesPrompt({
   instances,
@@ -16,6 +18,7 @@ export default function TodaysInstancesPrompt({
   const pathParts = location.pathname.split('/');
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [isVisible, setIsVisible] = useState(true);
+  const { isMobile } = useMain();
 
   // status config for flexibility
   const statusConfig = {
@@ -67,21 +70,13 @@ export default function TodaysInstancesPrompt({
   const wrapperClasses = [
     styles.wrapper,
     variant !== 'default' ? styles[variant] : '',
+    isMobile ? styles.mobile : '',
   ]
     .filter(Boolean)
     .join(' ');
 
   return (
     <div className={wrapperClasses}>
-      {onDismiss && (
-        <button
-          className={styles.closeBtn}
-          onClick={dismissPrompt}
-          aria-label="Dismiss notification">
-          ✕
-        </button>
-      )}
-
       {/* Header / Toggle */}
       <div
         className={styles.header}
@@ -96,10 +91,25 @@ export default function TodaysInstancesPrompt({
           }
         }}>
         <span className={styles.badge}>{instances.length}</span>
-        {promptMessage ||
-          `You have ${instances.length} class instance${
-            instances.length !== 1 ? 's' : ''
-          } requiring attention`}
+        <span>
+          Heads up! You’ve got {instances.length} unconfirmed class session
+          {instances.length !== 1 ? 's' : ''} waiting for your review.
+        </span>
+        <div className={styles.cta}>
+          <button
+            className={styles.closeBtn}
+            aria-label="collapse notification">
+            {isCollapsed ? <LuChevronDown /> : <LuChevronUp />}
+          </button>
+          {onDismiss && (
+            <button
+              className={styles.closeBtn}
+              onClick={dismissPrompt}
+              aria-label="Dismiss notification">
+              <LuX />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Animate list expand/collapse */}
@@ -149,7 +159,10 @@ export default function TodaysInstancesPrompt({
                     <div className={styles.actionRow}>
                       <button
                         onClick={() =>
-                          onConfirm(instance.scheduleId?._id, instance)
+                          onConfirm(
+                            instance.scheduleId?._id,
+                            instance.courseName
+                          )
                         }
                         className={styles.confirmBtn}>
                         Confirm Status

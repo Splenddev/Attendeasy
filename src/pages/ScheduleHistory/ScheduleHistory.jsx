@@ -34,6 +34,7 @@ import Tabs from '../../components/Tabs/Tabs';
 import NoResults from '../../components/NoResults/NoResults';
 import UpdateInstanceStatus from './components/UpdateInstanceStatus/UpdateInstanceStatus';
 import FullPageLoader from '../../components/Loader/FullPageLoader/FullPageLoader';
+import { useSuccessModal } from '../../hooks/useSuccessModal';
 
 const ScheduleHistory = () => {
   const [expandedCard, setExpandedCard] = useState(null);
@@ -43,9 +44,16 @@ const ScheduleHistory = () => {
 
   const location = useLocation();
   const defaultTab = location.state?.tab || 'all';
+  const scheduleTitle = location.state?.courseName || '';
 
   const { id } = useParams();
-  const { data = [], loading } = useScheduleInstance(id);
+  const {
+    data = [],
+    loading,
+    refetch,
+    fetchTodaysInstances,
+  } = useScheduleInstance(id);
+  const { open } = useSuccessModal();
 
   console.log(data);
 
@@ -230,7 +238,7 @@ const ScheduleHistory = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}>
           <header className={styles.header}>
-            <h1 className={styles.title}>Class Schedule History</h1>
+            <h1 className={styles.title}>{scheduleTitle} Class History</h1>
             <p className={styles.subtitle}>
               Stay organized — view, track, and manage all your upcoming and
               past class sessions.
@@ -297,9 +305,10 @@ const ScheduleHistory = () => {
 
                     <div className={styles.cardTime}>
                       <LuClock size={14} />
+
                       {instance.updatedTime
                         ? `${instance.updatedTime.start} - ${instance.updatedTime.end}`
-                        : dateInfo.time}
+                        : `${instance.normalTime.start} - ${instance.normalTime.end}`}
                     </div>
                   </div>
 
@@ -357,6 +366,9 @@ const ScheduleHistory = () => {
                         <UpdateInstanceStatus
                           instance={instance}
                           onSuccess={(updatedInstance) => {
+                            refetch();
+                            fetchTodaysInstances();
+                            open(updatedInstance);
                             console.log('Status updated:', updatedInstance);
                           }}
                         />

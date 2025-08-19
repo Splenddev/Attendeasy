@@ -8,6 +8,7 @@
   right: 0;
   z-index: 10;
   background: linear-gradient(135deg, #1f7a3e, #145a2c);
+  -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
@@ -16,6 +17,10 @@
   overflow: hidden;
   max-height: 60vh;
   padding-left: 60px;
+}
+
+.wrapper.mobile {
+  padding-left: 0;
 }
 
 .wrapper.collapsed {
@@ -44,7 +49,7 @@
   background: rgba(255, 255, 255, 0.12);
 }
 
-.header::after {
+/* .header::after {
   content: '▼';
   font-size: 12px;
   margin-left: 8px;
@@ -53,7 +58,7 @@
 
 .wrapper.collapsed .header::after {
   transform: rotate(-90deg);
-}
+} */
 
 /* Badge */
 .badge {
@@ -114,6 +119,11 @@
   text-transform: capitalize;
   display: flex;
   gap: 10px;
+  margin-bottom: 0.3rem;
+}
+
+.infoRow span {
+  font-size: 14px;
 }
 
 /* ========== Status Badge ========== */
@@ -204,11 +214,16 @@
   font-size: 10px;
 }
 
+.cta {
+  display: flex;
+  gap: 0.3rem;
+}
+
 /* ========== Close Button ========== */
 .closeBtn {
-  position: absolute;
+  /* position: absolute;
   top: 12px;
-  right: 14px;
+  right: 14px; */
   width: 26px;
   height: 26px;
   border-radius: 50%;
