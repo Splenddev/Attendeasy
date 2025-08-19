@@ -5,14 +5,8 @@ import FieldSet from '../../../../components/FieldSet/FieldSet';
 import { MdCheckCircle, MdCheckCircleOutline } from 'react-icons/md';
 import BtnGroup from '../BtnGroup';
 import { AnimatePresence, motion } from 'framer-motion';
+import { departments, faculties } from '../../../../assets/assets';
 
-const faculties = ['Sciences', 'Arts', 'Engineering', 'Social Sciences'];
-const departments = {
-  Sciences: ['Biology', 'Chemistry', 'Physics'],
-  Arts: ['History', 'Philosophy', 'Languages'],
-  Engineering: ['Mechanical', 'Electrical', 'Civil'],
-  'Social Sciences': ['Economics', 'Sociology', 'Psychology'],
-};
 const levels = ['100L', '200L', '300L', '400L', '500L'];
 
 const ProfileSetup = ({ onNext, onBack, methods }) => {
@@ -53,28 +47,13 @@ const ProfileSetup = ({ onNext, onBack, methods }) => {
 
     const valid = await trigger(['faculty', 'department', 'level', 'terms']);
 
-    const courses = watch('courses') || [];
-
     if (!valid) {
       setError('Please complete all required fields and agree to the terms.');
       setTimeout(() => setError(null), 3000);
       return;
     }
 
-    if (selectedRole === 'class-rep' && courses.length < 3) {
-      setError('As a Class Rep, you must add at least 3 courses.');
-      setTimeout(() => setError(null), 3000);
-      return;
-    }
-
-    setValue('courses', courses); // inject into form data
-
     if (onNext) onNext();
-  };
-
-  const handleSkip = () => {
-    setValue('profilePicture', null);
-    onNext();
   };
 
   return (
@@ -105,13 +84,6 @@ const ProfileSetup = ({ onNext, onBack, methods }) => {
           className="visually-hidden"
         />
       </label>
-
-      <button
-        type="button"
-        className="skip-link"
-        onClick={handleSkip}>
-        Skip for now
-      </button>
 
       <hr />
       <h3>Academic Details</h3>

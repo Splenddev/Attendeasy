@@ -33,6 +33,7 @@ import { CLASS_STATUS_TABS, dataIn } from '../../utils/contants';
 import Tabs from '../../components/Tabs/Tabs';
 import NoResults from '../../components/NoResults/NoResults';
 import UpdateInstanceStatus from './components/UpdateInstanceStatus/UpdateInstanceStatus';
+import FullPageLoader from '../../components/Loader/FullPageLoader/FullPageLoader';
 
 const ScheduleHistory = () => {
   const [expandedCard, setExpandedCard] = useState(null);
@@ -44,7 +45,7 @@ const ScheduleHistory = () => {
   const defaultTab = location.state?.tab || 'all';
 
   const { id } = useParams();
-  const { data = [] } = useScheduleInstance(id);
+  const { data = [], loading } = useScheduleInstance(id);
 
   console.log(data);
 
@@ -53,10 +54,9 @@ const ScheduleHistory = () => {
   const dummyScheduleInstances =
     data && data.length > 0 ? [...data, ...dataIn] : dataIn;
 
-  const scheduleInstances = dummyScheduleInstances.filter((ins) => {
-    if (filterTab === 'all') return true;
-    return filterTab === ins.classStatus;
-  });
+  const scheduleInstances = Array.isArray(data)
+    ? data.filter((ins) => filterTab === 'all' || ins.classStatus === filterTab)
+    : [];
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -209,6 +209,16 @@ const ScheduleHistory = () => {
       transition: { duration: 0.3, ease: 'easeInOut' },
     },
   };
+
+  if (loading) {
+    return (
+      <FullPageLoader
+        message="Loading your schedule history..."
+        subMessage="Hang tight! We’re pulling up your past classes from Vigilo."
+        theme="light" // or "dark"
+      />
+    );
+  }
 
   return (
     <div className={styles.wrapper}>

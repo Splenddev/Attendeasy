@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import {
   getScheduleHistory,
   getTodayInstancesForReps,
+  updateInstances,
 } from '../services/scheduleInstance.service';
 import { toast } from 'react-toastify';
 
@@ -49,5 +50,42 @@ export function useScheduleInstance(scheduleId) {
     }
   };
 
-  return { data, loading, error, refetch: fetchInstance, fetchTodaysInstances };
+  const update = async ({
+    id,
+    classStatus,
+    rescheduledToDate,
+    updatedTime,
+    lecturerMessage,
+  }) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await updateInstances({
+        id,
+        classStatus,
+        rescheduledToDate,
+        updatedTime,
+        lecturerMessage,
+      });
+      fetchInstance();
+      fetchTodaysInstances();
+      return data;
+    } catch (err) {
+      setError(
+        err.response?.data?.message || err.message || 'Failed to update status'
+      );
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    data,
+    loading,
+    error,
+    refetch: fetchInstance,
+    fetchTodaysInstances,
+    update,
+  };
 }

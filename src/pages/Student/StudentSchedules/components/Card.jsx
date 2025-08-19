@@ -11,7 +11,9 @@ import {
 import { formatTime, getFileIconClass } from './utils';
 import styles from '../StudentSchedules.module.css';
 import button from '../../../../components/Button/Button';
-import { FaStickyNote } from 'react-icons/fa';
+import { FaHistory } from 'react-icons/fa';
+import { LuCalendar } from 'react-icons/lu';
+import DayTimeSlot from '../../../../components/DayTimeSlot/DayTimeSlot';
 
 const Card = ({ schedule, isExpanded, onToggle }) => {
   return (
@@ -29,12 +31,8 @@ const Card = ({ schedule, isExpanded, onToggle }) => {
           <span>
             <FiMapPin /> {schedule.classroomVenue}
           </span>
-          <span>
-            <FiClock /> Time:{' '}
-            {formatTime(schedule.classDaysTimes[0].timing.startTime)} -{' '}
-            {formatTime(schedule.classDaysTimes[0].timing.endTime)}
-          </span>
         </div>
+        <DayTimeSlot daysTimes={schedule.classDaysTimes} />
 
         <button
           onClick={onToggle}
@@ -56,12 +54,17 @@ const Card = ({ schedule, isExpanded, onToggle }) => {
               <p>
                 <strong>Department:</strong> {schedule.department}
               </p>
-              <p>
-                <strong>Notes:</strong> {schedule.notes}
-              </p>
-              <p>
-                <strong>Materials:</strong>
-              </p>
+              {schedule.notes && (
+                <p>
+                  <strong>Notes:</strong> {schedule.notes}
+                </p>
+              )}
+
+              {schedule.media.length > 0 && (
+                <p>
+                  <strong>Materials:</strong>
+                </p>
+              )}
               {schedule.media?.map((file) => {
                 const { icon, color } = getFileIconClass(file.fileType);
                 const Icon = icon;
@@ -78,8 +81,8 @@ const Card = ({ schedule, isExpanded, onToggle }) => {
                 );
               })}
               {button.multiple({
-                icon: FaStickyNote,
-                element: 'View attencance.',
+                icon: FaHistory,
+                element: 'View history.',
                 name: styles.attBtn,
               })}
             </div>

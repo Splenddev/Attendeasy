@@ -13,6 +13,7 @@ import TodaysInstancesPrompt from '../../components/Prompts/TodaysInstancesPromp
 const ClassRepLayout = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const day = new Date().getDay();
   const { isSideBarMenu, setIsSidebarMenu, isMobile } = useMain();
   const dropdownAssets = [
     {
@@ -28,7 +29,7 @@ const ClassRepLayout = () => {
     if (!user._id) return;
     console.log(data);
     fetchTodaysInstances();
-  }, [user._id]);
+  }, [user._id, day]);
 
   const { promptMessage = '', instances = [] } = data || {};
 
@@ -45,7 +46,6 @@ const ClassRepLayout = () => {
         isMobile={isMobile}
       />
       <main className={`main ${isSideBarMenu ? 'move' : ''}`}>
-        <p>{promptMessage}</p>
         <TodaysInstancesPrompt
           instances={instances}
           promptMessage={promptMessage}

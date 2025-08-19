@@ -61,13 +61,6 @@ const App = () => {
     error;
 
   if (authLoading || courseLoading) return <Loader />;
-  if (!user)
-    return (
-      <Navigate
-        to="/auth/login"
-        replace
-      />
-    );
   return (
     <>
       <NavigationProgress />

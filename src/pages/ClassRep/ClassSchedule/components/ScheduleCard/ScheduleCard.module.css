@@ -292,61 +292,6 @@
 }
 
 /* schedule time */
-.timings {
-  margin-top: 1.5rem;
-}
-
-.title {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 600;
-  font-size: 0.85rem;
-  color: #1f2937;
-  margin-bottom: 1rem;
-}
-
-.timingList {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.timeSlot {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  padding: 0.75rem 1rem;
-  border-radius: 0.75rem;
-  transition: all 0.2s ease;
-}
-
-.timeSlot:hover {
-  background-color: #f3f4f6;
-  border-color: #d1d5db;
-}
-
-.left {
-  flex: 1;
-}
-
-.right {
-  flex-shrink: 0;
-}
-
-.day {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #111827;
-  text-transform: capitalize;
-}
-
-.time {
-  font-size: 0.855rem;
-  color: #4b5563;
-}
 
 .scheduleHistory {
   display: flex;

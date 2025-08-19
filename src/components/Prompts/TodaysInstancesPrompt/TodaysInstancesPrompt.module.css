@@ -1,0 +1,298 @@
+/* TodaysInstancesPrompt.module.css */
+
+/* ========== Wrapper ========== */
+.wrapper {
+  position: fixed;
+  top: 50px;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: linear-gradient(135deg, #1f7a3e, #145a2c);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  color: #fff;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+  overflow: hidden;
+  max-height: 60vh;
+  padding-left: 60px;
+}
+
+.wrapper.collapsed {
+  max-height: 56px;
+}
+
+.wrapper.expanded {
+  max-height: 60vh;
+}
+
+/* ========== Header ========== */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  padding: 14px 18px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.header:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.header::after {
+  content: '▼';
+  font-size: 12px;
+  margin-left: 8px;
+  transition: transform 0.3s ease;
+}
+
+.wrapper.collapsed .header::after {
+  transform: rotate(-90deg);
+}
+
+/* Badge */
+.badge {
+  background: rgba(255, 255, 255, 0.2);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 7px;
+  border-radius: 10px;
+  margin-right: 10px;
+}
+
+/* ========== List ========== */
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: calc(60vh - 56px);
+  overflow-y: auto;
+}
+
+.wrapper.collapsed .list {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Scrollbar */
+.list::-webkit-scrollbar {
+  width: 6px;
+}
+.list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+.list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* ========== List Item ========== */
+.listItem {
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  transition: background 0.3s ease;
+}
+
+.listItem:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.listItem strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.infoRow {
+  text-transform: capitalize;
+  display: flex;
+  gap: 10px;
+}
+
+/* ========== Status Badge ========== */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 8px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.status::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.status[data-status='completed'] {
+  color: #10b981;
+}
+.status[data-status='completed']::before {
+  background: #10b981;
+}
+
+.status[data-status=''] {
+  color: #f59e0b;
+}
+.status[data-status='']::before {
+  background: #f59e0b;
+}
+
+.status {
+  color: #ef4444;
+}
+.status::before {
+  background: #ef4444;
+}
+
+.status[data-status='scheduled'] {
+  color: #06b6d4;
+}
+.status[data-status='scheduled']::before {
+  background: #06b6d4;
+}
+
+/* ========== Buttons ========== */
+.confirmBtn,
+.linkBtn {
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.confirmBtn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+.confirmBtn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.linkBtn {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.linkBtn:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.linkBtn::after {
+  content: '↗';
+  font-size: 10px;
+}
+
+/* ========== Close Button ========== */
+.closeBtn {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeBtn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.unconfirmedBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  background: #fff5e6;
+  color: #b76b00;
+  animation: pulse 2s infinite;
+}
+
+.confirmedBadge {
+  background: #e6f8ee;
+  color: #1c7c3c;
+}
+
+.cancelledBadge {
+  background: #ffe6e6;
+  color: #b22222;
+}
+
+/* ========== Mobile ========== */
+@media (max-width: 768px) {
+  .wrapper {
+    max-height: 50vh;
+  }
+  .list {
+    max-height: calc(50vh - 56px);
+  }
+  .header {
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+  .listItem {
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+}
+
+@keyframes pulseBage {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.unconfirmedBadge {
+  animation: pulseBage 2s infinite;
+}
+
+.actionRow {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.statusWrapper {
+  margin-left: 8px;
+}

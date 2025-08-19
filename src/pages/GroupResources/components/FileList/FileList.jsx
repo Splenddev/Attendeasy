@@ -3,9 +3,10 @@ import { FaThLarge, FaList, FaUser, FaCommentDots } from 'react-icons/fa';
 import styles from './FileList.module.css';
 import { LuDownload, LuTrash, LuEye, LuShare2, LuCopy } from 'react-icons/lu';
 import MoreOptions from '../../../../features/MoreOptions/MoreOptions';
-import { FiEdit3 } from 'react-icons/fi';
+import { FiEdit3, FiGrid, FiList } from 'react-icons/fi';
 import { getFileIconClass } from '../../../Student/StudentSchedules/components/utils';
 import useGsap from '../../../../hooks/useGsap';
+import ViewChanger from '../../../../components/ViewChanger/ViewChanger';
 
 const fileMoreMenuData = [
   { id: 'open', label: 'Open', icon: <LuEye /> },
@@ -59,20 +60,14 @@ const FileList = ({ files = [], defaultView = 'grid', user }) => {
       {/* Header / Controls */}
       <div className={styles.header}>
         <h2>Recent Files</h2>
-        <div className={styles.viewToggle}>
-          <button
-            className={viewMode === 'grid' ? styles.active : ''}
-            onClick={() => setViewMode('grid')}
-            title="Grid View">
-            <FaThLarge />
-          </button>
-          <button
-            className={viewMode === 'list' ? styles.active : ''}
-            onClick={() => setViewMode('list')}
-            title="List View">
-            <FaList />
-          </button>
-        </div>
+        <ViewChanger
+          views={[
+            { value: 'grid', icon: <FiGrid /> },
+            { value: 'list', icon: <FiList /> },
+          ]}
+          defaultView={viewMode}
+          onChange={(value) => setViewMode(value)}
+        />
       </div>
 
       {/* Files */}

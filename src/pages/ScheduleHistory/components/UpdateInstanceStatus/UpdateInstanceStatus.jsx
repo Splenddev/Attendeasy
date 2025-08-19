@@ -1,5 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import TextArea from '../../../../components/TextArea/TextArea';
+import styles from './UpdateInstanceStatus.module.css';
+import { FaExclamationTriangle } from 'react-icons/fa';
+import { useScheduleInstance } from '../../../../hooks/useScheduleInstance';
 
 const STATUS_OPTIONS = [
   'unconfirmed',
@@ -7,21 +11,65 @@ const STATUS_OPTIONS = [
   'rescheduled',
   'postponed',
   'holding',
-  'held',
-  'partial',
   'cancelled',
-  'missed',
-  'disrupted',
   'makeup',
   'offsite',
 ];
 
-// Helper to format status nicely
 const formatStatusLabel = (str) =>
   str.charAt(0).toUpperCase() + str.slice(1).replace(/_/g, ' ');
 
+// Animation variants
+const containerVariants = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -20 },
+};
+
+const fieldsetVariants = {
+  initial: { opacity: 0, height: 0, marginBottom: 0 },
+  animate: {
+    opacity: 1,
+    height: 'auto',
+    marginBottom: 16,
+    transition: {
+      height: { duration: 0.3, ease: 'easeOut' },
+      opacity: { duration: 0.2, delay: 0.1 },
+      marginBottom: { duration: 0.3, ease: 'easeOut' },
+    },
+  },
+  exit: {
+    opacity: 0,
+    height: 0,
+    marginBottom: 0,
+    transition: {
+      opacity: { duration: 0.1 },
+      height: { duration: 0.2, delay: 0.1, ease: 'easeIn' },
+      marginBottom: { duration: 0.2, delay: 0.1, ease: 'easeIn' },
+    },
+  },
+};
+
+const messageVariants = {
+  initial: { opacity: 0, scale: 0.95 },
+  animate: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.2, ease: 'easeOut' },
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.95,
+    transition: { duration: 0.15, ease: 'easeIn' },
+  },
+};
+
+const buttonVariants = {
+  hover: { scale: 1.02 },
+  tap: { scale: 0.98 },
+};
+
 export default function UpdateInstanceStatus({ instance, onSuccess }) {
-  // Initial states from instance props
   const [status, setStatus] = useState(instance.classStatus || 'unconfirmed');
   const [newDate, setNewDate] = useState(
     instance.rescheduledToDate
@@ -30,27 +78,31 @@ export default function UpdateInstanceStatus({ instance, onSuccess }) {
   );
   const [startTime, setStartTime] = useState(instance.updatedTime?.start || '');
   const [endTime, setEndTime] = useState(instance.updatedTime?.end || '');
-  const [message, setMessage] = useState(''); // generic message textarea for notes/reasons
-  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
   const [error, setError] = useState(null);
 
-  // Status groups for UI logic
-  const showRescheduleFields = ['postponed', 'rescheduled', 'makeup'].includes(
+  const {
+    update: updateStatus,
+    loading,
+    error: hookError,
+  } = useScheduleInstance(instance._id);
+
+  const showRescheduleFields = ['rescheduled', 'postponed', 'makeup'].includes(
     status
   );
   const showCancellationReason = status === 'cancelled';
   const showPendingApprovalNote = status === 'pending_approval';
   const showHoldingReason = status === 'holding';
-  const showIncidentNotes = ['missed', 'disrupted', 'partial'].includes(status);
-  const showHeldConfirmation = status === 'held';
+  const showIncidentNotes = ['offsite'].includes(status);
 
-  // Validation state to disable submit button if invalid input
   const isValidDate = !showRescheduleFields || newDate !== '';
   const isValidTime =
     !showRescheduleFields || !startTime || !endTime || startTime <= endTime;
-  const isValidMessage = !showCancellationReason || message.trim() !== '';
+  const isValidMessage =
+    !showCancellationReason && !showHoldingReason && !showIncidentNotes
+      ? true
+      : message.trim() !== '';
 
-  // Reset to original instance values
   const handleReset = () => {
     setStatus(instance.classStatus || 'unconfirmed');
     setNewDate(
@@ -64,292 +116,262 @@ export default function UpdateInstanceStatus({ instance, onSuccess }) {
     setError(null);
   };
 
-  // Submit update handler
   const handleSubmit = async () => {
     setError(null);
 
-    // Basic validation
-    if (!isValidDate) {
-      setError('Please select a valid new date.');
-      return;
-    }
-    if (!isValidTime) {
-      setError('Start time must be less than or equal to end time.');
-      return;
-    }
-    if (!isValidMessage) {
-      setError('Please provide a cancellation reason.');
-      return;
-    }
-
-    setLoading(true);
-    const payload = { classStatus: status };
-
-    if (showRescheduleFields) {
-      payload.rescheduledToDate = newDate;
-      payload.updatedTime = {
-        start: startTime || null,
-        end: endTime || null,
-      };
-    }
-    if (
-      showCancellationReason ||
-      showHoldingReason ||
-      showIncidentNotes ||
-      showHeldConfirmation
-    ) {
-      // Attach the message as relevant (reason, notes, confirmation)
-      if (message.trim()) payload.lecturerMessage = message.trim();
-    }
+    if (!isValidDate) return setError('Please select a valid new date.');
+    if (!isValidTime)
+      return setError('Start time must be before or equal to end time.');
+    if (!isValidMessage) return setError('Please provide a message.');
 
     try {
-      const res = await fetch(
-        `/api/schedule-instances/${instance._id}/status`,
-        {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        }
-      );
+      const updatedInstance = await updateStatus({
+        id: instance._id,
+        classStatus: status,
+        rescheduledToDate: showRescheduleFields ? newDate : null,
+        updatedTime: showRescheduleFields
+          ? { start: startTime || null, end: endTime || null }
+          : null,
+        lecturerMessage:
+          showCancellationReason || showHoldingReason || showIncidentNotes
+            ? message
+            : null,
+      });
 
-      if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.message || 'Failed to update status');
-      }
-
-      const data = await res.json();
-      onSuccess && onSuccess(data);
+      onSuccess?.(updatedInstance);
       setMessage('');
     } catch (err) {
       setError(err.message);
-    } finally {
-      setLoading(false);
     }
   };
 
+  const isDisabled = loading || !isValidDate || !isValidTime || !isValidMessage;
+
   return (
-    <div
-      className="update-instance-status"
-      style={{ maxWidth: 500 }}>
-      <b style={{ marginBottom: 12 }}>
+    <motion.div
+      className={styles.container}
+      variants={containerVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit">
+      <motion.b
+        className={styles.title}
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.1, duration: 0.3 }}>
         Update Status for {instance.scheduleId?.courseTitle || 'Schedule'}
-      </b>
-      <p style={{ marginBottom: 16 }}>
-        <strong>Date:</strong>{' '}
-        {new Date(instance.classDate).toLocaleDateString()}
-        <br />
-        <strong>Current Status:</strong>{' '}
-        {formatStatusLabel(instance.classStatus)}
-      </p>
+      </motion.b>
 
-      <label
-        htmlFor="status-select"
-        style={{ fontWeight: 'bold', display: 'block', marginBottom: 8 }}>
-        Select New Status:
-      </label>
-      <select
-        id="status-select"
-        value={status}
-        onChange={(e) => setStatus(e.target.value)}
-        disabled={loading || showPendingApprovalNote}
-        style={{
-          width: '100%',
-          padding: '0.5rem',
-          marginBottom: 16,
-          fontSize: 16,
-          backgroundColor: showPendingApprovalNote ? '#eee' : 'white',
-          cursor: showPendingApprovalNote ? 'not-allowed' : 'pointer',
-        }}>
-        {STATUS_OPTIONS.map((opt) => (
-          <option
-            key={opt}
-            value={opt}>
-            {formatStatusLabel(opt)}
-          </option>
-        ))}
-      </select>
-
-      {showPendingApprovalNote && (
-        <p style={{ fontStyle: 'italic', marginBottom: 16, color: '#555' }}>
-          This instance is pending approval and cannot be edited at this time.
+      <motion.div
+        className={styles.currentInfo}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2, duration: 0.3 }}>
+        <p>
+          <strong>Date:</strong>{' '}
+          {new Date(instance.classDate).toLocaleDateString()}
         </p>
-      )}
+        <p>
+          <strong>Current Status:</strong>{' '}
+          {formatStatusLabel(instance.classStatus)}
+        </p>
+      </motion.div>
 
-      {showRescheduleFields && (
-        <fieldset
-          style={{
-            marginBottom: 16,
-            border: '1px solid #ccc',
-            padding: 12,
-            borderRadius: 6,
-          }}>
-          <legend style={{ fontWeight: 'bold', marginBottom: 8 }}>
-            {formatStatusLabel(status)} Details
-          </legend>
+      <motion.div
+        className={styles.field}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.3 }}>
+        <label
+          htmlFor="status-select"
+          className={styles.label}>
+          Select New Status:
+        </label>
+        <motion.select
+          id="status-select"
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+          disabled={loading}
+          className={styles.select}
+          whileFocus={{ scale: 1.01 }}
+          transition={{ duration: 0.2 }}>
+          {STATUS_OPTIONS.map((opt) => (
+            <option
+              key={opt}
+              value={opt}>
+              {formatStatusLabel(opt)}
+            </option>
+          ))}
+        </motion.select>
+      </motion.div>
 
-          <label
-            htmlFor="new-date"
-            style={{ display: 'block', marginBottom: 6 }}>
-            New Date:
-          </label>
-          <input
-            type="date"
-            id="new-date"
-            value={newDate}
-            onChange={(e) => setNewDate(e.target.value)}
-            disabled={loading}
-            style={{ width: '100%', padding: '0.4rem', marginBottom: 12 }}
-          />
+      <AnimatePresence mode="wait">
+        {showPendingApprovalNote && (
+          <motion.div
+            className={styles.infoBox}
+            variants={messageVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            key="pending-note">
+            <FaExclamationTriangle className={styles.infoIcon} />
+            <span>
+              The selected status indicates the class might still take place, as
+              we are awaiting the lecturer's confirmation. You may update
+              details freely.
+            </span>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-          <label
-            htmlFor="start-time"
-            style={{ display: 'block', marginBottom: 6 }}>
-            Start Time (optional):
-          </label>
-          <input
-            type="time"
-            id="start-time"
-            value={startTime}
-            onChange={(e) => setStartTime(e.target.value)}
-            disabled={loading}
-            style={{ width: '100%', padding: '0.4rem', marginBottom: 12 }}
-          />
+      <AnimatePresence mode="wait">
+        {showRescheduleFields && (
+          <motion.fieldset
+            className={styles.fieldset}
+            variants={fieldsetVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            key="reschedule-fields">
+            <legend className={styles.legend}>
+              {formatStatusLabel(status)} Details
+            </legend>
 
-          <label
-            htmlFor="end-time"
-            style={{ display: 'block', marginBottom: 6 }}>
-            End Time (optional):
-          </label>
-          <input
-            type="time"
-            id="end-time"
-            value={endTime}
-            onChange={(e) => setEndTime(e.target.value)}
-            disabled={loading}
-            style={{ width: '100%', padding: '0.4rem' }}
-          />
-        </fieldset>
-      )}
+            <div className={styles.field}>
+              <label
+                htmlFor="new-date"
+                className={styles.label}>
+                New Date:
+              </label>
+              <input
+                type="date"
+                id="new-date"
+                value={newDate}
+                onChange={(e) => setNewDate(e.target.value)}
+                disabled={loading}
+                className={styles.input}
+              />
+            </div>
 
-      {(showCancellationReason ||
-        showHoldingReason ||
-        showIncidentNotes ||
-        showHeldConfirmation) && (
-        <>
-          <label
-            htmlFor="message"
-            style={{ fontWeight: 'bold', display: 'block', marginBottom: 6 }}>
-            {showCancellationReason
-              ? 'Cancellation Reason:'
-              : showHoldingReason
-              ? 'Reason for Holding:'
-              : showIncidentNotes
-              ? 'Incident Notes:'
-              : 'Confirmation Notes:'}
-          </label>
-          <TextArea
-            id="message"
-            name="message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder={
-              showCancellationReason
-                ? 'Please provide a reason for cancellation.'
+            <div className={styles.field}>
+              <label
+                htmlFor="start-time"
+                className={styles.label}>
+                Start Time (optional):
+              </label>
+              <input
+                type="time"
+                id="start-time"
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+                disabled={loading}
+                className={styles.input}
+              />
+            </div>
+
+            <div className={styles.field}>
+              <label
+                htmlFor="end-time"
+                className={styles.label}>
+                End Time (optional):
+              </label>
+              <input
+                type="time"
+                id="end-time"
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+                disabled={loading}
+                className={styles.input}
+              />
+            </div>
+          </motion.fieldset>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence mode="wait">
+        {(showCancellationReason || showHoldingReason || showIncidentNotes) && (
+          <motion.div
+            className={styles.messageField}
+            variants={fieldsetVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            key="message-field">
+            <label
+              htmlFor="message"
+              className={styles.label}>
+              {showCancellationReason
+                ? 'Cancellation Reason:'
                 : showHoldingReason
-                ? 'Add any relevant notes about the class being held.'
-                : showIncidentNotes
-                ? 'Add notes about what happened during the class.'
-                : 'Add any confirmation notes.'
-            }
-            maxLength={500}
-            showCounter={true}
-            disabled={loading}
-          />
-        </>
-      )}
+                ? 'Reason for Holding:'
+                : 'Notes:'}
+            </label>
+            <TextArea
+              id="message"
+              name="message"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder={
+                showCancellationReason
+                  ? 'Please provide a reason for cancellation.'
+                  : showHoldingReason
+                  ? 'Add any relevant notes about the class being held.'
+                  : 'Add notes about this class instance.'
+              }
+              maxLength={500}
+              showCounter={true}
+              disabled={loading}
+              className={styles.textarea}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {error && (
-        <p
-          role="alert"
-          style={{ color: 'red', marginBottom: 16, fontWeight: 'bold' }}>
-          {error}
-        </p>
-      )}
+      <AnimatePresence mode="wait">
+        {(error || hookError) && (
+          <motion.p
+            role="alert"
+            className={styles.error}
+            variants={messageVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            key="error-message">
+            {error || hookError}
+          </motion.p>
+        )}
+      </AnimatePresence>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <button
+      <motion.div
+        className={styles.buttonGroup}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.3 }}>
+        <motion.button
           onClick={handleSubmit}
-          disabled={
-            loading ||
-            !isValidDate ||
-            !isValidTime ||
-            !isValidMessage ||
-            showPendingApprovalNote
-          }
-          style={{
-            flexGrow: 1,
-            marginRight: 8,
-            padding: '0.75rem',
-            backgroundColor:
-              loading ||
-              !isValidDate ||
-              !isValidTime ||
-              !isValidMessage ||
-              showPendingApprovalNote
-                ? '#999'
-                : '#25aff3',
-            color: 'white',
-            fontWeight: 'bold',
-            border: 'none',
-            borderRadius: 6,
-            cursor:
-              loading ||
-              !isValidDate ||
-              !isValidTime ||
-              !isValidMessage ||
-              showPendingApprovalNote
-                ? 'not-allowed'
-                : 'pointer',
-            transition: 'background-color 0.3s ease',
-          }}
-          aria-disabled={
-            loading ||
-            !isValidDate ||
-            !isValidTime ||
-            !isValidMessage ||
-            showPendingApprovalNote
-          }
-          title={
-            !isValidDate
-              ? 'Please select a valid date'
-              : !isValidTime
-              ? 'Start time must be before or equal to end time'
-              : !isValidMessage
-              ? 'Please provide a cancellation reason'
-              : showPendingApprovalNote
-              ? 'Editing disabled while pending approval'
-              : ''
-          }>
+          disabled={isDisabled}
+          className={`${styles.button} ${styles.submitButton} ${
+            isDisabled ? styles.disabled : ''
+          }`}
+          variants={buttonVariants}
+          whileHover={!isDisabled ? 'hover' : undefined}
+          whileTap={!isDisabled ? 'tap' : undefined}>
           {loading ? 'Updating...' : 'Update Status'}
-        </button>
+        </motion.button>
 
-        <button
+        <motion.button
           onClick={handleReset}
           type="button"
           disabled={loading}
-          style={{
-            flexGrow: 1,
-            marginLeft: 8,
-            padding: '0.75rem',
-            backgroundColor: '#ccc',
-            color: '#333',
-            border: 'none',
-            borderRadius: 6,
-            cursor: loading ? 'not-allowed' : 'pointer',
-          }}>
+          className={`${styles.button} ${styles.resetButton} ${
+            loading ? styles.disabled : ''
+          }`}
+          variants={buttonVariants}
+          whileHover={!loading ? 'hover' : undefined}
+          whileTap={!loading ? 'tap' : undefined}>
           Reset
-        </button>
-      </div>
-    </div>
+        </motion.button>
+      </motion.div>
+    </motion.div>
   );
 }

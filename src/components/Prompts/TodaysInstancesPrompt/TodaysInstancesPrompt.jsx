@@ -1,52 +1,177 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
+import styles from './TodaysInstancesPrompt.module.css';
+import { dateFormatter } from '../../../utils/helpers';
+import { FaClock, FaCheck, FaTimes } from 'react-icons/fa';
 
 export default function TodaysInstancesPrompt({
   instances,
   promptMessage,
   onConfirm,
+  onDismiss,
+  variant = 'default', // 'default', 'warning', 'error', 'dark'
 }) {
   const location = useLocation();
   const pathParts = location.pathname.split('/');
+  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isVisible, setIsVisible] = useState(true);
 
+  // status config for flexibility
+  const statusConfig = {
+    unconfirmed: {
+      label: 'Unconfirmed',
+      icon: <FaClock className={styles.icon} />,
+      style: styles.unconfirmedBadge,
+    },
+    confirmed: {
+      label: 'Confirmed',
+      icon: <FaCheck className={styles.icon} />,
+      style: styles.confirmedBadge,
+    },
+    cancelled: {
+      label: 'Cancelled',
+      icon: <FaTimes className={styles.icon} />,
+      style: styles.cancelledBadge,
+    },
+  };
+
+  // Expand if urgent (pending/unconfirmed or today’s classes)
+  useEffect(() => {
+    const hasUrgentInstances = instances?.some(
+      (instance) =>
+        instance.classStatus === 'unconfirmed' ||
+        new Date(instance.classDate).toDateString() ===
+          new Date().toDateString()
+    );
+    if (hasUrgentInstances) setIsCollapsed(false);
+  }, [instances]);
+
+  // Hide entirely if nothing to show
   if (
     !instances ||
     instances.length === 0 ||
+    !isVisible ||
     (pathParts.includes('schedules') && pathParts.includes('history'))
   ) {
     return null;
   }
 
+  const toggleCollapse = () => setIsCollapsed(!isCollapsed);
+
+  const dismissPrompt = () => {
+    setIsVisible(false);
+    onDismiss?.();
+  };
+
+  const wrapperClasses = [
+    styles.wrapper,
+    variant !== 'default' ? styles[variant] : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
-    <div
-      style={{ padding: '1rem', background: '#eef6ff', borderRadius: '8px' }}>
-      <p>{promptMessage}</p>
-      <ul style={{ listStyle: 'none', paddingLeft: 0 }}>
-        {instances.map((instance) => (
-          <li
-            key={instance._id}
-            style={{
-              marginBottom: '1rem',
-              borderBottom: '1px solid #ccc',
-              paddingBottom: '0.5rem',
-            }}>
-            <strong>Class Date:</strong>{' '}
-            {new Date(instance.classDate).toLocaleDateString()}
-            <br />
-            <strong>Status:</strong> {instance.classStatus}
-            <br />
-            <strong>Schedule:</strong>{' '}
-            {instance.scheduleId?._id || 'Unnamed Schedule'}
-            <br />
-            {/* Add more instance info here */}
-            <button
-              onClick={() => onConfirm(instance.scheduleId?._id)}
-              style={{ marginTop: '0.5rem', cursor: 'pointer' }}>
-              Confirm Status
-            </button>
-          </li>
-        ))}
-      </ul>
+    <div className={wrapperClasses}>
+      {onDismiss && (
+        <button
+          className={styles.closeBtn}
+          onClick={dismissPrompt}
+          aria-label="Dismiss notification">
+          ✕
+        </button>
+      )}
+
+      {/* Header / Toggle */}
+      <div
+        className={styles.header}
+        onClick={toggleCollapse}
+        role="button"
+        aria-expanded={!isCollapsed}
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleCollapse();
+          }
+        }}>
+        <span className={styles.badge}>{instances.length}</span>
+        {promptMessage ||
+          `You have ${instances.length} class instance${
+            instances.length !== 1 ? 's' : ''
+          } requiring attention`}
+      </div>
+
+      {/* Animate list expand/collapse */}
+      <AnimatePresence initial={false}>
+        {!isCollapsed && (
+          <motion.ul
+            className={styles.list}
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}>
+            {instances.map((instance) => {
+              const status =
+                statusConfig[instance.classStatus] || statusConfig.unconfirmed;
+
+              return (
+                <motion.li
+                  key={instance._id}
+                  className={styles.listItem}
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -5 }}
+                  transition={{ duration: 0.2 }}>
+                  <div className={styles.instanceInfo}>
+                    <div className={styles.infoRow}>
+                      <strong>Class Date:</strong>
+                      <span>{dateFormatter(instance.classDate)}</span>
+                    </div>
+
+                    <div className={styles.infoRow}>
+                      <strong>Class Status:</strong>
+                      <div className={styles.statusWrapper}>
+                        <span className={status.style}>
+                          {status.icon}
+                          {status.label}
+                        </span>
+                      </div>
+                    </div>
+
+                    {instance.courseName && (
+                      <div className={styles.infoRow}>
+                        <strong>Course:</strong>
+                        <span>{instance.courseName}</span>
+                      </div>
+                    )}
+
+                    <div className={styles.actionRow}>
+                      <button
+                        onClick={() =>
+                          onConfirm(instance.scheduleId?._id, instance)
+                        }
+                        className={styles.confirmBtn}>
+                        Confirm Status
+                      </button>
+
+                      {instance.virtualLink && (
+                        <a
+                          href={instance.virtualLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={styles.linkBtn}>
+                          Join Class
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </motion.li>
+              );
+            })}
+          </motion.ul>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -17,8 +17,6 @@ const FiltersPanel = ({
   setSearchTerm,
   selectedDay,
   setSelectedDay,
-  viewMode,
-  setViewMode,
 }) => {
   return (
     <div className={styles.filterBox}>
@@ -46,23 +44,6 @@ const FiltersPanel = ({
             </option>
           ))}
         </select>
-      </div>
-
-      <div className={styles.viewToggle}>
-        <button
-          onClick={() => setViewMode('grid')}
-          className={`${styles.toggleBtn} ${
-            viewMode === 'grid' ? styles.active : ''
-          }`}>
-          <FiGrid />
-        </button>
-        <button
-          onClick={() => setViewMode('list')}
-          className={`${styles.toggleBtn} ${
-            viewMode === 'list' ? styles.active : ''
-          }`}>
-          <FiList />
-        </button>
       </div>
     </div>
   );
